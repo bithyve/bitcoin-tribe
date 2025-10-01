@@ -1,34 +1,34 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import SelectMenuItem from './SelectMenuItem';
 import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
 
 interface sectionListProps {
   data: SettingMenuProps[];
   sectionTitle: string;
+  isDanger?: boolean;
 }
 
 function SettingSectionList(props: sectionListProps) {
-  const { data, sectionTitle } = props;
+  const { data, sectionTitle, isDanger } = props;
   const filteredData = data.filter(
     item => item.hideMenu !== false || !item.hideMenu,
   );
   const lastIndex = filteredData.length - 1;
-
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
-  const { translations } = useContext(LocalizationContext);
-  const { common } = translations;
-  const styles = getStyles(theme);
+  const styles = getStyles(theme, isDanger, isThemeDark);
+  
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <View style={styles.headerSection}>
-        <AppText variant="body1" style={styles.headerText}>
+        <AppText variant="body1" style={[styles.headerText]}>
           {sectionTitle}
         </AppText>
       </View>
@@ -55,22 +55,29 @@ function SettingSectionList(props: sectionListProps) {
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+
+const getStyles = (theme: AppTheme, isDanger: boolean, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       backgroundColor: theme.colors.cardGradient3,
       borderRadius: 16,
       marginVertical: hp(10),
+      borderColor: isDanger ? '#EC5557' : 'transparent',
+      borderWidth: isDanger ? 1 : 0,
     },
     headerSection: {
       height: hp(50),
       justifyContent: 'center',
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
-      backgroundColor: theme.colors.settingMenuHeader,
+      backgroundColor: isDanger
+        ? isThemeDark
+          ? '#2C2424'
+          : '#FFEBEC'
+        : theme.colors.settingMenuHeader,
     },
     headerText: {
-      color: theme.colors.secondaryHeadingColor,
+      color: isDanger ? '#EC5557' : theme.colors.secondaryHeadingColor,
       marginHorizontal: hp(10),
       textTransform: 'uppercase',
     },

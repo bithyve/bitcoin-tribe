@@ -139,13 +139,19 @@ const getStyles = (theme: AppTheme, index = null) =>
     },
     addNewIconWrapper: {
       position: 'absolute',
-      bottom: hp(90),
+      bottom: Platform.select({
+        ios: hp(90),
+        android: hp(110),
+      }),
       right: wp(20),
     },
     addNewIconWrapperLight: {
       position: 'absolute',
-      bottom: 90,
-      right: 20,
+      bottom: Platform.select({
+        ios: hp(90),
+        android: hp(70),
+      }),
+      right: wp(20),
       shadowColor: Colors.Black,
       shadowOffset: { width: 8, height: 15 },
       shadowOpacity: 0.1,

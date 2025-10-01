@@ -220,7 +220,6 @@ function RGBAssetList(props: DropdownProps) {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      width: '100%',
       zIndex: 999,
       height: '70%',
       backgroundColor: theme.colors.primaryBackground,

@@ -22,6 +22,7 @@ function TransferDetails({ route, navigation }) {
   const coin = route.params?.coin;
   const assetId = route.params?.assetId;
   const precision = route.params?.precision;
+  const schema = route.params?.schema;
   const { translations } = useContext(LocalizationContext);
   const { wallet, assets } = translations;
   const [visible, setVisible] = useState(false);
@@ -65,6 +66,7 @@ function TransferDetails({ route, navigation }) {
         assetName={coin}
         transAmount={`${Number(amount) / 10 ** precision}`}
         assetId={assetId}
+        schema={schema}
         transaction={transaction}
         onPress={() => cancelTransactionMutation()}
       />

@@ -66,6 +66,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       borderRadius: 18,
       // marginVertical: hp(20),
       width: width,
+      marginHorizontal: 4,
     },
     labelStyle: {
       // minWidth: width,
@@ -73,12 +74,13 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       color: disabled ? theme.colors.disableCTATitle : textColor,
     },
     primaryCTATitle: {
-      fontSize: 16,
+      fontSize: 15,
       fontFamily:
         Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,
       fontWeight: '500',
       letterSpacing: 0.4,
+      flex: 1,
     },
     disableButton: {
       borderRadius: 18,
@@ -89,6 +91,7 @@ const getStyles = (theme: AppTheme, width, disabled, textColor, height) =>
       shadowOpacity: 0,
       shadowRadius: 0,
       elevation: 0,
+      marginHorizontal: 4,
     },
   });
 export default PrimaryCTA;

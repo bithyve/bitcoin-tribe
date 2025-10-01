@@ -157,10 +157,13 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const isEligibleForCampaign = useMemo(() => {
-    const participatedCampaignsArray = JSON.parse(
-      participatedCampaigns || '[]',
-    );
-    return !participatedCampaignsArray.includes(coin?.campaign._id);
+    if(coin?.campaign.exclusive === 'true') {
+      const participatedCampaignsArray = JSON.parse(
+        participatedCampaigns || '[]',
+      );
+      return !participatedCampaignsArray.includes(coin?.campaign._id);
+    }
+    return true;
   }, [participatedCampaigns, coin?.campaign._id]);
 
   const isBalanceRequired = useMemo(() => {

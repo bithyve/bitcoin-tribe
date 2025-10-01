@@ -56,14 +56,31 @@ RCT_EXPORT_METHOD(getAddress:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromis
   });
 }
 
-RCT_EXPORT_METHOD(initiate:(NSString*)network mnemonic:(NSString *)mnemonic accountXpubVanilla:(NSString *)accountXpubVanilla accountXpubColored:(NSString *)accountXpubColored masterFingerprint:(NSString *)masterFingerprint resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(initiate:(NSString *)network
+                  mnemonic:(NSString *)mnemonic
+        accountXpubVanilla:(NSString *)accountXpubVanilla
+        accountXpubColored:(NSString *)accountXpubColored
+          masterFingerprint:(NSString *)masterFingerprint
+                  timeout:(nonnull NSNumber *)timeout
+                    resolver:(RCTPromiseResolveBlock)resolve
+                    rejecter:(RCTPromiseRejectBlock)reject)
+{
   EXEC_ASYNC({
     RGBHelper *helper = [[RGBHelper alloc] init];
-    [helper initiateWithBtcNetwork:network mnemonic:mnemonic accountXpubVanilla:accountXpubVanilla accountXpubColored:accountXpubColored masterFingerprint:masterFingerprint callback:^(NSString * _Nonnull response) {
-      [self resolvePromise:resolve withResult:response];
-    }];
+    [helper initiateWithBtcNetwork:network
+                          mnemonic:mnemonic
+                accountXpubVanilla:accountXpubVanilla
+                accountXpubColored:accountXpubColored
+                  masterFingerprint:masterFingerprint
+                           timeout:timeout
+                          callback:^(NSString *result) {
+                              resolve(result);
+                          }
+                  completionHandler:^{
+                  }];
   });
 }
+
 
 RCT_EXPORT_METHOD(sync:(NSString*)mnemonic network:(NSString *)network resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   EXEC_ASYNC({
@@ -249,6 +266,15 @@ RCT_EXPORT_METHOD(getRgbDir:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromise
   EXEC_ASYNC({
     RGBHelper *helper = [[RGBHelper alloc] init];
     [helper getRgbDirWithCallback:^(NSString * _Nonnull response) {
+      [self resolvePromise:resolve withResult:response];
+    }];
+  });
+}
+
+RCT_EXPORT_METHOD(resetWallet:(NSString*)masterFingerprint resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+  EXEC_ASYNC({
+    RGBHelper *helper = [[RGBHelper alloc] init];
+    [helper resetWalletWithMasterFingerprint:masterFingerprint callback:^(NSString * _Nonnull response) {
       [self resolvePromise:resolve withResult:response];
     }];
   });

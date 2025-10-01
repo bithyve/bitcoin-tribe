@@ -145,7 +145,6 @@ object RGBHelper {
     fun getAssetTransfers(assetID: String): String {
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf(), false)
         val transfers = RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()
-        Log.d(TAG, "getAssetTransfers: ${transfers.toString()}")
         val gson = Gson()
         val jsonArray = JsonArray()
         

@@ -45,4 +45,5 @@ export enum RealmSchema {
   Request = 'Request',
   Disclaimer = 'Disclaimer',
   DisclaimerContent = 'DisclaimerContent',
+  ElectrumTransaction = 'ElectrumTransaction',
 }

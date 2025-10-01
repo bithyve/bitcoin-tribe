@@ -79,6 +79,7 @@ function HomeScreen() {
     setNodeInitStatus,
     setNodeConnected,
     setIsWalletOnline,
+    isWalletOnline,
   } = useContext(AppContext);
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -137,12 +138,14 @@ function HomeScreen() {
         const response = await ApiHandler.makeWalletOnline();
         setWalletOnline(response.status);
         setIsWalletOnline(
-          response.status ? WalletOnlineStatus.Online : WalletOnlineStatus.Error,
+          response.status
+            ? WalletOnlineStatus.Online
+            : WalletOnlineStatus.Error,
         );
-        if(response.error) {
+        if (response.error) {
           Toast(response.error, true);
         }
-        if(response.status) {
+        if (response.status) {
           refreshRgbWallet.mutate();
         }
       } catch (error) {
@@ -197,7 +200,9 @@ function HomeScreen() {
             schema: RealmSchema.Coin,
           });
         }
-        checkBackupRequired();
+        if (isWalletOnline === WalletOnlineStatus.Online) {
+          checkBackupRequired();
+        }
       }
     },
   });

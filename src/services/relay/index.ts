@@ -183,10 +183,7 @@ export default class Relay {
         const extension = walletImage.type?.split('/')[1] || 'jpg';
         const fileName = `wallet_${Date.now()}.${extension}`;
         formData.append('file', {
-          uri:
-            Platform.OS === 'ios'
-              ? walletImage.uri
-              : walletImage.uri.replace('file://', ''),
+          uri:walletImage.uri,
           name: fileName,
           type: walletImage.type || 'image/jpeg',
         } as any);
@@ -196,7 +193,6 @@ export default class Relay {
         Authorization: `Bearer ${authToken}`,
       });
     } catch (err) {
-      console.log(err, err.response.data);
       throw err;
     }
     return res.data || res.json;
@@ -531,7 +527,7 @@ export default class Relay {
         err?.code ||
         err?.message ||
         'Asset registration failed';
-      throw new Error(errMsg);
+      return { status: false };
     }
   };
 

@@ -22,7 +22,7 @@ function OnboardingSlideComponent(props: OnboardingSlidesProps) {
   return (
     <View style={styles.wrapper}>
       <View style={styles.contentWrapper1}>
-        <AppText variant="heading2" style={styles.titleText}>
+        <AppText variant="heading1" style={styles.titleText}>
           {title}
         </AppText>
         <AppText variant="body2" style={styles.subTitleText}>
@@ -78,6 +78,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       flexWrap: 'wrap',
       width: '80%',
+      marginTop: hp(10),
     },
     infoText: {
       textAlign: 'center',

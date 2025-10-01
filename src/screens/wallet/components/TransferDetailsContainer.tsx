@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { hp } from 'src/constants/responsive';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Colors from 'src/theme/Colors';
@@ -19,6 +17,7 @@ import {
   Transfer,
   TransferStatus,
   receiveUTXOData,
+  Asset,
 } from 'src/models/interfaces/RGBWallet';
 import Toast from 'src/components/Toast';
 import AppTouchable from 'src/components/AppTouchable';
@@ -27,6 +26,8 @@ import { RealmSchema } from 'src/storage/enum';
 import config from 'src/utils/config';
 import { NetworkType } from 'src/services/wallets/enums';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import ElectrumClient from 'src/services/electrum/client';
+import { useObject } from '@realm/react';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -34,21 +35,26 @@ type WalletTransactionsProps = {
   assetId: string;
   transaction: Transfer;
   onPress: () => void;
+  schema: RealmSchema;
 };
 
 function TransferDetailsContainer(props: WalletTransactionsProps) {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const { assetName, transAmount, assetId, transaction, onPress } = props;
+  const { assetName, transAmount, assetId, transaction, onPress, schema } =
+    props;
   const { translations } = useContext(LocalizationContext);
   const { wallet, settings, assets } = translations;
   const styles = getStyles(theme);
-  const rgbReceiveUtxo: receiveUTXOData = dbManager.getCollection(
+  const rgbReceiveUtxo = dbManager.getCollection(
     RealmSchema.ReceiveUTXOData,
+  ) as unknown as receiveUTXOData[];
+  const transfer = useObject<Asset>(schema, assetId).transactions.find(
+    item => item.txid === transaction?.txid,
   );
   const [mismatchError, setMismatchError] = useState(false);
-  const normalizedKind = transaction?.kind.toLowerCase().replace(/_/g, '');
-  const normalizedStatus = transaction?.status.toLowerCase().replace(/_/g, '');
+  const normalizedKind = transfer?.kind.toLowerCase().replace(/_/g, '');
+  const normalizedStatus = transfer?.status.toLowerCase().replace(/_/g, '');
   function normalize(value: string): string {
     return value.toLowerCase().replace(/_/g, '');
   }
@@ -59,7 +65,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
     const isSettled = normalizedStatus === normalize(TransferStatus.SETTLED);
     if (isReceiveBlind && isSettled) {
       const matchedTransfer = rgbReceiveUtxo?.find(
-        item => item.recipientId === transaction?.recipientId,
+        item => item.recipientId === transfer?.recipientId,
       );
       if (
         matchedTransfer &&
@@ -94,7 +100,7 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
         normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartyReceive
-      : settings[transaction.status.toLowerCase().replace(/_/g, '')];
+      : settings[transfer.status.toLowerCase().replace(/_/g, '')];
 
   const redirectToBlockExplorer = (txid: string) => {
     if (config.NETWORK_TYPE === NetworkType.REGTEST) {
@@ -105,11 +111,54 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
       config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
     }/tx/${txid}`;
 
-    navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+    (navigation as any).navigate(NavigationRoutes.WEBVIEWSCREEN, {
       url,
       title: 'Transaction Details',
     });
   };
+
+  const getTransaction = useCallback(async () => {
+    try {
+      if (transfer.txid && !transfer.transaction) {
+        const result = await ElectrumClient.getTransactionsById([
+          transfer.txid,
+        ]);
+        if (result && result[transfer.txid]) {
+          const realmAsset = dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          );
+
+          if (realmAsset && realmAsset.transactions) {
+            const assetData = realmAsset.toJSON() as unknown as Asset;
+            const transactionIndex = assetData.transactions.findIndex(
+              item => item.txid === transfer.txid,
+            );
+
+            if (transactionIndex !== -1) {
+              assetData.transactions[transactionIndex].transaction =
+                result[transfer.txid];
+              const success = dbManager.updateObjectByPrimaryId(
+                schema,
+                'assetId',
+                assetId,
+                {
+                  transactions: assetData.transactions,
+                },
+              );
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [transfer, schema, assetId]);
+
+  useEffect(() => {
+    getTransaction();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -164,74 +213,76 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               content={assetName}
             />
             <TransferLabelContent label={wallet.amount} content={transAmount} />
-            {transaction.txid && (
+            {transfer.txid && (
               <AppTouchable
-                onPress={() => redirectToBlockExplorer(transaction.txid)}>
+                onPress={() => redirectToBlockExplorer(transfer.txid)}>
                 <TransferLabelContent
                   label={wallet.transactionID}
-                  content={transaction.txid}
+                  content={transfer.txid}
                   contentUnderline={true}
                   selectable={true}
                 />
               </AppTouchable>
             )}
-            <TransferLabelContent
-              label={wallet.date}
-              content={moment
-                .unix(transaction.updatedAt)
-                .format('DD MMM YY  •  hh:mm A')}
-            />
+            {transfer.transaction && (
+              <TransferLabelContent
+                label={wallet.date}
+                content={moment
+                  .unix(transfer.transaction.time)
+                  .format('DD MMM YY  •  hh:mm A')}
+              />
+            )}
 
             <TransferLabelContent
               label={'RGB Transfer Status'}
-              content={transaction.status.toLowerCase().replace(/_/g, '')}
+              content={transfer.status.toLowerCase().replace(/_/g, '')}
             />
 
-            {transaction?.recipientId && (
+            {transfer?.recipientId && (
               <TransferLabelContent
                 label={'Blinded UTXO'}
                 selectable={true}
-                content={transaction?.recipientId}
+                content={transfer?.recipientId}
               />
             )}
 
-            {transaction?.changeUtxo && (
+            {transfer?.changeUtxo && (
               <TransferLabelContent
                 label={'Change UTXO'}
                 selectable={true}
-                content={transaction?.changeUtxo?.txid}
+                content={transfer?.changeUtxo?.txid}
               />
             )}
 
-            {transaction?.receiveUtxo && (
+            {transfer?.receiveUtxo && (
               <TransferLabelContent
                 label={'Receive UTXO'}
                 selectable={true}
-                content={transaction?.receiveUtxo?.txid}
+                content={transfer?.receiveUtxo?.txid}
               />
             )}
 
-            {transaction?.transportEndpoints?.length > 0 && (
+            {transfer?.transportEndpoints?.length > 0 && (
               <TransferLabelContent
                 label={'Consignment Endpoints'}
                 selectable={true}
-                content={transaction.transportEndpoints
+                content={transfer.transportEndpoints
                   .map(item => item.endpoint)
                   .join('\n')}
               />
             )}
 
-            {transaction?.invoiceString && (
+            {transfer?.invoiceString && (
               <TransferLabelContent
                 label={'Invoice'}
-                content={transaction?.invoiceString}
+                content={transfer?.invoiceString}
                 selectable={true}
               />
             )}
           </View>
         </View>
       </ScrollView>
-      {transaction.status.toLowerCase().replace(/_/g, '') ===
+      {transfer.status.toLowerCase().replace(/_/g, '') ===
         normalize(TransferStatus.WAITING_COUNTERPARTY) && (
         <SwipeToAction
           title={assets.cancelTransactionCtaTitle}

@@ -103,23 +103,91 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun initiate(network: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, promise: Promise){
+    fun initiate(
+        network: String,
+        mnemonic: String,
+        accountXpubVanilla: String,
+        accountXpubColored: String,
+        masterFingerprint: String,
+        timeout: Int,
+        promise: Promise
+    ) {
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val result = RGBWalletRepository.initialize(network,accountXpubVanilla,accountXpubColored,mnemonic, masterFingerprint)
+                suspend fun runInit(): Pair<Boolean, String>? {
+                    return if (timeout > 0) {
+                        withTimeoutOrNull(timeout.toLong() * 1000) {
+                            RGBWalletRepository.initialize(
+                                network,
+                                accountXpubVanilla,
+                                accountXpubColored,
+                                mnemonic,
+                                masterFingerprint
+                            )
+                        }
+                    } else {
+                        RGBWalletRepository.initialize(
+                            network,
+                            accountXpubVanilla,
+                            accountXpubColored,
+                            mnemonic,
+                            masterFingerprint
+                        )
+                    }
+                }
+
+                val result = runInit()
+
                 withContext(Dispatchers.Main) {
-                    promise.resolve(result)
+                    if (result != null) {
+                        val (status, error) = result
+                        if (status) {
+                            val jsonObject = JsonObject().apply {
+                                addProperty("status", status)
+                                addProperty("error", error)
+                            }
+                            promise.resolve(jsonObject.toString())
+                        } else {
+                            RGBWalletRepository.writeToLogFile(masterFingerprint, error)
+                            RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
+                            val retryResult = runInit()
+                            if (retryResult != null) {
+                                val (retryStatus, retryError) = retryResult
+                                val jsonObject = JsonObject().apply {
+                                    addProperty("status", retryStatus)
+                                    addProperty("error", retryError)
+                                }
+                                promise.resolve(jsonObject.toString())
+                            }
+                        }
+                    } else {
+                        RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
+                        val retryResult = runInit()
+                        if (retryResult != null) {
+                            val (retryStatus, retryError) = retryResult
+                            val jsonObject = JsonObject().apply {
+                                addProperty("status", retryStatus)
+                                addProperty("error", retryError)
+                            }
+                            promise.resolve(jsonObject.toString())
+                        }
+                    }
                 }
             } catch (e: Exception) {
+                RGBWalletRepository.writeToLogFile(masterFingerprint, e.message!!)
                 Log.e(TAG, "initiate failed: ${e.message}", e)
                 withContext(Dispatchers.Main) {
-                    val jsonObject = JsonObject()
-                    jsonObject.addProperty("error", e.message ?: "Failed to initialize wallet")
+                    val jsonObject = JsonObject().apply {
+                        addProperty("status", false)
+                        addProperty("error", e.message ?: "Failed to initialize wallet")
+                    }
                     promise.resolve(jsonObject.toString())
                 }
             }
         }
     }
+
+
 
     @ReactMethod
     fun sync(mnemonic: String, network: String, promise: Promise){
@@ -672,6 +740,21 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("dir", dir)
                 promise.resolve(jsonObject.toString())
+            } catch (e: Exception) {
+                Log.e(TAG, "resetData failed: ${e.message}", e)
+                val jsonObject = JsonObject()
+                jsonObject.addProperty("error", e.message)
+                promise.resolve(jsonObject.toString())
+            }
+        }
+    }
+
+    @ReactMethod
+    fun resetWallet(masterFingerprint:String, promise: Promise){
+        coroutineScope.launch(Dispatchers.IO) {
+            try {
+                val response = RGBWalletRepository.resetWallet(masterFingerprint)
+                promise.resolve(response)
             } catch (e: Exception) {
                 Log.e(TAG, "resetData failed: ${e.message}", e)
                 val jsonObject = JsonObject()

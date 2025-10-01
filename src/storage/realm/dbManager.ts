@@ -242,6 +242,17 @@ const getObjectByTxid = (schema: RealmSchema, txid: string) => {
   return realm.get(schema).filtered('utxo.outpoint.txid == $0', txid)[0];
 };
 
+const clearSchemas = (schemas: RealmSchema[]) => {
+  try {
+    schemas.forEach(schemaName => {
+      realm.delete(realm.get(schemaName));
+    });
+  } catch (err) {
+    console.error('Error clearing schemas:', err);
+    throw err;
+  }
+};
+
 export default {
   initializeRealm,
   deleteRealm,
@@ -258,4 +269,5 @@ export default {
   getObjectByField,
   updateObject,
   getObjectByTxid,
+  clearSchemas,
 };

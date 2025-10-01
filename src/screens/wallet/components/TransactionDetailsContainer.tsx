@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { useTheme } from 'react-native-paper';
-import { StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { AppTheme } from 'src/theme';
@@ -86,7 +86,10 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   }, [transaction?.inputs]);
 
   return (
-    <View>
+    <ScrollView
+      overScrollMode="never"
+      bounces={false}
+      contentContainerStyle={{ paddingBottom: 100 }}>
       <TransactionInfoSection
         amount={transAmount}
         txID={transaction.txid}
@@ -148,7 +151,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
           }
         />
       )}
-    </View>
+    </ScrollView>
   );
 }
 

@@ -9,6 +9,8 @@ export const AppContext = React.createContext({
   setKey: key => {},
   isWalletOnline: WalletOnlineStatus.Null,
   setIsWalletOnline: status => {},
+  reSyncWallet: (status: boolean) => {},
+reSyncingWallet: false,
   appType: null,
   setAppType: apptype => {},
   isBackupInProgress: null,
@@ -38,6 +40,7 @@ export const AppContext = React.createContext({
 export function AppProvider({ children }) {
   const [key, setKey] = useState<string>(null);
   const [isWalletOnline, setIsWalletOnline] = useState<WalletOnlineStatus>(WalletOnlineStatus.Null);
+  const [resyncWallet, setResyncWallet] = useState<boolean>(false);
   const [appType, setAppType] = useState<AppType>(null);
   const [isBackupInProgress, setBackupProcess] = useState<boolean>(null);
   const [isBackupDone, setBackupDone] = useState<boolean>(null);
@@ -67,6 +70,8 @@ export function AppProvider({ children }) {
         setKey: setKey,
         isWalletOnline,
         setIsWalletOnline: setIsWalletOnline,
+        reSyncingWallet: resyncWallet,
+        reSyncWallet: (status: boolean)=> setResyncWallet(status),
         appType,
         setAppType: setAppType,
         isBackupInProgress,
