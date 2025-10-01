@@ -63,6 +63,8 @@ function CoinAllTransaction() {
                 transaction: item,
                 coin: asset?.name,
                 precision: asset?.precision,
+                schema,
+                assetId
               });
             }}
           />

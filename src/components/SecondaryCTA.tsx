@@ -56,6 +56,7 @@ const getStyles = (theme: AppTheme, width, height) =>
       // alignItems: 'center',
       borderRadius: 18,
       // marginHorizontal: 10,
+      marginHorizontal: 4,
     },
     ctaContainerStyle: {
       borderRadius: 20,
@@ -69,7 +70,7 @@ const getStyles = (theme: AppTheme, width, height) =>
       marginVertical: height,
     },
     primaryCTATitle: {
-      fontSize: 16,
+      fontSize: 15,
       fontFamily:
         Platform.OS === 'ios' ? Fonts.LufgaRegular : Fonts.LufgaSemiBold,
       lineHeight: 16 * 1.4,

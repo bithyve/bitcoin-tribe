@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -8,7 +8,7 @@ import IconWallet from 'src/assets/images/icon_wallet1.svg';
 import IconWalletLight from 'src/assets/images/icon_wallet1_light.svg';
 import IconRecovery from 'src/assets/images/icon_recoveryphrase.svg';
 import IconRecoveryLight from 'src/assets/images/icon_recoveryphrase_light.svg';
-import { hp, windowHeight, windowWidth } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -16,10 +16,6 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import UseRGBAssetPopupContainer from './components/UseRGBAssetPopupContainer';
-import config, { APP_STAGE } from 'src/utils/config';
-import WebView from 'react-native-webview';
-import Modal from 'react-native-modal';
-import PrimaryCTA from 'src/components/PrimaryCTA';
 
 function WalletSetupOption({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -29,15 +25,6 @@ function WalletSetupOption({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [visible, setVisible] = useState(false);
-  const [showTermsModal, setShowTermsModal] = useState(false);
-
-  const onPressCreateNew = () => {
-    if (config.ENVIRONMENT === APP_STAGE.DEVELOPMENT) {
-      navigation.navigate(NavigationRoutes.SELECTWALLET);
-    } else {
-      setShowTermsModal(true);
-    }
-  };
 
   return (
     <ScreenContainer>
@@ -49,7 +36,7 @@ function WalletSetupOption({ navigation }) {
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
-        onPress={()=>setShowTermsModal(true)}
+        onPress={()=>navigation.navigate(NavigationRoutes.PROFILESETUP)}
         style={styles.optionCardStyle}
       />
       <OptionCard
@@ -61,31 +48,6 @@ function WalletSetupOption({ navigation }) {
         style={styles.optionCardStyle}
       />
 
-      <Modal
-        isVisible={showTermsModal}
-        onDismiss={() => setShowTermsModal(false)}>
-        <View style={styles.containerStyle}>
-          <WebView
-            source={{
-              uri: config.TERMS_AND_CONDITIONS_URL[
-                theme.dark ? 'dark' : 'light'
-              ],
-            }}
-            style={styles.webViewStyle}
-          />
-
-          <PrimaryCTA
-            title={'I agree'}
-            onPress={() => {
-              setShowTermsModal(false);
-              navigation.navigate(NavigationRoutes.PROFILESETUP);
-            }}
-            width={windowWidth - hp(50)}
-            disabled={false}
-            style={{ marginTop: hp(10), alignSelf: 'center' }}
-          />
-        </View>
-      </Modal>
       <ResponsePopupContainer
         visible={visible}
         enableClose={true}

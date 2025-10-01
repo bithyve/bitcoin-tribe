@@ -113,6 +113,8 @@ function TransactionsList({
                 coin: coin,
                 assetId: assetId,
                 precision: precision,
+                schema,
+                assetId
               });
             }}
             precision={precision}

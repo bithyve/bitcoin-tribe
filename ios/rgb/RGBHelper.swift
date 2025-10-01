@@ -703,11 +703,11 @@ import CloudKit
     callback(response)
   }
   
-  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, callback: @escaping ((String) -> Void)) {
+  @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, timeout: NSNumber, callback: @escaping ((String) -> Void)) async {
       do {
           self.rgbManager = RgbManager.shared
-          let response = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
-          
+        let response = try runWithTimeout(seconds: Double(timeout)){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        }
           if response.status {
 //              if let logPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("log"),
 //                 FileManager.default.fileExists(atPath: logPath.path) {
@@ -721,25 +721,23 @@ import CloudKit
               let json = Utility.convertToJSONString(params: data)
               callback(json)
           } else {
-              let errorStrings = ["bincode", "error from bdk"]
+            let errorStrings = ["unreleased lock file", "bincode", "error from bdk", "timeout"]
               let containsAny = errorStrings.contains { response.error.contains($0) }
-              
-//              if containsAny {
-//                  if let dbPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("bdk_db"),
-//                     FileManager.default.fileExists(atPath: dbPath.path) {
-//                      try FileManager.default.removeItem(at: dbPath)
-//                      
-//                      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
-//                      
-//                      let data: [String: Any] = [
-//                          "status": retryResponse.status,
-//                          "error": retryResponse.error
-//                      ]
-//                      let json = Utility.convertToJSONString(params: data)
-//                      callback(json)
-//                      return
-//                  }
-//              }
+            writeToLogFile(masterFingerprint: masterFingerprint, content: response.error)
+
+              if containsAny {
+                deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
+                
+              let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+                writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
+                let data: [String: Any] = [
+                    "status": retryResponse.status,
+                    "error": retryResponse.error
+                ]
+                let json = Utility.convertToJSONString(params: data)
+                callback(json)
+                return
+              }
               
               let data: [String: Any] = [
                   "status": false,
@@ -748,14 +746,109 @@ import CloudKit
               let json = Utility.convertToJSONString(params: data)
               callback(json)
           }
-      } catch {
+      } catch TimeoutError.timedOut {
+        deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
+      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
+        let data: [String: Any] = [
+            "status": retryResponse.status,
+            "error": retryResponse.error
+        ]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+    } catch {
+      writeToLogFile(masterFingerprint: masterFingerprint, content: error.localizedDescription)
           let errorData = ["error": error.localizedDescription]
           let json = Utility.convertToJSONString(params: errorData)
           callback(json)
       }
   }
+  
+  func deleteRuntimeLockFile(masterFingerprint: String) {
+      guard let runtimeLockPath = Utility.getRgbDir()?
+          .appendingPathComponent(masterFingerprint)
+          .appendingPathComponent("rgb_runtime.lock") else {
+          print("Could not construct runtime lock path for fingerprint: \(masterFingerprint)")
+          return
+      }
+      guard FileManager.default.fileExists(atPath: runtimeLockPath.path) else {
+          print("No runtime lock file exists at path.")
+          return
+      }
+      do {
+          print("Deleting runtime lock at: \(runtimeLockPath.path)")
+          try FileManager.default.removeItem(at: runtimeLockPath)
+          print("Runtime lock deleted successfully.")
+      } catch {
+          print("Failed to delete runtime lock: \(error)")
+      }
+  }
+  
+  func writeToLogFile(masterFingerprint: String, content: String) {
+      guard let logFilePath = Utility.getRgbDir()?
+          .appendingPathComponent(masterFingerprint)
+          .appendingPathComponent("log") else {
+          print("Could not construct log path for fingerprint: \(masterFingerprint)")
+          return
+      }
+
+      if !FileManager.default.fileExists(atPath: logFilePath.path) {
+          FileManager.default.createFile(atPath: logFilePath.path, contents: nil, attributes: nil)
+      }
+
+      let formatter = DateFormatter()
+      formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+      formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+      let timestamp = formatter.string(from: Date())
+
+      let logLine = "\(timestamp) INFO[TRIBE_INTERNAL] \(content)\n"
+
+      if let handle = try? FileHandle(forWritingTo: logFilePath) {
+          handle.seekToEndOfFile()
+          if let data = logLine.data(using: .utf8) {
+              handle.write(data)
+          }
+          try? handle.close()
+      } else {
+          print("Failed to open log file for writing at path: \(logFilePath.path)")
+      }
+  }
 
   
+  @objc func resetWallet(masterFingerprint: String,callback: @escaping ((String) -> Void)) -> Void {
+      self.rgbManager.online = nil
+      guard let rgbWalletDir = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint) else {
+          print("Could not construct rgb dir path for fingerprint: \(masterFingerprint)")
+          return
+      }
+      var isDir: ObjCBool = false
+      guard FileManager.default.fileExists(atPath: rgbWalletDir.path, isDirectory: &isDir), isDir.boolValue else {
+          print("No rgb dir exists at path or it's not a directory.")
+          return
+      }
+      do {
+          print("Deleting rgb dir at: \(rgbWalletDir.path)")
+          try FileManager.default.removeItem(at: rgbWalletDir)
+          print("rgb dir deleted successfully.")
+        let data = [
+          "message": "Reset successful",
+          "status": true
+        ] as [String : Any]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      } catch {
+        print("Failed to delete rgb dir: \(error)")
+        let data = [
+          "message": error.localizedDescription,
+          "status": false
+        ] as [String : Any]
+        let json = Utility.convertToJSONString(params: data)
+        callback(json)
+      }
+  }
+
+
   @objc func issueAssetNia(ticker: String, name: String, supply: String, precision: NSNumber, callback: @escaping ((String) -> Void)) -> Void{
     do {
       let data = try self.handleMissingFunds {

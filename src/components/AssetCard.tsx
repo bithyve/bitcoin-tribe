@@ -13,9 +13,9 @@ import AppTouchable from './AppTouchable';
 import { AppTheme } from 'src/theme';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import GradientView from './GradientView';
-import { Asset } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
-import { BlurView } from '@react-native-community/blur';
+import AssetIcon from './AssetIcon';
 
 type AssetCardProps = {
   asset: Asset;
@@ -36,7 +36,13 @@ const AssetCard = (props: AssetCardProps) => {
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 
+  const details = useMemo(() => {
+    if (asset.assetSchema === AssetSchema.Coin) return asset.ticker;
+    return asset.details;
+  }, [asset.assetSchema, asset.ticker, asset.details]);
+
   const uri = useMemo(() => {
+    if (asset.assetSchema === AssetSchema.Coin) return '';
     const media = asset?.media?.filePath || asset.token.media.filePath;
     return Platform.select({
       android: `file://${media}`,
@@ -58,36 +64,54 @@ const AssetCard = (props: AssetCardProps) => {
           theme.colors.cardGradient3,
         ]}>
         <View style={styles.assetImageWrapper}>
-          <Image
-            source={{
-              uri: uri,
-            }}
-            style={styles.imageStyle}
-          />
-          <BlurView
-            blurType="light"
-            blurAmount={1}
-            reducedTransparencyFallbackColor="white"
-            style={styles.balanceWrapper}>
-            <AppText variant="caption" style={styles.balanceText}>
-              {balance}
-            </AppText>
-          </BlurView>
+          {asset.assetSchema === AssetSchema.Coin ? (
+            <AssetIcon
+              iconUrl={asset.iconUrl}
+              assetID={asset.assetId}
+              size={120}
+              verified={asset?.issuer?.verified}
+            />
+          ) : (
+            <Image
+              source={{
+                uri: uri,
+              }}
+              style={styles.imageStyle}
+            />
+          )}
         </View>
         <View style={styles.contentWrapper}>
-          <AppText variant="body2" numberOfLines={1} style={styles.nameText}>
-            {asset.name}
+          <View style={styles.row}>
+            <View style={styles.nameContainer}>
+              <AppText
+                variant="body2"
+                numberOfLines={1}
+                style={styles.nameText}>
+                {asset.name}
+              </AppText>
+              {isVerified && <IconVerified width={20} height={20} />}
+            </View>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              style={styles.amountText}>
+              {balance}
+            </AppText>
+          </View>
+          <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
+            {details}
           </AppText>
-          {isVerified && <IconVerified width={20} height={20} />}
         </View>
       </GradientView>
     </AppTouchable>
   );
 };
+
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       width: wp(160),
+      height: hp(210),
       borderRadius: 15,
       margin: hp(5),
       borderColor: theme.colors.borderColor,
@@ -106,53 +130,36 @@ const getStyles = (theme: AppTheme) =>
     },
     contentWrapper: {
       height: '30%',
-      justifyContent: 'center',
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    titleText: {
-      lineHeight: hp(18),
-      fontWeight: '600',
-      color: theme.colors.accent1,
+      padding: 10,
     },
     nameText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
-      flexWrap: 'wrap',
-      textAlign: 'center',
       marginRight: hp(2),
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
-      flexWrap: 'wrap',
+      textAlign: 'center',
+      marginRight: hp(2),
     },
     assetImageWrapper: {
       width: '100%',
       height: '70%',
-    },
-    tagWrapper: {
-      position: 'absolute',
-      alignSelf: 'center',
-      bottom: -10,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     row: {
       flexDirection: 'row',
-      alignItems: 'center',
+      flex: 1,
     },
-    balanceWrapper: {
-      paddingVertical: hp(3),
-      paddingHorizontal: hp(10),
-      borderRadius: 15,
-      alignSelf: 'center',
-      top: 15,
-      position: 'absolute',
-      left: 15,
-      borderWidth: 0.5,
-      borderColor: 'white',
+    nameContainer: {
+      flex: 1,
+      flexDirection: 'row',
     },
-    balanceText: {
-      fontWeight: '500',
+    textDetails: {
+      fontWeight: '300',
+      color: theme.colors.secondaryHeadingColor,
     },
   });
 export default AssetCard;

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
@@ -444,7 +444,7 @@ function SendToContainer({
           />
         </View>
         <View style={styles.availableBalanceWrapper}>
-          <AppText variant="body2" style={styles.recipientAddressLabel}>
+          <AppText variant="body2" style={styles.availableBalanceLabel}>
             {sendScreen.availableBalance}
           </AppText>
           <View style={styles.balanceWrapper}>
@@ -635,6 +635,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginVertical: hp(10),
       color: theme.colors.secondaryHeadingColor,
     },
+    availableBalanceLabel: {
+      color: theme.colors.secondaryHeadingColor,
+    },
     recipientInputStyle: {
       width: '80%',
     },
@@ -676,6 +679,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+      marginBottom: hp(15),
     },
     currencyIconWrapper: {
       marginRight: hp(5),

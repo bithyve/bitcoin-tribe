@@ -82,14 +82,14 @@ const FeePriorityButton = ({
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     feeWrapper: {
-      height: hp(85),
-      width: '23.5%',
+      height: hp(100),
       padding: 5,
-      borderWidth: 1,
-      borderRadius: 10,
+      borderWidth: 2,
+      borderRadius: 15,
       alignItems: 'center',
       justifyContent: 'center',
       marginRight: hp(5),
+      flex: 1
     },
     priorityValue: {
       color: theme.colors.headingColor,

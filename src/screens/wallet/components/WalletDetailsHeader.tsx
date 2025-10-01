@@ -1,10 +1,9 @@
 import React, { useContext, useMemo } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
 import TransactionButtons from './TransactionButtons';
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -58,12 +57,9 @@ function WalletDetailsHeader(props: walletDetailsHeaderProps) {
     username,
     wallet,
     rgbWallet,
-    onPressSetting,
     onPressSend,
     onPressReceive,
     onPressBuy,
-    smallHeaderOpacity,
-    largeHeaderHeight,
     totalAssetLocalAmount,
   } = props;
 
