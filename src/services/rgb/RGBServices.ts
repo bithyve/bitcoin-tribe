@@ -101,7 +101,7 @@ export default class RGBServices {
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
-    timeout: number = 30,
+    timeout: number = 60,
   ): Promise<{
     status: boolean;
     error: string;

@@ -83,7 +83,7 @@ function AppBackup({ navigation }) {
               const response = await ApiHandler.createBackup(true);
               if (response) {
                 setBackup(true);
-                navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
+                navigation.replace(NavigationRoutes.WALLETBACKUPHISTORY);
                 setTimeout(() => {
                   Toast(settings.SEED_BACKUP_CONFIRMED);
                 }, 400);

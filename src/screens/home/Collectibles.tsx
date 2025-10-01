@@ -78,16 +78,26 @@ function Collectibles() {
     collection =>
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
+  const coins = useMemo(() => {
+    if (!coinsResult) return [];
+    const coinsArray = coinsResult.slice();
+    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
+    if (defaultCoinIndex !== -1) {
+      coinsArray.splice(defaultCoinIndex, 1);
+      return coinsArray
+    }
+    return coinsArray;
+  }, [coinsResult,]);
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
     return [...coins, ...collectibles, ...udas]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles, udas]);
+  }, [collectibles, udas, coins]);
 
   useEffect(() => {
     setBackupProcess(isLoading);

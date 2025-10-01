@@ -38,11 +38,20 @@ const ViewLogs = () => {
   const styles = useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
+  const filterLogsByDate = useCallback((logContent: string) => {
+    const lines = logContent.split('\n');
+    const totalLines = lines.length;
+    const maxLines = 50;
+    const recentLines = lines.slice(-maxLines);
+    return recentLines.join('\n\n');
+  }, []);
+
   const readRgbLogs = useCallback(async () => {
     try {
       const rgbDir = await RGBServices.getRgbDir();
-      const logFile = `${rgbDir.dir.replace('file://', '')
-      }/${rgbWallet.masterFingerprint}/log`;
+      const logFile = `${rgbDir.dir.replace('file://', '')}/${
+        rgbWallet.masterFingerprint
+      }/log`;
       const fileExists = await RNFS.exists(logFile);
       if (!fileExists) {
         setContent('Log file not found');
@@ -58,11 +67,8 @@ const ViewLogs = () => {
       if (fileSize > MAX_DISPLAY_SIZE) {
         const startPosition = Math.max(0, fileSize - MAX_DISPLAY_SIZE);
         const data = await RNFS.read(logFile, MAX_DISPLAY_SIZE, startPosition);
-        setContent(
-          `[Showing last ${Math.round(
-            MAX_DISPLAY_SIZE / 1024,
-          )}KB of ${Math.round(fileSize / 1024 / 1024)}MB file]\n\n${data}`,
-        );
+        const filteredData = filterLogsByDate(data);
+        setContent(`\n${filteredData}`);
       } else if (fileSize > CHUNK_SIZE) {
         let content = '';
         let position = 0;
@@ -81,11 +87,13 @@ const ViewLogs = () => {
             setContent(content + `\n[${progressPercent}% loaded...]`);
           }
         }
-        setContent(content);
+        const filteredContent = filterLogsByDate(content);
+        setContent(`\n${filteredContent}`);
         setLoadingProgress('');
       } else {
         const data = await RNFS.readFile(logFile);
-        setContent(data);
+        const filteredData = filterLogsByDate(data);
+        setContent(`\n${filteredData}`);
       }
     } catch (error) {
       Toast(`${error}`, true);
@@ -93,7 +101,7 @@ const ViewLogs = () => {
     } finally {
       setLoading(false);
     }
-  }, [rgbWallet.masterFingerprint]);
+  }, [rgbWallet.masterFingerprint, filterLogsByDate]);
 
   useEffect(() => {
     readRgbLogs();

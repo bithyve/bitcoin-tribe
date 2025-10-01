@@ -708,7 +708,6 @@ import CloudKit
           self.rgbManager = RgbManager.shared
         let response = try runWithTimeout(seconds: Double(timeout)){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
         }
-          
           if response.status {
 //              if let logPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("log"),
 //                 FileManager.default.fileExists(atPath: logPath.path) {
@@ -724,12 +723,13 @@ import CloudKit
           } else {
             let errorStrings = ["unreleased lock file", "bincode", "error from bdk", "timeout"]
               let containsAny = errorStrings.contains { response.error.contains($0) }
-              
+            writeToLogFile(masterFingerprint: masterFingerprint, content: response.error)
+
               if containsAny {
                 deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
                 
               let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
-                
+                writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
                 let data: [String: Any] = [
                     "status": retryResponse.status,
                     "error": retryResponse.error
@@ -749,7 +749,7 @@ import CloudKit
       } catch TimeoutError.timedOut {
         deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
       let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
-        
+        writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
         let data: [String: Any] = [
             "status": retryResponse.status,
             "error": retryResponse.error
@@ -757,6 +757,7 @@ import CloudKit
         let json = Utility.convertToJSONString(params: data)
         callback(json)
     } catch {
+      writeToLogFile(masterFingerprint: masterFingerprint, content: error.localizedDescription)
           let errorData = ["error": error.localizedDescription]
           let json = Utility.convertToJSONString(params: errorData)
           callback(json)
@@ -782,6 +783,38 @@ import CloudKit
           print("Failed to delete runtime lock: \(error)")
       }
   }
+  
+  func writeToLogFile(masterFingerprint: String, content: String) {
+      guard let logFilePath = Utility.getRgbDir()?
+          .appendingPathComponent(masterFingerprint)
+          .appendingPathComponent("log") else {
+          print("Could not construct log path for fingerprint: \(masterFingerprint)")
+          return
+      }
+
+      if !FileManager.default.fileExists(atPath: logFilePath.path) {
+          FileManager.default.createFile(atPath: logFilePath.path, contents: nil, attributes: nil)
+      }
+
+      let formatter = DateFormatter()
+      formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
+      formatter.timeZone = TimeZone(secondsFromGMT: 0)
+
+      let timestamp = formatter.string(from: Date())
+
+      let logLine = "\(timestamp) INFO[TRIBE_INTERNAL] \(content)\n"
+
+      if let handle = try? FileHandle(forWritingTo: logFilePath) {
+          handle.seekToEndOfFile()
+          if let data = logLine.data(using: .utf8) {
+              handle.write(data)
+          }
+          try? handle.close()
+      } else {
+          print("Failed to open log file for writing at path: \(logFilePath.path)")
+      }
+  }
+
   
   @objc func resetWallet(masterFingerprint: String,callback: @escaping ((String) -> Void)) -> Void {
       self.rgbManager.online = nil

@@ -15,6 +15,7 @@ import AddPicture from 'src/components/AddPicture';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
+import TncCta from 'src/components/TncCta';
 
 type ProfileDetailsProps = {
   title: string;
@@ -96,15 +97,18 @@ function ProfileDetails(props: ProfileDetailsProps) {
               maxLength={15}
             />
           </View>
-          <Buttons
-            primaryTitle={primaryCTATitle}
-            secondaryTitle={secondaryCTATitle}
-            primaryOnPress={primaryOnPress}
-            secondaryOnPress={secondaryOnPress}
-            width={windowWidth / 1.1}
-            secondaryCTAWidth={windowWidth / 2.3}
-            disabled={disabled}
-          />
+          <View style={{ gap: hp(20) }}>
+            <TncCta />
+            <Buttons
+              primaryTitle={primaryCTATitle}
+              secondaryTitle={secondaryCTATitle}
+              primaryOnPress={primaryOnPress}
+              secondaryOnPress={secondaryOnPress}
+              width={windowWidth / 1.1}
+              secondaryCTAWidth={windowWidth / 2.3}
+              disabled={disabled}
+            />
+          </View>
         </ScrollView>
       </KeyboardAvoidingView>
     </>

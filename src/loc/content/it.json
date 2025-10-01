@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Supporto di backup",
     "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
     "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata.",
-    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono."
+    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono.",
+    "termsText": "Procedendo accetti il "
   },
   "home": {
     "addAssets": "Ricevi asset",
@@ -203,8 +204,8 @@
     "select": "Seleziona",
     "noAssetTitle": "Ancora nessuna risorsa.",
     "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto.",
-    "noCollectibleAssetTitle": "Ancora nessun collezionabile?",
-    "noCollectibleAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere il tuo primo collezionabile RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia collezionabili con facilità.",
+    "noCollectibleAssetTitle": "Ancora nessun asset?",
+    "noCollectibleAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere il tuo primo asset RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia asset con facilità.",
     "noCoinAssetTitle": "Crea il tuo primo asset.",
     "noCoinAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere la tua prima moneta RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia monete con facilità.",
     "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
@@ -643,7 +644,7 @@
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
     "verificationTitle": "VERIFICA",
-    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
+    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 20.000 sats nel tuo wallet per pagare la tariffa di servizio.",
     "recordCard": "Dettagli del record DNS",
     "recordType": "Tipo di Record",
     "domain": "Dominio",

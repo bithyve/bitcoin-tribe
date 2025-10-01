@@ -74,6 +74,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(-10),
     },
     campaignContainer: {
       backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
@@ -217,7 +218,7 @@ const DefaultCoin = ({
             })
           }>
           <GradientBorderAnimated
-            height={hp(90)}
+            height={hp(95)}
             radius={hp(20)}
             strokeWidth={2}
             style={styles.campaignContainer}>
@@ -292,13 +293,13 @@ const DefaultCoin = ({
             navigation.navigate(NavigationRoutes.WALLETDETAILS);
           }}>
           <IconBitcoin />
-          <View style={{ marginVertical: hp(15) }} />
+          <View style={{ marginVertical: hp(20) }} />
           <AppText style={styles.totalBalanceLabel} variant="body2">
             Bitcoin Balance
           </AppText>
           <DecimalText value={Number(btcBalance)} unit={'sats'} />
         </AppTouchable>
-        <View style={{ marginHorizontal: wp(5) }} />
+        <View style={{ marginHorizontal: wp(7) }} />
 
         <AppTouchable
           style={styles.balanceContainer}
@@ -306,7 +307,7 @@ const DefaultCoin = ({
             navigation.navigate(NavigationRoutes.ASSETS);
           }}>
           <IconOtherAssets />
-          <View style={{ marginVertical: hp(15) }} />
+          <View style={{ marginVertical: hp(20) }} />
 
           <AppText style={styles.totalBalanceLabel} variant="body2">
             Other Assets

@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "バックアップサポート",
     "supportLearnMoreContent3": "リレーベースのバックアップにより、資産の回復と安全な管理が保証されます。",
     "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。",
-    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。"
+    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。",
+    "termsText": "続行すると、"
   },
   "home": {
     "addAssets": "資産を受け取る",
@@ -203,8 +204,8 @@
     "select": "選択",
     "noAssetTitle": "まだアセットがありません。",
     "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。",
-    "noCollectibleAssetTitle": "まだコレクティブルはありませんか？",
-    "noCollectibleAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコレクティブルを発行し、今日からデジタル資産を管理しましょう。コレクティブルを簡単に作成、管理、送信できます。",
+    "noCollectibleAssetTitle": "まだ資産はありませんか？",
+    "noCollectibleAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGB資産を発行し、今日からデジタル資産を管理しましょう。資産を簡単に作成、管理、送信できます。",
     "noCoinAssetTitle": "最初のアセットを作成しましょう。",
     "noCoinAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコインを発行し、今日からデジタル資産を管理しましょう。コインを簡単に作成、管理、送信できます。",
     "backupAlertTitle": "バックアップで資金を保護する",
@@ -643,7 +644,7 @@
     "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。",
     "sharePostTitle": "X に投稿を共有する",
     "verificationTitle": "認証",
-    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
+    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 20,000 サトシがあることを確認してください。",
     "recordCard": "DNSレコードの詳細",
     "recordType": "レコードタイプ",
     "domain": "ドメイン",
