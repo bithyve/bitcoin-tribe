@@ -46,7 +46,7 @@ platform :android do
     store_password = ENV["STORE_PASSWORD"]
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
-    releaseFilePath = File.join(Dir.pwd, "..", "app", "release.keystore")
+    releaseFilePath = ENV["MYAPP_RELEASE_STORE_FILE"] || File.join(Dir.pwd, "..", "app", "release.keystore")
     gradle(task: 'clean')
     gradle(
       task: 'bundle',
@@ -77,7 +77,7 @@ platform :android do
     store_password = ENV["STORE_PASSWORD"]
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
-    releaseFilePath = File.join(Dir.pwd, "../app", "release.keystore")
+    releaseFilePath = ENV["MYAPP_RELEASE_STORE_FILE"] || File.join(Dir.pwd, "../app", "release.keystore")
     gradle(task: 'clean')
     gradle(
       task: 'bundle',
