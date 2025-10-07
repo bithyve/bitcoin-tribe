@@ -60,7 +60,7 @@ import { NativeModules, PermissionsAndroid, Platform } from 'react-native';
 import { BackupAction, CloudBackupAction } from 'src/models/enums/Backup';
 import AppType from 'src/models/enums/AppType';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
-import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
+import { snakeCaseToCamelCase } from 'src/utils/snakeCaseToCamelCase';
 import Realm from 'realm';
 import { hexToBase64 } from 'src/utils/hexToBase64';
 import * as RNFS from '@dr.pogodin/react-native-fs';
@@ -1259,7 +1259,7 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.decodelninvoice({ invoice });
       if (response.payment_hash) {
-        return snakeCaseToCamelCaseCase(response);
+        return snakeCaseToCamelCase(response);
       } else {
         throw new Error(response.error);
       }
@@ -1273,7 +1273,7 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.sendPayment({ invoice });
       if (response.payment_hash) {
-        return snakeCaseToCamelCaseCase(response);
+        return snakeCaseToCamelCase(response);
       } else {
         throw new Error(response.error);
       }
@@ -1298,7 +1298,7 @@ export class ApiHandler {
             lnPayments: response?.payments,
           },
         );
-        return snakeCaseToCamelCaseCase(response.payments);
+        return snakeCaseToCamelCase(response.payments);
       } else {
         throw new Error(response.error);
       }
@@ -1685,7 +1685,7 @@ export class ApiHandler {
         });
         if (balances && balances.future) {
           dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
-            balance: snakeCaseToCamelCaseCase(balances),
+            balance: snakeCaseToCamelCase(balances),
           });
         }
       }
@@ -2339,9 +2339,9 @@ export class ApiHandler {
     try {
       const response = await ApiHandler.api.listchannels();
       if (response && response.channels) {
-        return snakeCaseToCamelCaseCase(response).channels;
+        return snakeCaseToCamelCase(response).channels;
       } else {
-        return snakeCaseToCamelCaseCase(response);
+        return snakeCaseToCamelCase(response);
       }
     } catch (error) {
       console.log('error - ', error);
@@ -2413,7 +2413,7 @@ export class ApiHandler {
         throw new Error(response.error);
       }
       if (response) {
-        return snakeCaseToCamelCaseCase(response);
+        return snakeCaseToCamelCase(response);
       } else {
         throw new Error('Failed to unlock node');
       }
