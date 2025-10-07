@@ -293,7 +293,7 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 2,
-      title: 'Change Passcode',
+      title: settings.changePasscodeTitle,
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => setVisible(true),
       hideMenu: pinMethod === PinMethod.DEFAULT,
@@ -360,8 +360,8 @@ function SettingsScreen({ navigation }) {
         <HomeHeader showBalance={false} showSearch />
       </View>
       <EnterPasscodeModal
-        title={'Change Passcode'}
-        subTitle={'Enter your current passcode'}
+        title={settings.changePasscodeTitle}
+        subTitle={settings.enterPasscodeSubTitle}
         visible={visible}
         passcode={passcode}
         invalidPin={invalidPin}
@@ -391,7 +391,7 @@ function SettingsScreen({ navigation }) {
       <View>
         <BiometricUnlockModal
           visible={visibleBiometricUnlock}
-          primaryCtaTitle={'Set Passcode'}
+          primaryCtaTitle={settings.setPasscodeTitle}
           primaryOnPress={() => {
             setVisibleBiometricUnlock(false);
             setIsEnableBiometrics(true);
@@ -421,7 +421,7 @@ function SettingsScreen({ navigation }) {
         {isThemeDark ? <WalletSync /> : <WalletSyncLight />}
         <View style={styles.ctaWrapper}>
           <Buttons
-            primaryTitle={'Start Resync'}
+            primaryTitle={resetWalletMessages.startResync}
             primaryOnPress={() => {
               reSyncWallet(true);
               setShowFullSyncModal(false);

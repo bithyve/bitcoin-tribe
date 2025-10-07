@@ -293,7 +293,9 @@
     "EnterPasscode": "Enter Passcode",
     "EnterPasscodeSubTitle": "Confirm passcode to show seed phrase",
     "setPasscodeTitle": "Set Passcode",
-    "issuance": "Issuance",
+    "changePasscodeTitle": "Change Passcode",
+    "enterPasscodeSubTitle": "Enter your current passcode",
+    "issuance": "Issuance", 
     "send": "Sent",
     "receiveblind": "Received",
     "settled": "Settled",
@@ -344,7 +346,8 @@
     "utxoInfoSubTitle4": "Blue border is removed completely.",
     "activeNetworkLabel": "Active Network",
     "bioUnlockTitle": "Set Passcode to Enable Biometric Login",
-    "bioUnlockSubTitle": "To use biometric authentication in Bitcoin Tribe, you need to set a device passcode first. This keeps your wallet and assets secure."
+    "bioUnlockSubTitle": "To use biometric authentication in Bitcoin Tribe, you need to set a device passcode first. This keeps your wallet and assets secure.",
+    "advancedOptionsTitle": "Advanced Options"
   },
   "receciveScreen": {
     "headerSubTitle": "Scan QR",
@@ -464,9 +467,9 @@
     "date": "Date",
     "numOfUtxo": "Number of UTXOs",
     "transferDetails": "Transfer Details",
-    "viewUnspent": "View UTXOs & Invoices",
+    "viewUnspent": "View UTXOs and Invoices",
     "walletRefreshMsg": "Wallet successfully updated",
-    "unspentTitle": "UTXOs & Invoices",
+    "unspentTitle": "UTXOs and Invoices",
     "satsAmount": "Sats Amount",
     "rgbAssetID": "RGB Asset ID",
     "testSatsRecived": "Test-sats received",
@@ -496,7 +499,18 @@
     "rampSubTitle": "Ramp allows you to acquire Bitcoin using payment methods available in your country.",
     "rampInfo": "Ramp offers multiple payment methods to acquire Bitcliin.",
     "rampAddressLabel": "Address for the transaction",
-    "rampNote": "By proceeding, you understand that ramp will process the payment and transfer for the purchased bitcoin. On continuing you will be redirected to their page."
+    "rampNote": "By proceeding, you understand that ramp will process the payment and transfer for the purchased bitcoin. On continuing you will be redirected to their page.",
+    "colored": "Colored",
+    "colorable": "Colorable",
+    "invoices": "Invoices",
+    "noActiveInvoicesTitle": "No active invoices",
+    "noActiveInvoicesSubTitle": "You have no active invoices",
+    "invoiceCancelled": "Invoice cancelled",
+    "failedToCancelInvoice": "Failed to cancel invoice",
+    "invoiceCopiedToClipboard": "Invoice copied to clipboard",
+    "recipientId": "Recipient ID",
+    "expiresOn": "Expires On",
+    "cancelInvoiceTitle": "Cancel Invoice"
   },
   "assets": {
     "assetCreateMsg": "Asset created successfully",
@@ -720,7 +734,19 @@
     "domainVerificationInfoSubTitle2": "Ideal for businesses, personal brands, and project websites.",
     "domainVerificationInfoTitle3": "Verified Badge",
     "domainVerificationInfoSubTitle3": "Your domain will be publicly shown as the verified source.",
-    "rateLimitMsg": "Rate limit reached.\n You can retry after 15 minutes."
+    "rateLimitMsg": "Rate limit reached.\n You can retry after 15 minutes.",
+    "totalBalance": "Total Balance",
+    "bitcoinBalance": "Bitcoin Balance",
+    "otherAssets": "Other Assets",
+    "addAssetSubtitle": "Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.",
+    "invoiceExpiryTitle": "Invoice Expiry",
+    "oneHour": "1 Hr",
+    "sixHours": "6 Hrs",
+    "twelveHours": "12 Hrs",
+    "oneDay": "1 Day",
+    "twoDays": "2 Days",
+    "searchAssetPlaceholder": "Search from Tribe RGB registry",
+    "availableBalance": "Available Balance"
   },
   "community": {
     "fnfTitle": "Community",
@@ -857,6 +883,7 @@
     "YouMustBackup": "You must back up your wallet before resetting to avoid losing access to your assets.",
     "YourWalletWill": "Your wallet will now perform a full resync.",
     "ThisMayTake": "This may take a few minutes depending on your data size and network speed.",
-    "PleaseDoNot": "Please do not minimize or close the app until the process is complete."
+    "PleaseDoNot": "Please do not minimize or close the app until the process is complete.",
+    "startResync": "Start Resync"
   }
 }

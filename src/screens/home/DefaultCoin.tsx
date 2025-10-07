@@ -28,6 +28,7 @@ import { useQuery } from '@realm/react';
 import GradientBorderAnimated from './GradientBorderAnimated';
 import RefreshControlView from 'src/components/RefreshControlView';
 import Fonts from 'src/constants/Fonts';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
@@ -152,6 +153,8 @@ const DefaultCoin = ({
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
   const { appType } = useContext(AppContext);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const wallet: Wallet = useWallets({}).wallets[0];
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const rgbWallet = useRgbWallets({}).wallets[0];
@@ -252,7 +255,7 @@ const DefaultCoin = ({
           <View style={styles.coinNameContainer}>
             <AppText variant="heading1">{asset.name}</AppText>
             <AppText style={styles.totalBalanceLabel} variant="body2">
-              Total Balance
+              {assets.totalBalance}
             </AppText>
             <DecimalText
               value={Number(asset?.balance?.spendable) / 10 ** asset.precision}
@@ -295,7 +298,7 @@ const DefaultCoin = ({
           <IconBitcoin />
           <View style={{ marginVertical: hp(20) }} />
           <AppText style={styles.totalBalanceLabel} variant="body2">
-            Bitcoin Balance
+            {assets.bitcoinBalance}
           </AppText>
           <DecimalText value={Number(btcBalance)} unit={'sats'} />
         </AppTouchable>
@@ -310,7 +313,7 @@ const DefaultCoin = ({
           <View style={{ marginVertical: hp(20) }} />
 
           <AppText style={styles.totalBalanceLabel} variant="body2">
-            Other Assets
+            {assets.otherAssets}
           </AppText>
           <AppText style={styles.totalBalance} variant="heading1">
             {totalAssets}

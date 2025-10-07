@@ -216,9 +216,7 @@ const EnterInvoiceDetails = () => {
     <ScreenContainer>
       <AppHeader
         title={home.addAssets}
-        subTitle={
-          'Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.'
-        }
+        subTitle={assets.addAssetSubtitle}
         enableBack={true}
       />
       <KeyboardAwareScrollView
