@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonArray
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
+import org.rgbtools.AssetSchema
 import org.rgbtools.Assignment
 import org.rgbtools.Balance
 import org.rgbtools.BtcBalance
@@ -261,11 +262,15 @@ object RGBHelper {
         amount: ULong,
         consignmentEndpoints: List<String>,
         feeRate: Float = AppConstants.defaultFeeRate,
-        isDonation: Boolean
+        isDonation: Boolean,
+        schema: String
     ): String {
+        val assignment =
+            if (schema.uppercase() === "UDA") Assignment.NonFungible
+            else Assignment.Fungible(amount)
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
-            mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
+            mapOf(assetID to listOf(Recipient(blindedUTXO,null, assignment, consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
             1u,

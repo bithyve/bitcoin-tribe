@@ -289,6 +289,7 @@ const SendAssetScreen = () => {
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
+        schema: assetData?.assetSchema.toUpperCase(),
       });
       setLoading(false);
       if (response?.txid) {
