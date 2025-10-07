@@ -927,13 +927,16 @@ import CloudKit
   }
   
   
-  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, callback: @escaping ((String) -> Void)) -> Void{
+  @objc func sendAsset(assetId: String, blindedUTXO: String, amount: NSNumber, consignmentEndpoints: String, fee: NSNumber,isDonation: Bool, schema: String, callback: @escaping ((String) -> Void)) -> Void{
     do {
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
       }
       var recipientMap: [String: [Recipient]] = [:]
-      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, assignment: .fungible(amount: UInt64(amount)), transportEndpoints: [consignmentEndpoints])
+      let assignment: Assignment = schema.uppercased() == "UDA"
+          ? .nonFungible
+      : .fungible(amount: UInt64(amount))
+      let recipient = Recipient(recipientId: blindedUTXO, witnessData: nil, assignment:assignment, transportEndpoints: [consignmentEndpoints])
       recipientMap[assetId] = [recipient]
       let response = try self.handleMissingFunds {
         return try wallet.send(online: online, recipientMap: recipientMap, donation: isDonation, feeRate: UInt64(truncating: fee), minConfirmations: 1, skipSync: true)
