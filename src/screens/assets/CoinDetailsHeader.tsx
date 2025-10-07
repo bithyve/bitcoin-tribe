@@ -43,6 +43,7 @@ type assetDetailsHeaderProps = {
   largeHeaderHeight?: any;
   headerRightIcon?: React.ReactNode;
   totalAssetLocalAmount?: number;
+  disabled?: boolean;
 };
 function CoinDetailsHeader(props: assetDetailsHeaderProps) {
   const {
@@ -55,6 +56,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
     largeHeaderHeight,
     headerRightIcon,
     totalAssetLocalAmount,
+    disabled = false,
   } = props;
   const navigation = useNavigation();
   const insets = useSafeAreaInsets();
@@ -237,6 +239,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                 onPressBuy={onPressBuy}
                 sendCtaWidth={wp(150)}
                 receiveCtaWidth={wp(150)}
+                disabled={disabled}
               />
             </View>
           </View>

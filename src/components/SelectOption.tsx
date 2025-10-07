@@ -31,6 +31,7 @@ type SelectOptionProps = {
   backup?: boolean;
   manualAssetBackupStatus?: boolean;
   hasCompletedManualBackup?: boolean;
+  disabled?: boolean;
 };
 const SelectOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -49,11 +50,12 @@ const SelectOption = (props: SelectOptionProps) => {
     backup = false,
     manualAssetBackupStatus,
     hasCompletedManualBackup,
+    disabled = false,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, backColor, backup);
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} disabled={disabled}>
       <GradientView
         style={[styles.container, style]}
         colors={[

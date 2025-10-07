@@ -26,6 +26,7 @@ import {
   Collectible,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
@@ -33,6 +34,7 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AppContext } from 'src/contexts/AppContext';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -112,6 +114,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
+  const { appType, isWalletOnline } = useContext(AppContext);
   const { invoiceAssetId, chosenAsset } = useRoute().params;
   const { receciveScreen, common, assets, home } = translations;
   const navigation = useNavigation();
@@ -300,6 +303,7 @@ const EnterInvoiceDetails = () => {
             primaryTitle={common.proceed}
             primaryOnPress={() => validateAndNavigateToReceiveAsset()}
             width={'100%'}
+            disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
           />
         </View>
         {assetsDropdown && (

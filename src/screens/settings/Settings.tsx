@@ -71,7 +71,7 @@ import LottieView from 'lottie-react-native';
 import RGBServices from 'src/services/rgb/RGBServices';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import dbManager from 'src/storage/realm/dbManager';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RGBWallet, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const RNBiometrics = new ReactNativeBiometrics();
@@ -88,7 +88,7 @@ function SettingsScreen({ navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet } =
+  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet, isWalletOnline } =
     useContext(AppContext);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
@@ -345,6 +345,7 @@ function SettingsScreen({ navigation }) {
       title: resetWalletMessages.ResyncWalletData,
       icon: isThemeDark ? <SyncWalletIcon /> : <SyncWalletIconLight />,
       onPress: () => setShowFullSyncModal(true),
+      hideMenu: isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress,
     },
     {
       id: 2,

@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo } from 'react';
-import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
+  import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -152,9 +152,9 @@ const DefaultCoin = ({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
-  const { appType } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
+  const { appType, isWalletOnline } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const rgbWallet = useRgbWallets({}).wallets[0];
@@ -286,6 +286,7 @@ const DefaultCoin = ({
           }}
           sendCtaWidth={wp(150)}
           receiveCtaWidth={wp(150)}
+          disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
         />
       </AppTouchable>
 
