@@ -48,7 +48,6 @@ const ColorableUTXO = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations || { wallet: {}, assets: {} };
-  const [refreshing, setRefreshing] = useState(false);
   const app: TribeApp | undefined = useQuery(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
@@ -68,7 +67,7 @@ const ColorableUTXO = () => {
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
 
-  const { mutate } = useMutation(ApiHandler.viewUtxos);
+  const { mutate, isLoading} = useMutation(ApiHandler.viewUtxos);
   useEffect(() => {
     mutate();
   }, [mutate]);
@@ -89,9 +88,7 @@ const ColorableUTXO = () => {
   };
 
   const pullDownToRefresh = () => {
-    setRefreshing(true);
     mutate();
-    setTimeout(() => setRefreshing(false), 2000);
   };
   const FooterComponent = () => {
     return <View style={styles.footer} />;
@@ -121,12 +118,12 @@ const ColorableUTXO = () => {
       refreshControl={
         Platform.OS === 'ios' ? (
           <RefreshControlView
-            refreshing={refreshing}
+            refreshing={isLoading}
             onRefresh={() => pullDownToRefresh()}
           />
         ) : (
           <RefreshControl
-            refreshing={refreshing}
+            refreshing={isLoading}
             onRefresh={() => pullDownToRefresh()}
             colors={[theme.colors.accent1]}
             progressBackgroundColor={theme.colors.inputBackground}
