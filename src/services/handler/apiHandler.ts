@@ -544,6 +544,7 @@ export class ApiHandler {
         await ApiHandler.makeWalletOnline();
         await ApiHandler.refreshRgbWallet();
         await ApiHandler.fetchPresetAssets();
+        await ApiHandler.viewUtxos()
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
           'version',

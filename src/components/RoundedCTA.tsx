@@ -16,6 +16,7 @@ type RoundedCTAProps = {
   width?: number;
   colors?: [string, string, string];
   textColor?: string;
+  disabled?: boolean;
 };
 
 function RoundedCTA(props: RoundedCTAProps) {
@@ -33,6 +34,7 @@ function RoundedCTA(props: RoundedCTAProps) {
       theme.colors.cardGradient3,
     ],
     textColor = theme.colors.headingColor,
+    disabled = false,
   } = props;
   const styles = getStyles(width, buttonColor, height);
   return (
@@ -47,7 +49,8 @@ function RoundedCTA(props: RoundedCTAProps) {
         // buttonColor={buttonColor}
         textColor={textColor}
         onPress={onPress}
-        maxFontSizeMultiplier={1}>
+        maxFontSizeMultiplier={1}
+        disabled={disabled}>
         {title}
       </Button>
     </GradientView>
