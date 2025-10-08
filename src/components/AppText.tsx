@@ -11,6 +11,7 @@ export enum TextVariants {
   pageTitle2 = 'pageTitle2',
   subTitle = 'subTitle',
   body1 = 'body1',
+  body1Bold = 'body1Bold',
   body2 = 'body2',
   body3 = 'body3',
   body5 = 'body5',
@@ -58,6 +59,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.subTitle;
       case TextVariants.body1:
         return CommonStyles.body1;
+      case TextVariants.body1Bold:
+        return CommonStyles.body1Bold;
       case TextVariants.body2:
         return CommonStyles.body2;
       case TextVariants.caption:

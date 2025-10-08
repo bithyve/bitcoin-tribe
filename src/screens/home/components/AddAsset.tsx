@@ -1,16 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
-import SelectOption from 'src/components/SelectOption';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
@@ -27,6 +21,7 @@ import { AppTheme } from 'src/theme';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import RibbonCard from 'src/components/RibbonCardCard';
 
 function AddAsset() {
   const navigation = useNavigation();
@@ -46,7 +41,7 @@ function AddAsset() {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
-
+  
 
   const canProceed = useMemo(() => {
     if (
@@ -94,8 +89,9 @@ function AddAsset() {
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
 
       <View style={styles.container}>
-        <SelectOption
+        <RibbonCard
           title={assets.issueNewCoin}
+          subTitle={assets.issueNewCoinSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -105,11 +101,11 @@ function AddAsset() {
               navigateToIssue(false, AssetType.Coin);
             }
           }}
-          testID="issue_new"
         />
 
-        <SelectOption
+        <RibbonCard
           title={assets.issueCollectibles}
+          subTitle={assets.issueCollectiblesSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -119,10 +115,10 @@ function AddAsset() {
               navigateToIssue(false, AssetType.Collectible);
             }
           }}
-          testID="issue_new"
         />
-        <SelectOption
+        <RibbonCard
           title={home.addAssets}
+          subTitle={home.receiveAssetsSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -134,7 +130,6 @@ function AddAsset() {
               });
             }
           }}
-          testID="receive"
         />
       </View>
 
@@ -164,9 +159,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingTop: hp(20),
+      gap: hp(12),
     },
     optionStyle: {
-      marginVertical: hp(5),
       paddingHorizontal: 20,
     },
     labelWrapper: {
