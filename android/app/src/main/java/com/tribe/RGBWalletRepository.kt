@@ -92,6 +92,30 @@ object RGBWalletRepository {
         }
     }
 
+    fun writeToLogFile(masterFingerprint: String, content: String) {
+        try {
+            val logFilePath = AppConstants.rgbDir
+                .resolve(masterFingerprint)
+                .resolve("log")
+
+            logFilePath.parentFile?.mkdirs()
+
+            if (!logFilePath.exists()) {
+                logFilePath.createNewFile()
+            }
+            val formatter = java.time.format.DateTimeFormatter
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+                .withZone(java.time.ZoneOffset.UTC)
+
+            val timestamp = formatter.format(java.time.Instant.now())
+            val logLine = "$timestamp INFO[TRIBE_INTERNAL] $content\n"
+            logFilePath.appendText(logLine)
+        } catch (e: Exception) {
+            Log.e("RGB", "Failed to write log file: ${e.message}", e)
+        }
+    }
+
+
 
 //    fun checkWalletInitialized(): Boolean {
 //        return this::wallet.isInitialized && this::online.isInitialized

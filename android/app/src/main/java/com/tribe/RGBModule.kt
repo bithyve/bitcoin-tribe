@@ -148,6 +148,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                             }
                             promise.resolve(jsonObject.toString())
                         } else {
+                            RGBWalletRepository.writeToLogFile(masterFingerprint, error)
                             RGBWalletRepository.deleteRuntimeLockFile(masterFingerprint)
                             val retryResult = runInit()
                             if (retryResult != null) {
@@ -173,6 +174,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
                     }
                 }
             } catch (e: Exception) {
+                RGBWalletRepository.writeToLogFile(masterFingerprint, e.message!!)
                 Log.e(TAG, "initiate failed: ${e.message}", e)
                 withContext(Dispatchers.Main) {
                     val jsonObject = JsonObject().apply {
@@ -466,11 +468,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun sendAsset(assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean, promise: Promise){
+    fun sendAsset(assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean,schema: String, promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 val endpoints = listOf(consignmentEndpoints)
-                val result = RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation)
+                val result = RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation, schema)
                 withContext(Dispatchers.Main) {
                     promise.resolve(result)
                 }

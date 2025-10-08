@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo } from 'react';
-import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset } from 'src/models/interfaces/RGBWallet';
+  import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -29,6 +29,7 @@ import GradientBorderAnimated from './GradientBorderAnimated';
 import RefreshControlView from 'src/components/RefreshControlView';
 import Fonts from 'src/constants/Fonts';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
@@ -75,6 +76,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(-10),
     },
     campaignContainer: {
       backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
@@ -151,7 +153,9 @@ const DefaultCoin = ({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
-  const { appType } = useContext(AppContext);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
+  const { appType, isWalletOnline } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const rgbWallet = useRgbWallets({}).wallets[0];
@@ -218,7 +222,7 @@ const DefaultCoin = ({
             })
           }>
           <GradientBorderAnimated
-            height={hp(90)}
+            height={hp(95)}
             radius={hp(20)}
             strokeWidth={2}
             style={styles.campaignContainer}>
@@ -252,7 +256,7 @@ const DefaultCoin = ({
           <View style={styles.coinNameContainer}>
             <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
             <AppText style={styles.totalBalanceLabel} variant="body2">
-              Total Balance
+              {assets.totalBalance}
             </AppText>
             <DecimalText
               value={Number(asset?.balance?.spendable) / 10 ** asset.precision}
@@ -283,6 +287,7 @@ const DefaultCoin = ({
           }}
           sendCtaWidth={wp(150)}
           receiveCtaWidth={wp(150)}
+          disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
         />
       </AppTouchable>
 
@@ -293,13 +298,13 @@ const DefaultCoin = ({
             navigation.navigate(NavigationRoutes.WALLETDETAILS);
           }}>
           <IconBitcoin />
-          <View style={{ marginVertical: hp(15) }} />
+          <View style={{ marginVertical: hp(20) }} />
           <AppText style={styles.totalBalanceLabel} variant="body2">
-            Bitcoin Balance
+            {assets.bitcoinBalance}
           </AppText>
           <DecimalText value={Number(btcBalance)} unit={'sats'} />
         </AppTouchable>
-        <View style={{ marginHorizontal: wp(5) }} />
+        <View style={{ marginHorizontal: wp(7) }} />
 
         <AppTouchable
           style={styles.balanceContainer}
@@ -307,10 +312,10 @@ const DefaultCoin = ({
             navigation.navigate(NavigationRoutes.ASSETS);
           }}>
           <IconOtherAssets />
-          <View style={{ marginVertical: hp(15) }} />
+          <View style={{ marginVertical: hp(20) }} />
 
           <AppText style={styles.totalBalanceLabel} variant="body2">
-            Other Assets
+            {assets.otherAssets}
           </AppText>
           <AppText style={styles.totalBalance} variant="heading1">
             {totalAssets}

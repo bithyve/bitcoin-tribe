@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -27,6 +27,7 @@ import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg'
 import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
 import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -58,6 +59,8 @@ function WalletTransactions(props: WalletTransactionsProps) {
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
 
   const getStatusIcon = (status, type, isThemeDark, confirmations) => {
     const icons = {
@@ -158,7 +161,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               ellipsizeMode="middle"
               style={styles.transIdText}>
               {transKind === TransactionKind.SERVICE_FEE
-                ? 'Platform Fee'
+                ? assets.platformFeeTitle
                 : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>

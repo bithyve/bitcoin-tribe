@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "バックアップサポート",
     "supportLearnMoreContent3": "リレーベースのバックアップにより、資産の回復と安全な管理が保証されます。",
     "supportLearnMoreContent4": "サポートモードで強化されたセキュリティと使いやすさをお楽しみください。",
-    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。"
+    "backupFileNotFound": "RGBアセットファイルが見つかりませんでした。携帯電話からファイルをアップロードしてください。",
+    "termsText": "続行すると、"
   },
   "home": {
     "addAssets": "資産を受け取る",
@@ -203,8 +204,8 @@
     "select": "選択",
     "noAssetTitle": "まだアセットがありません。",
     "noAssetSubTitle": "下のプラスアイコンをタップして、最初のアセットを発行してください。",
-    "noCollectibleAssetTitle": "まだコレクティブルはありませんか？",
-    "noCollectibleAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコレクティブルを発行し、今日からデジタル資産を管理しましょう。コレクティブルを簡単に作成、管理、送信できます。",
+    "noCollectibleAssetTitle": "まだ資産はありませんか？",
+    "noCollectibleAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGB資産を発行し、今日からデジタル資産を管理しましょう。資産を簡単に作成、管理、送信できます。",
     "noCoinAssetTitle": "最初のアセットを作成しましょう。",
     "noCoinAssetSubTitle": "傑作を作成する準備はできましたか？下の「+」アイコンをタップして、最初のRGBコインを発行し、今日からデジタル資産を管理しましょう。コインを簡単に作成、管理、送信できます。",
     "backupAlertTitle": "バックアップで資金を保護する",
@@ -292,6 +293,8 @@
     "EnterPasscode": "パスコードを入力",
     "EnterPasscodeSubTitle": "シードフレーズを表示するためにパスコードを確認",
     "setPasscodeTitle": "パスコードを設定",
+    "changePasscodeTitle": "パスコードを変更",
+    "enterPasscodeSubTitle": "現在のパスコードを入力してください",
     "issuance": "発行",
     "send": "送信済み",
     "receiveblind": "受け取る",
@@ -343,7 +346,8 @@
     "utxoInfoSubTitle4": "青い枠線は完全に削除されました。",
     "activeNetworkLabel": "アクティブネットワーク",
     "bioUnlockTitle": "生体認証ログインを有効にするにはパスコードを設定してください",
-    "bioUnlockSubTitle": "Bitcoin Tribeで生体認証を使用するには、最初にデバイスのパスコードを設定する必要があります。これにより、ウォレットと資産が安全に保たれます。"
+    "bioUnlockSubTitle": "Bitcoin Tribeで生体認証を使用するには、最初にデバイスのパスコードを設定する必要があります。これにより、ウォレットと資産が安全に保たれます。",
+    "advancedOptionsTitle": "詳細オプション"
   },
   "receciveScreen": {
     "headerSubTitle": "QRをスキャン",
@@ -368,8 +372,8 @@
     "sendBtcOptionCardSubTitle": "ビットコインアドレスを入力",
     "enterSendAddress": "送信アドレスを入力",
     "enterSendAdrsSubTitle": "送信アドレスを入力または貼り付け",
-    "enterSendAddressInvoice": "Enter Text",
-    "enterSendAdrsInvoiceSubTitle": "Paste Bitcoin Address, RGB Invoice, Asset ID or Tribe QR Code",
+    "enterSendAddressInvoice": "テキストを入力",
+    "enterSendAdrsInvoiceSubTitle": "ビットコインアドレス、RGB請求書、アセットIDまたはTribe QRコードを貼り付け",
     "enterAddress": "アドレスを入力",
     "sendToTitle": "送信先",
     "sendTitle": "送信",
@@ -463,9 +467,9 @@
     "date": "日付",
     "numOfUtxo": "UTXOの数",
     "transferDetails": "転送の詳細",
-    "viewUnspent": "View UTXOs & Invoices",
+    "viewUnspent": "UTXOと請求書を表示",
     "walletRefreshMsg": "ウォレットが正常に更新されました",
-    "unspentTitle": "UTXOs & Invoices",
+    "unspentTitle": "UTXOと請求書",
     "satsAmount": "サットの金額",
     "rgbAssetID": "RGBアセットID",
     "testSatsRecived": "テストサットを受信しました",
@@ -485,7 +489,7 @@
     "utxoValue": "UTXO 値",
     "requestTSatsProcessTitle": "リクエストを処理中",
     "requestTSatsProcessSubTitle": "テストサットのリクエストを処理しています。しばらくお待ちください。ご理解ありがとうございます！",
-    "xpubAndUtxoTitle": "UTXOs, Invoices and xPUB",
+    "xpubAndUtxoTitle": "UTXO、請求書、xPUB",
     "valueMismatchTitle": "値の不一致が検出されました",
     "valueMismatchSubTitle": "送信された内容と受信された内容に不一致があります。原因としては以下が考えられます：",
     "valueMismatchInfo1": "予想とは異なるアセット",
@@ -495,7 +499,18 @@
     "rampSubTitle": "Ramp は、お住まいの国で利用可能な支払い方法を使ってビットコインを取得できます。",
     "rampInfo": "Ramp は Bitcliin を取得するための複数の支払い方法を提供しています。",
     "rampAddressLabel": "取引用アドレス",
-    "rampNote": "続行することで、Ramp が支払いと購入したビットコインの送金を処理することに同意したものとみなされます。続けると、Ramp のページにリダイレクトされます。"
+    "rampNote": "続行することで、Ramp が支払いと購入したビットコインの送金を処理することに同意したものとみなされます。続けると、Ramp のページにリダイレクトされます。",
+    "colored": "カラード",
+    "colorable": "カラー可能",
+    "invoices": "請求書",
+    "noActiveInvoicesTitle": "アクティブな請求書がありません",
+    "noActiveInvoicesSubTitle": "アクティブな請求書はありません",
+    "invoiceCancelled": "請求書がキャンセルされました",
+    "failedToCancelInvoice": "請求書のキャンセルに失敗しました",
+    "invoiceCopiedToClipboard": "請求書がクリップボードにコピーされました",
+    "recipientId": "受取人ID",
+    "expiresOn": "有効期限",
+    "cancelInvoiceTitle": "請求書をキャンセル"
   },
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
@@ -643,7 +658,7 @@
     "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。",
     "sharePostTitle": "X に投稿を共有する",
     "verificationTitle": "認証",
-    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 5,000 サトシがあることを確認してください。",
+    "payServiceFeeFundError": "残高不足です。サービス手数料を支払うには、ウォレットに少なくとも 20,000 サトシがあることを確認してください。",
     "recordCard": "DNSレコードの詳細",
     "recordType": "レコードタイプ",
     "domain": "ドメイン",
@@ -719,7 +734,18 @@
     "domainVerificationInfoSubTitle2": "ビジネスや個人ブランド、プロジェクトサイトに最適です。",
     "domainVerificationInfoTitle3": "認証バッジ",
     "domainVerificationInfoSubTitle3": "あなたのドメインは認証済みのソースとして公開表示されます。",
-    "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。"
+    "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。",
+    "addAssetSubtitle": "「請求書を作成」をタップしてブラインド請求書を作成するか、特定の請求書に対してアセットと金額を選択して追加します。",
+    "invoiceExpiryTitle": "請求書の有効期限",
+    "oneHour": "1 時間",
+    "sixHours": "6 時間",
+    "twelveHours": "12 時間",
+    "oneDay": "1 日",
+    "twoDays": "2 日",
+    "searchAssetPlaceholder": "Tribe RGB レジストリから検索",
+    "totalBalance": "総残高",
+    "bitcoinBalance": "ビットコイン残高",
+    "otherAssets": "その他のアセット"
   },
   "community": {
     "fnfTitle": "コミュニティ",
@@ -856,6 +882,7 @@
     "YouMustBackup": "アセットへのアクセスを失わないように、リセットする前にウォレットをバックアップする必要があります。",
     "YourWalletWill": "ウォレットは現在、完全な再同期を実行します。",
     "ThisMayTake": "データ量やネットワーク速度により、数分かかる場合があります。",
-    "PleaseDoNot": "プロセスが完了するまで、アプリを最小化または閉じないでください。"
+    "PleaseDoNot": "プロセスが完了するまで、アプリを最小化または閉じないでください。",
+    "startResync": "再同期を開始"
   }
 }

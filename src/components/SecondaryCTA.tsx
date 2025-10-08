@@ -56,6 +56,7 @@ const getStyles = (theme: AppTheme, width, height) =>
       // alignItems: 'center',
       borderRadius: 18,
       // marginHorizontal: 10,
+      marginHorizontal: 4,
     },
     ctaContainerStyle: {
       borderRadius: 20,

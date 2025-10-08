@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Soporte de respaldo",
     "supportLearnMoreContent3": "Las copias de seguridad basadas en relé garantizan la recuperación de activos y una gestión segura.",
     "supportLearnMoreContent4": "Disfruta de una experiencia fácil de usar con mayor seguridad en el modo compatible.",
-    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono."
+    "backupFileNotFound": "No pudimos encontrar tu archivo de activos RGB. Por favor, súbelo desde tu teléfono.",
+    "termsText": "Al continuar, usted acepta los "
   },
   "home": {
     "addAssets": "Recibir activo",
@@ -203,8 +204,8 @@
     "select": "Seleccionar",
     "noAssetTitle": "Aún no hay activos.",
     "noAssetSubTitle": "Toque el ícono más a continuación para emitir su primer activo.",
-    "noCollectibleAssetTitle": "¿Aún no tienes coleccionables?",
-    "noCollectibleAssetSubTitle": "¿Listo para crear tu obra maestra? Toca el ícono \"+\" abajo para emitir tu primer coleccionable RGB y comienza a administrar tus activos digitales hoy mismo. Crea, administra y envía coleccionables sin problemas.",
+    "noCollectibleAssetTitle": "¿Aún no hay activos?",
+    "noCollectibleAssetSubTitle": "¿Listo para crear tu obra maestra? Toca el ícono \"+\" abajo para emitir tu primer activo RGB y comienza a administrar tus activos digitales hoy mismo. Crea, administra y envía activos sin problemas.",
     "noCoinAssetTitle": "Crea tu primer activo.",
     "noCoinAssetSubTitle": "¿Listo para crear tu obra maestra? Toca el ícono \"+\" abajo para emitir tu primera moneda RGB y comienza a administrar tus activos digitales hoy mismo. Crea, administra y envía monedas sin problemas.",
     "backupAlertTitle": "Asegura tus fondos con un respaldo",
@@ -292,6 +293,8 @@
     "EnterPasscode": "Introduce el código",
     "EnterPasscodeSubTitle": "Confirma el código para mostrar la frase semilla",
     "setPasscodeTitle": "Establecer código",
+    "changePasscodeTitle": "Cambiar código",
+    "enterPasscodeSubTitle": "Introduce tu código actual",
     "issuance": "Emisión",
     "send": "Enviado",
     "receiveblind": "Recibir",
@@ -343,7 +346,8 @@
     "utxoInfoSubTitle4": "El borde azul se ha eliminado por completo.",
     "activeNetworkLabel": "Red Activa",
     "bioUnlockTitle": "Establece un código para habilitar el inicio biométrico",
-    "bioUnlockSubTitle": "Para usar la autenticación biométrica en Bitcoin Tribe, primero debes establecer un código de acceso en el dispositivo. Esto mantiene tu billetera y activos seguros."
+    "bioUnlockSubTitle": "Para usar la autenticación biométrica en Bitcoin Tribe, primero debes establecer un código de acceso en el dispositivo. Esto mantiene tu billetera y activos seguros.",
+    "advancedOptionsTitle": "Opciones Avanzadas"
   },
   "receciveScreen": {
     "headerSubTitle": "Escanear QR",
@@ -368,8 +372,8 @@
     "sendBtcOptionCardSubTitle": "Ingrese una dirección de Bitcoin",
     "enterSendAddress": "Introduce la dirección de envío",
     "enterSendAdrsSubTitle": "Ingrese la dirección de envío o pegue",
-    "enterSendAddressInvoice": "Enter Text",
-    "enterSendAdrsInvoiceSubTitle": "Paste Bitcoin Address, RGB Invoice, Asset ID or Tribe QR Code",
+    "enterSendAddressInvoice": "Ingresar Texto",
+    "enterSendAdrsInvoiceSubTitle": "Pega Dirección Bitcoin, Factura RGB, ID de Activo o Código QR de Tribe",
     "enterAddress": "Introduce la dirección",
     "sendToTitle": "Enviar a",
     "sendTitle": "Enviar",
@@ -463,9 +467,9 @@
     "date": "Fecha",
     "numOfUtxo": "Número de UTXO",
     "transferDetails": "Detalles de la transferencia",
-    "viewUnspent": "View UTXOs & Invoices",
+    "viewUnspent": "Ver UTXOs y Facturas",
     "walletRefreshMsg": "Billetera actualizada con éxito",
-    "unspentTitle": "UTXOs & Invoices",
+    "unspentTitle": "UTXOs y Facturas",
     "satsAmount": "Cantidad de sats",
     "rgbAssetID": "ID de activo RGB",
     "testSatsRecived": "Pruebas recibidas",
@@ -485,7 +489,7 @@
     "utxoValue": "Valor UTXO",
     "requestTSatsProcessTitle": "Procesando su solicitud",
     "requestTSatsProcessSubTitle": "Su solicitud de test sats está siendo procesada. Espere un momento. ¡Gracias por su paciencia!",
-    "xpubAndUtxoTitle": "UTXOs, Invoices and xPUB",
+    "xpubAndUtxoTitle": "UTXOs, Facturas y xPUB",
     "valueMismatchTitle": "Desajuste de valor detectado",
     "valueMismatchSubTitle": "Hay una diferencia entre lo que se envió y lo que se recibió. Podría ser:",
     "valueMismatchInfo1": "Un activo diferente al esperado",
@@ -495,7 +499,18 @@
     "rampSubTitle": "Ramp te permite adquirir Bitcoin usando métodos de pago disponibles en tu país.",
     "rampInfo": "Ramp ofrece múltiples métodos de pago para adquirir Bitcliin.",
     "rampAddressLabel": "Dirección para la transacción",
-    "rampNote": "Al continuar, aceptas que Ramp procesará el pago y la transferencia del bitcoin comprado. Al seguir, serás redirigido a su página."
+    "rampNote": "Al continuar, aceptas que Ramp procesará el pago y la transferencia del bitcoin comprado. Al seguir, serás redirigido a su página.",
+    "colored": "Coloreado",
+    "colorable": "Coloreable",
+    "invoices": "Facturas",
+    "noActiveInvoicesTitle": "No hay facturas activas",
+    "noActiveInvoicesSubTitle": "No tienes facturas activas",
+    "invoiceCancelled": "Factura cancelada",
+    "failedToCancelInvoice": "Error al cancelar la factura",
+    "invoiceCopiedToClipboard": "Factura copiada al portapapeles",
+    "recipientId": "ID del destinatario",
+    "expiresOn": "Expira el",
+    "cancelInvoiceTitle": "Cancelar factura"
   },
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
@@ -643,7 +658,7 @@
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
     "verificationTitle": "VERIFICACIÓN",
-    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 5,000 sats en tu billetera para pagar la tarifa de servicio.",
+    "payServiceFeeFundError": "Fondos insuficientes. Asegúrate de tener al menos 20,000 sats en tu billetera para pagar la tarifa de servicio.",
     "recordCard": "Detalles del registro DNS",
     "recordType": "Tipo de Registro",
     "domain": "Dominio",
@@ -719,7 +734,18 @@
     "domainVerificationInfoSubTitle2": "Ideal para negocios, marcas personales y sitios de proyectos.",
     "domainVerificationInfoTitle3": "Insignia verificada",
     "domainVerificationInfoSubTitle3": "Tu dominio se mostrará públicamente como fuente verificada.",
-    "rateLimitMsg": "Límite de velocidad alcanzado.\nPuedes volver a intentarlo después de 15 minutos."
+    "rateLimitMsg": "Límite de velocidad alcanzado.\nPuedes volver a intentarlo después de 15 minutos.",
+    "addAssetSubtitle": "Toca ‘Generar Factura’ para crear una factura ciega, o selecciona y añade activo y monto para una factura específica.",
+    "invoiceExpiryTitle": "Vencimiento de la factura",
+    "oneHour": "1 h",
+    "sixHours": "6 h",
+    "twelveHours": "12 h",
+    "oneDay": "1 día",
+    "twoDays": "2 días",
+    "searchAssetPlaceholder": "Buscar en el registro RGB de Tribe",
+    "totalBalance": "Saldo Total",
+    "bitcoinBalance": "Saldo Bitcoin",
+    "otherAssets": "Otros Activos"
   },
   "community": {
     "fnfTitle": "Comunidad",
@@ -856,6 +882,7 @@
     "YouMustBackup": "Debes respaldar tu billetera antes de restablecer para evitar perder el acceso a tus activos.",
     "YourWalletWill": "Tu billetera realizará ahora una resincronización completa.",
     "ThisMayTake": "Esto puede tardar unos minutos según el tamaño de tus datos y la velocidad de la red.",
-    "PleaseDoNot": "No minimices ni cierres la aplicación hasta que el proceso se complete."
+    "PleaseDoNot": "No minimices ni cierres la aplicación hasta que el proceso se complete.",
+    "startResync": "Iniciar resincronización"
   }
 }

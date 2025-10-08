@@ -145,10 +145,10 @@ RCT_EXPORT_METHOD(getRgbAssetTransactions:(NSString*)assetId resolver:(RCTPromis
   });
 }
 
-RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId blindedUTXO:(NSString *)blindedUTXO amount:(nonnull NSNumber *)amount consignmentEndpoints:(NSString *)consignmentEndpoints fee:(nonnull NSNumber *)fee isDonation:(BOOL)isDonation resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
+RCT_EXPORT_METHOD(sendAsset:(NSString*)assetId blindedUTXO:(NSString *)blindedUTXO amount:(nonnull NSNumber *)amount consignmentEndpoints:(NSString *)consignmentEndpoints fee:(nonnull NSNumber *)fee isDonation:(BOOL)isDonation schema:(NSString *)schema resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject) {
   EXEC_ASYNC({
     RGBHelper *helper = [[RGBHelper alloc] init];
-    [helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints fee:fee isDonation:isDonation callback:^(NSString * _Nonnull response) {
+    [helper sendAssetWithAssetId:assetId blindedUTXO:blindedUTXO amount:amount consignmentEndpoints:consignmentEndpoints fee:fee isDonation:isDonation schema: schema callback:^(NSString * _Nonnull response) {
       [self resolvePromise:resolve withResult:response];
     }];
   });

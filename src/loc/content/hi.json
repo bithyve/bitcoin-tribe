@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "बैकअप समर्थन",
     "supportLearnMoreContent3": "रिले-आधारित बैकअप संपत्ति पुनर्प्राप्ति और सुरक्षित प्रबंधन सुनिश्चित करता है।",
     "supportLearnMoreContent4": "समर्थित मोड में उन्नत सुरक्षा के साथ एक उपयोगकर्ता-अनुकूल अनुभव का आनंद लें।",
-    "backupFileNotFound": "हम आपका RGB एसेट फ़ाइल नहीं ढूंढ सके। कृपया इसे अपने फ़ोन से अपलोड करें।"
+    "backupFileNotFound": "हम आपका RGB एसेट फ़ाइल नहीं ढूंढ सके। कृपया इसे अपने फ़ोन से अपलोड करें।",
+    "termsText": "आगे बढ़ने से आप सहमत होते हैं "
   },
   "home": {
     "addAssets": "संपत्ति प्राप्त करें",
@@ -203,8 +204,8 @@
     "select": "चुनें",
     "noAssetTitle": "अभी तक कोई संपत्ति नहीं है।",
     "noAssetSubTitle": "नीचे दिए गए प्लस आइकन पर टैप करके अपनी पहली संपत्ति जारी करें।",
-    "noCollectibleAssetTitle": "अभी तक कोई संग्रहणीय वस्तु नहीं है?",
-    "noCollectibleAssetSubTitle": "अपनी कृति बनाने के लिए तैयार हैं? नीचे दिए गए \"+\" आइकन पर टैप करें, अपना पहला RGB संग्रहणीय वस्तु जारी करें और आज ही अपने डिजिटल संपत्तियों को प्रबंधित करना शुरू करें। संग्रहणीय वस्तुएं आसानी से बनाएं, प्रबंधित करें और भेजें।",
+    "noCollectibleAssetTitle": "अभी तक कोई संपत्ति नहीं है?",
+    "noCollectibleAssetSubTitle": "अपनी कृति बनाने के लिए तैयार हैं? नीचे दिए गए \"+\" आइकन पर टैप करें, अपना पहला RGB संपत्ति जारी करें और आज ही अपने डिजिटल संपत्तियों को प्रबंधित करना शुरू करें। संपत्तियां आसानी से बनाएं, प्रबंधित करें और भेजें।",
     "noCoinAssetTitle": "अपनी पहली संपत्ति बनाएं।",
     "noCoinAssetSubTitle": "अपनी कृति बनाने के लिए तैयार हैं? नीचे दिए गए \"+\" आइकन पर टैप करें, अपना पहला RGB सिक्का जारी करें और आज ही अपने डिजिटल संपत्तियों को प्रबंधित करना शुरू करें। सिक्के आसानी से बनाएं, प्रबंधित करें और भेजें।",
     "backupAlertTitle": "बैकअप के साथ अपने फंड सुरक्षित करें",
@@ -292,6 +293,8 @@
     "EnterPasscode": "पासकोड दर्ज करें",
     "EnterPasscodeSubTitle": "सीड वाक्यांश दिखाने के लिए पासकोड की पुष्टि करें",
     "setPasscodeTitle": "पासकोड सेट करें",
+    "changePasscodeTitle": "पासकोड बदलें",
+    "enterPasscodeSubTitle": "अपना वर्तमान पासकोड दर्ज करें",
     "issuance": "निर्गम",
     "send": "भेजा गया",
     "receiveblind": "प्राप्त करें",
@@ -343,7 +346,8 @@
     "utxoInfoSubTitle4": "नीली सीमा पूरी तरह से हटा दी गई है।",
     "activeNetworkLabel": "सक्रिय नेटवर्क",
     "bioUnlockTitle": "बायोमेट्रिक लॉगिन सक्षम करने के लिए पासकोड सेट करें",
-    "bioUnlockSubTitle": "बिटकॉइन ट्राइब में बायोमेट्रिक प्रमाणीकरण का उपयोग करने के लिए, पहले आपको डिवाइस पासकोड सेट करना होगा। यह आपके वॉलेट और संपत्तियों को सुरक्षित रखता है।"
+    "bioUnlockSubTitle": "बिटकॉइन ट्राइब में बायोमेट्रिक प्रमाणीकरण का उपयोग करने के लिए, पहले आपको डिवाइस पासकोड सेट करना होगा। यह आपके वॉलेट और संपत्तियों को सुरक्षित रखता है।",
+    "advancedOptionsTitle": "उन्नत विकल्प"
   },
   "receciveScreen": {
     "headerSubTitle": "QR स्कैन करें",
@@ -368,8 +372,8 @@
     "sendBtcOptionCardSubTitle": "बिटकॉइन पता दर्ज करें",
     "enterSendAddress": "सेंड पता दर्ज करें",
     "enterSendAdrsSubTitle": "सेंड पता दर्ज करें या पेस्ट करें",
-    "enterSendAddressInvoice": "Enter Text",
-    "enterSendAdrsInvoiceSubTitle": "Paste Bitcoin Address, RGB Invoice, Asset ID or Tribe QR Code",
+    "enterSendAddressInvoice": "टेक्स्ट दर्ज करें",
+    "enterSendAdrsInvoiceSubTitle": "बिटकॉइन पता, RGB चालान, एसेट आईडी या ट्राइब क्यूआर कोड पेस्ट करें",
     "enterAddress": "पता दर्ज करें",
     "sendToTitle": "भेजें",
     "sendTitle": "भेजें",
@@ -463,9 +467,9 @@
     "date": "तिथि",
     "numOfUtxo": "UTXO की संख्या",
     "transferDetails": "स्थानांतरण विवरण",
-    "viewUnspent": "View UTXOs & Invoices",
+    "viewUnspent": "UTXO और चालान देखें",
     "walletRefreshMsg": "वॉलेट सफलतापूर्वक अपडेट किया गया",
-    "unspentTitle": "UTXOs & Invoices",
+    "unspentTitle": "UTXO और चालान",
     "satsAmount": "सैट्स राशि",
     "rgbAssetID": "आरजीबी एसेट आईडी",
     "testSatsRecived": "टेस्ट-सैट्स प्राप्त हुए",
@@ -485,7 +489,7 @@
     "utxoValue": "UTXO मूल्य",
     "requestTSatsProcessTitle": "आपके अनुरोध को संसाधित किया जा रहा है",
     "requestTSatsProcessSubTitle": "आपका टेस्ट सैट्स अनुरोध संसाधित किया जा रहा है। कृपया थोड़ी देर प्रतीक्षा करें। आपके धैर्य के लिए धन्यवाद!",
-    "xpubAndUtxoTitle": "UTXOs, Invoices and xPUB",
+    "xpubAndUtxoTitle": "UTXO, चालान और xPUB",
     "valueMismatchTitle": "मूल्य असंगति पाई गई",
     "valueMismatchSubTitle": "भेजे गए और प्राप्त किए गए में अंतर है। यह हो सकता है:",
     "valueMismatchInfo1": "वांछित से भिन्न संपत्ति",
@@ -495,7 +499,18 @@
     "rampSubTitle": "Ramp आपके देश में उपलब्ध भुगतान विधियों के माध्यम से बिटकॉइन प्राप्त करने की अनुमति देता है।",
     "rampInfo": "Ramp बिटक्लीन प्राप्त करने के लिए कई भुगतान विधियाँ प्रदान करता है।",
     "rampAddressLabel": "लेनदेन के लिए पता",
-    "rampNote": "आगे बढ़ने पर आप सहमत हैं कि Ramp भुगतान और खरीदे गए बिटकॉइन का ट्रांसफर प्रोसेस करेगा। जारी रखने पर आप उनके पेज पर रीडायरेक्ट हो जाएंगे।"
+    "rampNote": "आगे बढ़ने पर आप सहमत हैं कि Ramp भुगतान और खरीदे गए बिटकॉइन का ट्रांसफर प्रोसेस करेगा। जारी रखने पर आप उनके पेज पर रीडायरेक्ट हो जाएंगे।",
+    "colored": "रंगीन",
+    "colorable": "रंग योग्य",
+    "invoices": "चालान",
+    "noActiveInvoicesTitle": "कोई सक्रिय चालान नहीं",
+    "noActiveInvoicesSubTitle": "आपके पास कोई सक्रिय चालान नहीं है",
+    "invoiceCancelled": "चालान रद्द कर दिया गया",
+    "failedToCancelInvoice": "चालान रद्द करने में विफल",
+    "invoiceCopiedToClipboard": "चालान क्लिपबोर्ड पर कॉपी किया गया",
+    "recipientId": "प्राप्तकर्ता आईडी",
+    "expiresOn": "समाप्ति तिथि",
+    "cancelInvoiceTitle": "चालान रद्द करें"
   },
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
@@ -643,7 +658,7 @@
     "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।",
     "sharePostTitle": "X पर पोस्ट साझा करें",
     "verificationTitle": "सत्यापन",
-    "payServiceFeeFundError": "पर्याप्त धनराशि नहीं है। कृपया सेवा शुल्क का भुगतान करने के लिए अपने वॉलेट में कम से कम 5,000 सैट्स सुनिश्चित करें।",
+    "payServiceFeeFundError": "पर्याप्त धनराशि नहीं है। कृपया सेवा शुल्क का भुगतान करने के लिए अपने वॉलेट में कम से कम 20,000 सैट्स सुनिश्चित करें।",
     "recordCard": "DNS रिकॉर्ड विवरण",
     "recordType": "रिकॉर्ड प्रकार",
     "domain": "डोमेन",
@@ -719,7 +734,18 @@
     "domainVerificationInfoSubTitle2": "व्यवसाय, ब्रांड और प्रोजेक्ट वेबसाइट्स के लिए उपयुक्त",
     "domainVerificationInfoTitle3": "सत्यापित बैज",
     "domainVerificationInfoSubTitle3": "आपका डोमेन एक सत्यापित स्रोत के रूप में दिखाया जाएगा।",
-    "rateLimitMsg": "रेट सीमा पूरी हो गई है।\nआप 15 मिनट बाद पुनः प्रयास कर सकते हैं।"
+    "rateLimitMsg": "रेट सीमा पूरी हो गई है।\nआप 15 मिनट बाद पुनः प्रयास कर सकते हैं।",
+    "addAssetSubtitle": "‘इनवॉइस जनरेट करें’ टैप करके ब्लाइंड इनवॉइस बनाएँ, या किसी विशिष्ट इनवॉइस के लिए एसेट और राशि चुनकर जोड़ें।",
+    "invoiceExpiryTitle": "इनवॉइस की समाप्ति",
+    "oneHour": "1 घंटा",
+    "sixHours": "6 घंटे",
+    "twelveHours": "12 घंटे",
+    "oneDay": "1 दिन",
+    "twoDays": "2 दिन",
+    "searchAssetPlaceholder": "Tribe RGB रजिस्ट्री में खोजें",
+    "totalBalance": "कुल शेष",
+    "bitcoinBalance": "बिटकॉइन शेष",
+    "otherAssets": "अन्य संपत्तियां"
   },
   "community": {
     "fnfTitle": "समुदाय",
@@ -856,6 +882,7 @@
     "YouMustBackup": "आपको अपने एसेट्स तक पहुंच खोने से बचने के लिए रीसेट करने से पहले अपने वॉलेट का बैकअप लेना होगा।",
     "YourWalletWill": "अब आपका वॉलेट पूर्ण री-सिंक करेगा।",
     "ThisMayTake": "आपके डेटा के आकार और नेटवर्क गति के अनुसार इसमें कुछ मिनट लग सकते हैं।",
-    "PleaseDoNot": "प्रक्रिया पूरी होने तक ऐप को मिनिमाइज़ या बंद न करें।"
+    "PleaseDoNot": "प्रक्रिया पूरी होने तक ऐप को मिनिमाइज़ या बंद न करें।",
+    "startResync": "री-सिंक शुरू करें"
   }
 }

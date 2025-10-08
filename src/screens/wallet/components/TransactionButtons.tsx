@@ -25,6 +25,7 @@ type transButtonProps = {
   sendCtaWidth?: number;
   receiveCtaWidth?: number;
   buyCtaWidth?: number;
+  disabled?: boolean;
 };
 const TransactionButtons = (props: transButtonProps) => {
   const {
@@ -34,6 +35,7 @@ const TransactionButtons = (props: transButtonProps) => {
     sendCtaWidth = wp(102),
     receiveCtaWidth = wp(102),
     buyCtaWidth = wp(102),
+    disabled = false,
   } = props;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
@@ -55,6 +57,7 @@ const TransactionButtons = (props: transButtonProps) => {
           title={common.send}
           width={sendCtaWidth}
           onPress={onPressSend}
+          disabled={disabled}
         />
       </View>
       {onPressBuy && (
@@ -94,6 +97,7 @@ const TransactionButtons = (props: transButtonProps) => {
       )}
       <View style={styles.buttonWrapper}>
         <RoundedCTA
+          disabled={disabled}
           colors={[
             theme.colors.transButtonBackColor,
             theme.colors.transButtonBackColor,

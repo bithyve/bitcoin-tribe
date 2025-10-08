@@ -181,7 +181,8 @@
     "supportLearnMoreLabel3": "Supporto di backup",
     "supportLearnMoreContent3": "I backup basati su relay garantiscono il recupero degli asset e una gestione sicura.",
     "supportLearnMoreContent4": "Goditi un'esperienza intuitiva con una maggiore sicurezza in modalità supportata.",
-    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono."
+    "backupFileNotFound": "Non siamo riusciti a trovare il tuo file RGB Asset. Per favore, caricalo dal tuo telefono.",
+    "termsText": "Procedendo accetti il "
   },
   "home": {
     "addAssets": "Ricevi asset",
@@ -203,8 +204,8 @@
     "select": "Seleziona",
     "noAssetTitle": "Ancora nessuna risorsa.",
     "noAssetSubTitle": "Per emettere la tua prima risorsa, tocca l'icona più qui sotto.",
-    "noCollectibleAssetTitle": "Ancora nessun collezionabile?",
-    "noCollectibleAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere il tuo primo collezionabile RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia collezionabili con facilità.",
+    "noCollectibleAssetTitle": "Ancora nessun asset?",
+    "noCollectibleAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere il tuo primo asset RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia asset con facilità.",
     "noCoinAssetTitle": "Crea il tuo primo asset.",
     "noCoinAssetSubTitle": "Pronto a creare il tuo capolavoro? Tocca l'icona \"+\" qui sotto per emettere la tua prima moneta RGB e inizia a gestire i tuoi beni digitali oggi. Crea, gestisci e invia monete con facilità.",
     "backupAlertTitle": "Proteggi i tuoi fondi con un backup",
@@ -292,6 +293,8 @@
     "EnterPasscode": "Inserisci il codice",
     "EnterPasscodeSubTitle": "Conferma il codice per mostrare la frase di recupero",
     "setPasscodeTitle": "Imposta il codice",
+    "changePasscodeTitle": "Cambia codice",
+    "enterPasscodeSubTitle": "Inserisci il tuo codice attuale",
     "issuance": "Emissione",
     "send": "Inviato",
     "receiveblind": "Ricevi",
@@ -343,7 +346,8 @@
     "utxoInfoSubTitle4": "Il bordo blu è stato completamente rimosso.",
     "activeNetworkLabel": "Rete Attiva",
     "bioUnlockTitle": "Imposta un passcode per abilitare l’accesso biometrico",
-    "bioUnlockSubTitle": "Per usare l'autenticazione biometrica in Bitcoin Tribe, devi prima impostare un passcode sul dispositivo. Questo protegge il tuo portafoglio e i tuoi beni."
+    "bioUnlockSubTitle": "Per usare l'autenticazione biometrica in Bitcoin Tribe, devi prima impostare un passcode sul dispositivo. Questo protegge il tuo portafoglio e i tuoi beni.",
+    "advancedOptionsTitle": "Opzioni Avanzate"
   },
   "receciveScreen": {
     "headerSubTitle": "Scansiona QR",
@@ -368,8 +372,8 @@
     "sendBtcOptionCardSubTitle": "Inserisci un indirizzo Bitcoin",
     "enterSendAddress": "Inserisci indirizzo di invio",
     "enterSendAdrsSubTitle": "Inserisci indirizzo di invio o incolla",
-    "enterSendAddressInvoice": "Enter Text",
-    "enterSendAdrsInvoiceSubTitle": "Paste Bitcoin Address, RGB Invoice, Asset ID or Tribe QR Code",
+    "enterSendAddressInvoice": "Inserisci Testo",
+    "enterSendAdrsInvoiceSubTitle": "Incolla Indirizzo Bitcoin, Fattura RGB, ID Asset o Codice QR Tribe",
     "enterAddress": "Inserisci indirizzo",
     "sendToTitle": "Invia a",
     "sendTitle": "Invia",
@@ -463,9 +467,9 @@
     "date": "Data",
     "numOfUtxo": "Numero di UTXO",
     "transferDetails": "Dettagli trasferimento",
-    "viewUnspent": "View UTXOs & Invoices",
+    "viewUnspent": "Visualizza UTXO e Fatture",
     "walletRefreshMsg": "Portafoglio aggiornato con successo",
-    "unspentTitle": "UTXOs & Invoices",
+    "unspentTitle": "UTXO e Fatture",
     "satsAmount": "Importo Sats",
     "rgbAssetID": "ID risorsa RGB",
     "testSatsRecived": "Test-sats ricevuti",
@@ -485,7 +489,7 @@
     "utxoValue": "Valore UTXO",
     "requestTSatsProcessTitle": "Elaborazione della tua richiesta",
     "requestTSatsProcessSubTitle": "La tua richiesta di test sats è in fase di elaborazione. Attendi un momento. Grazie per la tua pazienza!",
-    "xpubAndUtxoTitle": "UTXOs, Invoices and xPUB",
+    "xpubAndUtxoTitle": "UTXO, Fatture e xPUB",
     "valueMismatchTitle": "Valore non corrispondente rilevato",
     "valueMismatchSubTitle": "C'è una discrepanza tra ciò che è stato inviato e ciò che è stato ricevuto. Potrebbe essere:",
     "valueMismatchInfo1": "Un asset diverso da quello previsto",
@@ -495,7 +499,18 @@
     "rampSubTitle": "Ramp ti consente di acquistare Bitcoin utilizzando i metodi di pagamento disponibili nel tuo paese.",
     "rampInfo": "Ramp offre diversi metodi di pagamento per acquistare Bitcliin.",
     "rampAddressLabel": "Indirizzo per la transazione",
-    "rampNote": "Procedendo, accetti che Ramp elabori il pagamento e il trasferimento per i bitcoin acquistati. Continuando, verrai reindirizzato alla loro pagina."
+    "rampNote": "Procedendo, accetti che Ramp elabori il pagamento e il trasferimento per i bitcoin acquistati. Continuando, verrai reindirizzato alla loro pagina.",
+    "colored": "Colorato",
+    "colorable": "Colorabile",
+    "invoices": "Fatture",
+    "noActiveInvoicesTitle": "Nessuna fattura attiva",
+    "noActiveInvoicesSubTitle": "Non hai fatture attive",
+    "invoiceCancelled": "Fattura annullata",
+    "failedToCancelInvoice": "Impossibile annullare la fattura",
+    "invoiceCopiedToClipboard": "Fattura copiata negli appunti",
+    "recipientId": "ID destinatario",
+    "expiresOn": "Scade il",
+    "cancelInvoiceTitle": "Annulla fattura"
   },
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
@@ -643,7 +658,7 @@
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
     "verificationTitle": "VERIFICA",
-    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 5.000 sats nel tuo wallet per pagare la tariffa di servizio.",
+    "payServiceFeeFundError": "Fondi insufficienti. Assicurati di avere almeno 20.000 sats nel tuo wallet per pagare la tariffa di servizio.",
     "recordCard": "Dettagli del record DNS",
     "recordType": "Tipo di Record",
     "domain": "Dominio",
@@ -719,7 +734,18 @@
     "domainVerificationInfoSubTitle2": "Ideale per aziende, brand personali e siti web di progetto.",
     "domainVerificationInfoTitle3": "Badge verificato",
     "domainVerificationInfoSubTitle3": "Il tuo dominio verrà mostrato pubblicamente come fonte verificata.",
-    "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti."
+    "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti.",
+    "addAssetSubtitle": "Tocca ‘Genera Fattura’ per creare una fattura cieca, oppure seleziona e aggiungi asset e importo per una fattura specifica.",
+    "invoiceExpiryTitle": "Scadenza Fattura",
+    "oneHour": "1 ora",
+    "sixHours": "6 ore",
+    "twelveHours": "12 ore",
+    "oneDay": "1 giorno",
+    "twoDays": "2 giorni",
+    "searchAssetPlaceholder": "Cerca nel registro RGB di Tribe",
+    "totalBalance": "Saldo Totale",
+    "bitcoinBalance": "Saldo Bitcoin",
+    "otherAssets": "Altri Asset"
   },
   "community": {
     "fnfTitle": "Comunità",
@@ -856,6 +882,7 @@
     "YouMustBackup": "Devi eseguire il backup del tuo portafoglio prima di reimpostare per evitare di perdere l'accesso ai tuoi asset.",
     "YourWalletWill": "Il tuo portafoglio ora eseguirà una risincronizzazione completa.",
     "ThisMayTake": "Questo potrebbe richiedere alcuni minuti a seconda delle dimensioni dei dati e della velocità della rete.",
-    "PleaseDoNot": "Non minimizzare o chiudere l'app finché il processo non è completo."
+    "PleaseDoNot": "Non minimizzare o chiudere l'app finché il processo non è completo.",
+    "startResync": "Avvia risincronizzazione"
   }
 }

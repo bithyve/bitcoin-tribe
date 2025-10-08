@@ -37,6 +37,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
@@ -62,6 +63,7 @@ import AssetIcon from 'src/components/AssetIcon';
 import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
+import { AppContext } from 'src/contexts/AppContext';
 
 type ItemProps = {
   name: string;
@@ -218,7 +220,14 @@ const SendAssetScreen = () => {
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
+  const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
+    if (
+      isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress
+    ) {
+      return true;
+    }
     return (
       !invoice ||
       assetAmount === '' ||
@@ -290,6 +299,7 @@ const SendAssetScreen = () => {
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
+        schema: assetData?.assetSchema.toUpperCase(),
       });
       setLoading(false);
       if (response?.txid) {

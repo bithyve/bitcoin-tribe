@@ -131,6 +131,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
 const getStyles = (theme: AppTheme, index = null) =>
   StyleSheet.create({
     container: {
+      flexGrow: 1
     },
     assetWrapper: {
       flexWrap: 'wrap',

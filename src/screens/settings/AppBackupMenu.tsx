@@ -31,6 +31,7 @@ import moment from 'moment';
 import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import BackupPhraseModal from 'src/components/BackupPhraseModal';
+import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -46,6 +47,7 @@ function AppBackupMenu({ navigation }) {
     setManualAssetBackupStatus,
     setHasCompletedManualBackup,
     hasCompletedManualBackup,
+    isWalletOnline,
   } = React.useContext(AppContext);
   const [visible, setVisible] = useState(false);
   const [visibleBackupPhrase, setVisibleBackupPhrase] = useState(false);
@@ -191,6 +193,7 @@ function AppBackupMenu({ navigation }) {
             <SelectOption
               title={settings.rgbAssetsbackup}
               subTitle={''}
+              disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
               onPress={() => {
                 !backup
                   ? Toast(settings.appBackupStepCheck, true)

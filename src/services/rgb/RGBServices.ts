@@ -101,7 +101,7 @@ export default class RGBServices {
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
-    timeout: number = 30,
+    timeout: number = 60,
   ): Promise<{
     status: boolean;
     error: string;
@@ -334,6 +334,7 @@ export default class RGBServices {
     consignmentEndpoints: string,
     feePerByte,
     isDonation: boolean,
+    schema: string,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
@@ -357,6 +358,7 @@ export default class RGBServices {
         consignmentEndpoints,
         feePerByte,
         isDonation,
+        schema,
       );
       return JSON.parse(data);
     }

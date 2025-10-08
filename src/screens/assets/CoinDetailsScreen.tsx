@@ -12,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   Coin,
   IssuerVerificationMethod,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -62,6 +63,7 @@ const CoinDetailsScreen = () => {
     isNodeInitInProgress,
     isDisclaimerVisible,
     setIsDisclaimerVisible,
+    isWalletOnline,
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
@@ -157,10 +159,13 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const isEligibleForCampaign = useMemo(() => {
-    const participatedCampaignsArray = JSON.parse(
-      participatedCampaigns || '[]',
-    );
-    return !participatedCampaignsArray.includes(coin?.campaign._id);
+    if(coin?.campaign.exclusive === 'true') {
+      const participatedCampaignsArray = JSON.parse(
+        participatedCampaigns || '[]',
+      );
+      return !participatedCampaignsArray.includes(coin?.campaign._id);
+    }
+    return true;
   }, [participatedCampaigns, coin?.campaign._id]);
 
   const isBalanceRequired = useMemo(() => {
@@ -286,6 +291,7 @@ const CoinDetailsScreen = () => {
           });
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
+        disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
       />
       {coin.campaign.isActive === 'true' && (
         <GradientBorderAnimated
@@ -293,7 +299,7 @@ const CoinDetailsScreen = () => {
           radius={hp(20)}
           strokeWidth={2}
           height={isBalanceRequired? hp(100):hp(84)}
-          disabled={!isEligibleForCampaign}>
+          disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress || !isEligibleForCampaign}>
           <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(96):hp(80)}]}>
             <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>

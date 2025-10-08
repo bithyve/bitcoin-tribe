@@ -36,32 +36,15 @@ function Collectibles() {
 
   const navigation = useNavigation();
   const {
-    setBackupProcess,
-    setBackupDone,
-    setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
     isNodeInitInProgress,
   } = useContext(AppContext);
 
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
-    onSuccess: () => {
-      setBackupDone(true);
-      setTimeout(() => {
-        setBackupDone(false);
-        setManualAssetBackupStatus(true);
-      }, 1500);
-    },
-  });
-  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
-    ApiHandler.isBackupRequired,
-  );
-
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app.appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
       }
     },
   });
@@ -78,26 +61,26 @@ function Collectibles() {
     collection =>
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
+  const coins = useMemo(() => {
+    if (!coinsResult) return [];
+    const coinsArray = coinsResult.slice();
+    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
+    if (defaultCoinIndex !== -1) {
+      coinsArray.splice(defaultCoinIndex, 1);
+      return coinsArray
+    }
+    return coinsArray;
+  }, [coinsResult,]);
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
     return [...coins, ...collectibles, ...udas]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles, udas]);
-
-  useEffect(() => {
-    setBackupProcess(isLoading);
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isBackupRequired) {
-      backupMutate();
-    }
-  }, [isBackupRequired]);
+  }, [collectibles, udas, coins]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -116,7 +99,6 @@ function Collectibles() {
     }
     setRefreshing(true);
     refreshRgbWallet.mutate();
-    checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };

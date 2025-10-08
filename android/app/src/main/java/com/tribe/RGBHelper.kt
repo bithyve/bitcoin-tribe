@@ -8,6 +8,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonArray
 import org.rgbtools.AssetCfa
 import org.rgbtools.AssetNia
+import org.rgbtools.AssetSchema
 import org.rgbtools.Assignment
 import org.rgbtools.Balance
 import org.rgbtools.BtcBalance
@@ -145,7 +146,6 @@ object RGBHelper {
     fun getAssetTransfers(assetID: String): String {
         val refresh = RGBWalletRepository.wallet?.refresh(RGBWalletRepository.online!!, assetID, listOf(), false)
         val transfers = RGBWalletRepository.wallet?.listTransfers(assetID)?.reversed()
-        Log.d(TAG, "getAssetTransfers: ${transfers.toString()}")
         val gson = Gson()
         val jsonArray = JsonArray()
         
@@ -262,11 +262,15 @@ object RGBHelper {
         amount: ULong,
         consignmentEndpoints: List<String>,
         feeRate: Float = AppConstants.defaultFeeRate,
-        isDonation: Boolean
+        isDonation: Boolean,
+        schema: String
     ): String {
+        val assignment =
+            if (schema.uppercase() === "UDA") Assignment.NonFungible
+            else Assignment.Fungible(amount)
         val txid = handleMissingFunds { RGBWalletRepository.wallet?.send(
             RGBWalletRepository.online!!,
-            mapOf(assetID to listOf(Recipient(blindedUTXO,null, Assignment.Fungible(amount), consignmentEndpoints))),
+            mapOf(assetID to listOf(Recipient(blindedUTXO,null, assignment, consignmentEndpoints))),
             isDonation,
             feeRate.toULong(),
             1u,

@@ -170,6 +170,7 @@ export class ApiHandler {
     rgbNodeConnectParams,
     rgbNodeInfo,
     authToken,
+    isRestore = false,
   }: {
     appName: string;
     pinMethod: PinMethod;
@@ -180,6 +181,7 @@ export class ApiHandler {
     rgbNodeConnectParams?: RgbNodeConnectParams;
     rgbNodeInfo?: NodeInfo;
     authToken: string;
+    isRestore?: boolean;
   }) {
     Storage.set(Keys.SETUPAPP, true);
     Storage.set(Keys.PIN_METHOD, pinMethod);
@@ -262,7 +264,7 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage: registerApp?.app?.imageUrl || '',
+            walletImage: !isRestore ? registerApp?.app?.imageUrl : walletImage || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -537,7 +539,12 @@ export class ApiHandler {
           passcode: '',
           walletImage: backup?.app?.imageUrl || '',
           mnemonic: mnemonic,
+          isRestore: true
         });
+        await ApiHandler.makeWalletOnline();
+        await ApiHandler.refreshRgbWallet();
+        await ApiHandler.fetchPresetAssets();
+        await ApiHandler.viewUtxos()
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
           'version',
@@ -706,7 +713,7 @@ export class ApiHandler {
           rgbWallet.accountXpubVanilla,
           rgbWallet.accountXpubColored,
           rgbWallet.masterFingerprint,
-          timeout
+          timeout,
         );
         // const cm = ChatPeerManager.getInstance();
         // await cm.init(app.primarySeed);
@@ -1697,6 +1704,7 @@ export class ApiHandler {
     consignmentEndpoints,
     feeRate,
     isDonation,
+    schema
   }: {
     assetId: string;
     blindedUTXO: string;
@@ -1704,6 +1712,7 @@ export class ApiHandler {
     consignmentEndpoints: string;
     feeRate: number;
     isDonation: boolean;
+    schema: string;
   }) {
     try {
       const response = await RGBServices.sendAsset(
@@ -1713,6 +1722,7 @@ export class ApiHandler {
         consignmentEndpoints,
         feeRate,
         isDonation,
+        schema,
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -2058,7 +2068,7 @@ export class ApiHandler {
       Keys.EXCHANGE_RATES,
       JSON.stringify(exchangeRates.exchangeRates),
     );
-    if(serviceFee) {
+    if (serviceFee) {
       Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
     }
     await ApiHandler.getTxRates();
