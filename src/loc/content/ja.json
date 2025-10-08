@@ -361,7 +361,7 @@
     "placeHolderText": "金額を入力",
     "invoiceAddress": "RGB請求書",
     "bitcoinAddress": "ビットコインアドレス",
-    "noteSubTitle": "この請求書のブラインドUTXOは{time}時間で失効します。",
+    "noteSubTitle": "この請求書の{type}UTXOは{time}時間で失効します。",
     "lightningAddress": "ライトニングアドレス",
     "chooseInvoiceType": "請求書の種類を選択",
     "onchain": "オンチェーン",

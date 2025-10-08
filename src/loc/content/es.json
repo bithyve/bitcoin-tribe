@@ -361,7 +361,7 @@
     "placeHolderText": "Introduce la cantidad",
     "invoiceAddress": "Factura RGB",
     "bitcoinAddress": "Dirección de Bitcoin",
-    "noteSubTitle": "El UTXO cegado en esta factura caducará en {time} horas.",
+    "noteSubTitle": "El UTXO {type} en esta factura caducará en {time} horas.",
     "lightningAddress": "Dirección Lightning",
     "chooseInvoiceType": "Elige el tipo de factura",
     "onchain": "En cadena",

@@ -1,10 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
@@ -56,7 +51,8 @@ export const ServiceFee = ({
             <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
           </View>
           <View style={styles.valueWrapper}>
-            <AppText style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
+            <AppText
+              style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
           </View>
         </View>
       </View>
@@ -103,7 +99,6 @@ function AddAsset() {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
-  
 
   const canProceed = useMemo(() => {
     if (
@@ -183,15 +178,12 @@ function AddAsset() {
           subTitle={home.receiveAssetsSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
-          onPress={() => {
-            if (!canProceed) {
-              setVisible(true);
-            } else {
-              navigation.replace(NavigationRoutes.ENTERINVOICEDETAILS, {
-                refresh: true,
-              });
-            }
-          }}
+          onPress={() =>
+            navigation.replace(NavigationRoutes.ENTERINVOICEDETAILS, {
+              refresh: true,
+            })
+          }
+          testID="receive"
         />
       </View>
 

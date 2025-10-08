@@ -37,6 +37,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  InvoiceMode,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
@@ -64,6 +65,8 @@ import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
+
+const DUST_LIMIT = 330;
 
 type ItemProps = {
   name: string;
@@ -215,6 +218,8 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
+  const [witnessSats, setWitnessSats] = useState('0');
+  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(null);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
@@ -300,6 +305,7 @@ const SendAssetScreen = () => {
         feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
         schema: assetData?.assetSchema.toUpperCase(),
+        witnessSats: Number(witnessSats),
       });
       setLoading(false);
       if (response?.txid) {
@@ -353,6 +359,11 @@ const SendAssetScreen = () => {
         Toast('This invoice is not valid for the current network', true);
         return;
       }
+      setInvoiceType(
+        res.recipientId.includes(':wvout')
+          ? InvoiceMode.Witness
+          : InvoiceMode.Blinded,
+      );
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
@@ -379,6 +390,8 @@ const SendAssetScreen = () => {
       fromPaste && setValidatingInvoiceLoader(false);
     }
   };
+
+  const getInvoiceType = (invoice: string) => {};
 
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
@@ -425,6 +438,11 @@ const SendAssetScreen = () => {
       setTooltipPos({ x, y });
       setVisibleSpendableErrInfo(true);
     });
+  };
+
+  const clearInvoice = () => {
+    setInvoice('');
+    setInvoiceType(null);
   };
 
   return (
@@ -506,7 +524,7 @@ const SendAssetScreen = () => {
             invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
           }
           onRightTextPress={() =>
-            invoice ? setInvoice('') : handlePasteAddress()
+            invoice ? clearInvoice() : handlePasteAddress()
           }
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
@@ -545,6 +563,26 @@ const SendAssetScreen = () => {
             </AppText>
           </View>
         </View>
+        {invoiceType === InvoiceMode.Witness && (
+          <View style={styles.inputWrapper}>
+            <AppText variant="body2" style={styles.labelstyle}>
+              Sats Amount
+            </AppText>
+            <TextField
+              value={witnessSats}
+              onChangeText={text => setWitnessSats(text)}
+              placeholder={assets.amount}
+              keyboardType="numeric"
+              style={styles.input}
+              inputStyle={styles.inputStyle}
+              rightCTAStyle={styles.rightCTAStyle}
+              rightCTATextColor={theme.colors.accent1}
+              onPressErrorInfo={() => {}}
+              errInfoIconRef={iconRef}
+            />
+          </View>
+        )}
+
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
         </AppText>
@@ -738,6 +776,11 @@ const SendAssetScreen = () => {
               setAmountValidationError(
                 assets.checkSpendableAmt + assetData?.balance.spendable,
               );
+              return;
+            }
+            if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
+              Keyboard.dismiss();
+              Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
               return;
             }
             Keyboard.dismiss();

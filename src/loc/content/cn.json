@@ -361,7 +361,7 @@
     "placeHolderText": "输入金额",
     "invoiceAddress": "RGB发票",
     "bitcoinAddress": "比特币地址",
-    "noteSubTitle": "此发票中的盲UTXO将在{time}小时内过期。",
+    "noteSubTitle": "此发票中的{type}UTXO将在{time}小时内过期。",
     "lightningAddress": "闪电地址",
     "chooseInvoiceType": "选择发票类型",
     "onchain": "链上",

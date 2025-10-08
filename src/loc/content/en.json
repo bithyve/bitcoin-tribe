@@ -361,7 +361,7 @@
     "placeHolderText": "Enter Amount",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
-    "noteSubTitle": "The blinded UTXO in this invoice will expire in {time} hours.",
+    "noteSubTitle": "The {type} UTXO in this invoice will expire in {time} hours.",
     "lightningAddress": "Lightning Address",
     "chooseInvoiceType": "Choose Invoice Type",
     "onchain": " On-chain",

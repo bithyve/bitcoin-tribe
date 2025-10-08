@@ -1704,7 +1704,8 @@ export class ApiHandler {
     consignmentEndpoints,
     feeRate,
     isDonation,
-    schema
+    schema,
+    witnessSats,
   }: {
     assetId: string;
     blindedUTXO: string;
@@ -1713,6 +1714,7 @@ export class ApiHandler {
     feeRate: number;
     isDonation: boolean;
     schema: string;
+    witnessSats: number;
   }) {
     try {
       const response = await RGBServices.sendAsset(
@@ -1723,6 +1725,7 @@ export class ApiHandler {
         feeRate,
         isDonation,
         schema,
+        witnessSats,
         ApiHandler.appType,
         ApiHandler.api,
       );

@@ -361,7 +361,7 @@
     "placeHolderText": "राशि दर्ज करें",
     "invoiceAddress": "आरजीबी इनवॉइस",
     "bitcoinAddress": "बिटकॉइन पता",
-    "noteSubTitle": "इस इनवॉइस में ब्लाइंडेड यूटीएक्सओ {time} घंटों में समाप्त हो जाएगा।",
+    "noteSubTitle": "इस इनवॉइस में {type} यूटीएक्सओ {time} घंटों में समाप्त हो जाएगा।",
     "lightningAddress": "लाइटनिंग पता",
     "chooseInvoiceType": "चुनें इनवॉइस प्रकार",
     "onchain": "ऑन-चेन",
