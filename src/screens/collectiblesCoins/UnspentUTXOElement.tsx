@@ -16,6 +16,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AllocatedAssets from './components/AllocatedAssets';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type UnspentUTXOElementProps = {
   transID: string;
@@ -80,7 +81,7 @@ function UnspentUTXOElement({
                 <View style={styles.allocationWrapper1}>
                   <AllocatedAssets asset={assetMap[allocation.assetId]} />
                   <AppText variant="heading3" style={styles.assetNameText}>
-                    {assetName}&nbsp;
+                    {formatTUsdt(assetName)}&nbsp;
                   </AppText>
                   {assetMap[allocation.assetId]?.issuer?.verified && (
                     <IconVerified width={20} height={20} />

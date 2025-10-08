@@ -13,6 +13,7 @@ import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type Props = {
   selectedAsset: Asset;
@@ -75,7 +76,7 @@ const SelectYourAsset = (props: Props) => {
                 )}
               </View>
               <AppText variant="body1" style={styles.titleText}>
-                {selectedAsset?.name || selectedAsset?.asset?.name}
+                {formatTUsdt(selectedAsset?.name || selectedAsset?.asset?.name)}
               </AppText>
             </View>
           ) : (
