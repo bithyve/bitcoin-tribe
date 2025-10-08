@@ -360,7 +360,7 @@
     "placeHolderText": "Inserisci importo",
     "invoiceAddress": "Fattura RGB",
     "bitcoinAddress": "Indirizzo Bitcoin",
-    "noteSubTitle": "L'UTXO cieco in questa fattura scadrà in {time} ore.",
+    "noteSubTitle": "L'UTXO {type} in questa fattura scadrà in {time} ore.",
     "lightningAddress": "Indirizzo Lightning",
     "chooseInvoiceType": "Scegli il tipo di fattura",
     "onchain": "On-chain",

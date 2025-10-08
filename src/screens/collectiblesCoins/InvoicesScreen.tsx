@@ -94,6 +94,14 @@ const ListItem = ({
             )}
           </AppText>
         </View>
+        <View style={styles.row}>
+          <AppText variant="body2" style={styles.title}>
+            Type
+          </AppText>
+          <AppText variant="body3" style={styles.value}>
+            {invoice.recipientId.includes(':wvout') ? 'Witness' : 'Blinded'}
+          </AppText>
+        </View>
         {invoice.type === InvoiceType.Default && (
           <AppTouchable onPress={handleCancel}>
             <AppText variant="body2" style={styles.deleteText}>

@@ -37,6 +37,11 @@ export interface RGBWallet {
   }[];
 }
 
+export enum InvoiceMode {
+  Blinded = 'blinded',
+  Witness = 'witness'
+}
+
 export enum InvoiceType {
   Default = 'default',
   Campaign = 'campaign'
