@@ -62,6 +62,7 @@ import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 import AssetIcon from 'src/components/AssetIcon';
 import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
 
 type ItemProps = {
@@ -451,12 +452,12 @@ const SendAssetScreen = () => {
       </View>
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
-          name={assetData?.name}
-          ticker={assetData?.ticker}
+          name={formatTUsdt(assetData?.name)}
+          ticker={formatTUsdt(assetData?.ticker)}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.details
-              : assetData?.ticker
+              ? formatTUsdt(assetData?.details)
+              : formatTUsdt(assetData?.ticker)
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
@@ -678,7 +679,7 @@ const SendAssetScreen = () => {
           }}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            assetName={assetData?.name}
+            assetName={formatTUsdt(assetData?.name)}
             amount={assetAmount && assetAmount.replace(/,/g, '')}
             feeRate={
               selectedPriority === TxPriority.CUSTOM

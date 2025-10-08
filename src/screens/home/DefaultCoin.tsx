@@ -28,6 +28,7 @@ import { useQuery } from '@realm/react';
 import GradientBorderAnimated from './GradientBorderAnimated';
 import RefreshControlView from 'src/components/RefreshControlView';
 import Fonts from 'src/constants/Fonts';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -253,13 +254,13 @@ const DefaultCoin = ({
         ]}>
         <View style={styles.row}>
           <View style={styles.coinNameContainer}>
-            <AppText variant="heading1">{asset.name}</AppText>
+            <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
             <AppText style={styles.totalBalanceLabel} variant="body2">
               {assets.totalBalance}
             </AppText>
             <DecimalText
               value={Number(asset?.balance?.spendable) / 10 ** asset.precision}
-              unit={asset.ticker}
+              unit={formatTUsdt(asset.ticker)}
             />
           </View>
           <AssetIcon
