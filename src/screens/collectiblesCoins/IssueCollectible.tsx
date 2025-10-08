@@ -35,6 +35,7 @@ import {
   AssetType,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
@@ -65,7 +66,7 @@ const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as Bi
 
 function IssueCollectibleScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
-  const { appType } = useContext(AppContext);
+  const { appType, isWalletOnline } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
@@ -116,7 +117,10 @@ function IssueCollectibleScreen() {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
   );
 
   useEffect(() => {
@@ -294,6 +298,12 @@ function IssueCollectibleScreen() {
   ]);
 
   const isButtonDisabled = useMemo(() => {
+    if (
+      isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress
+    ) {
+      return true;
+    }
     if (assetType === AssetType.Collectible) {
       return !assetName || !image || !totalSupplyAmt || !description;
     }
