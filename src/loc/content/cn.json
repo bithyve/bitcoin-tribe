@@ -742,6 +742,7 @@
     "domainVerificationInfoTitle3": "验证徽章",
     "domainVerificationInfoSubTitle3": "您的域名将作为验证来源公开显示。",
     "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。",
+    "generateInvoice":"生成发票"
     "addAssetSubtitle": "点击‘生成发票’以创建盲发票，或为特定发票选择并添加资产和金额。",
     "invoiceExpiryTitle": "发票到期",
     "oneHour": "1 小时",

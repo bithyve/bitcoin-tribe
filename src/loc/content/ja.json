@@ -742,6 +742,7 @@
     "domainVerificationInfoTitle3": "認証バッジ",
     "domainVerificationInfoSubTitle3": "あなたのドメインは認証済みのソースとして公開表示されます。",
     "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。",
+    "generateInvoice":"請求書を生成する"
     "addAssetSubtitle": "「請求書を作成」をタップしてブラインド請求書を作成するか、特定の請求書に対してアセットと金額を選択して追加します。",
     "invoiceExpiryTitle": "請求書の有効期限",
     "oneHour": "1 時間",

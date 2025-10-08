@@ -265,7 +265,9 @@ const EnterInvoiceDetails = () => {
     <ScreenContainer>
       <AppHeader
         title={home.addAssets}
-        subTitle={assets.addAssetSubtitle}
+        subTitle={
+          `Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`
+        }
         enableBack={true}
       />
       <KeyboardAwareScrollView
@@ -370,7 +372,7 @@ const EnterInvoiceDetails = () => {
             <View style={styles.reservedSatsWrapper} />
           )}
           <Buttons
-            primaryTitle={common.proceed}
+            primaryTitle={assets.generateInvoice}
             primaryOnPress={() => validateAndNavigateToReceiveAsset()}
             width={'100%'}
             disabled={
