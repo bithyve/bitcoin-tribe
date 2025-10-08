@@ -720,7 +720,8 @@
     "domainVerificationInfoSubTitle2": "非常适合企业、个人品牌和项目网站。",
     "domainVerificationInfoTitle3": "验证徽章",
     "domainVerificationInfoSubTitle3": "您的域名将作为验证来源公开显示。",
-    "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。"
+    "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。",
+    "generateInvoice":"生成发票"
   },
   "community": {
     "fnfTitle": "社区",

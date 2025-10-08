@@ -720,7 +720,8 @@
     "domainVerificationInfoSubTitle2": "ビジネスや個人ブランド、プロジェクトサイトに最適です。",
     "domainVerificationInfoTitle3": "認証バッジ",
     "domainVerificationInfoSubTitle3": "あなたのドメインは認証済みのソースとして公開表示されます。",
-    "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。"
+    "rateLimitMsg": "レート制限に達しました。\n15分後に再試行できます。",
+    "generateInvoice":"請求書を生成する"
   },
   "community": {
     "fnfTitle": "コミュニティ",

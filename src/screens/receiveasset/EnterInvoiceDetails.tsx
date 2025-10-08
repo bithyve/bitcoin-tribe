@@ -217,7 +217,7 @@ const EnterInvoiceDetails = () => {
       <AppHeader
         title={home.addAssets}
         subTitle={
-          'Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.'
+          `Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`
         }
         enableBack={true}
       />
@@ -299,7 +299,7 @@ const EnterInvoiceDetails = () => {
             </View>
           ) : null}
           <Buttons
-            primaryTitle={common.proceed}
+            primaryTitle={assets.generateInvoice}
             primaryOnPress={() => validateAndNavigateToReceiveAsset()}
             width={'100%'}
           />
