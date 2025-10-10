@@ -218,7 +218,7 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
-  const [witnessSats, setWitnessSats] = useState('0');
+  const [witnessSats, setWitnessSats] = useState('330');
   const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(null);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
@@ -338,7 +338,7 @@ const SendAssetScreen = () => {
       }, 500);
       console.log(error);
     }
-  }, [invoice, assetAmount, navigation, isDonation]);
+  }, [invoice, assetAmount, navigation, isDonation, witnessSats]);
 
   const validateAndSetInvoice = async (rawText: string, fromPaste = false) => {
     const cleanedText = rawText.replace(/\s/g, '');
@@ -563,7 +563,7 @@ const SendAssetScreen = () => {
             </AppText>
           </View>
         </View>
-        {invoiceType === InvoiceMode.Witness && (
+        {/* {invoiceType === InvoiceMode.Witness && (
           <View style={styles.inputWrapper}>
             <AppText variant="body2" style={styles.labelstyle}>
               Sats Amount
@@ -581,7 +581,7 @@ const SendAssetScreen = () => {
               errInfoIconRef={iconRef}
             />
           </View>
-        )}
+        )} */}
 
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
