@@ -22,7 +22,7 @@ const { IPC } = BareKit;
 let keyPair;
 const connections = new Map();
 
-const RELAY_PUB_KEY = '58dac4e5cfe213a0755719abda3ab6d131d02eee0bc3bb2066ded29630885681'
+const RELAY_PUB_KEY = 'b2acad2618ee396ea6ccb3dd5ac3995a7db9e5415e69b6fb4f9b6cd3c1cc3cca'
 
 const rpc = new RPC(IPC, (req, error) => {
   try {
