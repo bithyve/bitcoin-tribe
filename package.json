@@ -11,7 +11,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
-    "bare-pack": "npx bare-pack --target ios --target android  --linked --out src/services/p2p/app.bundle.mjs src/services/p2p/worklet.mjs",
+    "bare-pack": "npx bare-pack --target ios --target android --linked --out src/services/messaging/holepunch/network/worklet/app.bundle.mjs src/services/messaging/holepunch/network/worklet/hyperswarm-worklet.mjs",
     "androidDevDebug": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
     "androidDevRelease": "ENVFILE=.env react-native run-android --mode=devRelease --appIdSuffix=dev",
     "androidProductionDebug": "ENVFILE=.env.production react-native run-android --mode=productionDebug",
@@ -116,6 +116,7 @@
     "realm": "12.14.1",
     "rn-nodeify": "github:tradle/rn-nodeify",
     "rn-qr-generator": "^1.4.3",
+    "sodium-javascript": "^0.8.0",
     "stream-browserify": "^1.0.0",
     "uuid": "^10.0.0"
   },
