@@ -52,6 +52,7 @@ import {
   RequestSchema,
 } from './community';
 import { ElectrumTransactionSchema, VinSchema, VoutSchema } from './electrumTransaction';
+import { HolepunchRoomSchema, HolepunchMessageSchema } from './messaging';
 
 export default [
   TribeAppSchema,
@@ -104,4 +105,6 @@ export default [
   ElectrumTransactionSchema,
   VinSchema,
   VoutSchema,
+  HolepunchRoomSchema,
+  HolepunchMessageSchema,
 ];
