@@ -73,7 +73,14 @@
     "registry": "注册表",
     "verify": "验证",
     "tapToCopy": "点击复制",
-    "retry": "重试"
+    "retry": "重试",
+    "baseFee": "基础费用",
+    "satsPerArt": "每件艺术品的聪（sats）",
+    "totalUda": "总 UDA",
+    "feeRate": "费用率",
+    "swipeToPay": "滑动以立即支付",
+    "loading": "加载中"
+
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -720,7 +727,18 @@
     "domainVerificationInfoSubTitle2": "非常适合企业、个人品牌和项目网站。",
     "domainVerificationInfoTitle3": "验证徽章",
     "domainVerificationInfoSubTitle3": "您的域名将作为验证来源公开显示。",
-    "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。"
+    "rateLimitMsg": "已达到频率限制。\n15分钟后可重试。",
+    "issueCollection": "创建集合",
+    "collectionName": "集合名称",
+    "collectionNamePlaceholder": "请输入您的集合名称",
+    "enterCollectionName": "请输入集合名称",
+    "collectionDesc": "集合描述",
+    "collectionDescPlaceholder": "描述您的集合",
+    "enterCollectionDescription": "请输入集合描述",
+    "collectionPayment": "付款确认",
+    "collectionPaymentConfirm": "付款已确认。",
+    "collectionPaymentSubtitle": "查看并确认您的交易",
+    "collectionPaymentConfirmSubtitle": "集合已上链。\n您现在可以开始添加 UDA。"
   },
   "community": {
     "fnfTitle": "社区",

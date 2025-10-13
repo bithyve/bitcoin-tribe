@@ -89,6 +89,7 @@ import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
+import IssueCollection from 'src/screens/collectiblesCoins/IssueCollection';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -209,6 +210,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUECOLLECTIBLESCREEN}
           component={IssueCollectible}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUECOLLECTION}
+          component={IssueCollection}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}

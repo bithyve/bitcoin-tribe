@@ -64,5 +64,6 @@ const Colors = {
   ElectricViolet: 'rgba(137, 4, 249,1)',
   imageOverlay: 'rgba(0,0,0,0.6)',
   SpanishGray: 'rgba(153, 153, 153,1)',
+  mediumGray: 'rgba(120, 120, 120, 1)',
 };
 export default Colors;

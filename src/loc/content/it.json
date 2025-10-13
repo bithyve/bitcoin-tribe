@@ -73,7 +73,13 @@
     "registry": "Registro",
     "verify": "Verifica",
     "tapToCopy": "Tocca per copiare",
-    "retry": "Riprova"
+    "retry": "Riprova",
+    "baseFee": "Tariffa base",
+    "satsPerArt": "sats per opera",
+    "totalUda": "Totale UDAs",
+    "feeRate": "Tariffa",
+    "swipeToPay": "Scorri per pagare ora",
+    "loading": "Caricamento"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -720,7 +726,18 @@
     "domainVerificationInfoSubTitle2": "Ideale per aziende, brand personali e siti web di progetto.",
     "domainVerificationInfoTitle3": "Badge verificato",
     "domainVerificationInfoSubTitle3": "Il tuo dominio verrà mostrato pubblicamente come fonte verificata.",
-    "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti."
+    "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti.",
+    "issueCollection": "Crea collezione",
+    "collectionName": "Nome della collezione",
+    "collectionNamePlaceholder": "Inserisci un nome per la tua collezione",
+    "enterCollectionName": "Per favore inserisci il nome della collezione",
+    "collectionDesc": "Descrizione della collezione",
+    "collectionDescPlaceholder": "Descrivi la tua collezione",
+    "enterCollectionDescription": "Per favore inserisci la descrizione della collezione",
+    "collectionPayment": "Conferma pagamento",
+    "collectionPaymentConfirm": "Pagamento confermato.",
+    "collectionPaymentSubtitle": "Rivedi e conferma la tua transazione",
+    "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs."
   },
   "community": {
     "fnfTitle": "Comunità",
