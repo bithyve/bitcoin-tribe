@@ -89,7 +89,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
         style={styles.loaderStyle}
         autoPlay
-        loop
+        loop={false}
       />
       <PrimaryCTA
         title={common.done}
