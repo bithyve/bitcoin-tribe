@@ -36,6 +36,7 @@ function SettingSectionList(props: sectionListProps) {
         {data.map((item, index) => {
           return !item.hideMenu ? (
             <SelectMenuItem
+            key={item.title}
               title={item.title}
               subTitle={item.subtitle}
               icon={item.icon}

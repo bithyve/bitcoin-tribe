@@ -41,6 +41,12 @@ export default StyleSheet.create({
     fontFamily: Fonts.LufgaRegular,
     lineHeight: 16 * 1.6,
   },
+  body1Bold: {
+    fontSize: 16,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaRegular,
+    lineHeight: 16,
+  },
   body2: {
     fontSize: 14,
     fontWeight: '400',

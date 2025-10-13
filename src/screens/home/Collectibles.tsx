@@ -36,32 +36,15 @@ function Collectibles() {
 
   const navigation = useNavigation();
   const {
-    setBackupProcess,
-    setBackupDone,
-    setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
     isNodeInitInProgress,
   } = useContext(AppContext);
 
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
-    onSuccess: () => {
-      setBackupDone(true);
-      setTimeout(() => {
-        setBackupDone(false);
-        setManualAssetBackupStatus(true);
-      }, 1500);
-    },
-  });
-  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
-    ApiHandler.isBackupRequired,
-  );
-
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app.appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
       }
     },
   });
@@ -100,16 +83,6 @@ function Collectibles() {
   }, [collectibles, udas, coins]);
 
   useEffect(() => {
-    setBackupProcess(isLoading);
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isBackupRequired) {
-      backupMutate();
-    }
-  }, [isBackupRequired]);
-
-  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       refreshRgbWallet.mutate();
     });
@@ -126,7 +99,6 @@ function Collectibles() {
     }
     setRefreshing(true);
     refreshRgbWallet.mutate();
-    checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };
