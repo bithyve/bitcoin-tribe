@@ -156,7 +156,7 @@ function HomeScreen() {
     if (!walletOnline) {
       initializeWalletOnline();
     }
-  }, []);
+  }, [isWalletOnline]);
 
   useEffect(() => {
     const fetchStatus = async () => {
