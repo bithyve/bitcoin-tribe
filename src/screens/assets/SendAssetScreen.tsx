@@ -218,7 +218,6 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
-  const [witnessSats, setWitnessSats] = useState('330');
   const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(null);
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
@@ -305,7 +304,7 @@ const SendAssetScreen = () => {
         feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
         schema: assetData?.assetSchema.toUpperCase(),
-        witnessSats: Number(witnessSats),
+        witnessSats: Number(invoiceType === InvoiceMode.Witness ? 330 : 0),
       });
       setLoading(false);
       if (response?.txid) {
@@ -338,7 +337,7 @@ const SendAssetScreen = () => {
       }, 500);
       console.log(error);
     }
-  }, [invoice, assetAmount, navigation, isDonation, witnessSats]);
+  }, [invoice, assetAmount, navigation, isDonation]);
 
   const validateAndSetInvoice = async (rawText: string, fromPaste = false) => {
     const cleanedText = rawText.replace(/\s/g, '');
@@ -778,11 +777,11 @@ const SendAssetScreen = () => {
               );
               return;
             }
-            if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
-              Keyboard.dismiss();
-              Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
-              return;
-            }
+            // if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
+            //   Keyboard.dismiss();
+            //   Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
+            //   return;
+            // }
             Keyboard.dismiss();
             setVisible(true);
           }}
