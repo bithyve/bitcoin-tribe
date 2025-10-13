@@ -742,7 +742,7 @@
     "domainVerificationInfoTitle3": "Badge verificato",
     "domainVerificationInfoSubTitle3": "Il tuo dominio verrà mostrato pubblicamente come fonte verificata.",
     "rateLimitMsg": "Limite di frequenza raggiunto.\nPuoi riprovare dopo 15 minuti.",
-    "generateInvoice":"Genera fattura"
+    "generateInvoice":"Genera fattura",
     "addAssetSubtitle": "Tocca ‘Genera Fattura’ per creare una fattura cieca, oppure seleziona e aggiungi asset e importo per una fattura specifica.",
     "invoiceExpiryTitle": "Scadenza Fattura",
     "oneHour": "1 ora",

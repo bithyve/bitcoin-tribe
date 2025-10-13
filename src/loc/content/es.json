@@ -742,7 +742,7 @@
     "domainVerificationInfoTitle3": "Insignia verificada",
     "domainVerificationInfoSubTitle3": "Tu dominio se mostrará públicamente como fuente verificada.",
     "rateLimitMsg": "Límite de velocidad alcanzado.\nPuedes volver a intentarlo después de 15 minutos.",
-    "generateInvoice":"Generar factura"
+    "generateInvoice":"Generar factura",
     "addAssetSubtitle": "Toca ‘Generar Factura’ para crear una factura ciega, o selecciona y añade activo y monto para una factura específica.",
     "invoiceExpiryTitle": "Vencimiento de la factura",
     "oneHour": "1 h",

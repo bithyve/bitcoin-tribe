@@ -742,7 +742,7 @@
     "domainVerificationInfoTitle3": "सत्यापित बैज",
     "domainVerificationInfoSubTitle3": "आपका डोमेन एक सत्यापित स्रोत के रूप में दिखाया जाएगा।",
     "rateLimitMsg": "रेट सीमा पूरी हो गई है।\nआप 15 मिनट बाद पुनः प्रयास कर सकते हैं।",
-    "generateInvoice":"चालान जनरेट करें"
+    "generateInvoice":"चालान जनरेट करें",
     "addAssetSubtitle": "‘इनवॉइस जनरेट करें’ टैप करके ब्लाइंड इनवॉइस बनाएँ, या किसी विशिष्ट इनवॉइस के लिए एसेट और राशि चुनकर जोड़ें।",
     "invoiceExpiryTitle": "इनवॉइस की समाप्ति",
     "oneHour": "1 घंटा",
