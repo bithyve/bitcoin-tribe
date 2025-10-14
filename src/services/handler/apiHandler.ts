@@ -544,6 +544,7 @@ export class ApiHandler {
         await ApiHandler.makeWalletOnline();
         await ApiHandler.refreshRgbWallet();
         await ApiHandler.fetchPresetAssets();
+        await ApiHandler.viewUtxos()
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
           'version',
@@ -1703,7 +1704,8 @@ export class ApiHandler {
     consignmentEndpoints,
     feeRate,
     isDonation,
-    schema
+    schema,
+    witnessSats,
   }: {
     assetId: string;
     blindedUTXO: string;
@@ -1712,6 +1714,7 @@ export class ApiHandler {
     feeRate: number;
     isDonation: boolean;
     schema: string;
+    witnessSats: number;
   }) {
     try {
       const response = await RGBServices.sendAsset(
@@ -1722,6 +1725,7 @@ export class ApiHandler {
         feeRate,
         isDonation,
         schema,
+        witnessSats,
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -1941,6 +1945,7 @@ export class ApiHandler {
           )}`,
         );
       }
+      if(response.length > 0) {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
@@ -1953,8 +1958,10 @@ export class ApiHandler {
           utxos: utxosData,
         },
       );
-
-      return response;
+        return utxosData;
+      } else {
+        return [];
+      }
     } catch (error) {
       console.log('utxos', error);
       throw error;

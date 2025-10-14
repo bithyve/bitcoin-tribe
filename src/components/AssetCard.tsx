@@ -16,6 +16,7 @@ import GradientView from './GradientView';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type AssetCardProps = {
   asset: Asset;

@@ -14,3 +14,13 @@ export function snakeCaseToCamelCaseCase(obj: any): any {
   }
   return obj;
 }
+
+
+export const formatTUsdt = (str: string) => {
+  try {
+    if (!str) return str;
+    return str.replace(/tusdt/gi, 'tUSDT');
+  } catch (error) {
+    return str
+  }
+};

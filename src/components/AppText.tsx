@@ -11,7 +11,7 @@ export enum TextVariants {
   pageTitle2 = 'pageTitle2',
   subTitle = 'subTitle',
   body1 = 'body1',
-  body1Bold='body1Bold',
+  body1Bold = 'body1Bold',
   body2 = 'body2',
   body3 = 'body3',
   body5 = 'body5',

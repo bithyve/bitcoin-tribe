@@ -16,7 +16,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  InvoiceMode,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
@@ -44,6 +48,7 @@ function ReceiveAssetScreen() {
   const amount = route.params.amount || 0;
   const selectedType = route.params.selectedType || 'bitcoin';
   const invoiceExpiry = route.params.invoiceExpiry || 86400;
+  const invoiceType = route.params.invoiceType || InvoiceMode.Blinded;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -70,13 +75,14 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
-        if (colorable.length > 0) {
+        if (invoiceType === InvoiceMode.Witness || colorable.length > 0) {
           mutate({
             assetId,
             amount,
             linkedAsset: '',
             linkedAmount: 0,
             expiry: invoiceExpiry,
+            blinded: invoiceType === InvoiceMode.Blinded,
           });
         } else {
           createUtxos();
@@ -89,13 +95,14 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      if (colorable.length > 0) {
+      if (invoiceType === InvoiceMode.Witness || colorable.length > 0) {
         mutate({
           assetId,
           amount,
           linkedAsset: assetId,
           linkedAmount: amount,
           expiry: invoiceExpiry,
+          blinded: invoiceType === InvoiceMode.Blinded,
         });
       } else {
         createUtxos();
@@ -120,6 +127,7 @@ function ReceiveAssetScreen() {
               linkedAsset: assetId,
               linkedAmount: amount,
               expiry: invoiceExpiry,
+              blinded: invoiceType === InvoiceMode.Blinded,
             });
           }, 100);
           return true;
@@ -160,6 +168,7 @@ function ReceiveAssetScreen() {
         linkedAsset: '',
         linkedAmount: 0,
         expiry: invoiceExpiry,
+        blinded: invoiceType === InvoiceMode.Blinded,
       });
     } else if (createUtxoError) {
       createUtxoReset();
@@ -181,7 +190,7 @@ function ReceiveAssetScreen() {
           amount: Number(amount),
           assetId,
           expiry: invoiceExpiry,
-        });
+          });
       }
     } else {
       if (rgbInvoice === '') {
@@ -191,6 +200,7 @@ function ReceiveAssetScreen() {
           linkedAsset: '',
           linkedAmount: 0,
           expiry: invoiceExpiry,
+          blinded: invoiceType === InvoiceMode.Blinded,
         });
       }
     }
@@ -276,6 +286,7 @@ function ReceiveAssetScreen() {
             title={common.note}
             subTitle={formatString(receciveScreen.noteSubTitle, {
               time: invoiceExpiry / 3600,
+              type: invoiceType === InvoiceMode.Witness ? 'witness' : 'blinded',
             })}
             customStyle={styles.advanceOptionStyle}
           />

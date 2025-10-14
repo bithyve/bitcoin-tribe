@@ -40,6 +40,8 @@ const ListItem = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const ref = useRef(null);
+  const { translations } = useContext(LocalizationContext);
+  const { wallet, assets } = translations;
 
   const handleCancel = () => {
     onCancel(invoice);
@@ -62,7 +64,7 @@ const ListItem = ({
         ]}>
         <View style={styles.row}>
           <AppText variant="body2" style={styles.title}>
-            Invoice
+            {assets.invoice}
           </AppText>
           <AppText
             variant="body3"
@@ -75,7 +77,7 @@ const ListItem = ({
 
         <View style={styles.row}>
           <AppText variant="body2" style={styles.title}>
-            Recipient ID
+            {wallet.recipientId}
           </AppText>
           <AppText variant="body3" style={styles.value}>
             {invoice.recipientId}
@@ -84,7 +86,7 @@ const ListItem = ({
 
         <View style={styles.row}>
           <AppText variant="body2" style={styles.title}>
-            Expires On
+            {wallet.expiresOn}
           </AppText>
           <AppText variant="body3" style={styles.value}>
             {moment(invoice.expirationTimestamp * 1000).format(
@@ -92,10 +94,18 @@ const ListItem = ({
             )}
           </AppText>
         </View>
+        <View style={styles.row}>
+          <AppText variant="body2" style={styles.title}>
+            Type
+          </AppText>
+          <AppText variant="body3" style={styles.value}>
+            {invoice.recipientId.includes(':wvout') ? 'Witness' : 'Blinded'}
+          </AppText>
+        </View>
         {invoice.type === InvoiceType.Default && (
           <AppTouchable onPress={handleCancel}>
             <AppText variant="body2" style={styles.deleteText}>
-              Cancel Invoice
+              {wallet.cancelInvoiceTitle}
             </AppText>
           </AppTouchable>
         )}
@@ -108,6 +118,7 @@ const InvoicesScreen = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
+  const { wallet } = translations;
   const rgbWallet: RGBWallet = useQuery(RealmSchema.RgbWallet)[0];
   const [isLoading, setIsLoading] = useState(false);
   const invoices = useMemo(() => {
@@ -126,7 +137,7 @@ const InvoicesScreen = () => {
       );
       setIsLoading(false);
       if (result.status) {
-        Toast('Invoice cancelled', false);
+        Toast(wallet.invoiceCancelled, false);
         const updatedInvoices = invoices.filter(
           i => i.invoice !== invoice.invoice,
         );
@@ -137,10 +148,10 @@ const InvoicesScreen = () => {
           { invoices: updatedInvoices },
         );
       } else {
-        Toast('Failed to cancel invoice', true);
+        Toast(wallet.failedToCancelInvoice, true);
       }
     } catch (error) {
-      // Toast(`Failed to cancel ${error}`, true);
+      Toast(wallet.failedToCancelInvoice, true);
       setIsLoading(false);
       console.log('error', error);
     }
@@ -148,7 +159,7 @@ const InvoicesScreen = () => {
 
   const handleCopy = (invoice: RgbInvoice) => {
     Clipboard.setString(invoice.invoice);
-    Toast('Invoice copied to clipboard', false);
+    Toast(wallet.invoiceCopiedToClipboard, false);
   };
 
   return (
@@ -169,8 +180,8 @@ const InvoicesScreen = () => {
         ListEmptyComponent={
           <EmptyStateView
             style={styles.emptyContainer}
-            title={'No active invoices'}
-            subTitle={'You have no active invoices'}
+            title={wallet.noActiveInvoicesTitle}
+            subTitle={wallet.noActiveInvoicesSubTitle}
             IllustartionImage={
               isThemeDark ? (
                 <NoTransactionIllustration />
