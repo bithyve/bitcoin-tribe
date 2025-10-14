@@ -159,7 +159,7 @@ function IssueCollectibleScreen() {
     try {
       const response = await ApiHandler.issueNewCollectible({
         name: assetName.trim(),
-        description: description,
+        description: description.trim(),
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
         filePath: Platform.select({
@@ -225,7 +225,7 @@ function IssueCollectibleScreen() {
     try {
       const response = await ApiHandler.issueAssetUda({
         name: assetName.trim(),
-        details: description,
+        details: description.trim(),
         ticker: assetTicker,
         mediaFilePath: Platform.select({
           android:
