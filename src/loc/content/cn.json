@@ -738,7 +738,9 @@
     "collectionPayment": "付款确认",
     "collectionPaymentConfirm": "付款已确认。",
     "collectionPaymentSubtitle": "查看并确认您的交易",
-    "collectionPaymentConfirmSubtitle": "集合已上链。\n您现在可以开始添加 UDA。"
+    "collectionPaymentConfirmSubtitle": "集合已上链。\n您现在可以开始添加 UDA。",
+    "totalItems": "总项目",
+    "minted": "已铸造"
   },
   "community": {
     "fnfTitle": "社区",

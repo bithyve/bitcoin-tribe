@@ -737,7 +737,9 @@
     "collectionPayment": "支払い確認",
     "collectionPaymentConfirm": "支払いが確認されました。",
     "collectionPaymentSubtitle": "取引内容を確認して承認してください",
-    "collectionPaymentConfirmSubtitle": "コレクションがオンチェーンに固定されました。\nこれでUDAを追加できます。"
+    "collectionPaymentConfirmSubtitle": "コレクションがオンチェーンに固定されました。\nこれでUDAを追加できます。",
+    "totalItems": "合計アイテム",
+    "minted": "ミント済み"
   },
   "community": {
     "fnfTitle": "コミュニティ",

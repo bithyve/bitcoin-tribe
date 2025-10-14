@@ -737,7 +737,10 @@
     "collectionPayment": "भुगतान की पुष्टि",
     "collectionPaymentConfirm": "भुगतान की पुष्टि हो गई।",
     "collectionPaymentSubtitle": "अपने लेन-देन की समीक्षा करें और पुष्टि करें",
-    "collectionPaymentConfirmSubtitle": "कलेक्शन चेन पर एंकर हो गया है।\nअब आप UDAs जोड़ना शुरू कर सकते हैं।"
+    "collectionPaymentConfirmSubtitle": "कलेक्शन चेन पर एंकर हो गया है।\nअब आप UDAs जोड़ना शुरू कर सकते हैं।",
+    "totalItems": "कुल आइटम",
+    "minted": "मिंट किया गया"
+
   },
   "community": {
     "fnfTitle": "समुदाय",

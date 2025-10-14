@@ -737,7 +737,9 @@
     "collectionPayment":"Payment Confirmation",
     "collectionPaymentConfirm":"Payment confirmed.",
     "collectionPaymentSubtitle":"Review and Confirm Your Transaction",
-    "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs."
+    "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs.",
+    "totalItems":"Total Items",
+    "minted":"Minted"
   },
   "community": {
     "fnfTitle": "Community",
