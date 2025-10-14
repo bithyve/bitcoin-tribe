@@ -1945,6 +1945,7 @@ export class ApiHandler {
           )}`,
         );
       }
+      if(response.length > 0) {
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
       );
@@ -1957,8 +1958,10 @@ export class ApiHandler {
           utxos: utxosData,
         },
       );
-
-      return response;
+        return utxosData;
+      } else {
+        return [];
+      }
     } catch (error) {
       console.log('utxos', error);
       throw error;

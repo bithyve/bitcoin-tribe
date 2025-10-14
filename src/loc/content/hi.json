@@ -77,7 +77,13 @@
     "registry": "रजिस्ट्री",
     "verify": "सत्यापित करें",
     "tapToCopy": "कॉपी करने के लिए टैप करें",
-    "retry": "पुनः प्रयास करें"
+    "retry": "पुनः प्रयास करें",
+    "baseFee": "बेस शुल्क",
+    "satsPerArt": "प्रति कला सैट्स",
+    "totalUda": "कुल UDAs",
+    "feeRate": "शुल्क दर",
+    "swipeToPay": "अभी भुगतान करने के लिए स्वाइप करें",
+    "loading": "लोड हो रहा है"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -520,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
     "insufficientSatsMainWallet": "मुख्य वॉलेट में अपर्याप्त सैट्स, नए यूटीएक्सओ बनाने में विफल",
-    "insufficientSats": "अपर्याप्त सैट्स, नए यूटीएक्सओ बनाने में विफल",
+    "insufficientSats": "अपर्याप्त sats, आपके पास नए यूटीएक्सओ बनाने के लिए कम से कम {amount} sats होने चाहिए।",
     "receiveAssetTitle": "संपत्ति प्राप्त करें",
     "receiveAssetSubTitle": "आरजीबी इनवॉइस स्कैन करें या कॉपी पेस्ट करें",
     "insufficientSatsRGB": "संपत्ति लेनदेन के लिए आरक्षित सैट्स",
@@ -753,7 +759,21 @@
     "searchAssetPlaceholder": "Tribe RGB रजिस्ट्री में खोजें",
     "totalBalance": "कुल शेष",
     "bitcoinBalance": "बिटकॉइन शेष",
-    "otherAssets": "अन्य संपत्तियां"
+    "otherAssets": "अन्य संपत्तियां",
+    "issueCollection": "कलेक्शन बनाएं",
+    "collectionName": "कलेक्शन का नाम",
+    "collectionNamePlaceholder": "अपनी कलेक्शन का नाम दर्ज करें",
+    "enterCollectionName": "कृपया कलेक्शन का नाम दर्ज करें",
+    "collectionDesc": "कलेक्शन विवरण",
+    "collectionDescPlaceholder": "अपनी कलेक्शन का वर्णन करें",
+    "enterCollectionDescription": "कृपया कलेक्शन का विवरण दर्ज करें",
+    "collectionPayment": "भुगतान की पुष्टि",
+    "collectionPaymentConfirm": "भुगतान की पुष्टि हो गई।",
+    "collectionPaymentSubtitle": "अपने लेन-देन की समीक्षा करें और पुष्टि करें",
+    "collectionPaymentConfirmSubtitle": "कलेक्शन चेन पर एंकर हो गया है।\nअब आप UDAs जोड़ना शुरू कर सकते हैं।",
+    "totalItems": "कुल आइटम",
+    "minted": "मिंट किया गया"
+
   },
   "community": {
     "fnfTitle": "समुदाय",

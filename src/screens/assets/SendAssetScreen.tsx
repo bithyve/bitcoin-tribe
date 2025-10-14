@@ -172,7 +172,7 @@ const SendAssetScreen = () => {
   const { assetId, rgbInvoice, amount, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const {
     sendScreen,
     common,
@@ -218,7 +218,13 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
-  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(null);
+  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(
+    rgbInvoice !== ''
+      ? rgbInvoice.includes(':wvout')
+        ? InvoiceMode.Witness
+        : InvoiceMode.Blinded
+      : null,
+  );
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
@@ -249,8 +255,12 @@ const SendAssetScreen = () => {
     } else if (createUtxos.data === false) {
       setLoading(false);
       Toast(walletTranslation.failedToCreateUTXO, true);
+    } else if (createUtxos.error) {
+      setLoading(false);
+      Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      createUtxos.reset();
     }
-  }, [createUtxos.data]);
+  }, [createUtxos.data, createUtxos.error]);
 
   const handleAmountInputChange = text => {
     let regex;

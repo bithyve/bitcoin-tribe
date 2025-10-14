@@ -175,7 +175,11 @@ function ReceiveAssetScreen() {
       fetchUTXOs();
       refreshRgbWallet.mutate();
       navigation.goBack();
-      Toast(assets.assetProcessErrorMsg, true);
+      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+        Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      } else {
+        Toast(assets.assetProcessErrorMsg, true);
+      }
       // Toast(`${createUtxoError}`, true);
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
@@ -190,7 +194,7 @@ function ReceiveAssetScreen() {
           amount: Number(amount),
           assetId,
           expiry: invoiceExpiry,
-          });
+        });
       }
     } else {
       if (rgbInvoice === '') {
@@ -241,27 +245,25 @@ function ReceiveAssetScreen() {
           )
         }
       />
-      {loading ? (
-        <View>
-          <ResponsePopupContainer
-            visible={loading}
-            enableClose={true}
-            backColor={theme.colors.modalBackColor}
-            borderColor={theme.colors.modalBackColor}>
-            <InProgessPopupContainer
-              title={assets.requestInvoiceProcessTitle}
-              subTitle={assets.requestInvoiceProcessSubTitle}
-              illustrationPath={
-                isThemeDark
-                  ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
-                  : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
-              }
-            />
-          </ResponsePopupContainer>
-        </View>
-      ) : error ? (
-        <View />
-      ) : (
+
+      <View>
+        <ResponsePopupContainer
+          visible={loading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.requestInvoiceProcessTitle}
+            subTitle={assets.requestInvoiceProcessSubTitle}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
+                : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
+            }
+          />
+        </ResponsePopupContainer>
+      </View>
+      {!loading && !error && (
         <View>
           <View style={styles.detailsContainer}>
             <ShowQRCode
