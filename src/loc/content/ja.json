@@ -77,7 +77,13 @@
     "registry": "レジストリ",
     "verify": "確認する",
     "tapToCopy": "タップしてコピー",
-    "retry": "再試行"
+    "retry": "再試行",
+    "baseFee": "基本料金",
+    "satsPerArt": "アートあたりのサトシ",
+    "totalUda": "合計 UDA",
+    "feeRate": "手数料率",
+    "swipeToPay": "今すぐ支払うにはスワイプしてください",
+    "loading": "読み込み中"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -753,7 +759,18 @@
     "searchAssetPlaceholder": "Tribe RGB レジストリから検索",
     "totalBalance": "総残高",
     "bitcoinBalance": "ビットコイン残高",
-    "otherAssets": "その他のアセット"
+    "otherAssets": "その他のアセット",
+    "issueCollection": "コレクションを作成",
+    "collectionName": "コレクション名",
+    "collectionNamePlaceholder": "コレクションの名前を入力してください",
+    "enterCollectionName": "コレクション名を入力してください",
+    "collectionDesc": "コレクションの説明",
+    "collectionDescPlaceholder": "コレクションについて説明してください",
+    "enterCollectionDescription": "コレクションの説明を入力してください",
+    "collectionPayment": "支払い確認",
+    "collectionPaymentConfirm": "支払いが確認されました。",
+    "collectionPaymentSubtitle": "取引内容を確認して承認してください",
+    "collectionPaymentConfirmSubtitle": "コレクションがオンチェーンに固定されました。\nこれでUDAを追加できます。"
   },
   "community": {
     "fnfTitle": "コミュニティ",

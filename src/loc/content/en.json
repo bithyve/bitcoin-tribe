@@ -77,7 +77,13 @@
     "registry": "Registry",
     "verify": "Verify",
     "tapToCopy": "TAP TO COPY",
-    "retry": "Retry"
+    "retry": "Retry",
+    "baseFee":"Base Fee",
+    "satsPerArt":"sats per Art",
+    "totalUda":"Total UDAs",
+    "feeRate":"Fee Rate",
+    "swipeToPay":"Swipe to pay now",
+    "loading": "loading"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -754,7 +760,18 @@
     "oneDay": "1 Day",
     "twoDays": "2 Days",
     "searchAssetPlaceholder": "Search from Tribe RGB registry",
-    "availableBalance": "Available Balance"
+    "availableBalance": "Available Balance",
+    "issueCollection":"Create Collection",
+    "collectionName":"Collection Name",
+    "collectionNamePlaceholder":"Enter a name for your collection",
+    "enterCollectionName": "Please enter collection name",
+    "collectionDesc":"Collection Description",
+    "collectionDescPlaceholder":"Describe your collection",
+    "enterCollectionDescription": "Please enter collection description",
+    "collectionPayment":"Payment Confirmation",
+    "collectionPaymentConfirm":"Payment confirmed.",
+    "collectionPaymentSubtitle":"Review and Confirm Your Transaction",
+    "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs."
   },
   "community": {
     "fnfTitle": "Community",
