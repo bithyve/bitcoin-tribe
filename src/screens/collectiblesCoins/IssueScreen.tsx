@@ -49,7 +49,7 @@ function IssueScreen() {
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -101,10 +101,11 @@ function IssueScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      Toast(
-        'An issue occurred while processing your request. Please try again.',
-        true,
-      );
+      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+        Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      } else {
+        Toast(assets.assetProcessErrorMsg, true);
+      }
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
       navigation.goBack();

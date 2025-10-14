@@ -172,7 +172,7 @@ const SendAssetScreen = () => {
   const { assetId, rgbInvoice, amount, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const {
     sendScreen,
     common,
@@ -255,8 +255,12 @@ const SendAssetScreen = () => {
     } else if (createUtxos.data === false) {
       setLoading(false);
       Toast(walletTranslation.failedToCreateUTXO, true);
+    } else if (createUtxos.error) {
+      setLoading(false);
+      Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      createUtxos.reset();
     }
-  }, [createUtxos.data]);
+  }, [createUtxos.data, createUtxos.error]);
 
   const handleAmountInputChange = text => {
     let regex;
