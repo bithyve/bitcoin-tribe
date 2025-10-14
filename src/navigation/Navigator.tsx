@@ -89,6 +89,9 @@ import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
+import { CreateGroup } from 'src/screens/community/CreateGroup';
+import { GroupInfo } from 'src/screens/community/GroupInfo';
+import GroupQr from 'src/screens/community/GroupQr';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -363,6 +366,18 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.WEBVIEWSCREEN}
           component={WebViewScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CREATEGROUP}
+          component={CreateGroup}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.GROUPINFO}
+          component={GroupInfo}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.GROUPQR}
+          component={GroupQr}
         />
       </Stack.Navigator>
     </RealmProvider>

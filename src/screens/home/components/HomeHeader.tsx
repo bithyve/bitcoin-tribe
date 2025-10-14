@@ -168,7 +168,7 @@ function HomeHeader({
           {showAdd && (
             <IconWrapper
               onPress={() => {
-                navigation.navigate(NavigationRoutes.PROFILEINFO);
+                navigation.navigate(NavigationRoutes.CREATEGROUP);
               }}>
               {isThemeDark ? <AddContactIcon /> : <AddContactIconLight />}
             </IconWrapper>
