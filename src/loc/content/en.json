@@ -719,7 +719,7 @@
     "waitingVerificationSubTitle": "Transaction is under verification. Processing will continue once checks are complete.",
     "failedTitle": "Failed",
     "failedSubTitle": "Transaction was unsuccessful. No funds were moved.",
-    "platformFeeTitle": "Platform Fee (Registry Listing)",
+    "platformFeeTitle": "Platform Fee",
     "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry.",
     "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden.",
     "txnInfoTitle": "Info",

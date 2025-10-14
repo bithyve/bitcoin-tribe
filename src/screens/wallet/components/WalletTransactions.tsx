@@ -28,6 +28,7 @@ import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
 import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { SizedBox } from 'src/components/SizedBox';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -155,7 +156,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
             )}
           </View>
           <View style={styles.contentWrapper}>
-            <AppText
+          <AppText
               variant="body1"
               numberOfLines={1}
               ellipsizeMode="middle"
@@ -169,6 +170,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
             </AppText>
           </View>
         </View>
+        <SizedBox width={10}/>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
             {initialCurrencyMode !== CurrencyKind.SATS &&
@@ -209,7 +211,6 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     container: {
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
       backgroundColor: backColor,
       paddingVertical: backColor ? hp(20) : 0,
@@ -220,11 +221,12 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '50%',
+      flex:1,
       alignItems: 'center',
     },
     contentWrapper: {
       marginLeft: 10,
+      flex:1
     },
     transIdText: {
       lineHeight: 25,
@@ -235,12 +237,9 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '50%',
-      alignItems: 'center',
       justifyContent: 'space-between',
     },
     amtIconWrapper: {
-      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',
