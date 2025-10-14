@@ -725,7 +725,7 @@
     "waitingVerificationSubTitle": "取引は検証中です。確認が完了すると処理が続行されます。",
     "failedTitle": "失敗",
     "failedSubTitle": "取引が失敗しました。資金は移動されていません。",
-    "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
+    "platformFeeTitle": "プラットフォーム手数料",
     "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。",
     "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。",
     "txnInfoTitle": "情報",

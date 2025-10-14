@@ -110,7 +110,7 @@ const AssetCard = (props: AssetCardProps) => {
               )}
             </View>
           <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
-              {details}
+              {details.trim()}
             </AppText>
           </View>
         </GradientView>
