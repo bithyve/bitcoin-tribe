@@ -10,8 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { HyperswarmManager } from './holepunch/network/managers/HyperswarmManager';
 import { MessageEncryption } from './holepunch/crypto/MessageEncryption';
 
-import { RoomStorage, HolepunchRoom } from './holepunch/storage/RoomStorage';
-import { MessageStorage, HolepunchMessage } from './holepunch/storage/MessageStorage';
+import { RoomStorage, HolepunchRoom, HolepunchRoomType } from './holepunch/storage/RoomStorage';
+import { MessageStorage, HolepunchMessage, HolepunchMessageType } from './holepunch/storage/MessageStorage';
 import { KeyPair } from './holepunch/network/types/network.types';
 
 
@@ -64,6 +64,7 @@ export class ChatAdapter extends EventEmitter {
           messageId: data.messageId,
           roomId: data.roomId,
           senderId: data.senderId,
+          messageType: data.messageType,
           content: data.content,
           timestamp: data.timestamp,
         };
@@ -81,7 +82,7 @@ export class ChatAdapter extends EventEmitter {
    * Create a new chat room
    * Generates room key, derives topic, saves metadata
    */
-  async createRoom(roomName: string): Promise<HolepunchRoom> {
+  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string): Promise<HolepunchRoom> {
 
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
@@ -96,21 +97,18 @@ export class ChatAdapter extends EventEmitter {
     this.currentRoom = {
       roomId: roomTopic,
       roomKey: roomKey,
+      roomType: roomType,
       roomName: roomName,
-      lastActive: Date.now(),
-      createdAt: Date.now(),
+      roomDescription: roomDescription,
+      peers: [],
       creator: this.keyPair.publicKey,
+      createdAt: Date.now(),
+      lastActive: Date.now(),
+      roomImage: roomImage,
     };
 
     // Save to storage
-    await RoomStorage.saveRoom({
-      roomId: roomTopic,
-      roomKey,
-      roomName: this.currentRoom.roomName,
-      lastActive: this.currentRoom.lastActive,
-      createdAt: this.currentRoom.createdAt,
-      creator: this.currentRoom.creator,
-    });
+    await RoomStorage.saveRoom(this.currentRoom);
 
     // Join the room via HyperswarmManager
     const lastSyncedIndex = 0; // New room, so start from 0
@@ -124,7 +122,7 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Join existing room with room key
    */
-  async joinRoom(roomKey: string, roomName?: string): Promise<HolepunchRoom> {
+  async joinRoom(roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string): Promise<HolepunchRoom> {
     // Validate room key
     if (!MessageEncryption.isValidRoomKey(roomKey)) {
       throw new Error('Invalid room key format');
@@ -136,32 +134,28 @@ export class ChatAdapter extends EventEmitter {
     // Load any cached messages from storage
     const allRooms = await RoomStorage.getAllRooms();
     const existingRoom = allRooms.find(r => r.roomKey === roomKey);
-    const lastSyncedIndex = 0; // Will be used for syncing from root peer
+    let lastSyncedIndex = 0; // Will be used for syncing from root peer
 
     // Create room object
-    this.currentRoom = {
-      roomId: roomTopic,
-      roomKey: roomKey,
-      roomName: roomName || existingRoom?.roomName || `Room ${roomTopic.substring(0, 8)}`,
-      lastActive: Date.now(),
-      createdAt: existingRoom?.createdAt || Date.now(),
-      creator: existingRoom?.creator || this.keyPair.publicKey,
-    };
-
-    if (!existingRoom) {
-      console.log('[ChatAdapter] ⚠️ Joining new room, no existing metadata found. Creating new persistence.');
-      // Save room metadata
-      await RoomStorage.saveRoom({
+    if(existingRoom) {
+      this.currentRoom = existingRoom;
+    } else {
+      // TODO: update fields once meta data for the new room is communicated ()
+      this.currentRoom =  {
         roomId: roomTopic,
-        roomKey,
-        roomName: this.currentRoom.roomName,
-        lastActive: this.currentRoom.lastActive,
-        createdAt: this.currentRoom.createdAt,
-        creator: this.currentRoom.creator,
-      });
+        roomKey: roomKey,
+        roomType: roomType || HolepunchRoomType.GROUP,
+        roomName: roomName || `Room ${roomTopic.substring(0, 8)}`,
+        roomDescription: roomDescription || `Description for room ${roomTopic.substring(0, 8)}`,
+        peers: [],
+        creator: '', 
+        createdAt: Date.now(),
+        lastActive: Date.now(),
+        roomImage: roomImage,
+      };
+
+      await RoomStorage.saveRoom(this.currentRoom);
     }
-
-
 
     // Join via HyperswarmManager (will sync messages from root peer)
     await this.manager.joinRoom(roomTopic, roomKey, lastSyncedIndex);
@@ -174,7 +168,7 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Send message to current room
    */
-  async sendMessage(text: string): Promise<void> {
+  async sendMessage(text: string, messageType: HolepunchMessageType): Promise<void> {
     if (!this.currentRoom) {
       throw new Error('No active room');
     }
@@ -188,6 +182,7 @@ export class ChatAdapter extends EventEmitter {
       messageId: uuidv4(),
       roomId: this.currentRoom.roomId,
       senderId: this.keyPair.publicKey,
+      messageType: messageType,
       content: text,
       timestamp: Date.now(),
     };

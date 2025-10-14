@@ -8,7 +8,8 @@ import { ChatService } from '../services/messaging/ChatService';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
-import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
 
 interface UseChatResult {
   // State
@@ -18,8 +19,8 @@ interface UseChatResult {
   connectedPeers: string[];
 
   // Actions
-  createRoom: (roomName: string) => Promise<void>;
-  joinRoom: (roomKey: string, roomName?: string) => Promise<HolepunchRoom>;
+  createRoom: (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string) => Promise<void>;
+  joinRoom: (roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string) => Promise<HolepunchRoom>;
   sendMessage: (text: string) => Promise<void>;
   leaveRoom: () => Promise<void>;
 
@@ -49,7 +50,7 @@ export function useChat(): UseChatResult {
   const [error, setError] = useState<string | null>(null);
 
   const chatService = ChatService.getInstance();
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
   const seed = app.primarySeed.toString('hex');
 
   // Initialize service (starts worklet, waits for root peer)
@@ -120,12 +121,12 @@ export function useChat(): UseChatResult {
     };
   }, [chatService.isInitialized()]);
 
-  const createRoom = useCallback(async (roomName: string) => {
+  const createRoom = useCallback(async (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string) => {
     setIsCreatingRoom(true);
     setError(null);
     try {
       const adapter = chatService.getAdapter();
-      await adapter.createRoom(roomName);
+      await adapter.createRoom(roomName, roomType, roomDescription, roomImage);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -134,13 +135,13 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
-  const joinRoom = useCallback(async (roomKey: string, roomName?: string): Promise<HolepunchRoom> => {
+  const joinRoom = useCallback(async (roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string): Promise<HolepunchRoom> => {
     setIsJoiningRoom(true);
     setError(null);
     try {
       console.log('[useChat] Joining room with key:', roomKey);
       const adapter = chatService.getAdapter();
-      return await adapter.joinRoom(roomKey, roomName);
+      return await adapter.joinRoom(roomKey, roomName, roomType, roomDescription, roomImage);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -154,7 +155,7 @@ export function useChat(): UseChatResult {
     setError(null);
     try {
       const adapter = chatService.getAdapter();
-      await adapter.sendMessage(text);
+      await adapter.sendMessage(text, HolepunchMessageType.TEXT);
     } catch (err: any) {
       setError(err.message);
       throw err;
