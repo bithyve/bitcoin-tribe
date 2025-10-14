@@ -218,7 +218,13 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
-  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(null);
+  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(
+    rgbInvoice !== ''
+      ? rgbInvoice.includes(':wvout')
+        ? InvoiceMode.Witness
+        : InvoiceMode.Blinded
+      : null,
+  );
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
