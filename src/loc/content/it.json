@@ -526,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
     "insufficientSatsMainWallet": "Sats insufficienti nel portafoglio principale, creazione di nuovi UTXO non riuscita",
-    "insufficientSats": "Sats insufficienti, creazione di nuovi UTXO non riuscita",
+    "insufficientSats": "Sats insufficienti. Devi avere almeno {amount} sats nel tuo portafoglio per creare un nuovo UTXO.",
     "receiveAssetTitle": "Ricevi risorsa",
     "receiveAssetSubTitle": "Scansiona o copia incolla la fattura RGB",
     "insufficientSatsRGB": "Sats riservati per la transazione della risorsa",

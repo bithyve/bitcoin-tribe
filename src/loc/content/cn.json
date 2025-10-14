@@ -527,7 +527,7 @@
   "assets": {
     "assetCreateMsg": "资产创建成功",
     "insufficientSatsMainWallet": "主钱包中的Sats不足，无法创建新的UTXO",
-    "insufficientSats": "Sats不足，无法创建新的UTXO",
+    "insufficientSats": "聪不足。您的钱包中至少需要有 {amount} 聪才能创建新的 UTXO",
     "receiveAssetTitle": "接收资产",
     "receiveAssetSubTitle": "扫描或复制粘贴RGB发票",
     "insufficientSatsRGB": "为资产交易保留的Sats",

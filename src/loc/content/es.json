@@ -526,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
     "insufficientSatsMainWallet": "Satoshis insuficientes en la billetera principal, fallo al crear nuevos UTXOs",
-    "insufficientSats": "Satoshis insuficientes, fallo al crear nuevos UTXOs",
+    "insufficientSats": "Satoshis insuficientes. Necesitas tener al menos {amount} sats en tu billetera para crear un nuevo UTXO.",
     "receiveAssetTitle": "Recibir activo",
     "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB",
     "insufficientSatsRGB": "Sats reservados para transacciones de activos",

@@ -526,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "Asset created successfully",
     "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
-    "insufficientSats": "Insufficient sats, failed to create new UTXOs",
+    "insufficientSats": "Insufficient sats. You need to have at least {amount} sats in your wallet to create a new UTXO.",
     "receiveAssetTitle": "Receive Assset",
     "receiveAssetSubTitle": "Scan or copy paste the RGB Invoice",
     "insufficientSatsRGB": "Sats reserved for asset transaction",

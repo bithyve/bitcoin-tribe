@@ -526,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "संपत्ति सफलतापूर्वक बनाई गई",
     "insufficientSatsMainWallet": "मुख्य वॉलेट में अपर्याप्त सैट्स, नए यूटीएक्सओ बनाने में विफल",
-    "insufficientSats": "अपर्याप्त सैट्स, नए यूटीएक्सओ बनाने में विफल",
+    "insufficientSats": "अपर्याप्त sats, आपके पास नए यूटीएक्सओ बनाने के लिए कम से कम {amount} sats होने चाहिए।",
     "receiveAssetTitle": "संपत्ति प्राप्त करें",
     "receiveAssetSubTitle": "आरजीबी इनवॉइस स्कैन करें या कॉपी पेस्ट करें",
     "insufficientSatsRGB": "संपत्ति लेनदेन के लिए आरक्षित सैट्स",

@@ -526,7 +526,7 @@
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
     "insufficientSatsMainWallet": "メインウォレットのサットが不足しているため、新しいUTXOの作成に失敗しました",
-    "insufficientSats": "サットが不足しているため、新しいUTXOの作成に失敗しました",
+    "insufficientSats": "satsが不足しています。新しいUTXOを作成するには、ウォレットに少なくとも{amount} satsが必要です。",
     "receiveAssetTitle": "アセットを受け取る",
     "receiveAssetSubTitle": "RGB請求書をスキャンまたはコピーして貼り付け",
     "insufficientSatsRGB": "アセット取引のためにサットが予約されました",
