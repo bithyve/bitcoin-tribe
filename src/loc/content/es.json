@@ -770,7 +770,9 @@
     "collectionPayment": "Confirmación de pago",
     "collectionPaymentConfirm": "Pago confirmado.",
     "collectionPaymentSubtitle": "Revisa y confirma tu transacción",
-    "collectionPaymentConfirmSubtitle": "Colección anclada en la cadena.\nAhora puedes empezar a agregar UDAs."
+    "collectionPaymentConfirmSubtitle": "Colección anclada en la cadena.\nAhora puedes empezar a agregar UDAs.",
+    "totalItems": "Artículos totales",
+    "minted": "Acuñado"
   },
   "community": {
     "fnfTitle": "Comunidad",

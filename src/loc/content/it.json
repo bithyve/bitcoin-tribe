@@ -770,7 +770,9 @@
     "collectionPayment": "Conferma pagamento",
     "collectionPaymentConfirm": "Pagamento confermato.",
     "collectionPaymentSubtitle": "Rivedi e conferma la tua transazione",
-    "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs."
+    "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs.",
+    "totalItems": "Elementi totali",
+    "minted": "Coniato"
   },
   "community": {
     "fnfTitle": "Comunità",

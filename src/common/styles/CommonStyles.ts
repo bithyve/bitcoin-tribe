@@ -58,6 +58,11 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
   },
+  captionBold: {
+    fontSize: 12,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaMedium,
+  },
   // Should be removed - body 3, 4, 5, 6 and 7
   body3: {
     fontSize: 16,
@@ -104,5 +109,10 @@ export default StyleSheet.create({
   walletBalance: {
     fontSize: 39,
     fontFamily: Fonts.LufgaSemiBold,
+  },
+  muted: {
+    fontSize: 10,
+    fontFamily: Fonts.LufgaRegular,
+    fontWeight: '400',
   },
 });
