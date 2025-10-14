@@ -1,10 +1,15 @@
 import { RealmSchema } from 'src/storage/enum';
 import RealmDatabase from 'src/storage/realm/realm';
 
-export interface HolepunchMessage{
+export enum HolepunchMessageType {
+  TEXT = 'TEXT',
+}
+
+export interface HolepunchMessage {
   messageId: string;
   roomId: string;
   senderId: string;
+  messageType: HolepunchMessageType;
   content: string;
   timestamp: number;
 }
@@ -35,6 +40,7 @@ export class MessageStorage {
         messageId: String(m._id),
         roomId: String(m.roomId),
         senderId: String(m.senderId),
+        messageType: String(m.messageType) as HolepunchMessageType,
         content: String(m.content),
         timestamp: m.timestamp instanceof Date ? m.timestamp.getTime() : Date.now(),
         status: String(m.status),
@@ -60,6 +66,7 @@ export class MessageStorage {
         messageId: String(m._id),
         roomId: String(m.roomId),
         senderId: String(m.senderId),
+        messageType: String(m.messageType) as HolepunchMessageType,
         content: String(m.content),
         timestamp: m.timestamp instanceof Date ? m.timestamp.getTime() : Date.now(),
       };

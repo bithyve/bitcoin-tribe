@@ -2,13 +2,21 @@
 import { RealmSchema } from 'src/storage/enum';
 import RealmDatabase from 'src/storage/realm/realm';
 
+export enum HolepunchRoomType {
+  GROUP = 'GROUP',
+}
+
 export interface HolepunchRoom {
-  roomId: string;
-  roomKey: string;
-  roomName: string;
-  creator: string;
-  createdAt: number;
-  lastActive?: number;
+  roomId: string,
+  roomKey: string,
+  roomType: HolepunchRoomType,
+  roomName: string,
+  roomDescription: string,
+  peers: string[],
+  creator: string,
+  createdAt: number,
+  lastActive: number,
+  roomImage?: string,
 }
 
 export class RoomStorage {
@@ -36,10 +44,14 @@ export class RoomStorage {
       const rooms: HolepunchRoom[] = Array.from(realmRooms as Realm.Results<any>).map((r) => ({
         roomId: String(r.roomId),
         roomKey: String(r.roomKey),
+        roomType: String(r.roomType) as HolepunchRoomType,
         roomName: String(r.roomName),
+        roomDescription: String(r.roomDescription),
+        peers: r.peers.map(String),
         creator: String(r.creator),
-        createdAt: r.createdAt instanceof Date ? r.createdAt.getTime() : Date.now(),
-        lastActive: r.lastActive instanceof Date ? r.lastActive.getTime() : undefined,
+        createdAt: Number(r.createdAt),
+        lastActive: Number(r.lastActive),
+        roomImage: r.roomImage ? String(r.roomImage) : undefined,
       }));
       // Sort by last active (most recent first)
       rooms.sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
@@ -62,10 +74,14 @@ export class RoomStorage {
       return {
         roomId: String(r.roomId),
         roomKey: String(r.roomKey),
+        roomType: String(r.roomType) as HolepunchRoomType,
         roomName: String(r.roomName),
+        roomDescription: String(r.roomDescription),
+        peers: r.peers.map(String),
         creator: String(r.creator),
-        createdAt: r.createdAt instanceof Date ? r.createdAt.getTime() : Date.now(),
-        lastActive: r.lastActive instanceof Date ? r.lastActive.getTime() : undefined,
+        createdAt: Number(r.createdAt),
+        lastActive: Number(r.lastActive),
+        roomImage: r.roomImage ? String(r.roomImage) : undefined,
       };
     } catch (error) {
       console.error('[RoomStorage] Failed to get room:', error);
