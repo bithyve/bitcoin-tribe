@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { TextInput } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
@@ -11,14 +11,7 @@ import { hp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
-
-type RouteParams = {
-  roomKey?: string;
-  roomName?: string;
-};
-
 function CommunityNew() {
-  const route = useRoute<RouteProp<{ params: RouteParams }>>();
   const [rooms, setRooms] = useState<HolepunchRoom[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [manualRoomKey, setManualRoomKey] = useState('');
@@ -29,6 +22,8 @@ function CommunityNew() {
   const {
     isInitializing,
     isCreatingRoom,
+    isRootPeerConnected,
+    isReconnecting,
     error,
     isJoiningRoom,
     currentRoom,
@@ -38,6 +33,7 @@ function CommunityNew() {
     leaveRoom,
     sendMessage,
     getPubKey,
+    reconnectRootPeer,
   } = useChat();
 
   // Load rooms from storage
@@ -62,7 +58,8 @@ function CommunityNew() {
   }, [error]);
 
   useEffect(() => {
-    if(currentRoom) navigation.navigate(NavigationRoutes.CHAT, { currentRoom, leaveRoom, sendMessage, peerPubKey: getPubKey() });
+    if(currentRoom) (navigation as any).navigate(NavigationRoutes.CHAT, { currentRoom, leaveRoom, sendMessage, peerPubKey: getPubKey() });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentRoom]);
 
   const [joiningRoomKey, setJoiningRoomKey] = useState<string | null>(null);
@@ -100,8 +97,26 @@ function CommunityNew() {
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await loadRooms();
-    setRefreshing(false);
+    try {
+      // If root peer is disconnected, try to reconnect
+      if (!isRootPeerConnected) {
+        console.log('[CommunityNew] 🔄 Root peer disconnected, attempting reconnection...');
+        try {
+          await reconnectRootPeer();
+          Toast('✅ Reconnected to server', false);
+        } catch (reconnectError) {
+          console.error('[CommunityNew] Failed to reconnect:', reconnectError);
+          Toast('⚠️ Could not reconnect to server', true);
+        }
+      }
+      
+      // Always reload rooms list
+      await loadRooms();
+    } catch (error) {
+      console.error('[CommunityNew] Refresh error:', error);
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const renderRoomItem = ({ item }: { item }) => {
@@ -125,11 +140,20 @@ function CommunityNew() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <ModalLoading visible={isInitializing || isCreatingRoom} />
+      <ModalLoading visible={isInitializing || isCreatingRoom || isReconnecting} />
       
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showAdd />
       </View>
+
+      {/* Root Peer Connection Status Banner */}
+      {!isInitializing && !isRootPeerConnected && (
+        <View style={styles.disconnectedBanner}>
+          <Text style={styles.disconnectedText}>
+            ⚠️ Server Offline - Pull down to reconnect
+          </Text>
+        </View>
+      )}
 
       {isInitializing ? (
         <View style={styles.loadingContainer}>
@@ -203,6 +227,20 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 16,
     color: '#24262B',
+  },
+  disconnectedBanner: {
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  disconnectedText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
   },
   headerWrapper: {
     marginVertical: hp(16),

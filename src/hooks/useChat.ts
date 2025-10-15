@@ -15,6 +15,7 @@ interface UseChatResult {
   // State
   isInitializing: boolean;  // True while HyperswarmManager is starting up
   isConnected: boolean;     // True when joined a room
+  isRootPeerConnected: boolean; // True when root peer is connected
   currentRoom: any | null;
   connectedPeers: string[];
 
@@ -23,6 +24,7 @@ interface UseChatResult {
   joinRoom: (roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string) => Promise<HolepunchRoom>;
   sendMessage: (text: string) => Promise<void>;
   leaveRoom: () => Promise<void>;
+  reconnectRootPeer: () => Promise<void>;
 
   // Fetchers
   getAllRooms: () => Promise<any[]>;
@@ -33,6 +35,7 @@ interface UseChatResult {
   isCreatingRoom: boolean;
   isJoiningRoom: boolean;
   isSendingMessage: boolean;
+  isReconnecting: boolean;
 
   // Error
   error: string | null;
@@ -41,17 +44,19 @@ interface UseChatResult {
 export function useChat(): UseChatResult {
   const [isInitializing, setIsInitializing] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isRootPeerConnected, setIsRootPeerConnected] = useState(false);
   const [currentRoom, setCurrentRoom] = useState<HolepunchRoom | null>(null);
   const [connectedPeers, setConnectedPeers] = useState<string[]>([]);
 
   const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [isJoiningRoom, setIsJoiningRoom] = useState(false);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
+  const [isReconnecting, setIsReconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const chatService = ChatService.getInstance();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
-  const seed = app.primarySeed.toString('hex');
+  const seed = app.primarySeed.toString();
 
   // Initialize service (starts worklet, waits for root peer)
   useEffect(() => {
@@ -69,6 +74,7 @@ export function useChat(): UseChatResult {
           setIsInitializing(false);
         });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed]);
 
 
@@ -80,7 +86,11 @@ export function useChat(): UseChatResult {
 
     const adapter = chatService.getAdapter();
 
-    const handleMessage = (message: any) => {
+    // Set initial root peer connection status
+    const initialStatus = adapter.isRootPeerConnected();
+    setIsRootPeerConnected(initialStatus);
+
+    const handleMessage = () => {
       // console.log('[useChat] Received message:', message);
     };
 
@@ -106,11 +116,23 @@ export function useChat(): UseChatResult {
       setConnectedPeers(peers);
     };
 
+    const handleRootPeerConnected = () => {
+      console.log('[useChat] 🏰 Root peer connected');
+      setIsRootPeerConnected(true);
+    };
+
+    const handleRootPeerDisconnected = () => {
+      console.log('[useChat] 👋 Root peer disconnected');
+      setIsRootPeerConnected(false);
+    };
+
     adapter.on('chat:message-received', handleMessage);
     adapter.on('chat:room-created', handleRoomCreated);
     adapter.on('chat:room-joined', handleRoomJoined);
     adapter.on('chat:peer-connected', handlePeerConnected);
     adapter.on('chat:peer-disconnected', handlePeerDisconnected);
+    adapter.on('chat:root-peer-connected', handleRootPeerConnected);
+    adapter.on('chat:root-peer-disconnected', handleRootPeerDisconnected);
 
     return () => {
       adapter.off('chat:message-received', handleMessage);
@@ -118,6 +140,8 @@ export function useChat(): UseChatResult {
       adapter.off('chat:room-joined', handleRoomJoined);
       adapter.off('chat:peer-connected', handlePeerConnected);
       adapter.off('chat:peer-disconnected', handlePeerDisconnected);
+      adapter.off('chat:root-peer-connected', handleRootPeerConnected);
+      adapter.off('chat:root-peer-disconnected', handleRootPeerDisconnected);
     };
   }, [chatService.isInitialized()]);
 
@@ -177,6 +201,56 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
+  /**
+   * Manually reconnect to root peer
+   * Useful for pull-to-refresh functionality
+   */
+  const reconnectRootPeer = useCallback(async () => {
+    if (!chatService.isInitialized()) {
+      console.warn('[useChat] Cannot reconnect - service not initialized');
+      return;
+    }
+
+    setIsReconnecting(true);
+    setError(null);
+    
+    try {
+      const adapter = chatService.getAdapter();
+      
+      // Check if already connected
+      if (adapter.isRootPeerConnected()) {
+        console.log('[useChat] ✅ Already connected to root peer');
+        setIsReconnecting(false);
+        return;
+      }
+
+      console.log('[useChat] 🔄 Attempting to reconnect to root peer...');
+      
+      // Access the manager through the adapter to trigger reconnection
+      const manager = (adapter as any).manager;
+      const result = await manager.reconnectRootPeer();
+      
+      if (result.alreadyConnected) {
+        console.log('[useChat] ✅ Root peer already connected');
+        setIsRootPeerConnected(true);
+      } else if (result.success) {
+        console.log('[useChat] 🔄 Reconnection initiated, waiting for connection...');
+        // The connection status will be updated via the event listener
+        // Wait a bit for the connection to establish
+        await manager.waitForRootPeer(3000, false); // 3 second timeout, don't trigger another reconnect
+        console.log('[useChat] ✅ Successfully reconnected to root peer');
+      } else {
+        throw new Error('Failed to initiate reconnection');
+      }
+    } catch (err: any) {
+      console.error('[useChat] ❌ Failed to reconnect to root peer:', err);
+      setError(err.message || 'Failed to reconnect to server');
+      throw err;
+    } finally {
+      setIsReconnecting(false);
+    }
+  }, [chatService]);
+
   // Fetch all rooms using chatAdapter
   const getAllRooms = useCallback(async () => {
     const adapter = chatService.getAdapter();
@@ -198,18 +272,21 @@ export function useChat(): UseChatResult {
   return {
     isInitializing,
     isConnected,
+    isRootPeerConnected,
     currentRoom,
     connectedPeers,
     createRoom,
     joinRoom,
     sendMessage,
     leaveRoom,
+    reconnectRootPeer,
     getAllRooms,
     getPubKey,
     // getMessagesForRoom,
     isCreatingRoom,
     isJoiningRoom,
     isSendingMessage,
+    isReconnecting,
     error,
   };
 }
