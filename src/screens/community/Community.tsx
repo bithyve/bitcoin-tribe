@@ -1,135 +1,215 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { TextInput } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from '@realm/react';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { RealmSchema } from 'src/storage/enum';
-import dbManager from 'src/storage/realm/dbManager';
-import { MessageType } from 'src/models/interfaces/Community';
-import { v4 as uuidv4 } from 'uuid';
-import Relay from 'src/services/relay';
-import {
-  Community as CommunityType,
-  CommunityType as CommunityTypeEnum,
-} from 'src/models/interfaces/Community';
-import CommunityList from './components/CommunityList';
-import ChatPeerManager from 'src/services/p2p/ChatPeerManager';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
-import { hash256 } from 'src/utils/encryption';
-import { ChatEncryptionManager } from 'src/services/p2p/ChatEncryptionManager';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { hp } from 'src/constants/responsive';
+import { useChat } from 'src/hooks/useChat';
+import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
 function Community() {
-  const route = useRoute();
+  const [rooms, setRooms] = useState<HolepunchRoom[]>([]);
+  const [refreshing, setRefreshing] = useState(false);
+  const [manualRoomKey, setManualRoomKey] = useState('');
   const navigation = useNavigation();
-  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const cm = ChatPeerManager.getInstance();
-  const communities = useQuery<CommunityType[]>(RealmSchema.Community);
-  const lastBlock = useQuery<MessageType[]>(RealmSchema.Message).sorted('block', true)[0]?.block;
-  const [loading, setLoading] = useState(!ChatPeerManager.isConnected);
+  
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (
-        route.params?.contactKey &&
-        route.params?.type === CommunityTypeEnum.Peer
-      ) {
-        initChat(route.params.contactKey, route.params.publicKey);
-      } else if (route.params?.groupKey) {
-      }
-    });
-    return unsubscribe;
-  }, [navigation, app.id, route.params?.contactKey, route.params?.publicKey]);
+  // Initialize P2P chat with useChat hook
+  const {
+    isInitializing,
+    isCreatingRoom,
+    isRootPeerConnected,
+    isReconnecting,
+    error,
+    isJoiningRoom,
+    currentRoom,
+    getAllRooms,
+    createRoom,
+    joinRoom,
+    leaveRoom,
+    sendMessage,
+    getPubKey,
+    reconnectRootPeer,
+  } = useChat();
 
-  useEffect(() => {
-    init();
-  }, []);
-
-  const init = async () => {
-    await initialize();
-    await cm.loadPendingMessages(lastBlock);
-    await cm.syncContacts();
-  };
-
-  const initialize = async () => {
+  // Load rooms from storage
+  const loadRooms = useCallback(async () => {
     try {
-      if (ChatPeerManager.isConnected) {
-        setLoading(false);
-        return;
-      }
-      const chatPeerInitialized = await cm.init(app.primarySeed);
-      if (!chatPeerInitialized) {
-        throw new Error();
-      }
-      setLoading(false);
-    } catch (error) {
-      console.error('Error initializing chat peer:', error);
-      Toast('Chat Peer initialization failed', true);
+      const savedRooms = await getAllRooms();
+      setRooms(savedRooms || []);
+    } catch (e) {
+      setRooms([]);
+    }
+  }, [getAllRooms]);
+
+  useEffect(() => {
+    loadRooms();
+  }, [loadRooms]);
+
+
+  useEffect(() => {
+    if (error) {
+      Toast(error, true);
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if(currentRoom) (navigation as any).navigate(NavigationRoutes.CHAT, { currentRoom, leaveRoom, sendMessage, peerPubKey: getPubKey() });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRoom]);
+
+  const [joiningRoomKey, setJoiningRoomKey] = useState<string | null>(null);
+  const handleJoinRoom = async (roomKey: string, roomName?: string) => {
+    if (isJoiningRoom || joiningRoomKey === roomKey) {
+      console.log('Joining already in progress, preventing multiple joins...');
       return;
     }
+    setJoiningRoomKey(roomKey);
+    try {
+      await joinRoom(roomKey, roomName);
+      Toast('Joined room successfully', false);
+      // Reload rooms after joining (case: new room joined)
+      await loadRooms();
+    } catch (err) {
+      console.error('Failed to join room:', err);
+      Toast('Failed to join room', true);
+    } finally {
+      setJoiningRoomKey(null);
+    }
   };
 
-  const initChat = async (contactKey: string, publicKey: string) => {
+  const handleCreateRoom = async () => {
     try {
-      if (contactKey === app.contactsKey.publicKey) {
-        Toast('You cannot chat with yourself', true);
-        return;
-      }
-      const profiles = await Relay.getWalletProfiles([contactKey]);
-      if (profiles.results.length > 0) {
-        dbManager.createObject(RealmSchema.Contact, profiles.results[0]);
-      }
-      const communityId = hash256([app.contactsKey.publicKey, contactKey].sort().join('-'));
-      const sessionKeys = ChatEncryptionManager.generateSessionKeys();
-      const sharedSecret = ChatEncryptionManager.deriveSharedSecret(
-        app.contactsKey.secretKey,
-        publicKey
-      );
-      const pubKey = ChatEncryptionManager.derivePublicKey(app.contactsKey.secretKey);
-      const encryptedKeys = ChatEncryptionManager.encryptKeys(sessionKeys.aesKey, sharedSecret);
-      const community = dbManager.getObjectByPrimaryId(RealmSchema.Community, 'id', communityId);
-      if (!community) {
-        dbManager.createObject(RealmSchema.Community, {
-          id: communityId,
-          communityId: communityId,
-          name: profiles.results[0].name,
-          createdAt: Date.now(),
-          type: CommunityTypeEnum.Peer,
-          with: contactKey,
-          key: sessionKeys.aesKey,
-        });
-        const message = {
-          id: uuidv4(),
-          communityId: communityId,
-          type: MessageType.Alert,
-          text: `Start of conversation`,
-          createdAt: Date.now(),
-          sender: app.contactsKey.publicKey,
-          unread: false,
-          encryptedKeys: encryptedKeys,
-          pubKey: pubKey,
-        };
-        cm.sendMessage(contactKey, JSON.stringify(message));
-        dbManager.createObject(RealmSchema.Message, message);
-        Toast('New Tribe Contact created', false);
-      }
-    } catch (error) {
-      console.error('Error initializing chat:', error);
+      const roomNumber = (Math.random() * 1000).toFixed(0);
+      await createRoom(`New Tribe Room ${roomNumber}`, HolepunchRoomType.GROUP, `Description for room ${roomNumber}`, '');
+      Toast('Room created! Share the room key to invite others.', false);
+      // Reload rooms after creation
+      await loadRooms();
+    } catch (err) {
+      console.error('Failed to create room:', err);
+      Toast('Failed to create room', true);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      // If root peer is disconnected, try to reconnect
+      if (!isRootPeerConnected) {
+        console.log('[Community] 🔄 Root peer disconnected, attempting reconnection...');
+        try {
+          await reconnectRootPeer();
+          Toast('✅ Reconnected to server', false);
+        } catch (reconnectError) {
+          console.error('[Community] Failed to reconnect:', reconnectError);
+          Toast('⚠️ Could not reconnect to server', true);
+        }
+      }
+      
+      // Always reload rooms list
+      await loadRooms();
+    } catch (error) {
+      console.error('[Community] Refresh error:', error);
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  const renderRoomItem = ({ item }: { item }) => {
+    const isJoiningThisRoom = joiningRoomKey === item.roomKey && isJoiningRoom;
+    return (
+      <TouchableOpacity
+        style={styles.roomItem}
+        onPress={() => handleJoinRoom(item.roomKey, item.roomName)}
+        disabled={isJoiningThisRoom}
+        activeOpacity={isJoiningThisRoom ? 1 : 0.7}
+      >
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Text style={styles.roomName}>{item.roomName}</Text>
+          {isJoiningThisRoom && <ActivityIndicator size="small" color="#007AFF" style={{ marginLeft: 8 }} />}
+        </View>
+        <Text style={styles.roomKey}>{item.roomKey.substring(0, 16)}...</Text>
+      </TouchableOpacity>
+    );
   };
 
 
   return (
     <ScreenContainer style={styles.container}>
-      <ModalLoading visible={loading} />
+      <ModalLoading visible={isInitializing || isCreatingRoom || isReconnecting} />
+      
       <View style={styles.headerWrapper}>
-      <HomeHeader showBalance={false} showAdd />
-
+        <HomeHeader showBalance={false} showAdd />
       </View>
-      <CommunityList onRefresh={init} />
+
+      {/* Root Peer Connection Status Banner */}
+      {!isInitializing && !isRootPeerConnected && (
+        <View style={styles.disconnectedBanner}>
+          <Text style={styles.disconnectedText}>
+            ⚠️ Server Offline - Pull down to reconnect
+          </Text>
+        </View>
+      )}
+
+      {isInitializing ? (
+        <View style={styles.loadingContainer}>
+          <Text>Initializing P2P chat...</Text>
+        </View>
+      ) : (
+        <>
+          <View style={styles.actionButtons}>
+            <TouchableOpacity
+              style={styles.createButton}
+              onPress={handleCreateRoom}
+              disabled={isCreatingRoom}
+            >
+              <Text style={styles.buttonText}>
+                {isCreatingRoom ? 'Creating...' : 'Create New Community'}
+              </Text>
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', marginTop: 12 }}>
+              <TextInput
+                style={[styles.textInput, { flex: 1, marginRight: 8 }]}
+                placeholder="Enter Room Key"
+                value={manualRoomKey}
+                onChangeText={setManualRoomKey}
+                autoCapitalize="none"
+                autoCorrect={false}
+              />
+              <TouchableOpacity
+                style={[styles.createButton, { paddingHorizontal: 12 }]}
+                onPress={() => handleJoinRoom(manualRoomKey)}
+                disabled={(manualRoomKey && isJoiningRoom) || !manualRoomKey.trim()}
+              >
+                <Text style={styles.buttonText}>
+                  {(manualRoomKey && isJoiningRoom) ? 'Joining...' : 'Join Room'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <FlatList
+            data={rooms}
+            keyExtractor={(item) => item.roomKey }
+            renderItem={renderRoomItem}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
+            ListEmptyComponent={
+              <View style={styles.emptyState}>
+                <Text style={styles.emptyText}>No communities yet</Text>
+                <Text style={styles.emptySubtext}>
+                  Create a new community or join one
+                </Text>
+              </View>
+            }
+            style={styles.flatList}
+          />
+        </>
+      )}
     </ScreenContainer>
   );
 }
@@ -138,10 +218,88 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 0,
   },
+  textInput: {
+    backgroundColor: '#FFF',
+    borderColor: '#DDD',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    fontSize: 16,
+    color: '#24262B',
+  },
+  disconnectedBanner: {
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  disconnectedText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
   headerWrapper: {
     marginVertical: hp(16),
   },
-})
-
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  actionButtons: {
+    padding: 16,
+  },
+  createButton: {
+    backgroundColor: '#007AFF',
+    padding: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  flatList: {
+    flex: 1,
+    paddingHorizontal: 16,
+  },
+  roomItem: {
+    backgroundColor: '#F5F5F5',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  roomName: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  roomKey: {
+    fontSize: 12,
+    color: '#666666',
+    fontFamily: 'monospace',
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 60,
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: '#666666',
+    textAlign: 'center',
+  },
+});
 
 export default Community;

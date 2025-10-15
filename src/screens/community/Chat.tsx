@@ -4,251 +4,174 @@ import {
   Platform,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useQuery } from '@realm/react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
+import { TouchableOpacity } from 'react-native';
+import { Alert, Clipboard } from 'react-native';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import MessageList from './components/MessageList';
 import MessageInput from './components/MessageInput';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { useObject, useQuery } from '@realm/react';
-import { RealmSchema } from 'src/storage/enum';
-import ContactsManager from 'src/services/p2p/ChatPeerManager';
-import { v4 as uuidv4 } from 'uuid';
-import dbManager from 'src/storage/realm/dbManager';
-import {
-  Community,
-  Contact,
-  Message,
-  MessageType,
-  RequestStatus,
-} from 'src/models/interfaces/Community';
-import { launchImageLibrary } from 'react-native-image-picker';
-import Relay from 'src/services/relay';
 import ModalLoading from 'src/components/ModalLoading';
-import ImageViewing from 'react-native-image-viewing';
-import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ChatKeyManager } from 'src/utils/ChatEnc';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import WalletUtilities from 'src/services/wallets/operations/utils';
 import Toast from 'src/components/Toast';
+import { HolepunchMessage } from 'src/services/messaging/holepunch/storage/MessageStorage';
+import { RealmSchema } from 'src/storage/enum';
+import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { ChatService } from 'src/services/messaging/ChatService';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  disconnectedBanner: {
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  disconnectedText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
+
+// No-op handlers for required props
+const noop = () => { };
 
 const Chat = () => {
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<{ params: { communityId: string } }>>();
-  const communityId = route.params.communityId;
+  const route = useRoute<RouteProp<{ params: { currentRoom: HolepunchRoom, leaveRoom: Function, sendMessage: Function, peerPubKey: string } }>>();
+  const { currentRoom, leaveRoom, sendMessage, peerPubKey } = route.params;
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
+  const [isRootPeerConnected, setIsRootPeerConnected] = useState(true);
   const flatListRef = useRef<FlatList>(null);
-  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const cm = ContactsManager.getInstance();
-  const community = useObject<Community>(RealmSchema.Community, communityId);
-  const messages = useQuery<Message>(RealmSchema.Message)
-    .filtered('communityId = $0', communityId)
-    .sorted('createdAt', true);
-  const contact = useQuery<Contact>(RealmSchema.Contact).filtered(
-    'contactKey = $0',
-    community.with,
-  )[0];
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [visible, setVisible] = useState(false);
+  const messages: HolepunchMessage[] = useQuery<HolepunchMessage>(RealmSchema.HolepunchMessage)
+    .filtered('roomId == $0', currentRoom?.roomId) as any || [];
+
 
   useEffect(() => {
-    cm.joinPeers(community.with);
-  }, []);
-
-  useEffect(() => {
-    markAsRead();
-  }, [messages.length])
-
-  useEffect(() => {
-    const payload = route.params?.payload;
-    if (payload) {
-      _sendMessage(payload.type, undefined, payload);
+    syncMessages();
+    setupRootPeerListeners();
+    
+    // Check initial root peer connection status
+    const adapter = ChatService.getInstance().getAdapter();
+    const initialStatus = adapter.isRootPeerConnected();
+    setIsRootPeerConnected(initialStatus);
+    
+    if (!initialStatus) {
+      Toast('⚠️ Server offline - messages cannot be sent', true);
     }
-  }, [route.params?.payload]);
-
-  const _sendMessage = useCallback(
-    async (type: MessageType, fileUrl?: string, request?: object) => {
-      try {
-        const messageData = {
-          id: uuidv4(),
-          text: message.trim(),
-          createdAt: Date.now(),
-          type: type,
-          sender: app.contactsKey.publicKey,
-          communityId: communityId,
-          unread: false,
-          fileUrl: fileUrl,
-          request: request,
-        };
-        dbManager.createObject(RealmSchema.Message, messageData);
-        const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
-        cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
-        flatListRef.current?.scrollToIndex({ index: 0, animated: true });
-        setMessage('');
-      } catch (error) {
-        console.error('Error sending message:', error);
-      }
-    },
-    [
-      message,
-      app.contactsKey.publicKey,
-      communityId,
-      community.with,
-      flatListRef,
-      setMessage,
-      cm,
-    ],
-  );
-
-  const onPressSend = async () => {
-    try {
-      _sendMessage(MessageType.Text);
-    } catch (error) {
-      console.error('Error creating chat room: ', error);
-    }
-  };
-
-  const markAsRead = async () => {
-    try {
-      const unreadMessages = messages.filter(message => message.unread === true);
-      unreadMessages.forEach(message => {
-        dbManager.updateObjectByPrimaryId(
-          RealmSchema.Message,
-          'id',
-          message.id,
-          {
-            unread: false,
-          },
-        );
-      });
-    } catch (error) {
-      console.error('Error marking as read:', error);
-    }
-  };
-
-  const onPressImage = useCallback(async () => {
-    try {
-      const image = await launchImageLibrary({
-        mediaType: 'photo',
-        selectionLimit: 1,
-        quality: 0.4,
-      });
-      if (image.assets?.length > 0) {
-        setSending(true);
-        const response = await Relay.uploadFile(image.assets[0], app.authToken);
-        setSending(false);
-        if (response.fileUrl) {
-          _sendMessage(MessageType.Image, response.fileUrl);
-        }
-      }
-    } catch (error) {
-      console.error('Error picking image:', error);
-    }
-  }, [app.authToken, _sendMessage]);
-
-  const onImagePress = (image: string) => {
-    setSelectedImage(image);
-    setVisible(true);
-  };
-
-  const onPressRequest = async () => {
-    navigation.navigate(NavigationRoutes.REQUESTORSEND, {
-      type: 'Request',
-      communityId
-    });
-  };
-
-  const _onPressSend = async () => {
-    // navigation.navigate(NavigationRoutes.REQUESTORSEND, {
-    //   type: 'Send',
-    // });
-  };
-
-  const onPressReject = (message: Message) => {
-    const messageData = {
-      ...message,
-      request: {
-        ...message.request,
-        status: RequestStatus.Rejected,
-      },
+    
+    return () => {
+      cleanupRootPeerListeners();
     };
-    dbManager.updateObjectByPrimaryId(RealmSchema.Message, 'id', message.id, {
-      request: {
-        ...message.request,
-        status: RequestStatus.Rejected,
-      },
-    });
-    const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
-    cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
+  }, [])
+
+  const setupRootPeerListeners = () => {
+    const adapter = ChatService.getInstance().getAdapter();
+    
+    adapter.on('chat:root-peer-connected', handleRootPeerConnected);
+    adapter.on('chat:root-peer-disconnected', handleRootPeerDisconnected);
+  };
+  
+  const cleanupRootPeerListeners = () => {
+    const adapter = ChatService.getInstance().getAdapter();
+    
+    adapter.off('chat:root-peer-connected', handleRootPeerConnected);
+    adapter.off('chat:root-peer-disconnected', handleRootPeerDisconnected);
+  };
+  
+  const handleRootPeerConnected = () => {
+    console.log('[Chat] 🏰 Root peer connected');
+    setIsRootPeerConnected(true);
+    Toast('✅ Server connected - you can now send messages', false);
+  };
+  
+  const handleRootPeerDisconnected = () => {
+    console.log('[Chat] 👋 Root peer disconnected');
+    setIsRootPeerConnected(false);
+    Toast('⚠️ Server disconnected - messages cannot be sent', true);
   };
 
-  const viewTransaction = (message: Message) => {
-    console.log('message', message);
-    if(message.request?.txid) {
-      navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {txid: message.request?.txid})
+  const syncMessages = async () => {
+    try {
+      const lastSyncedIndex = messages.length;
+      console.log('[Chat] 🔄 Requesting sync from index:', lastSyncedIndex);
+      const adapter = ChatService.getInstance().getAdapter();
+      const { success } = await adapter.requestSync(currentRoom.roomId, lastSyncedIndex)
+      if (!success) throw new Error('Sync unsuccessful');
+    } catch (error) {
+      console.error('Failed to sync messages:', error);
+      Toast('Failed to sync messages', true);
     }
   }
 
-  const onPressApprove = async (message: Message) => {
+  const onPressSend = async () => {
+    if (!message.trim()) return;
+    
+    // Check root peer connection before sending
+    if (!isRootPeerConnected) {
+      Toast('⚠️ Cannot send message - server is offline', true);
+      return;
+    }
+    
+    setSending(true);
     try {
-    const { address, options } = WalletUtilities.decodePaymentURI(message.request?.invoice);
-    const { txid } = await ApiHandler.sendToAddress({
-      recipient: {
-        address: address,
-        amount: options.amount * 1e8,
-      },
-      skipSync: false,
-    });
-   if(txid) {
-    const messageData = {
-      ...message,
-      request: {
-        ...message.request,
-        status: RequestStatus.Accepted,
-        txid: txid,
-      },
-    };
-    dbManager.updateObjectByPrimaryId(RealmSchema.Message, 'id', message.id, {
-      request: {
-        ...message.request,
-        status: RequestStatus.Accepted,
-        txid: txid,
-      },
-    });
-    const encryptedMessage = ChatKeyManager.encryptMessage(JSON.stringify({ ...messageData }), community.key);
-    cm.sendMessage(community.with, JSON.stringify({ ...encryptedMessage, communityId }));
-   }
+      await sendMessage(message.trim());
+      setMessage('');
     } catch (error) {
       Toast(error.message, true);
-      console.error('Error approving request:', error);
+    } finally {
+      setSending(false);
     }
-    console.log('approve', message);
+  };
+
+  const handleHeaderLongPress = () => {
+    if (!currentRoom?.roomKey) return;
+    Alert.alert(
+      'Room Key',
+      currentRoom.roomKey,
+      [
+        {
+          text: 'Copy',
+          onPress: () => {
+            if (typeof Clipboard?.setString === 'function') {
+              Clipboard.setString(currentRoom.roomKey);
+            }
+          },
+        },
+        { text: 'Close', style: 'cancel' },
+      ]
+    );
   };
 
   return (
     <ScreenContainer>
-      <AppHeader title={contact.name} />
+      <TouchableOpacity activeOpacity={0.8} onLongPress={handleHeaderLongPress}>
+        <AppHeader
+          title={currentRoom?.roomName || 'Chat'}
+          onBackNavigation={() => {
+            leaveRoom();
+            navigation.goBack();
+          }}
+        />
+      </TouchableOpacity>
+      
+      {/* Show disconnected banner when root peer is offline */}
+      {!isRootPeerConnected && (
+        <View style={styles.disconnectedBanner}>
+          <Text style={styles.disconnectedText}>
+            ⚠️ Server Offline - Cannot send messages
+          </Text>
+        </View>
+      )}
+      
       <ModalLoading visible={sending} />
-
-      <ImageViewing
-        images={[
-          {
-            uri: selectedImage,
-          },
-        ]}
-        imageIndex={0}
-        visible={visible}
-        onRequestClose={() => setVisible(false)}
-      />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
@@ -258,21 +181,21 @@ const Chat = () => {
             messages={messages}
             sending={sending}
             flatListRef={flatListRef}
-            appId={app.contactsKey.publicKey}
-            onImagePress={onImagePress}
-            onPressReject={onPressReject}
-            onPressApprove={onPressApprove}
-            viewTransaction={viewTransaction}
+            peerPubKey={peerPubKey}
+            onImagePress={noop}
+            onPressReject={noop}
+            onPressApprove={noop}
+            viewTransaction={noop}
           />
           <MessageInput
             message={message}
             loading={sending}
-            disabled={sending}
+            disabled={sending || !isRootPeerConnected}
             onPressSend={onPressSend}
             setMessage={setMessage}
-            onPressImage={onPressImage}
-            onPressRequest={onPressRequest}
-            _onPressSend={_onPressSend}
+            onPressImage={noop}
+            onPressRequest={noop}
+            _onPressSend={noop}
           />
         </View>
       </KeyboardAvoidingView>
