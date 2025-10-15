@@ -168,8 +168,6 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       width: hp(80),
       borderRadius: hp(15),
       paddingVertical: hp(14),
-      borderWidth: 2,
-      borderColor: theme.colors.borderColor,
       borderStyle: 'dashed',
       marginBottom: hp(10),
       alignSelf: 'center',
