@@ -1,8 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import { Share, StyleSheet, View } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
@@ -11,7 +9,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import AppHeader from 'src/components/AppHeader';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import QRCode from 'react-native-qrcode-svg';
 import Colors from 'src/theme/Colors';
 import AppText from 'src/components/AppText';
@@ -23,19 +21,19 @@ import AppTouchable from 'src/components/AppTouchable';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import ViewShot from 'react-native-view-shot';
-import { deeplinkType } from 'src/models/interfaces/Community';
+import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
 const qrSize = (windowWidth * 65) / 100;
 
 export const GroupQr = () => {
-  const {groupId, groupImage} = useRoute().params;
-  const theme: AppTheme = useTheme();
+  const route = useRoute<RouteProp<{ params: { room: HolepunchRoom } }>>();
+  const { room } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { community, common } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const styles = getStyles(theme);
+  const styles = getStyles();
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const qrValue = `tribe://${deeplinkType.Contact}/${groupId}`;
+  const qrValue = room.roomKey; // Just the room key for joining
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 
@@ -44,7 +42,7 @@ export const GroupQr = () => {
       if (!viewShotRef.current) return;
       const uri = await viewShotRef.current.capture();
       await Share.share({
-        message: `${community.shareQrMessage} ${qrValue.split('/')[2]}`,
+        message: `Join ${room.roomName || 'our group'}: ${qrValue}`,
         url: `file://${uri}`,
       });
     } catch (error) {
@@ -109,13 +107,16 @@ export const GroupQr = () => {
             <QRCode
               value={qrValue}
               size={qrSize}
-              logo={groupImage?? ""}
+              logo={room.roomImage ? { uri: room.roomImage } : undefined}
               logoSize={qrSize * 0.35}
               logoBorderRadius={qrSize * 0.3}
             />
           </View>
+          <AppText variant="heading3SemiBold" style={styles.groupNameTxt}>
+            {room.roomName || 'Group'}
+          </AppText>
           <AppText variant="caption" style={styles.groupIdTxt}>
-            {groupId}
+            {room.roomKey}
           </AppText>
         </ViewShot>
         {renderMenu()}
@@ -133,9 +134,14 @@ const getStyles = () =>
     bodyWrapper: {
       flex: 1,
     },
-    groupIdTxt: {
-      marginTop: hp(20),
+    groupNameTxt: {
+      marginTop: hp(16),
       textAlign: 'center',
+    },
+    groupIdTxt: {
+      marginTop: hp(8),
+      textAlign: 'center',
+      opacity: 0.6,
     },
     qrWrapper: {
       backgroundColor: Colors.White,
