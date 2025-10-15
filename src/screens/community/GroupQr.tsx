@@ -27,45 +27,8 @@ import { deeplinkType } from 'src/models/interfaces/Community';
 
 const qrSize = (windowWidth * 65) / 100;
 
-const getStyles = (theme: AppTheme) =>
-  StyleSheet.create({
-    bodyWrapper: {
-      flex: 1,
-    },
-    qrWrapper: {
-      backgroundColor: Colors.White,
-      padding: wp(20),
-      borderRadius: wp(20),
-      marginTop: hp(20),
-      alignItems: 'center',
-      alignSelf: 'center',
-    },
-    textName: {
-      marginTop: hp(20),
-      textAlign: 'center',
-    },
-    menuWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: hp(20),
-      alignSelf: 'center',
-      marginBottom: hp(30),
-    },
-    menuItem: {
-      paddingHorizontal: wp(20),
-      paddingVertical: hp(10),
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    menuItemText: {
-      marginTop: hp(10),
-      textAlign: 'center',
-    },
-  });
-
 export const GroupQr = () => {
-    // @ts-ignore
-    const {groupName,groupId} = useRoute().params;
+  const {groupId, groupImage} = useRoute().params;
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { community, common } = translations;
@@ -119,7 +82,7 @@ export const GroupQr = () => {
         {menuItems.map((item, index) => (
           <AppTouchable key={index} style={styles.menuItem} onPress={item.onPress}>
             {item.icon}
-            <AppText variant="body1" style={styles.menuItemText}>
+            <AppText variant="caption" style={styles.menuItemText}>
               {item.text}
             </AppText>
           </AppTouchable>
@@ -130,8 +93,7 @@ export const GroupQr = () => {
   return (
     <ScreenContainer>
       <AppHeader
-        title={"Group Info"}
-        subTitle={""}
+        title={community.groupInfo}
         enableBack={true}
         onBackNavigation={() => navigation.goBack()}
       />
@@ -147,26 +109,57 @@ export const GroupQr = () => {
             <QRCode
               value={qrValue}
               size={qrSize}
-              logo={app?.walletImage ? { uri: app.walletImage } : undefined}
+              logo={groupImage?? ""}
               logoSize={qrSize * 0.35}
               logoBorderRadius={qrSize * 0.3}
             />
           </View>
-          <AppText variant="heading1" style={styles.textName}>
-            {groupName}
+          <AppText variant="caption" style={styles.groupIdTxt}>
+            {groupId}
           </AppText>
         </ViewShot>
         {renderMenu()}
-
-        {/* <OptionCard
-          title={community.createGroup}
-          onPress={() => {
-            Toast('Coming Soon', false);
-          }}
-        /> */}
       </View>
     </ScreenContainer>
   );
 };
 
 export default GroupQr;
+
+
+
+const getStyles = () =>
+  StyleSheet.create({
+    bodyWrapper: {
+      flex: 1,
+    },
+    groupIdTxt: {
+      marginTop: hp(20),
+      textAlign: 'center',
+    },
+    qrWrapper: {
+      backgroundColor: Colors.White,
+      padding: wp(20),
+      borderRadius: wp(20),
+      marginTop: hp(20),
+      alignItems: 'center',
+      alignSelf: 'center',
+    },
+    menuWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: hp(20),
+      alignSelf: 'center',
+      marginBottom: hp(30),
+    },
+    menuItem: {
+      paddingHorizontal: wp(20),
+      paddingVertical: hp(10),
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    menuItemText: {
+      marginTop: hp(6),
+      textAlign: 'center',
+    },
+  });

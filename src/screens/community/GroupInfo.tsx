@@ -121,8 +121,8 @@ export const GroupInfo = () => {
     try {
       navigation.dispatch(
         CommonActions.navigate(NavigationRoutes.GROUPQR, {
-          groupName: 'Satoshi Squad',
           groupId: 'MOCK_GROUP_ID',
+          groupImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png'
         }),
       );
     } catch (error) {
