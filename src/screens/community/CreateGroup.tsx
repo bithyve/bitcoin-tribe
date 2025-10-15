@@ -23,8 +23,6 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import TextField from 'src/components/TextField';
 import pickImage from 'src/utils/imagePicker';
 import { SceneMap, TabView } from 'react-native-tab-view';
-import Upload from 'src/assets/images/uploadFile.svg';
-import UploadLight from 'src/assets/images/uploadFile_light.svg';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
@@ -33,6 +31,8 @@ import GradientView from 'src/components/GradientView';
 import Scan from 'src/assets/images/scan.svg';
 import ScanLight from 'src/assets/images/scanLight.svg';
 import Toast from 'src/components/Toast';
+import AddMediaFile from 'src/assets/images/addMediaFile.svg';
+import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -183,12 +183,7 @@ const CreateTab = () => {
           <AppTouchable
             onPress={handlePickImage}
             style={styles.imageSelectionCtr}>
-            <AppText
-              variant="body1"
-              style={{ color: theme.colors.secondaryHeadingColor }}>
-              {community.uploadFile}
-            </AppText>
-            {isThemeDark ? <Upload /> : <UploadLight />}
+            {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
           </AppTouchable>
         )}
         <AppText variant="caption" style={styles.textInputTitle}>
@@ -362,16 +357,17 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       alignItems: 'center',
     },
     imageSelectionCtr: {
-      flexDirection: 'row',
-      gap: wp(12),
       alignItems: 'center',
       justifyContent: 'center',
+      height: hp(80),
+      width: hp(80),
+      borderRadius: hp(15),
       paddingVertical: hp(14),
       borderWidth: 2,
-      borderRadius: 12,
       borderColor: theme.colors.borderColor,
       borderStyle: 'dashed',
       marginBottom: hp(10),
+      alignSelf: 'center',
     },
 
     // Join Tab

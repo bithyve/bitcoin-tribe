@@ -1,23 +1,21 @@
 import React, { useContext, useState } from 'react';
-import {
-  Image,
-  StyleSheet,
-  View,
-  FlatList,
-} from 'react-native';
+import { Image, StyleSheet, View, FlatList, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, wp } from 'src/constants/responsive';
-import AppHeader from 'src/components/AppHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import AppText from 'src/components/AppText';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ShowQr from 'src/assets/images/showQr.svg';
 import ShowQrLight from 'src/assets/images/showQrLight.svg';
-
+import AppTouchable from 'src/components/AppTouchable';
+import GoBack from 'src/assets/images/icon_back.svg';
+import GoBackLight from 'src/assets/images/icon_back_light.svg';
+import Edit from 'src/assets/images/profileEditIcon.svg';
+import EditLight from 'src/assets/images/profileEditIcon_light.svg';
 
 const STATIC_MEMBERS = [
   {
@@ -122,7 +120,8 @@ export const GroupInfo = () => {
       navigation.dispatch(
         CommonActions.navigate(NavigationRoutes.GROUPQR, {
           groupId: 'MOCK_GROUP_ID',
-          groupImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png'
+          groupImage:
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png',
         }),
       );
     } catch (error) {
@@ -159,15 +158,29 @@ export const GroupInfo = () => {
     );
   };
 
+  const onEditGroupInfo = () => {
+    navigation.dispatch(
+      CommonActions.navigate(NavigationRoutes.EDITGROUP, {
+        groupName: 'MicroBT stocks trading',
+        groupDesc:
+          'Exploring the future of Bitcoin — one block, one idea, one conversation at a time.',
+        groupImage:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png',
+      }),
+    );
+  };
+
   return (
     <ScreenContainer>
-      <AppHeader
+      <CustomHeader
         title={community.groupInfo}
-        enableBack={true}
         onBackNavigation={() => navigation.goBack()}
-        rightIcon={ theme.dark ?  <ShowQr />: <ShowQrLight/>}
+        rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
         onSettingsPress={handleScan}
+        ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
+        onTernaryIconPress={onEditGroupInfo}
       />
+
       <View style={styles.bodyWrapper}>
         <FlatList
           ListHeaderComponent={HeaderComponent}
@@ -227,3 +240,46 @@ const getStyles = (theme: AppTheme) =>
       borderRadius: wp(50),
     },
   });
+
+const CustomHeader = ({
+  title,
+  onBackNavigation,
+  rightIcon,
+  onSettingsPress,
+  ternaryIcon,
+  onTernaryIconPress,
+}) => {
+  const theme: AppTheme = useTheme();
+  const styles = StyleSheet.create({
+    container: {
+      width: '100%',
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    flexOne: { flex: 1 },
+    headerTitle: {
+      color: theme.colors.headingColor,
+      textAlign: 'center',
+    },
+    endCtr: { flexDirection: 'row', gap: wp(4), justifyContent: 'flex-end' },
+  });
+  return (
+    <View style={styles.container}>
+      <View style={styles.flexOne}>
+        <AppTouchable onPress={onBackNavigation}>
+          {theme.dark ? <GoBack /> : <GoBackLight />}
+        </AppTouchable>
+      </View>
+      <View style={styles.flexOne}>
+        <AppText variant="heading3" style={styles.headerTitle}>
+          {title}
+        </AppText>
+      </View>
+      <View style={[styles.flexOne, styles.endCtr]}>
+        <AppTouchable onPress={onSettingsPress}>{rightIcon}</AppTouchable>
+        <AppTouchable onPress={onTernaryIconPress}>{ternaryIcon}</AppTouchable>
+      </View>
+    </View>
+  );
+};

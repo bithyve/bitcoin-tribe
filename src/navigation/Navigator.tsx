@@ -93,6 +93,7 @@ import { CreateGroup } from 'src/screens/community/CreateGroup';
 import { GroupInfo } from 'src/screens/community/GroupInfo';
 import GroupQr from 'src/screens/community/GroupQr';
 import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
+import { EditGroup } from 'src/screens/community/EditGroup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -383,6 +384,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.SCANQRSCREEN}
           component={ScanQrScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.EDITGROUP}
+          component={EditGroup}
         />
       </Stack.Navigator>
     </RealmProvider>
