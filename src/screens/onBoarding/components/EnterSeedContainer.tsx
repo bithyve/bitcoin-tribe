@@ -329,7 +329,6 @@ function EnterSeedContainer() {
         }}
         width={'100%'}
         primaryTitle={common.next}
-        primaryLoading={isLoading || setupNewAppMutation.isLoading}
       />
       <RecoverRGBStatModal
         visible={visible}

@@ -18,6 +18,11 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
+  heading3SemiBold: {
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: Fonts.LufgaSemiBold,
+  },
   pageTitle1: {
     fontSize: 48,
     fontWeight: '500',
@@ -40,6 +45,12 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
     lineHeight: 16 * 1.6,
+  },
+  body1Bold: {
+    fontSize: 16,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaMedium,
+    lineHeight: 16,
   },
   body2: {
     fontSize: 14,

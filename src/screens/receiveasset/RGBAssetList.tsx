@@ -65,7 +65,7 @@ function RGBAssetList(props: DropdownProps) {
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
-  const { channel } = translations;
+  const { channel, assets: assetsTranslations, sendScreen } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
@@ -93,7 +93,7 @@ function RGBAssetList(props: DropdownProps) {
           <TextField
             value={searchAssetInput}
             onChangeText={onChangeSearchInput}
-            placeholder={'Search from Tribe RGB registry'}
+            placeholder={assetsTranslations.searchAssetPlaceholder}
             style={styles.input}
             inputStyle={styles.inputStyle}
             rightIcon={
@@ -120,12 +120,12 @@ function RGBAssetList(props: DropdownProps) {
           <View style={styles.labelWrapper}>
             <View>
               <AppText variant="caption" style={style.labelTextStyle}>
-                Asset Name
+                {assetsTranslations.assetName}
               </AppText>
             </View>
             <View>
               <AppText variant="caption" style={style.labelTextStyle}>
-                Available Balance
+                {sendScreen.availableBalance}
               </AppText>
             </View>
           </View>

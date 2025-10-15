@@ -468,11 +468,11 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     }
 
     @ReactMethod
-    fun sendAsset(assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean,schema: String, promise: Promise){
+    fun sendAsset(assetId: String, blindedUTXO: String, amount: Float, consignmentEndpoints: String, feeRate: Float, isDonation: Boolean, schema: String, witnessSats: Float, promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
                 val endpoints = listOf(consignmentEndpoints)
-                val result = RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation, schema)
+                val result = RGBHelper.send(assetId, blindedUTXO, amount.toULong(), endpoints, feeRate, isDonation, schema, witnessSats.toULong())
                 withContext(Dispatchers.Main) {
                     promise.resolve(result)
                 }
