@@ -781,7 +781,9 @@
     "viaQR": "Unisciti tramite scansione QR",
     "scanChannelTitle": "Scansiona ID canale",
     "scanChannelSubTitle": "Scansiona il QR dell'ID canale",
-    "scanChannelError": "Per favore scansiona un ID canale valido"
+    "scanChannelError": "Per favore scansiona un ID canale valido",
+    "groupInfo": "Info gruppo",
+    "members": "Membri"
   },
   "node": {
     "viewNodeInfoTitle": "Visualizza informazioni sul nodo",

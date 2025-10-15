@@ -781,7 +781,9 @@
     "viaQR": "通过二维码扫描加入",
     "scanChannelTitle": "扫描频道 ID",
     "scanChannelSubTitle": "扫描频道 ID 二维码",
-    "scanChannelError": "请扫描有效的频道 ID"
+    "scanChannelError": "请扫描有效的频道 ID",
+    "groupInfo": "群组信息",
+    "members": "成员"
   },
   "node": {
     "viewNodeInfoTitle": "查看节点信息",

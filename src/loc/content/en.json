@@ -782,7 +782,9 @@
     "viaQR":"Join via QR Scan",
     "scanChannelTitle": "Scan Channel ID",
     "scanChannelSubTitle": "Scan Channel ID QR",
-    "scanChannelError":"Please scan a valid Channel Id"
+    "scanChannelError":"Please scan a valid Channel Id",
+    "groupInfo":"Group Info",
+    "members":"Members"
   },
   "node": {
     "viewNodeInfoTitle": "View Node Info",
