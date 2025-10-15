@@ -140,7 +140,7 @@ const Chat = () => {
           title={room?.roomName || 'Chat'}
           onBackNavigation={() => {
             leaveRoom();
-            navigation.goBack();
+            (navigation as any).navigate(NavigationRoutes.COMMUNITY);
           }}
           rightIcon={
             <AppTouchable onPress={handleInfoPress}>

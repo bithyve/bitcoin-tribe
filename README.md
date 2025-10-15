@@ -28,6 +28,11 @@ Before getting started, make sure you have a proper [React Native development en
    yarn install
    ```
 
+4. Build the bare worklet
+  ```shell
+   yarn run bare-pack
+   ```
+
 ## Build and Run
 
 ### Variants

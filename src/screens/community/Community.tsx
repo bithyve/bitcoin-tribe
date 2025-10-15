@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
@@ -40,6 +40,13 @@ function Community() {
     loadRooms();
   }, [loadRooms]);
 
+  // Reload rooms when screen comes into focus (e.g., navigating back from Chat)
+  useFocusEffect(
+    useCallback(() => {
+      console.log('[Community] Screen focused, reloading rooms...');
+      loadRooms();
+    }, [loadRooms])
+  );
 
   useEffect(() => {
     if (error) {
@@ -86,7 +93,7 @@ function Community() {
         activeOpacity={0.7}
       >
         <Text style={styles.roomName}>{item.roomName}</Text>
-        <Text style={styles.roomKey}>{item.roomKey.substring(0, 16)}...</Text>
+        <Text style={styles.roomKey}>{item.roomDescription}</Text>
       </TouchableOpacity>
     );
   };
