@@ -778,7 +778,10 @@
     "joinExisting": "मौजूदा समूह में शामिल हों",
     "viaChannelId": "चैनल आईडी के माध्यम से शामिल हों",
     "viaChannelIdPlaceholder": "आईडी पेस्ट करें",
-    "viaQR": "QR स्कैन के माध्यम से शामिल हों"
+    "viaQR": "QR स्कैन के माध्यम से शामिल हों",
+    "scanChannelTitle": "चैनल आईडी स्कैन करें",
+    "scanChannelSubTitle": "चैनल आईडी क्यूआर स्कैन करें",
+    "scanChannelError": "कृपया मान्य चैनल आईडी स्कैन करें"
   },
   "node": {
     "viewNodeInfoTitle": "नोड जानकारी देखें",

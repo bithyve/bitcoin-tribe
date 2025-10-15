@@ -32,7 +32,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import GradientView from 'src/components/GradientView';
 import Scan from 'src/assets/images/scan.svg';
 import ScanLight from 'src/assets/images/scanLight.svg';
-
+import Toast from 'src/components/Toast';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -226,6 +226,22 @@ const JoinTab = () => {
     setChannelId(clipboardValue);
   };
 
+  const navigateToScanChannelId = () => {
+    navigation.dispatch(
+      CommonActions.navigate(NavigationRoutes.SCANQRSCREEN, {
+        title: community.scanChannelTitle,
+        subTitle: community.scanChannelSubTitle,
+        onCodeScanned: onScanChannelId,
+      }),
+    );
+  };
+
+  const onScanChannelId = data => {
+    const channelId = data[0]?.value;
+    if (channelId) setChannelId(channelId);
+    else Toast(community.scanChannelError, true);
+  };
+
   return (
     <View style={styles.flex}>
       <ScrollView style={styles.flex}>
@@ -262,7 +278,9 @@ const JoinTab = () => {
           }}
         />
 
-        <AppTouchable onPress={() => {}} style={styles.scannerCtaCtr}>
+        <AppTouchable
+          onPress={navigateToScanChannelId}
+          style={styles.scannerCtaCtr}>
           <GradientView
             style={styles.ctaContainer}
             colors={[
@@ -399,8 +417,7 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       alignItems: 'center',
     },
 
-    scannerCtaCtr:{ marginTop: hp(20) },
-
+    scannerCtaCtr: { marginTop: hp(20) },
 
     // TabBar
     tabBarContainer: {

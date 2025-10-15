@@ -778,7 +778,10 @@
     "joinExisting": "Unisciti a un gruppo esistente",
     "viaChannelId": "Unisciti tramite ID canale",
     "viaChannelIdPlaceholder": "Incolla ID",
-    "viaQR": "Unisciti tramite scansione QR"
+    "viaQR": "Unisciti tramite scansione QR",
+    "scanChannelTitle": "Scansiona ID canale",
+    "scanChannelSubTitle": "Scansiona il QR dell'ID canale",
+    "scanChannelError": "Per favore scansiona un ID canale valido"
   },
   "node": {
     "viewNodeInfoTitle": "Visualizza informazioni sul nodo",

@@ -778,7 +778,10 @@
     "joinExisting": "既存のグループに参加",
     "viaChannelId": "チャンネルIDで参加",
     "viaChannelIdPlaceholder": "IDを貼り付け",
-    "viaQR": "QRスキャンで参加"
+    "viaQR": "QRスキャンで参加",
+    "scanChannelTitle": "チャンネルIDをスキャン",
+    "scanChannelSubTitle": "チャンネルIDのQRコードをスキャン",
+    "scanChannelError": "有効なチャンネルIDをスキャンしてください"
   },
   "node": {
     "viewNodeInfoTitle": "ノード情報を表示",

@@ -778,7 +778,10 @@
     "joinExisting": "加入现有群组",
     "viaChannelId": "通过频道 ID 加入",
     "viaChannelIdPlaceholder": "粘贴 ID",
-    "viaQR": "通过二维码扫描加入"
+    "viaQR": "通过二维码扫描加入",
+    "scanChannelTitle": "扫描频道 ID",
+    "scanChannelSubTitle": "扫描频道 ID 二维码",
+    "scanChannelError": "请扫描有效的频道 ID"
   },
   "node": {
     "viewNodeInfoTitle": "查看节点信息",

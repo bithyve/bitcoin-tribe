@@ -779,7 +779,10 @@
     "joinExisting":"Join an existing group",
     "viaChannelId":"Join via Channel ID",
     "viaChannelIdPlaceholder":"Paste ID",
-    "viaQR":"Join via QR Scan"
+    "viaQR":"Join via QR Scan",
+    "scanChannelTitle": "Scan Channel ID",
+    "scanChannelSubTitle": "Scan Channel ID QR",
+    "scanChannelError":"Please scan a valid Channel Id"
   },
   "node": {
     "viewNodeInfoTitle": "View Node Info",
