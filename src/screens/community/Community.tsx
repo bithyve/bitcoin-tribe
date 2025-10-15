@@ -1,38 +1,28 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { TextInput } from 'react-native';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { StyleSheet, View, FlatList, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native';
 import { hp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
-import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
 function Community() {
   const [rooms, setRooms] = useState<HolepunchRoom[]>([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [manualRoomKey, setManualRoomKey] = useState('');
   const navigation = useNavigation();
   
 
   // Initialize P2P chat with useChat hook
   const {
     isInitializing,
-    isCreatingRoom,
     isRootPeerConnected,
     isReconnecting,
     error,
-    isJoiningRoom,
-    currentRoom,
     getAllRooms,
-    createRoom,
-    joinRoom,
-    leaveRoom,
-    sendMessage,
-    getPubKey,
     reconnectRootPeer,
   } = useChat();
 
@@ -56,43 +46,12 @@ function Community() {
       Toast(error, true);
     }
   }, [error]);
-
-  useEffect(() => {
-    if(currentRoom) (navigation as any).navigate(NavigationRoutes.CHAT, { currentRoom, leaveRoom, sendMessage, peerPubKey: getPubKey() });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentRoom]);
-
-  const [joiningRoomKey, setJoiningRoomKey] = useState<string | null>(null);
-  const handleJoinRoom = async (roomKey: string, roomName?: string) => {
-    if (isJoiningRoom || joiningRoomKey === roomKey) {
-      console.log('Joining already in progress, preventing multiple joins...');
-      return;
-    }
-    setJoiningRoomKey(roomKey);
-    try {
-      await joinRoom(roomKey, roomName);
-      Toast('Joined room successfully', false);
-      // Reload rooms after joining (case: new room joined)
-      await loadRooms();
-    } catch (err) {
-      console.error('Failed to join room:', err);
-      Toast('Failed to join room', true);
-    } finally {
-      setJoiningRoomKey(null);
-    }
-  };
-
-  const handleCreateRoom = async () => {
-    try {
-      const roomNumber = (Math.random() * 1000).toFixed(0);
-      await createRoom(`New Tribe Room ${roomNumber}`, HolepunchRoomType.GROUP, `Description for room ${roomNumber}`, '');
-      Toast('Room created! Share the room key to invite others.', false);
-      // Reload rooms after creation
-      await loadRooms();
-    } catch (err) {
-      console.error('Failed to create room:', err);
-      Toast('Failed to create room', true);
-    }
+  
+  const handleOpenRoom = (room: HolepunchRoom) => {
+    // Navigate immediately without waiting for join
+    (navigation as any).navigate(NavigationRoutes.CHAT, { 
+      room: room
+    });
   };
 
   const handleRefresh = async () => {
@@ -120,18 +79,13 @@ function Community() {
   };
 
   const renderRoomItem = ({ item }: { item }) => {
-    const isJoiningThisRoom = joiningRoomKey === item.roomKey && isJoiningRoom;
     return (
       <TouchableOpacity
         style={styles.roomItem}
-        onPress={() => handleJoinRoom(item.roomKey, item.roomName)}
-        disabled={isJoiningThisRoom}
-        activeOpacity={isJoiningThisRoom ? 1 : 0.7}
+        onPress={() => handleOpenRoom(item)}
+        activeOpacity={0.7}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.roomName}>{item.roomName}</Text>
-          {isJoiningThisRoom && <ActivityIndicator size="small" color="#007AFF" style={{ marginLeft: 8 }} />}
-        </View>
+        <Text style={styles.roomName}>{item.roomName}</Text>
         <Text style={styles.roomKey}>{item.roomKey.substring(0, 16)}...</Text>
       </TouchableOpacity>
     );
@@ -140,7 +94,7 @@ function Community() {
 
   return (
     <ScreenContainer style={styles.container}>
-      <ModalLoading visible={isInitializing || isCreatingRoom || isReconnecting} />
+      <ModalLoading visible={isInitializing || isReconnecting} />
       
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showAdd />
@@ -160,55 +114,23 @@ function Community() {
           <Text>Initializing P2P chat...</Text>
         </View>
       ) : (
-        <>
-          <View style={styles.actionButtons}>
-            <TouchableOpacity
-              style={styles.createButton}
-              onPress={handleCreateRoom}
-              disabled={isCreatingRoom}
-            >
-              <Text style={styles.buttonText}>
-                {isCreatingRoom ? 'Creating...' : 'Create New Community'}
+        <FlatList
+          data={rooms}
+          keyExtractor={(item) => item.roomKey }
+          renderItem={renderRoomItem}
+          onRefresh={handleRefresh}
+          refreshing={refreshing}
+          contentContainerStyle={rooms.length === 0 ? styles.emptyListContent : undefined}
+          ListEmptyComponent={
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyText}>No communities yet</Text>
+              <Text style={styles.emptySubtext}>
+                Tap the + button to create or join a community
               </Text>
-            </TouchableOpacity>
-            <View style={{ flexDirection: 'row', marginTop: 12 }}>
-              <TextInput
-                style={[styles.textInput, { flex: 1, marginRight: 8 }]}
-                placeholder="Enter Room Key"
-                value={manualRoomKey}
-                onChangeText={setManualRoomKey}
-                autoCapitalize="none"
-                autoCorrect={false}
-              />
-              <TouchableOpacity
-                style={[styles.createButton, { paddingHorizontal: 12 }]}
-                onPress={() => handleJoinRoom(manualRoomKey)}
-                disabled={(manualRoomKey && isJoiningRoom) || !manualRoomKey.trim()}
-              >
-                <Text style={styles.buttonText}>
-                  {(manualRoomKey && isJoiningRoom) ? 'Joining...' : 'Join Room'}
-                </Text>
-              </TouchableOpacity>
             </View>
-          </View>
-
-          <FlatList
-            data={rooms}
-            keyExtractor={(item) => item.roomKey }
-            renderItem={renderRoomItem}
-            onRefresh={handleRefresh}
-            refreshing={refreshing}
-            ListEmptyComponent={
-              <View style={styles.emptyState}>
-                <Text style={styles.emptyText}>No communities yet</Text>
-                <Text style={styles.emptySubtext}>
-                  Create a new community or join one
-                </Text>
-              </View>
-            }
-            style={styles.flatList}
-          />
-        </>
+          }
+          style={styles.flatList}
+        />
       )}
     </ScreenContainer>
   );
@@ -217,16 +139,6 @@ function Community() {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 0,
-  },
-  textInput: {
-    backgroundColor: '#FFF',
-    borderColor: '#DDD',
-    borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    fontSize: 16,
-    color: '#24262B',
   },
   disconnectedBanner: {
     backgroundColor: '#FFA500',
@@ -250,23 +162,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  actionButtons: {
-    padding: 16,
-  },
-  createButton: {
-    backgroundColor: '#007AFF',
-    padding: 16,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   flatList: {
     flex: 1,
     paddingHorizontal: 16,
+  },
+  emptyListContent: {
+    flexGrow: 1,
   },
   roomItem: {
     backgroundColor: '#F5F5F5',
@@ -299,6 +200,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#666666',
     textAlign: 'center',
+    paddingHorizontal: 32,
   },
 });
 
