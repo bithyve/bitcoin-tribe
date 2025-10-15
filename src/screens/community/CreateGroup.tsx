@@ -1,10 +1,12 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState } from 'react';
 import {
   Image,
   Keyboard,
   Platform,
   StyleSheet,
+  useWindowDimensions,
   View,
+  ScrollView,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -12,28 +14,94 @@ import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
-import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { RealmSchema } from 'src/storage/enum';
-import { useQuery } from '@realm/react';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AppHeader from 'src/components/AppHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
-import Colors from 'src/theme/Colors';
 import AppText from 'src/components/AppText';
-import IconScan from 'src/assets/images/ic_scan.svg';
-import IconScanLight from 'src/assets/images/ic_scan_light.svg';
 import AppTouchable from 'src/components/AppTouchable';
-import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import TextField from 'src/components/TextField';
 import pickImage from 'src/utils/imagePicker';
-import AddMediaFile from 'src/assets/images/addMediaFile.svg';
-import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
-import Buttons from 'src/components/Buttons';
+import { SceneMap, TabView } from 'react-native-tab-view';
+import Upload from 'src/assets/images/uploadFile.svg';
+import UploadLight from 'src/assets/images/uploadFile_light.svg';
+import PrimaryCTA from 'src/components/PrimaryCTA';
+import ClearIcon from 'src/assets/images/clearIcon.svg';
+import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
+import Clipboard from '@react-native-clipboard/clipboard';
+import GradientView from 'src/components/GradientView';
+import Scan from 'src/assets/images/scan.svg';
+import ScanLight from 'src/assets/images/scanLight.svg';
 
-const qrSize = (windowWidth * 65) / 100;
 
 export const CreateGroup = () => {
+  const layout = useWindowDimensions();
+  const { translations } = useContext(LocalizationContext);
+  const { community, common } = translations;
+  const navigation = useNavigation();
+  const [index, setIndex] = useState(0);
+  const routes = useMemo(() => {
+    return [
+      { key: 'create', title: common.create },
+      { key: 'join', title: common.join },
+    ];
+  }, []);
+  return (
+    <ScreenContainer>
+      <AppHeader
+        title={community.group}
+        enableBack={true}
+        onBackNavigation={() => navigation.goBack()}
+      />
+      <TabView
+        renderTabBar={props => <TabHeader {...props} />}
+        navigationState={{ index, routes }}
+        renderScene={renderScene}
+        onIndexChange={setIndex}
+        initialLayout={{ width: layout.width }}
+      />
+    </ScreenContainer>
+  );
+};
+const TabHeader = ({ navigationState, jumpTo }) => {
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
+
+  return (
+    <View style={styles.tabBarContainer}>
+      {navigationState.routes.map((route, index) => {
+        const isActive = navigationState.index === index;
+        return (
+          <AppTouchable
+            key={route.key}
+            onPress={() => jumpTo(route.key)}
+            style={styles.wrapper}>
+            <AppText
+              variant="heading3"
+              style={{
+                color: isActive ? theme.colors.accent1 : theme.colors.mutedTab,
+              }}>
+              {route.title}
+            </AppText>
+            <View
+              style={[
+                styles.activateView,
+                {
+                  height: 1,
+                  backgroundColor: isActive
+                    ? theme.colors.accent1
+                    : theme.colors.mutedTab,
+                },
+              ]}
+            />
+          </AppTouchable>
+        );
+      })}
+    </View>
+  );
+};
+
+const CreateTab = () => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { community, common } = translations;
@@ -43,25 +111,8 @@ export const CreateGroup = () => {
   const descriptionInputRef = useRef(null);
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
-  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const navigation = useNavigation();
   const [image, setImage] = useState(null);
-  const [groupId, setGroupId] = useState('');
-
-
-  const handleScan = () => {
-    try {
-      navigation.goBack();
-      navigation.navigate(NavigationRoutes.SENDSCREEN, {
-        receiveData: 'send',
-        title: common.scanQrTitle,
-        subTitle: common.scanQrSubTitle,
-      });
-    } catch (error) {
-      console.error('Error navigating to scan screen:', error);
-      Toast(common.failedToOpenScanner, true);
-    }
-  };
 
   const handlePickImage = async () => {
     Keyboard.dismiss();
@@ -73,59 +124,49 @@ export const CreateGroup = () => {
     }
   };
 
+  const isButtonDisabled = useMemo(() => {
+    return !name || !desc || !image;
+  }, [name, desc, image]);
+
   return (
-    <ScreenContainer>
-      <AppHeader
-        title={'Create or Join group'}
-        subTitle={''}
-        enableBack={true}
-        onBackNavigation={() => navigation.goBack()}
-        rightIcon={isThemeDark ? <IconScan /> : <IconScanLight />}
-        onSettingsPress={handleScan}
-      />
-      <View style={styles.bodyWrapper}>
+    <View style={styles.flex}>
+      <ScrollView style={styles.flex}>
         <AppText variant="body2" style={styles.textInputTitle}>
-          {'Group Name'}
+          {community.groupName}
         </AppText>
         <TextField
           value={name}
           onChangeText={setName}
-          placeholder={'Enter group name'}
+          placeholder={community.groupNamePlaceholder}
           maxLength={32}
           style={styles.input}
           autoCapitalize="words"
-          //   onSubmitEditing={handleAssetNameSubmit}
           blurOnSubmit={false}
           returnKeyType="next"
-          //   error={assetNameValidationError}
         />
 
         <AppText variant="body2" style={styles.textInputTitle}>
-          {'Group description'}
+          {community.groupDesc}
         </AppText>
         <TextField
           ref={descriptionInputRef}
           value={desc}
           onChangeText={setDesc}
-          placeholder={'Enter a group description'} // !
-          onContentSizeChange={event => {
-            setInputHeight(event.nativeEvent.contentSize.height);
-          }}
+          placeholder={community.groupDescPlaceholder}
+          onContentSizeChange={event =>
+            setInputHeight(event.nativeEvent.contentSize.height)
+          }
           keyboardType={'default'}
           returnKeyType="next"
           maxLength={100}
           multiline={true}
           numberOfLines={2}
           style={[styles.input, desc && styles.descInput]}
-          //   onSubmitEditing={() => totalSupplyInputRef.current?.focus()}
           blurOnSubmit={false}
-          //   error={assetDescValidationError}
         />
 
-        <AppText
-          variant="body2"
-          style={[styles.textInputTitle, { marginTop: 10 }]}>
-          Profile Picture
+        <AppText variant="body2" style={styles.pictureLabel}>
+          {community.groupPic}
         </AppText>
 
         {image ? (
@@ -141,86 +182,130 @@ export const CreateGroup = () => {
         ) : (
           <AppTouchable
             onPress={handlePickImage}
-            style={styles.addMediafileIconWrapper}>
-            {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
+            style={styles.imageSelectionCtr}>
+            <AppText
+              variant="body1"
+              style={{ color: theme.colors.secondaryHeadingColor }}>
+              {community.uploadFile}
+            </AppText>
+            {isThemeDark ? <Upload /> : <UploadLight />}
           </AppTouchable>
         )}
-        <AppText
-          variant="caption"
-          style={[styles.textInputTitle, { marginTop: 10 }]}>
-          Upload a picture for your group profile photo (e.g., logo or artwork)
+        <AppText variant="caption" style={styles.textInputTitle}>
+          {community.uploadFileDesc}
         </AppText>
-
-        <AppText variant="body2" style={styles.textInputTitle}>
-          {'Connect with Group Id'}
-        </AppText>
-        <TextField
-          value={groupId}
-          onChangeText={setGroupId}
-          placeholder={'Submit to connect'}
-          maxLength={32}
-          style={styles.input}
-          autoCapitalize="words"
-          onSubmitEditing={() => {
-            Keyboard.dismiss();
-            console.log('Connect to group with id ', groupId);
-          }}
-          blurOnSubmit={false}
-          returnKeyType="next"
-          //   error={assetNameValidationError}
-        />
-      </View>
-
+      </ScrollView>
       <View style={styles.buttonWrapper}>
-        <Buttons
-          primaryTitle={'Create'}
-          primaryOnPress={() => navigation.dispatch(CommonActions.navigate(NavigationRoutes.GROUPINFO))}
-          secondaryTitle={common.cancel}
-          secondaryOnPress={() => navigation.goBack()}
-          // disabled={isButtonDisabled || createUtxos.isLoading || loading}
-          width={windowWidth / 2.3}
-          secondaryCTAWidth={windowWidth / 2.3}
-          // primaryLoading={createUtxos.isLoading || loading}
+        <PrimaryCTA
+          title={common.create}
+          disabled={isButtonDisabled}
+          width={'100%'}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.navigate(NavigationRoutes.GROUPINFO),
+            )
+          }
         />
       </View>
-    </ScreenContainer>
+    </View>
   );
 };
 
-const getStyles = (theme: AppTheme, inputHeight) =>
+const JoinTab = () => {
+  const theme: AppTheme = useTheme();
+  const { translations } = useContext(LocalizationContext);
+  const { community, common, sendScreen } = translations;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [channelId, setChannelId] = useState('');
+  const navigation = useNavigation();
+  const [inputHeight, setInputHeight] = useState(100);
+  const styles = getStyles(theme, inputHeight);
+
+  const handlePasteChannelId = async () => {
+    const clipboardValue = await Clipboard.getString();
+    setChannelId(clipboardValue);
+  };
+
+  return (
+    <View style={styles.flex}>
+      <ScrollView style={styles.flex}>
+        <AppText variant="body1" style={styles.joinHeaderText}>
+          {community.joinExisting}
+        </AppText>
+
+        <AppText variant="body2" style={styles.textInputTitle}>
+          {community.viaChannelId}
+        </AppText>
+        <TextField
+          value={channelId}
+          onChangeText={setChannelId}
+          placeholder={community.viaChannelIdPlaceholder}
+          multiline={true}
+          maxLength={100}
+          contentStyle={
+            channelId ? styles.channelMultiLine : styles.channelIdInput
+          }
+          inputStyle={styles.shortInput}
+          blurOnSubmit={true}
+          returnKeyType="next"
+          rightText={!channelId && sendScreen.paste}
+          rightIcon={
+            channelId && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+          }
+          onRightTextPress={() =>
+            channelId ? setChannelId('') : handlePasteChannelId()
+          }
+          rightCTAStyle={styles.rightCTAStyle}
+          rightCTATextColor={theme.colors.accent1}
+          onContentSizeChange={event => {
+            setInputHeight(event.nativeEvent.contentSize.height);
+          }}
+        />
+
+        <AppTouchable onPress={() => {}} style={styles.scannerCtaCtr}>
+          <GradientView
+            style={styles.ctaContainer}
+            colors={[
+              theme.colors.cardGradient1,
+              theme.colors.cardGradient2,
+              theme.colors.cardGradient3,
+            ]}>
+            <View style={styles.iconWrapper}>
+              <View style={styles.contentWrapper}>
+                <AppText variant="body1" style={styles.ctaTitleStyle}>
+                  {community.viaQR}
+                </AppText>
+              </View>
+            </View>
+            <View style={styles.ctaIconCtr}>
+              {isThemeDark ? <Scan /> : <ScanLight />}
+            </View>
+          </GradientView>
+        </AppTouchable>
+      </ScrollView>
+      <View style={styles.buttonWrapper}>
+        <PrimaryCTA
+          title={common.joinNow}
+          disabled={!channelId}
+          width={'100%'}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.navigate(NavigationRoutes.GROUPINFO),
+            )
+          }
+        />
+      </View>
+    </View>
+  );
+};
+
+const renderScene = SceneMap({
+  create: CreateTab,
+  join: JoinTab,
+});
+
+const getStyles = (theme: AppTheme, inputHeight = 0) =>
   StyleSheet.create({
-    bodyWrapper: {
-      flex: 1,
-    },
-    qrWrapper: {
-      backgroundColor: Colors.White,
-      padding: wp(20),
-      borderRadius: wp(20),
-      marginTop: hp(20),
-      alignItems: 'center',
-      alignSelf: 'center',
-    },
-    textName: {
-      marginTop: hp(20),
-      textAlign: 'center',
-    },
-    menuWrapper: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      marginTop: hp(20),
-      alignSelf: 'center',
-      marginBottom: hp(30),
-    },
-    menuItem: {
-      paddingHorizontal: wp(20),
-      paddingVertical: hp(10),
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    menuItemText: {
-      marginTop: hp(10),
-      textAlign: 'center',
-    },
     textInputTitle: {
       color: theme.colors.secondaryHeadingColor,
       marginTop: hp(5),
@@ -229,11 +314,26 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     input: {
       marginVertical: hp(5),
     },
+    buttonWrapper: {
+      marginTop: hp(30),
+      alignItems: 'center',
+    },
+    // Create Tab
+    flex: {
+      flex: 1,
+    },
     descInput: {
       borderRadius: hp(20),
       height: Math.max(100, inputHeight),
     },
-    imageWrapper: {},
+    pictureLabel: {
+      color: theme.colors.secondaryHeadingColor,
+      marginTop: hp(10),
+      marginBottom: hp(13),
+    },
+    imageWrapper: {
+      alignItems: 'center',
+    },
     imageStyle: {
       height: hp(80),
       width: hp(80),
@@ -243,10 +343,77 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
-    addMediafileIconWrapper: {
+    imageSelectionCtr: {
+      flexDirection: 'row',
+      gap: wp(12),
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: hp(14),
+      borderWidth: 2,
+      borderRadius: 12,
+      borderColor: theme.colors.borderColor,
+      borderStyle: 'dashed',
+      marginBottom: hp(10),
+    },
+
+    // Join Tab
+    joinHeaderText: { marginBottom: hp(15) },
+    channelIdInput: { height: hp(50) },
+    channelMultiLine: {
+      borderRadius: 0,
+      marginVertical: hp(25),
+      marginBottom: 0,
+      height: Math.max(95, inputHeight),
+      marginTop: 0,
+    },
+    shortInput: { width: '80%' },
+    rightCTAStyle: {
+      width: '20%',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    ctaContainer: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: windowHeight > 670 ? hp(16) : hp(10),
+      borderRadius: 15,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
       marginVertical: hp(5),
     },
-    buttonWrapper: {
-      marginTop: hp(30),
+    iconWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      width: '85%',
+    },
+    contentWrapper: {
+      marginLeft: 10,
+    },
+    ctaTitleStyle: {
+      color: theme.colors.headingColor,
+    },
+    ctaIconCtr: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+
+    scannerCtaCtr:{ marginTop: hp(20) },
+
+
+    // TabBar
+    tabBarContainer: {
+      flexDirection: 'row',
+      marginBottom: hp(30),
+    },
+    wrapper: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: hp(10),
+    },
+    activateView: {
+      width: '100%',
+      marginTop: hp(10),
     },
   });

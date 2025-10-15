@@ -77,7 +77,10 @@
     "registry": "रजिस्ट्री",
     "verify": "सत्यापित करें",
     "tapToCopy": "कॉपी करने के लिए टैप करें",
-    "retry": "पुनः प्रयास करें"
+    "retry": "पुनः प्रयास करें",
+    "create": "बनाएं",
+    "join": "शामिल हों",
+    "joinNow": "अभी शामिल हों"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -763,7 +766,19 @@
     "profileInfoTitle": "प्रोफ़ाइल जानकारी",
     "profileInfoSubTitle": "तुरंत कनेक्ट करने के लिए अपना QR कोड स्कैन या शेयर करें।",
     "shareQrMessage": "Tribe पर मुझसे कनेक्ट करने या Tribe ऐप में खोलने के लिए इस QR कोड को स्कैन करें",
-    "createGroup": "समूह बनाएं"
+    "createGroup": "समूह बनाएं",
+    "group": "समूह",
+    "groupName": "समूह का नाम",
+    "groupNamePlaceholder": "समूह का नाम दर्ज करें",
+    "groupDesc": "समूह विवरण",
+    "groupDescPlaceholder": "समूह का विवरण दर्ज करें",
+    "groupPic": "समूह की तस्वीर",
+    "uploadFile": "अपनी फ़ाइल यहाँ अपलोड करें",
+    "uploadFileDesc": "समूह प्रोफ़ाइल फ़ोटो के लिए एक तस्वीर अपलोड करें (जैसे लोगो या कलाकृति)",
+    "joinExisting": "मौजूदा समूह में शामिल हों",
+    "viaChannelId": "चैनल आईडी के माध्यम से शामिल हों",
+    "viaChannelIdPlaceholder": "आईडी पेस्ट करें",
+    "viaQR": "QR स्कैन के माध्यम से शामिल हों"
   },
   "node": {
     "viewNodeInfoTitle": "नोड जानकारी देखें",

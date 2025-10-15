@@ -77,7 +77,10 @@
     "registry": "Registro",
     "verify": "Verifica",
     "tapToCopy": "Tocca per copiare",
-    "retry": "Riprova"
+    "retry": "Riprova",
+    "create": "Crea",
+    "join": "Unisciti",
+    "joinNow": "Unisciti ora"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -763,7 +766,19 @@
     "profileInfoTitle": "Informazioni Profilo",
     "profileInfoSubTitle": "Scansiona o condividi il tuo codice QR per connetterti istantaneamente.",
     "shareQrMessage": "Scansiona questo codice QR per connetterti con me su Tribe o aprire nell'app Tribe",
-    "createGroup": "Crea Gruppo"
+    "createGroup": "Crea Gruppo",
+    "group": "Gruppo",
+    "groupName": "Nome del gruppo",
+    "groupNamePlaceholder": "Inserisci il nome del gruppo",
+    "groupDesc": "Descrizione del gruppo",
+    "groupDescPlaceholder": "Inserisci una descrizione del gruppo",
+    "groupPic": "Immagine del gruppo",
+    "uploadFile": "Carica il tuo file qui",
+    "uploadFileDesc": "Carica un'immagine per la foto del profilo del gruppo (ad esempio, logo o opera d'arte)",
+    "joinExisting": "Unisciti a un gruppo esistente",
+    "viaChannelId": "Unisciti tramite ID canale",
+    "viaChannelIdPlaceholder": "Incolla ID",
+    "viaQR": "Unisciti tramite scansione QR"
   },
   "node": {
     "viewNodeInfoTitle": "Visualizza informazioni sul nodo",

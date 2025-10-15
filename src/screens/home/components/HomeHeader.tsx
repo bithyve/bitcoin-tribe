@@ -32,8 +32,8 @@ import PullDownRefreshInfoModal from './PullDownRefreshInfoModal';
 import { AppContext } from 'src/contexts/AppContext';
 import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
-import AddContactIconLight from 'src/assets/images/addcontact_light.svg';
-import AddContactIcon from 'src/assets/images/addcontact.svg';
+import CreateGroup from 'src/assets/images/createGroup.svg';
+import CreateGroupLight from 'src/assets/images/createGroupLight.svg';
 import openLink from 'src/utils/OpenLink';
 
 function HomeHeader({
@@ -170,7 +170,7 @@ function HomeHeader({
               onPress={() => {
                 navigation.navigate(NavigationRoutes.CREATEGROUP);
               }}>
-              {isThemeDark ? <AddContactIcon /> : <AddContactIconLight />}
+              {isThemeDark ? <CreateGroup /> : <CreateGroupLight />}
             </IconWrapper>
           )}
         </View>
