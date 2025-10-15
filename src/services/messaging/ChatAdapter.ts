@@ -109,10 +109,7 @@ export class ChatAdapter extends EventEmitter {
 
     // Save to storage
     await RoomStorage.saveRoom(this.currentRoom);
-
-    // Join the room via HyperswarmManager
-    const lastSyncedIndex = 0; // New room, so start from 0
-    await this.manager.joinRoom(roomTopic, roomKey, lastSyncedIndex);
+    await this.manager.joinRoom(roomTopic, roomKey);
 
     console.log('[ChatAdapter] ✅ Room created:', this.currentRoom.roomName);
     this.emit('chat:room-created', this.currentRoom);
@@ -134,7 +131,6 @@ export class ChatAdapter extends EventEmitter {
     // Load any cached messages from storage
     const allRooms = await RoomStorage.getAllRooms();
     const existingRoom = allRooms.find(r => r.roomKey === roomKey);
-    let lastSyncedIndex = 0; // Will be used for syncing from root peer
 
     // Create room object
     if(existingRoom) {
@@ -158,7 +154,7 @@ export class ChatAdapter extends EventEmitter {
     }
 
     // Join via HyperswarmManager (will sync messages from root peer)
-    await this.manager.joinRoom(roomTopic, roomKey, lastSyncedIndex);
+    await this.manager.joinRoom(roomTopic, roomKey);
 
     console.log('[ChatAdapter] ✅ Room joined:', this.currentRoom.roomName);
     this.emit('chat:room-joined', this.currentRoom);
@@ -202,6 +198,13 @@ export class ChatAdapter extends EventEmitter {
         sentTo: result.sentTo,
       });
     }
+  }
+
+  /**
+   * Request sync from root peer
+   */
+  async requestSync(roomId: string, lastIndex: number): Promise <{ success: boolean }> {
+    return await this.manager.requestSync(roomId, lastIndex);
   }
 
   /**

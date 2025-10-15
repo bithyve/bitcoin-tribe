@@ -324,9 +324,8 @@ export class HyperswarmManager {
    * Join a room with encryption
    * @param roomTopic - Room ID (hash of room key) for P2P discovery
    * @param roomKey - 64-char hex room key for message encryption (not sent to worklet)
-   * @param lastSyncedIndex - Optional: Last message index already synced (for incremental sync)
    */
-  async joinRoom(roomTopic: string, roomKey: string, lastSyncedIndex: number = 0): Promise<{ success: boolean; alreadyJoined?: boolean }> {
+  async joinRoom(roomTopic: string, roomKey: string): Promise<{ success: boolean; alreadyJoined?: boolean }> {
     this.ensureInitialized();
     
     // ⚠️ IMPORTANT: Wait for root peer connection before allowing room join
@@ -355,16 +354,6 @@ export class HyperswarmManager {
     
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
-    // After successfully joining, request sync with the provided lastIndex
-    if (response.success) {
-      console.log('[HyperswarmManager] 🔄 Requesting sync from index:', lastSyncedIndex);
-      
-      // Request sync in background (don't wait for it)
-      this.requestSync(roomTopic, lastSyncedIndex).catch(error => {
-        console.error('[HyperswarmManager] Failed to request sync after join:', error);
-      });
-    }
     
     return response;
   }
