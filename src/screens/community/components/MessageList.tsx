@@ -16,7 +16,7 @@ const MessageList = ({
   messages,
   sending,
   flatListRef,
-  appId,
+  peerPubKey,
   onImagePress,
   onPressReject,
   onPressApprove,
@@ -29,7 +29,7 @@ const MessageList = ({
       style={{ flex: 1, paddingBottom: 10 }}
       extraData={[messages, sending]}
       contentContainerStyle={styles.list}
-      inverted={true}
+      // inverted={true}
       showsVerticalScrollIndicator={false}
       // ListEmptyComponent={() => (
       //   <Text style={styles.textEmpty}>No messages</Text>
@@ -38,8 +38,8 @@ const MessageList = ({
       renderItem={({ item, index }) => (
         <MessageItem
           message={item}
-          previousMessage={messages[index + 1]}
-          appId={appId}
+          previousMessage={messages[index - 1]}
+          peerPubKey={peerPubKey}
           onImagePress={onImagePress}
           onPressReject={onPressReject}
           onPressApprove={onPressApprove}

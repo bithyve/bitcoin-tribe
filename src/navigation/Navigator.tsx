@@ -81,7 +81,7 @@ import VerifyDomain from 'src/screens/assets/VerifyDomain';
 import VerifyX from 'src/screens/assets/VerifyX';
 import ImportXPost from 'src/screens/assets/ImportXPost';
 import ProfileInfo from 'src/screens/community/ProfileInfo';
-import Chat from 'src/screens/community/Chat';
+import Chat from 'src/screens/community/ChatNew';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
 import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
 import NodeConnected from 'src/components/NodeConnected';
