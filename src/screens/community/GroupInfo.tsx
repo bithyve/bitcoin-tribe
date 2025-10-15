@@ -5,7 +5,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { hp, wp } from 'src/constants/responsive';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import AppText from 'src/components/AppText';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -14,86 +14,13 @@ import ShowQrLight from 'src/assets/images/showQrLight.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
-import Edit from 'src/assets/images/profileEditIcon.svg';
-import EditLight from 'src/assets/images/profileEditIcon_light.svg';
+import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
-const STATIC_MEMBERS = [
-  {
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    name: 'John Doe',
-    desc: 'Blockchain dev',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/45.jpg',
-    name: 'Emma Johnson',
-    desc: 'UI/UX designer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/21.jpg',
-    name: 'Michael Smith',
-    desc: 'Full-stack engineer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/12.jpg',
-    name: 'Sophia Brown',
-    desc: 'Product manager',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/64.jpg',
-    name: 'Liam Wilson',
-    desc: 'DevOps engineer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    name: 'John Doe',
-    desc: 'Blockchain dev',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/45.jpg',
-    name: 'Emma Johnson',
-    desc: 'UI/UX designer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/21.jpg',
-    name: 'Michael Smith',
-    desc: 'Full-stack engineer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/12.jpg',
-    name: 'Sophia Brown',
-    desc: 'Product manager',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/64.jpg',
-    name: 'Liam Wilson',
-    desc: 'DevOps engineer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
-    name: 'John Doe',
-    desc: 'Blockchain dev',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/45.jpg',
-    name: 'Emma Johnson',
-    desc: 'UI/UX designer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/21.jpg',
-    name: 'Michael Smith',
-    desc: 'Full-stack engineer',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/women/12.jpg',
-    name: 'Sophia Brown',
-    desc: 'Product manager',
-  },
-  {
-    image: 'https://randomuser.me/api/portraits/men/64.jpg',
-    name: 'Liam Wilson',
-    desc: 'DevOps engineer',
-  },
-];
+// TODO: Replace with actual members from P2P network
+// const STATIC_MEMBERS_EXAMPLE = [
+//   { image: 'https://...', name: 'John Doe', desc: 'Blockchain dev' },
+//   ...
+// ];
 
 export const GroupInfo = () => {
   const theme: AppTheme = useTheme();
@@ -101,8 +28,11 @@ export const GroupInfo = () => {
   const { community, common } = translations;
   const styles = getStyles(theme);
   const navigation = useNavigation();
-  const [members, setMembers] = useState(STATIC_MEMBERS);
-
+  const route = useRoute<RouteProp<{ params: { room: HolepunchRoom } }>>();
+  const { room } = route.params;
+  // TODO: Replace with actual members from P2P network
+  const [members] = useState([]); // Empty for now, will be populated with actual peer data
+ 
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <Image source={{ uri: item.image }} style={styles.avatar} />
@@ -119,9 +49,7 @@ export const GroupInfo = () => {
     try {
       navigation.dispatch(
         CommonActions.navigate(NavigationRoutes.GROUPQR, {
-          groupId: 'MOCK_GROUP_ID',
-          groupImage:
-            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png',
+          room,
         }),
       );
     } catch (error) {
@@ -134,41 +62,45 @@ export const GroupInfo = () => {
     return (
       <>
         <View style={styles.groupImageCtr}>
-          <Image
-            source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png',
-            }}
-            style={styles.groupImage}
-          />
+          {room.roomImage ? (
+            <Image
+              source={{ uri: room.roomImage }}
+              style={styles.groupImage}
+            />
+          ) : (
+            <View style={[styles.groupImage, styles.placeholderImage]}>
+              <AppText variant="heading1" style={styles.placeholderText}>
+                {room.roomName?.charAt(0).toUpperCase() || '?'}
+              </AppText>
+            </View>
+          )}
         </View>
 
         <AppText variant="heading3SemiBold" style={styles.title}>
-          {'MicroBT stocks trading'}
+          {room.roomName || 'Unnamed Group'}
         </AppText>
         <AppText variant="body2" style={styles.subTitle}>
-          {
-            'Exploring the future of Bitcoin — one block, one idea, one conversation at a time.'
-          }
+          {room.roomDescription || 'No description available'}
         </AppText>
         <View style={styles.divider} />
-        <AppText variant="body1Bold" style={{ marginBottom: hp(20) }}>
+        {/* <AppText variant="body1Bold" style={{ marginBottom: hp(20) }}>
           {`${members.length} ${community.members}`}
-        </AppText>
+        </AppText> */}
       </>
     );
   };
 
-  const onEditGroupInfo = () => {
-    navigation.dispatch(
-      CommonActions.navigate(NavigationRoutes.EDITGROUP, {
-        groupName: 'MicroBT stocks trading',
-        groupDesc:
-          'Exploring the future of Bitcoin — one block, one idea, one conversation at a time.',
-        groupImage:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/183px-Bitcoin.svg.png',
-      }),
-    );
-  };
+  // TODO: Implement edit group functionality
+  // const onEditGroupInfo = () => {
+  //   navigation.dispatch(
+  //     CommonActions.navigate(NavigationRoutes.EDITGROUP, {
+  //       groupName: room.roomName,
+  //       groupDesc: room.roomDescription,
+  //       groupImage: room.roomImage,
+  //       roomKey: room.roomKey,
+  //     }),
+  //   );
+  // };
 
   return (
     <ScreenContainer>
@@ -177,8 +109,8 @@ export const GroupInfo = () => {
         onBackNavigation={() => navigation.goBack()}
         rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
         onSettingsPress={handleScan}
-        ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
-        onTernaryIconPress={onEditGroupInfo}
+        // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
+        // onTernaryIconPress={onEditGroupInfo}
       />
 
       <View style={styles.bodyWrapper}>
@@ -239,6 +171,16 @@ const getStyles = (theme: AppTheme) =>
       height: wp(50),
       borderRadius: wp(50),
     },
+    placeholderImage: {
+      backgroundColor: theme.colors.accent,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderRadius: wp(75),
+    },
+    placeholderText: {
+      color: '#FFFFFF',
+      fontSize: 60,
+    },
   });
 
 const CustomHeader = ({
@@ -246,8 +188,8 @@ const CustomHeader = ({
   onBackNavigation,
   rightIcon,
   onSettingsPress,
-  ternaryIcon,
-  onTernaryIconPress,
+  // ternaryIcon,
+  // onTernaryIconPress,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = StyleSheet.create({
@@ -278,7 +220,7 @@ const CustomHeader = ({
       </View>
       <View style={[styles.flexOne, styles.endCtr]}>
         <AppTouchable onPress={onSettingsPress}>{rightIcon}</AppTouchable>
-        <AppTouchable onPress={onTernaryIconPress}>{ternaryIcon}</AppTouchable>
+        {/* <AppTouchable onPress={onTernaryIconPress}>{ternaryIcon}</AppTouchable> */}
       </View>
     </View>
   );

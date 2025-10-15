@@ -20,6 +20,9 @@ import { RealmSchema } from 'src/storage/enum';
 import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import { ChatService } from 'src/services/messaging/ChatService';
 import { useChat } from 'src/hooks/useChat';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import AppTouchable from 'src/components/AppTouchable';
+import InfoIcon from 'src/assets/images/icon_info.svg';
 
 const styles = StyleSheet.create({
   container: {
@@ -127,6 +130,10 @@ const Chat = () => {
 
 
 
+  const handleInfoPress = () => {
+    (navigation as any).navigate(NavigationRoutes.GROUPINFO, { room });
+  };
+
   return (
     <ScreenContainer>
         <AppHeader
@@ -135,6 +142,11 @@ const Chat = () => {
             leaveRoom();
             navigation.goBack();
           }}
+          rightIcon={
+            <AppTouchable onPress={handleInfoPress}>
+                <InfoIcon width={24} height={24} />
+            </AppTouchable>
+          }
         />
       
       {/* Show joining banner while joining room */}
