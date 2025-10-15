@@ -254,6 +254,13 @@ export class ChatAdapter extends EventEmitter {
   }
 
   /**
+   * Check if root peer is currently connected
+   */
+  isRootPeerConnected(): boolean {
+    return this.manager.isRootPeerConnected();
+  }
+
+  /**
    * Leave current room and disconnect
    */
   async leaveRoom(): Promise<void> {
