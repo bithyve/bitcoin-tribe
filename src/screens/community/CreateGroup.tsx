@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useContext, useMemo, useRef, useState, useEffect } from 'react';
 import {
   Image,
   Keyboard,
@@ -14,7 +14,7 @@ import { AppTheme } from 'src/theme';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppHeader from 'src/components/AppHeader';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import AppText from 'src/components/AppText';
@@ -33,6 +33,9 @@ import ScanLight from 'src/assets/images/scanLight.svg';
 import Toast from 'src/components/Toast';
 import AddMediaFile from 'src/assets/images/addMediaFile.svg';
 import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
+import { useChat } from 'src/hooks/useChat';
+import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import ModalLoading from 'src/components/ModalLoading';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -46,17 +49,63 @@ export const CreateGroup = () => {
       { key: 'join', title: common.join },
     ];
   }, []);
+
+  // Initialize P2P chat
+  const {
+    isInitializing,
+    isCreatingRoom,
+    isJoiningRoom,
+    isRootPeerConnected,
+    currentRoom,
+    createRoom,
+    joinRoom,
+    error,
+  } = useChat();
+
+  // Navigate to chat when room is created/joined
+  useEffect(() => {
+    if (currentRoom) {
+      (navigation as any).navigate(NavigationRoutes.CHAT, {
+        room: currentRoom
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRoom]);
+
+  // Show error toast
+  useEffect(() => {
+    if (error) {
+      Toast(error, true);
+    }
+  }, [error]);
+
   return (
     <ScreenContainer>
+      <ModalLoading visible={isInitializing || isCreatingRoom || isJoiningRoom} />
       <AppHeader
         title={community.group}
         enableBack={true}
-        onBackNavigation={() => navigation.goBack()}
+        onBackNavigation={() => {
+          navigation.goBack()
+        }}
       />
+      
+      {/* Root Peer Connection Status Banner */}
+      {!isInitializing && !isRootPeerConnected && (
+        <View style={styles.disconnectedBanner}>
+          <AppText variant="body2" style={styles.disconnectedText}>
+            ⚠️ Server Offline - Cannot create/join rooms
+          </AppText>
+        </View>
+      )}
+
       <TabView
         renderTabBar={props => <TabHeader {...props} />}
         navigationState={{ index, routes }}
-        renderScene={renderScene}
+        renderScene={SceneMap({
+          create: () => <CreateTab createRoom={createRoom} isCreatingRoom={isCreatingRoom} isRootPeerConnected={isRootPeerConnected} />,
+          join: () => <JoinTab joinRoom={joinRoom} isJoiningRoom={isJoiningRoom} isRootPeerConnected={isRootPeerConnected} />,
+        })}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
       />
@@ -101,7 +150,7 @@ const TabHeader = ({ navigationState, jumpTo }) => {
   );
 };
 
-const CreateTab = () => {
+const CreateTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { community, common } = translations;
@@ -111,7 +160,6 @@ const CreateTab = () => {
   const descriptionInputRef = useRef(null);
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
-  const navigation = useNavigation();
   const [image, setImage] = useState(null);
 
   const handlePickImage = async () => {
@@ -124,9 +172,24 @@ const CreateTab = () => {
     }
   };
 
+  const handleCreateRoom = async () => {
+    if (!isRootPeerConnected) {
+      Toast('⚠️ Cannot create room - server is offline', true);
+      return;
+    }
+
+    try {
+      await createRoom(name, HolepunchRoomType.GROUP, desc, image);
+      Toast('✅ Room created successfully!', false);
+    } catch (err) {
+      console.error('Failed to create room:', err);
+      Toast('❌ Failed to create room', true);
+    }
+  };
+
   const isButtonDisabled = useMemo(() => {
-    return !name || !desc || !image;
-  }, [name, desc, image]);
+    return !name || !desc || isCreatingRoom;
+  }, [name, desc, isCreatingRoom]);
 
   return (
     <View style={styles.flex}>
@@ -192,21 +255,17 @@ const CreateTab = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <PrimaryCTA
-          title={common.create}
+          title={isCreatingRoom ? 'Creating...' : common.create}
           disabled={isButtonDisabled}
           width={'100%'}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.navigate(NavigationRoutes.GROUPINFO),
-            )
-          }
+          onPress={handleCreateRoom}
         />
       </View>
     </View>
   );
 };
 
-const JoinTab = () => {
+const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { community, common, sendScreen } = translations;
@@ -235,6 +294,27 @@ const JoinTab = () => {
     const channelId = data[0]?.value;
     if (channelId) setChannelId(channelId);
     else Toast(community.scanChannelError, true);
+  };
+
+  const handleJoinRoom = async () => {
+    console.log('[JoinTab] handleJoinRoom', { isRootPeerConnected, channelId });
+    if (!isRootPeerConnected) {
+      Toast('⚠️ Cannot join room - server is offline', true);
+      return;
+    }
+
+    if (!channelId.trim()) {
+      Toast('⚠️ Please enter a room key', true);
+      return;
+    }
+
+    try {
+      await joinRoom(channelId.trim()); // channelId is the room key, roomId is further derived from it
+      Toast('✅ Joined room successfully!', false);
+    } catch (err) {
+      console.error('Failed to join room:', err);
+      Toast('❌ Failed to join room - invalid key or connection error', true);
+    }
   };
 
   return (
@@ -298,23 +378,32 @@ const JoinTab = () => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <PrimaryCTA
-          title={common.joinNow}
-          disabled={!channelId}
+          title={isJoiningRoom ? 'Joining...' : common.joinNow}
+          disabled={!channelId || isJoiningRoom}
           width={'100%'}
-          onPress={() =>
-            navigation.dispatch(
-              CommonActions.navigate(NavigationRoutes.GROUPINFO),
-            )
-          }
+          onPress={handleJoinRoom}
         />
       </View>
     </View>
   );
 };
 
-const renderScene = SceneMap({
-  create: CreateTab,
-  join: JoinTab,
+// Styles for disconnected banner
+const styles = StyleSheet.create({
+  disconnectedBanner: {
+    backgroundColor: '#FFA500',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    marginHorizontal: 16,
+    marginBottom: 8,
+    borderRadius: 8,
+  },
+  disconnectedText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '600',
+  },
 });
 
 const getStyles = (theme: AppTheme, inputHeight = 0) =>
