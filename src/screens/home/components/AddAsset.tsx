@@ -25,6 +25,7 @@ import RibbonCard from 'src/components/RibbonCardCard';
 import AppText from 'src/components/AppText';
 import SwipeToAction from 'src/components/SwipeToAction';
 import SkipButton from 'src/components/SkipButton';
+import SelectOption from 'src/components/SelectOption';
 
 export const ServiceFee = ({
   feeDetails,
@@ -125,7 +126,10 @@ function AddAsset() {
   const navigateToIssue = useCallback(
     (addToRegistry: boolean, issueAssetType) => {
       setTimeout(() => {
-        if (issueAssetType === AssetType.Coin) {
+        if(issueAssetType === AssetType.Collection) {
+          navigation.replace(NavigationRoutes.ISSUECOLLECTION);
+        }
+        else if (issueAssetType === AssetType.Coin) {
           navigation.replace(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry,
@@ -173,7 +177,21 @@ function AddAsset() {
             }
           }}
         />
-        <RibbonCard
+         <SelectOption
+          title={"Create Collection"}
+          // title={"Organize your assets into a single showcase."}
+          backColor={theme.colors.inputBackground}
+          style={styles.optionStyle}
+          onPress={() => {
+            if (!canProceed) {
+              setVisible(true);
+            } else {
+              navigateToIssue(false, AssetType.Collection);
+            }
+          }}
+          testID="issue_collection"
+        />
+        <SelectOption
           title={home.addAssets}
           subTitle={home.receiveAssetsSubtitle}
           backColor={theme.colors.inputBackground}

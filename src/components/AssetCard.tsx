@@ -25,9 +25,15 @@ type AssetCardProps = {
   precision?: number;
 };
 
+const CARD_WIDTH = 160;
+const CARD_HEIGHT = 210;
+const COLLECTION_CARD_COLOR_1 = 'rgba(143, 143, 143, 1)'; // ! need light mode color
+const COLLECTION_CARD_COLOR_2 = 'rgba(112, 112, 112, 1)';
+
 const AssetCard = (props: AssetCardProps) => {
   const { tag, onPress, asset, precision } = props;
   const theme: AppTheme = useTheme();
+  const isCollection = true; //! needs to be dynamic
 
   const balance = useMemo(() => {
     return (
@@ -56,72 +62,79 @@ const AssetCard = (props: AssetCardProps) => {
   );
 
   return (
-    <AppTouchable onPress={onPress}>
-      <GradientView
-        style={styles.container}
-        colors={[
-          theme.colors.cardGradient1,
-          theme.colors.cardGradient2,
-          theme.colors.cardGradient3,
-        ]}>
-        <View style={styles.assetImageWrapper}>
-          {asset.assetSchema === AssetSchema.Coin ? (
-            <AssetIcon
-              iconUrl={asset.iconUrl}
-              assetID={asset.assetId}
-              size={120}
-              verified={asset?.issuer?.verified}
-            />
-          ) : (
-            <Image
-              source={{
-                uri: uri,
-              }}
-              style={styles.imageStyle}
-            />
-          )}
-        </View>
-        <View style={styles.contentWrapper}>
-          <View style={styles.row}>
-            <View style={styles.nameContainer}>
-              <AppText
-                variant="body2"
-                numberOfLines={1}
-                style={styles.nameText}>
-                {formatTUsdt(asset.name)}
-              </AppText>
-              {isVerified && <IconVerified width={20} height={20} />}
+    <>
+      {isCollection && <DummyCards styles={styles} />}
+      <AppTouchable activeOpacity={1} onPress={onPress}>
+        <GradientView
+          style={styles.container}
+          colors={[
+            theme.colors.cardGradient1,
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient3,
+          ]}>
+          <View style={styles.assetImageWrapper}>
+            {asset.assetSchema === AssetSchema.Coin ? (
+              <AssetIcon
+                iconUrl={asset.iconUrl}
+                assetID={asset.assetId}
+                size={120}
+                verified={asset?.issuer?.verified}
+              />
+            ) : (
+              <Image
+                source={{
+                  uri: uri,
+                }}
+                style={styles.imageStyle}
+              />
+            )}
+          </View>
+          <View style={styles.contentWrapper}>
+            <View style={styles.row}>
+              <View style={styles.nameContainer}>
+                <AppText
+                  variant="body2"
+                  numberOfLines={1}
+                  style={styles.nameText}>
+                  {asset.name}
+                </AppText>
+                {isVerified && <IconVerified width={20} height={20} />}
+              </View>
+              {!isCollection && (
+                <AppText
+                  variant="body2"
+                  numberOfLines={1}
+                  style={styles.amountText}>
+                  {balance}
+                </AppText>
+              )}
             </View>
-            <AppText
-              variant="body2"
-              numberOfLines={1}
-              style={styles.amountText}>
-              {balance}
+          <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
+              {details.trim()}
             </AppText>
           </View>
-          <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
-            {details}
-          </AppText>
-        </View>
-      </GradientView>
-    </AppTouchable>
+        </GradientView>
+      </AppTouchable>
+    </>
   );
 };
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      width: wp(160),
-      height: hp(210),
+      width: wp(CARD_WIDTH),
+      height: hp(CARD_HEIGHT),
       borderRadius: 15,
       margin: hp(5),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
+      marginTop: 15,
+      marginBottom: hp(20),
     },
     imageStyle: {
       width: '100%',
       height: '100%',
-      borderRadius: 15,
+      borderRadius: 10,
     },
     identiconWrapper: {
       width: '100%',
@@ -149,6 +162,7 @@ const getStyles = (theme: AppTheme) =>
       height: '70%',
       justifyContent: 'center',
       alignItems: 'center',
+      padding: wp(6),
     },
     row: {
       flexDirection: 'row',
@@ -162,5 +176,36 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.secondaryHeadingColor,
     },
+    backgroundCard: {
+      position: 'absolute',
+      height: CARD_HEIGHT / 2,
+      alignSelf: 'center',
+      borderRadius: 15,
+    },
   });
 export default AssetCard;
+
+const DummyCards = ({ styles }) => (
+  <>
+    <View
+      style={[
+        styles.backgroundCard,
+        {
+          backgroundColor: COLLECTION_CARD_COLOR_1,
+          width: CARD_WIDTH * 0.88,
+          top: 5,
+        },
+      ]}
+    />
+    <View
+      style={[
+        styles.backgroundCard,
+        {
+          backgroundColor: COLLECTION_CARD_COLOR_2,
+          width: CARD_WIDTH * 0.96,
+          top: 10,
+        },
+      ]}
+    />
+  </>
+);
