@@ -145,6 +145,7 @@ const UDADetailsScreen = () => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [imageView, setImageView] = useState(true);
   const animatedHeight = useRef(new Animated.Value(screenHeight * 0.1)).current;
+  const touchY = useRef(0);
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
     v =>
@@ -312,9 +313,9 @@ const UDADetailsScreen = () => {
     }
   };
 
-  const toggleHeight = () => {
+  const toggleHeight = (expand = false) => {
     Animated.timing(animatedHeight, {
-      toValue: 0,
+      toValue: expand ? screenHeight * 0.1 : 0,
       duration: 500,
       useNativeDriver: false,
     }).start();
@@ -333,6 +334,22 @@ const UDADetailsScreen = () => {
       console.log('Error sharing asset ID:', error);
     }
   };
+  const handleTouchStart = e => {
+    touchY.current = e.nativeEvent.pageY;
+  };
+
+  const handleTouchEnd = e => {
+    const deltaY = e.nativeEvent.pageY - touchY.current;
+    if (deltaY > 100) {
+      if (!imageView)  {
+        console.log("triggered")
+        toggleHeight(true);
+        setTimeout(() => {
+          setImageView(true)
+        }, 300);
+      } 
+    }
+  };
 
   return (
     <>
@@ -348,11 +365,19 @@ const UDADetailsScreen = () => {
                 isUDA: true,
               })
             }>
-            {theme.dark ? <SendIcon height={22} width={22} /> : <SendIconLight height={22} width={22}/>}
+            {theme.dark ? (
+              <SendIcon height={22} width={22} />
+            ) : (
+              <SendIconLight height={22} width={22} />
+            )}
           </AppTouchable>
           <View style={styles.bottomCenterCta}>
             <AppTouchable hitSlop={10} onPress={onShareAssetId}>
-              {theme.dark ?<ShareIcon height={22} width={22} />:<ShareIconLight height={22} width={22}/>}
+              {theme.dark ? (
+                <ShareIcon height={22} width={22} />
+              ) : (
+                <ShareIconLight height={22} width={22} />
+              )}
             </AppTouchable>
             <AppTouchable
               hitSlop={10}
@@ -360,10 +385,18 @@ const UDADetailsScreen = () => {
                 setImageView(!imageView);
                 toggleHeight();
               }}>
-              {theme.dark ? <InfoIcon height={22} width={22} />: <InfoIconLight height={22} width={22}/>}
+              {theme.dark ? (
+                <InfoIcon height={22} width={22} />
+              ) : (
+                <InfoIconLight height={22} width={22} />
+              )}
             </AppTouchable>
             <AppTouchable hitSlop={10} onPress={onCopyAssetId}>
-              {theme.dark ?<CopyIcon height={22} width={22} />: <CopyIconLight height={22} width={22}/>}
+              {theme.dark ? (
+                <CopyIcon height={22} width={22} />
+              ) : (
+                <CopyIconLight height={22} width={22} />
+              )}
             </AppTouchable>
           </View>
           <AppTouchable
@@ -375,57 +408,64 @@ const UDADetailsScreen = () => {
               });
               onShare(filePath);
             }}>
-            {theme.dark? <DownloadIcon height={22} width={22} />:<DownloadIconLight height={22} width={22}/>}
+            {theme.dark ? (
+              <DownloadIcon height={22} width={22} />
+            ) : (
+              <DownloadIconLight height={22} width={22} />
+            )}
           </AppTouchable>
         </View>
       )}
 
-      <ScrollView style={styles.dataContainer}>
+      <ScrollView
+        style={styles.dataContainer}
+        bounces={false}
+      >
         <AppHeader
           title={imageView ? '' : assets.udaDetails}
           style={styles.gutter}
         />
         {/* Image */}
         <Animated.View style={{ height: animatedHeight }} />
-        <ImageBackground
-          source={{
-            uri: Platform.select({
-              android: `file://${imagesList[activeImageIndex].filePath}`,
-              ios: imagesList[activeImageIndex].filePath,
-            }),
-          }}
-          resizeMode="cover"
-          style={styles.imageStyle}
-          >
-          <View style={styles.attachmentsCtr}>
-            {!imageView && (
-              <FlatList
-                data={imagesList}
-                horizontal
-                contentContainerStyle={{ gap: hp(7) }}
-                renderItem={({ item, index }) => (
-                  <>
-                    <AppTouchable
-                      style={styles.smallImageWrapper}
-                      onPress={() => setActiveImageIndex(index)}>
-                      <Image
-                        source={{
-                          uri: Platform.select({
-                            android: `file://${item.filePath}`,
-                            ios: item.filePath,
-                          }),
-                        }}
-                        style={styles.smallImagesStyle}
-                      />
-                    </AppTouchable>
-                  </>
-                )}
-              />
-            )}
-          </View>
-        </ImageBackground>
-        <Animated.View style={{ height: animatedHeight }} />
-
+        <View onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+          <ImageBackground
+            source={{
+              uri: Platform.select({
+                android: `file://${imagesList[activeImageIndex].filePath}`,
+                ios: imagesList[activeImageIndex].filePath,
+              }),
+            }}
+            resizeMode="cover"
+            style={styles.imageStyle}>
+            <View style={styles.attachmentsCtr}>
+              {!imageView && (
+                <FlatList
+                  data={imagesList}
+                  horizontal
+                  contentContainerStyle={{ gap: hp(7) }}
+                  renderItem={({ item, index }) => (
+                    <>
+                      <AppTouchable
+                        style={styles.smallImageWrapper}
+                        onPress={() => setActiveImageIndex(index)}>
+                        <Image
+                          source={{
+                            uri: Platform.select({
+                              android: `file://${item.filePath}`,
+                              ios: item.filePath,
+                            }),
+                          }}
+                          style={styles.smallImagesStyle}
+                        />
+                      </AppTouchable>
+                    </>
+                  )}
+                />
+              )}
+            </View>
+          </ImageBackground>
+          <Animated.View style={{ height: animatedHeight }} />
+        </View>
         {imageView ? (
           <></>
         ) : (
@@ -466,7 +506,7 @@ const UDADetailsScreen = () => {
                     hasIssuanceTransaction={hasIssuanceTransaction}
                   />
                 </View>
-                <SizedBox height={hp(10)}/>
+                <SizedBox height={hp(10)} />
                 <Item
                   title={assets.issuedOn}
                   value={moment
