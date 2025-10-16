@@ -341,13 +341,12 @@ const UDADetailsScreen = () => {
   const handleTouchEnd = e => {
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 100) {
-      if (!imageView)  {
-        console.log("triggered")
+      if (!imageView) {
         toggleHeight(true);
         setTimeout(() => {
-          setImageView(true)
+          setImageView(true);
         }, 300);
-      } 
+      }
     }
   };
 
@@ -356,8 +355,11 @@ const UDADetailsScreen = () => {
       {imageView && (
         <View style={styles.bottomContainer}>
           <AppTouchable
-          disabled={ uda?.balance?.spendable < 1}
-            style={[styles.roundCtaCtr, uda?.balance?.spendable < 1 && {opacity:0 }]}
+            disabled={uda?.balance?.spendable < 1}
+            style={[
+              styles.roundCtaCtr,
+              uda?.balance?.spendable < 1 && { opacity: 0 },
+            ]}
             onPress={() =>
               // @ts-ignore
               navigation.navigate(NavigationRoutes.SCANASSET, {
@@ -418,10 +420,7 @@ const UDADetailsScreen = () => {
         </View>
       )}
 
-      <ScrollView
-        style={styles.dataContainer}
-        bounces={false}
-      >
+      <ScrollView style={styles.dataContainer} bounces={false}>
         <AppHeader
           title={imageView ? '' : assets.udaDetails}
           style={styles.gutter}
@@ -475,39 +474,37 @@ const UDADetailsScreen = () => {
               <ModalLoading visible={isVerifyingIssuer} />
             ) : (
               <>
-                <View style={styles.wrapper}>
-                  <IssuerVerified
-                    id={twitterVerification?.id}
-                    name={twitterVerification?.name}
-                    username={twitterVerification?.username.replace(/@/g, '')}
-                    assetId={assetId}
-                    schema={RealmSchema.UniqueDigitalAsset}
-                    onVerificationComplete={() => setRefreshToggle(t => !t)}
-                    setIsVerifyingIssuer={setIsVerifyingIssuer}
-                    hasIssuanceTransaction={hasIssuanceTransaction}
-                  />
-                  <IssuerDomainVerified
-                    domain={
-                      uda?.issuer?.verifiedBy?.find(
-                        v => v.type === IssuerVerificationMethod.DOMAIN,
-                      )?.name
+              <SizedBox height={hp(15)}/>
+                <IssuerVerified
+                  id={twitterVerification?.id}
+                  name={twitterVerification?.name}
+                  username={twitterVerification?.username.replace(/@/g, '')}
+                  assetId={assetId}
+                  schema={RealmSchema.UniqueDigitalAsset}
+                  onVerificationComplete={() => setRefreshToggle(t => !t)}
+                  setIsVerifyingIssuer={setIsVerifyingIssuer}
+                  hasIssuanceTransaction={hasIssuanceTransaction}
+                />
+                <IssuerDomainVerified
+                  domain={
+                    uda?.issuer?.verifiedBy?.find(
+                      v => v.type === IssuerVerificationMethod.DOMAIN,
+                    )?.name
+                  }
+                  verified={domainVerification?.verified}
+                  onPress={() => {
+                    if (domainVerification?.verified) {
+                      openLink(url);
+                    } else {
+                      navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                        assetId: assetId,
+                        schema: RealmSchema.UniqueDigitalAsset,
+                        savedDomainName: domainVerification?.name || '',
+                      });
                     }
-                    verified={domainVerification?.verified}
-                    onPress={() => {
-                      if (domainVerification?.verified) {
-                        openLink(url);
-                      } else {
-                        navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                          assetId: assetId,
-                          schema: RealmSchema.UniqueDigitalAsset,
-                          savedDomainName: domainVerification?.name || '',
-                        });
-                      }
-                    }}
-                    hasIssuanceTransaction={hasIssuanceTransaction}
-                  />
-                </View>
-                <SizedBox height={hp(10)} />
+                  }}
+                  hasIssuanceTransaction={hasIssuanceTransaction}
+                />
                 <Item
                   title={assets.issuedOn}
                   value={moment
@@ -527,6 +524,7 @@ const UDADetailsScreen = () => {
                 <View style={styles.gutter}>
                   {uda?.transactions.length > 0 && (
                     <AssetTransaction
+                      hidePrecision
                       transaction={uda?.transactions[0]}
                       coin={uda?.name}
                       onPress={() => {
