@@ -227,7 +227,8 @@
     "pullDownInfo2": "All balances and transaction statuses in Bitcoin Tribe update automatically in the background. You only need to pull down to refresh for a forced update if needed.",
     "pullDownInfo3": "When to Use Forced Refresh?",
     "pullDownInfo4": "To quickly see the latest updates after making a transaction.",
-    "pullDownInfo5": "To ensure your app reflects the most recent data instantly."
+    "pullDownInfo5": "To ensure your app reflects the most recent data instantly.",
+    "udaName": "UDA name"
   },
   "settings": {
     "setting": "Settings",
@@ -761,6 +762,7 @@
     "twoDays": "2 Days",
     "searchAssetPlaceholder": "Search from Tribe RGB registry",
     "availableBalance": "Available Balance",
+    "udaDetails":"UDA Details"
     "issueCollection":"Create Collection",
     "collectionName":"Collection Name",
     "collectionNamePlaceholder":"Enter a name for your collection",
