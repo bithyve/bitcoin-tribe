@@ -72,7 +72,18 @@ export default class Relay {
   public static fetchFeeAndExchangeRates = async (): Promise<{
     exchangeRates: any;
     averageTxFees: AverageTxFeesByNetwork;
-    serviceFee: any;
+    serviceFee: {
+      issuanceFee: {
+        address: string;
+        fee: number;
+        includeTxFee: boolean;
+      };
+      collectionFee: {
+        address: string;
+        fee: number;
+        includeTxFee: boolean;
+      };
+    };
   }> => {
     try {
       let res;
@@ -88,9 +99,7 @@ export default class Relay {
           throw new Error(err.code);
         }
       }
-      const { exchangeRates, averageTxFees, serviceFee } = res.data || res.json;
-
-      return {
+      const { exchangeRates, averageTxFees, serviceFee } = res.data || res.json;      return {
         exchangeRates,
         averageTxFees,
         serviceFee,
@@ -183,7 +192,7 @@ export default class Relay {
         const extension = walletImage.type?.split('/')[1] || 'jpg';
         const fileName = `wallet_${Date.now()}.${extension}`;
         formData.append('file', {
-          uri:walletImage.uri,
+          uri: walletImage.uri,
           name: fileName,
           type: walletImage.type || 'image/jpeg',
         } as any);
@@ -344,16 +353,20 @@ export default class Relay {
   public static getAssetIssuanceFee = async (): Promise<{
     address: string;
     fee: number;
-    includeTxFee: number;
+    includeTxFee: boolean;
   }> => {
     try {
       const serviceFee = Storage.get(Keys.SERVICE_FEE);
       if (serviceFee) {
-        return JSON.parse(serviceFee);
+        return JSON.parse(serviceFee as string).issuanceFee as {
+          address: string;
+          fee: number;
+          includeTxFee: boolean;
+        };
       }
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/servicefee/issuance`);
+        res = await RestClient.get(`${RELAY}/servicefee`);
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
@@ -362,7 +375,11 @@ export default class Relay {
           throw new Error(err.code);
         }
       }
-      return res.data || res.json;
+      return res.data.issuanceFee as {
+        address: string;
+        fee: number;
+        includeTxFee: boolean;
+      };
     } catch (err) {
       throw new Error(err);
     }
@@ -710,7 +727,7 @@ export default class Relay {
       network: string;
       authToken: string;
       imageUrl: string;
-    }
+    };
   }> => {
     try {
       let res;
@@ -835,13 +852,17 @@ export default class Relay {
   public static isEligibleForCampaign = async (
     authToken: string,
     campaignId: string,
-  ): Promise<{ status: boolean, message: string }> => {
+  ): Promise<{ status: boolean; message: string }> => {
     try {
-      const res = await RestClient.post(`${RELAY}/campaign/isEligible`, {
-        campaignId,
-      }, {
-        Authorization: `Bearer ${authToken}`,
-      });
+      const res = await RestClient.post(
+        `${RELAY}/campaign/isEligible`,
+        {
+          campaignId,
+        },
+        {
+          Authorization: `Bearer ${authToken}`,
+        },
+      );
       return res.data;
     } catch (error) {
       console.log(error);
@@ -855,12 +876,16 @@ export default class Relay {
     invoice: string,
   ): Promise<{ status: boolean }> => {
     try {
-      const res = await RestClient.post(`${RELAY}/campaign/claim`, {
-        campaignId,
-        invoice,
-      }, {
-        Authorization: `Bearer ${authToken}`,
-      });
+      const res = await RestClient.post(
+        `${RELAY}/campaign/claim`,
+        {
+          campaignId,
+          invoice,
+        },
+        {
+          Authorization: `Bearer ${authToken}`,
+        },
+      );
       return res.data;
     } catch (error) {
       console.log(error);
