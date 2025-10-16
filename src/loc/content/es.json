@@ -221,7 +221,8 @@
     "pullDownInfo2": "Todos los saldos y estados de transacciones en Bitcoin Tribe se actualizan automáticamente en segundo plano. Solo necesitas deslizar hacia abajo para una actualización forzada si es necesario.",
     "pullDownInfo3": "¿Cuándo usar la actualización forzada?",
     "pullDownInfo4": "Para ver rápidamente las últimas actualizaciones después de realizar una transacción.",
-    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante."
+    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante.",
+    "udaName": "Nombre de UDA"
   },
   "settings": {
     "setting": "Configuraciones",
@@ -753,7 +754,8 @@
     "searchAssetPlaceholder": "Buscar en el registro RGB de Tribe",
     "totalBalance": "Saldo Total",
     "bitcoinBalance": "Saldo Bitcoin",
-    "otherAssets": "Otros Activos"
+    "otherAssets": "Otros Activos",
+    "udaDetails": "Detalles de UDA"
   },
   "community": {
     "fnfTitle": "Comunidad",
