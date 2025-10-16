@@ -356,7 +356,8 @@ const UDADetailsScreen = () => {
       {imageView && (
         <View style={styles.bottomContainer}>
           <AppTouchable
-            style={styles.roundCtaCtr}
+          disabled={ uda?.balance?.spendable < 1}
+            style={[styles.roundCtaCtr, uda?.balance?.spendable < 1 && {opacity:0 }]}
             onPress={() =>
               // @ts-ignore
               navigation.navigate(NavigationRoutes.SCANASSET, {
