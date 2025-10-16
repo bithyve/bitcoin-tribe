@@ -74,10 +74,8 @@ const ProfileInfo = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  // const pubKey = ChatEncryptionManager.derivePublicKey(app?.contactsKey?.secretKey);  
-  const pubKey = 'randomPublicKey';  
-
-  const qrValue = `tribe://${deeplinkType.Contact}/${app?.contactsKey?.publicKey}/${pubKey}`;
+  const pubKey = app?.publicId;  
+  const qrValue = `tribe://${deeplinkType.Contact}/${pubKey}`;
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 

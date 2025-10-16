@@ -238,7 +238,6 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const keys = { publicKey: 'randomPublicKey', secretKey: 'randomSecretKey' };
           const registerApp = await Relay.createNewApp(
             appName,
             appID,
@@ -249,7 +248,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -270,10 +268,6 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -385,7 +379,6 @@ export class ApiHandler {
           if (!rgbNodeConnectParams.nodeId) {
             throw new Error('Missing nodeId');
           }
-          const keys = { publicKey: 'randomPublicKey', secretKey: 'randomSecretKey' };
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
@@ -396,7 +389,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -417,10 +409,6 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
