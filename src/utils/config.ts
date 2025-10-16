@@ -36,7 +36,7 @@ class Configuration {
   public TWITTER_CLIENT_ID: string = 'ZjA1RnRiSEFfNm1ESGFuY21hM1I6MTpjaQ';
   public TRIBE_FCM_BROADCAST_CHANNEL: string =
     config.TRIBE_FCM_BROADCAST_CHANNEL;
-  public CHAT_PEER_PUB_KEY: string = config.CHAT_PEER_PUB_KEY;
+  public HOLEPUNCH_ROOT_PEER_DISCOVERY: string = config.HOLEPUNCH_ROOT_PEER_DISCOVERY;
   public RAMP_BASE_URL: string = 'https://app.rampnetwork.com/';
   public RAMP_REFERRAL_CODE: string =
     'ku67r7oh5juc27bmb3h5pek8y5heyb5bdtfa66pr';

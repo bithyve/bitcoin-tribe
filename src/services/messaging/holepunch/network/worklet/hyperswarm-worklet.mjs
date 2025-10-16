@@ -312,7 +312,7 @@ class RPCManager {
       }
 
       // Rejoin the discovery swarm to actively search for root peer
-      const discoveryTopic = crypto.hash(Buffer.from('holepunch-root-peer-discovery'));
+      const discoveryTopic = crypto.hash(Buffer.from(state.discoveryKey));
       console.log('[Worklet] 🔍 Rejoining root peer discovery swarm...');
       
       // Leave and rejoin to refresh discovery
@@ -536,9 +536,11 @@ async function initializeWorklet() {
   try {
     console.log('[Worklet] 🚀 Starting worklet initialization...');
     
-    // Get seed from React Native (passed as argument)
+    // Get seed and discovery key from React Native (passed as arguments)
     const seed = Buffer.from(Bare.argv[0], 'hex');
-    console.log('[Worklet] ✅ Seed received from React Native');
+    state.discoveryKey = Bare.argv[1];
+    console.log('[Worklet] ✅ Seed and discovery key received from React Native');
+    console.log('[Worklet] 🔑 Discovery key:', state.discoveryKey);
 
     // Initialize Hyperswarm
     console.log('[Worklet] 📡 Initializing Hyperswarm...');
@@ -595,7 +597,7 @@ async function initializeWorklet() {
     });
     
     // Join root peer discovery swarm
-    const discoveryTopic = crypto.hash(Buffer.from('holepunch-root-peer-discovery'));
+    const discoveryTopic = crypto.hash(Buffer.from(state.discoveryKey));
     console.log('[Worklet] 🔍 Joining root peer discovery swarm...');
     state.swarm.join(discoveryTopic, {
       client: true,  // We are a client looking for root peer

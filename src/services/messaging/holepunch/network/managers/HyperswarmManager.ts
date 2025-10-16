@@ -13,6 +13,7 @@ import b4a from 'b4a';
 import bundle from '../worklet/app.bundle.mjs';
 import { CommandIds, WorkletCommand, WorkletEvent } from '../constants/rpc-commands';
 import { MessageEncryption } from '../../crypto/MessageEncryption';
+import config from 'src/utils/config';
 import type {
   KeyPair,
   WorkletReadyListener,
@@ -85,7 +86,10 @@ export class HyperswarmManager {
       // Create promise for root peer connection
       this.createRootPeerConnectPromise();
       
-      await this.worklet.start('/app.bundle', bundle, [seed]);
+      const discoveryKey = config.HOLEPUNCH_ROOT_PEER_DISCOVERY;
+      if(!discoveryKey) throw new Error('Discovery key not found');
+      
+      await this.worklet.start('/app.bundle', bundle, [seed, discoveryKey]);
       
       this.setupRPC();
       this.initialized = true;
