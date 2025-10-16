@@ -33,7 +33,12 @@ export const GroupQr = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles();
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const qrValue = room.roomKey; // Just the room key for joining
+  const share = JSON.stringify({
+    roomKey: room.roomKey,
+    roomName: room.roomName,
+    roomType: room.roomType,
+    roomDescription: room.roomDescription,
+  }) 
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 
@@ -42,7 +47,7 @@ export const GroupQr = () => {
       if (!viewShotRef.current) return;
       const uri = await viewShotRef.current.capture();
       await Share.share({
-        message: `Join ${room.roomName || 'our group'}: ${qrValue}`,
+        message: share,
         url: `file://${uri}`,
       });
     } catch (error) {
@@ -53,7 +58,7 @@ export const GroupQr = () => {
 
   const handleCopy = () => {
     try {
-      Clipboard.setString(qrValue);
+      Clipboard.setString(share);
       Toast(common.copiedToClipboard, false);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
@@ -105,7 +110,7 @@ export const GroupQr = () => {
           }}>
           <View style={styles.qrWrapper}>
             <QRCode
-              value={qrValue}
+              value={share}
               size={qrSize}
               logo={room.roomImage ? { uri: room.roomImage } : undefined}
               logoSize={qrSize * 0.35}

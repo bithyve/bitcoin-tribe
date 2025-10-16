@@ -89,7 +89,7 @@ export const CreateGroup = () => {
           navigation.goBack()
         }}
       />
-      
+
       {/* Root Peer Connection Status Banner */}
       {!isInitializing && !isRootPeerConnected && (
         <View style={styles.disconnectedBanner}>
@@ -270,14 +270,14 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
   const { translations } = useContext(LocalizationContext);
   const { community, common, sendScreen } = translations;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const [channelId, setChannelId] = useState('');
+  const [joinData, setJoinData] = useState('');
   const navigation = useNavigation();
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
 
-  const handlePasteChannelId = async () => {
+  const handlePasteJoinData = async () => {
     const clipboardValue = await Clipboard.getString();
-    setChannelId(clipboardValue);
+    setJoinData(clipboardValue);
   };
 
   const navigateToScanChannelId = () => {
@@ -291,25 +291,33 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
   };
 
   const onScanChannelId = data => {
-    const channelId = data[0]?.value;
-    if (channelId) setChannelId(channelId);
+    const joinData = data[0]?.value;
+    if (joinData) setJoinData(joinData);
     else Toast(community.scanChannelError, true);
   };
 
   const handleJoinRoom = async () => {
-    console.log('[JoinTab] handleJoinRoom', { isRootPeerConnected, channelId });
+    let parsedJoinData;
+    try {
+      parsedJoinData = JSON.parse(joinData);
+      if (!parsedJoinData?.roomKey || !parsedJoinData?.roomType) {
+        Toast('Invalid join data, missing room key or room type', true);
+        return;
+      }
+    } catch (error) {
+      Toast('Invalid join data', true);
+      return;
+    }
+
+
     if (!isRootPeerConnected) {
       Toast('⚠️ Cannot join room - server is offline', true);
       return;
     }
 
-    if (!channelId.trim()) {
-      Toast('⚠️ Please enter a room key', true);
-      return;
-    }
-
     try {
-      await joinRoom(channelId.trim()); // channelId is the room key, roomId is further derived from it
+      if(!parsedJoinData?.roomKey) throw new Error('Invalid join data');
+      await joinRoom(parsedJoinData.roomKey, parsedJoinData.roomName, parsedJoinData.roomType, parsedJoinData.roomDescription);
       Toast('✅ Joined room successfully!', false);
     } catch (err) {
       console.error('Failed to join room:', err);
@@ -328,23 +336,23 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
           {community.viaChannelId}
         </AppText>
         <TextField
-          value={channelId}
-          onChangeText={setChannelId}
+          value={joinData}
+          onChangeText={setJoinData}
           placeholder={community.viaChannelIdPlaceholder}
           multiline={true}
           maxLength={100}
           contentStyle={
-            channelId ? styles.channelMultiLine : styles.channelIdInput
+            joinData ? styles.channelMultiLine : styles.channelIdInput
           }
           inputStyle={styles.shortInput}
           blurOnSubmit={true}
           returnKeyType="next"
-          rightText={!channelId && sendScreen.paste}
+          rightText={!joinData && sendScreen.paste}
           rightIcon={
-            channelId && isThemeDark ? <ClearIcon /> : <ClearIconLight />
+            joinData && isThemeDark ? <ClearIcon /> : <ClearIconLight />
           }
           onRightTextPress={() =>
-            channelId ? setChannelId('') : handlePasteChannelId()
+            joinData ? setJoinData('') : handlePasteJoinData()
           }
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
@@ -379,7 +387,7 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
       <View style={styles.buttonWrapper}>
         <PrimaryCTA
           title={isJoiningRoom ? 'Joining...' : common.joinNow}
-          disabled={!channelId || isJoiningRoom}
+          disabled={!joinData || isJoiningRoom}
           width={'100%'}
           onPress={handleJoinRoom}
         />
