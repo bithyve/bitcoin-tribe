@@ -6,6 +6,7 @@ import CommonStyles from 'src/common/styles/CommonStyles';
 export enum TextVariants {
   heading1 = 'heading1',
   heading2 = 'heading2',
+  heading2Bold="heading2Bold",
   heading3 = 'heading3',
   pageTitle1 = 'pageTitle1',
   pageTitle2 = 'pageTitle2',
@@ -51,6 +52,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.heading1;
       case TextVariants.heading2:
         return CommonStyles.heading2;
+      case TextVariants.heading2Bold:
+        return CommonStyles.heading2Bold;
       case TextVariants.heading3:
         return CommonStyles.heading3;
       case TextVariants.pageTitle1:

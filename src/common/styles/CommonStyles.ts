@@ -13,6 +13,11 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
+  heading2Bold: {
+    fontSize: 20,
+    fontWeight: '400',
+    fontFamily: Fonts.LufgaMedium,
+  },
   heading3: {
     fontSize: 18,
     fontWeight: '400',

@@ -227,7 +227,8 @@
     "pullDownInfo2": "Bitcoin Tribeのすべての残高と取引ステータスは、バックグラウンドで自動的に更新されます。強制的に更新が必要な場合のみ、下にスワイプしてください。",
     "pullDownInfo3": "強制更新が必要なときは？",
     "pullDownInfo4": "取引後に最新の更新情報をすぐに確認するため。",
-    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。"
+    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。",
+    "udaName": "UDA名"
   },
   "settings": {
     "setting": "設定",
@@ -760,6 +761,7 @@
     "totalBalance": "総残高",
     "bitcoinBalance": "ビットコイン残高",
     "otherAssets": "その他のアセット",
+    "udaDetails": "UDA の詳細"
     "issueCollection": "コレクションを作成",
     "collectionName": "コレクション名",
     "collectionNamePlaceholder": "コレクションの名前を入力してください",

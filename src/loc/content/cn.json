@@ -228,7 +228,8 @@
     "pullDownInfo2": "Bitcoin Tribe中的所有余额和交易状态都会在后台自动更新。只有在需要强制更新时，才需要下拉刷新。",
     "pullDownInfo3": "什么时候需要强制刷新？",
     "pullDownInfo4": "在进行交易后快速查看最新更新。",
-    "pullDownInfo5": "确保您的应用程序立即反映最新数据。"
+    "pullDownInfo5": "确保您的应用程序立即反映最新数据。",
+    "udaName": "UDA 名称"
   },
   "settings": {
     "setting": "设置",
@@ -761,6 +762,7 @@
     "totalBalance": "总余额",
     "bitcoinBalance": "比特币余额",
     "otherAssets": "其他资产",
+    "udaDetails": "UDA 详情"
     "issueCollection": "创建集合",
     "collectionName": "集合名称",
     "collectionNamePlaceholder": "请输入您的集合名称",

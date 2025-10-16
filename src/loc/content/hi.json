@@ -227,7 +227,8 @@
     "pullDownInfo2": "Bitcoin Tribe में सभी बैलेंस और ट्रांजैक्शन स्टेटस बैकग्राउंड में ऑटोमैटिकली अपडेट होते हैं। केवल ज़रूरत पड़ने पर जबरन अपडेट के लिए नीचे खींचें।",
     "pullDownInfo3": "कब करें जबरन रिफ्रेश?",
     "pullDownInfo4": "लेन-देन के बाद त्वरित रूप से नवीनतम अपडेट देखने के लिए।",
-    "pullDownInfo5": "यह सुनिश्चित करने के लिए कि आपका ऐप सबसे हालिया डेटा तुरंत दिखा रहा है।"
+    "pullDownInfo5": "यह सुनिश्चित करने के लिए कि आपका ऐप सबसे हालिया डेटा तुरंत दिखा रहा है।",
+    "udaName": "UDA नाम"
   },
   "settings": {
     "setting": "सेटिंग्स",
@@ -760,6 +761,7 @@
     "totalBalance": "कुल शेष",
     "bitcoinBalance": "बिटकॉइन शेष",
     "otherAssets": "अन्य संपत्तियां",
+    "udaDetails": "UDA विवरण"
     "issueCollection": "कलेक्शन बनाएं",
     "collectionName": "कलेक्शन का नाम",
     "collectionNamePlaceholder": "अपनी कलेक्शन का नाम दर्ज करें",
@@ -773,7 +775,6 @@
     "collectionPaymentConfirmSubtitle": "कलेक्शन चेन पर एंकर हो गया है।\nअब आप UDAs जोड़ना शुरू कर सकते हैं।",
     "totalItems": "कुल आइटम",
     "minted": "मिंट किया गया"
-
   },
   "community": {
     "fnfTitle": "समुदाय",
