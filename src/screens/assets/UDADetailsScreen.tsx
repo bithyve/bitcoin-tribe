@@ -145,6 +145,9 @@ const UDADetailsScreen = () => {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [imageView, setImageView] = useState(true);
   const animatedHeight = useRef(new Animated.Value(screenHeight * 0.1)).current;
+  const animatedHeightBottom = useRef(
+    new Animated.Value(screenHeight * 0.5),
+  ).current;
   const touchY = useRef(0);
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
@@ -319,6 +322,11 @@ const UDADetailsScreen = () => {
       duration: 500,
       useNativeDriver: false,
     }).start();
+    Animated.timing(animatedHeightBottom, {
+      toValue: expand ? screenHeight * 0.5 : 0,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   };
 
   const onCopyAssetId = async () => {
@@ -345,7 +353,19 @@ const UDADetailsScreen = () => {
         toggleHeight(true);
         setTimeout(() => {
           setImageView(true);
-        }, 300);
+        }, 500);
+      }
+    }
+  };
+  const onResponderEnd = e => {
+    if (Platform.OS !== 'android') return;
+    const deltaY = e.nativeEvent.pageY - touchY.current;
+    if (deltaY > 10) {
+      if (!imageView) {
+        toggleHeight(true);
+        setTimeout(() => {
+          setImageView(true);
+        }, 500);
       }
     }
   };
@@ -420,14 +440,21 @@ const UDADetailsScreen = () => {
         </View>
       )}
 
-      <ScrollView style={styles.dataContainer} bounces={false}>
+      <ScrollView
+        style={styles.dataContainer}
+        bounces={false}
+        overScrollMode="never">
         <AppHeader
           title={imageView ? '' : assets.udaDetails}
           style={styles.gutter}
         />
         {/* Image */}
         <Animated.View style={{ height: animatedHeight }} />
-        <View onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+        <View
+          onStartShouldSetResponder={() => true}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onResponderEnd={onResponderEnd}>
           <ImageBackground
             source={{
               uri: Platform.select({
@@ -442,7 +469,7 @@ const UDADetailsScreen = () => {
                 <FlatList
                   data={imagesList}
                   horizontal
-                  contentContainerStyle={{ gap: hp(7) }}
+                  contentContainerStyle={{ gap: hp(7), width: '100%' }}
                   renderItem={({ item, index }) => (
                     <>
                       <AppTouchable
@@ -464,7 +491,7 @@ const UDADetailsScreen = () => {
               )}
             </View>
           </ImageBackground>
-          <Animated.View style={{ height: animatedHeight }} />
+          <Animated.View style={{ height: animatedHeightBottom }} />
         </View>
         {imageView ? (
           <></>
@@ -474,7 +501,7 @@ const UDADetailsScreen = () => {
               <ModalLoading visible={isVerifyingIssuer} />
             ) : (
               <>
-              <SizedBox height={hp(15)}/>
+                <SizedBox height={hp(15)} />
                 <IssuerVerified
                   id={twitterVerification?.id}
                   name={twitterVerification?.name}
