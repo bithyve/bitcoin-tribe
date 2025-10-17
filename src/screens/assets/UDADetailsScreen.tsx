@@ -426,8 +426,8 @@ const UDADetailsScreen = () => {
             style={styles.roundCtaCtr}
             onPress={() => {
               const filePath = Platform.select({
-                android: `file://${uda?.token.media?.filePath}`,
-                ios: `${uda?.token.media?.filePath}`,
+                android: `file://${imagesList[activeImageIndex].filePath}`,
+                ios: `${imagesList[activeImageIndex].filePath}`,
               });
               onShare(filePath);
             }}>
