@@ -150,7 +150,7 @@ function AddAsset() {
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
 
       <View style={styles.container}>
-        <RibbonCard
+        <SelectOption
           title={assets.issueNewCoin}
           subTitle={assets.issueNewCoinSubtitle}
           backColor={theme.colors.inputBackground}
@@ -164,7 +164,7 @@ function AddAsset() {
           }}
         />
 
-        <RibbonCard
+        <SelectOption
           title={assets.issueCollectibles}
           subTitle={assets.issueCollectiblesSubtitle}
           backColor={theme.colors.inputBackground}

@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useState,
-  useMemo,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -23,22 +17,37 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-
+import { RadioButton } from 'react-native-paper';
 import pickImage from 'src/utils/imagePicker';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
-import { Keys } from 'src/storage';
+import { Keys, Storage } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from './components/FailedToCreatePopupContainer';
-
+import CheckIcon from 'src/assets/images/checkIcon.svg';
+import UncheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UncheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
+import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PencilRound from 'src/assets/images/pencil_round.svg';
 import ModalContainer from 'src/components/ModalContainer';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import { CreateCollectionConfirmation } from 'src/components/CollectionConfirmationModal';
+import Toast from 'src/components/Toast';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { AppContext } from 'src/contexts/AppContext';
+import AppType from 'src/models/enums/AppType';
+import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useNavigation } from '@react-navigation/native';
+
 const MOCK_BANNER = require('src/assets/images/mockBanner.png');
 const MOCK_COLLECTION = require('src/assets/images/mockCollection.png');
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
@@ -65,22 +74,50 @@ function IssueCollection() {
     useState(false);
   const [image, setImage] = useState('');
   const [collectionImage, setCollectionImage] = useState('');
-
+  const [isFixedSupply, setisFixedSupply] = useState(true);
+  const [isVerification, setIsVerification] = useState(false);
   const { mutate: createUtxos } = useMutation(ApiHandler.createUtxos);
   const viewUtxos = useMutation(ApiHandler.viewUtxos);
   const totalSupplyInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
-
+  const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
   const [showPayment, setShowPayment] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const wallet: Wallet = useWallets({}).wallets[0];
+  const { appType, isWalletOnline } = useContext(AppContext);
+  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+    RealmSchema.RgbWallet,
+  );
+  const navigation = useNavigation();
+  const [collection, setCollection] = useState(null)
+  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
+    JSON.parse(utxoStr),
+  );
+  const colorable = unspent.filter(
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
+  );
 
   useEffect(() => {
     viewUtxos.mutate();
   }, []);
 
   const isButtonDisabled = useMemo(() => {
-    return !collectionName || !description || !image;
-  }, [collectionName, description, image, totalSupplyAmt]);
+    if (isFixedSupply) {
+      return !collectionName || !description || !image || !totalSupplyAmt;
+    } else {
+      return !collectionName || !description || !image;
+    }
+  }, [collectionName, description, image, totalSupplyAmt, isFixedSupply]);
+
+  const checkIcon = useMemo(() => {
+    if (isThemeDark) {
+      return isVerification ? <CheckIcon /> : <UncheckIcon />;
+    }
+    return isVerification ? <CheckIconLight /> : <UncheckIconLight />;
+  }, [isVerification]);
 
   const handlePickImage = async () => {
     Keyboard.dismiss();
@@ -118,7 +155,6 @@ function IssueCollection() {
       descriptionInputRef.current?.focus();
     }
   };
- 
 
   const handleCollectionDescriptionChange = text => {
     if (!text.trim()) {
@@ -129,7 +165,6 @@ function IssueCollection() {
       setDescValidationError(null);
     }
   };
-
 
   const handleTotalSupplyChange = text => {
     try {
@@ -152,6 +187,81 @@ function IssueCollection() {
       }
     } catch {
       setTotalSupplyAmt('');
+    }
+  };
+
+  const payFees = async () => {
+    try {
+      const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
+      const totalFee = isVerification
+        ? fees.issuanceFee.fee + fees.collectionFee.fee
+        : fees.collectionFee.fee;
+      if (
+        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed <
+        totalFee
+      ) {
+        setShowPayment(false);
+        Toast(
+          `Insufficient sats. You need to have at least ${
+            colorable.length === 0 ? totalFee : totalFee + 2000
+          } sats and transaction fee in your wallet to create a new collection.`,
+          true,
+        );
+        return;
+      }
+      const feeDetails = {
+        address: fees.collectionFee.address,
+        fee: totalFee,
+      };
+      const response = await ApiHandler.payServiceFee({
+        feeDetails,
+        feeType: ServiceFeeType.CREATE_COLLECTION_FEE,
+        collectionId: '',
+      });
+      if (response.txid) {
+        // setShowSuccess(true);
+        const collection = await ApiHandler.issueNewCollection({
+          name: collectionName,
+          ticker: 'TCOLP',
+          details: description,
+          totalSupplyAmt: parseInt(totalSupplyAmt),
+          isFixedSupply: isFixedSupply,
+          mediaFilePath: Platform.select({
+            android:
+              appType === AppType.NODE_CONNECT ||
+              appType === AppType.SUPPORTED_RLN
+                ? image.startsWith('file://')
+                  ? image
+                  : `file://${path}`
+                : image.replace('file://', ''),
+            ios: image.replace('file://', ''),
+          }),
+          attachmentsFilePaths: [
+            Platform.select({
+              android:
+                appType === AppType.NODE_CONNECT ||
+                appType === AppType.SUPPORTED_RLN
+                  ? collectionImage.startsWith('file://')
+                    ? collectionImage
+                    : `file://${path}`
+                  : collectionImage.replace('file://', ''),
+              ios: collectionImage.replace('file://', ''),
+            }),
+          ],
+          createUtxos: colorable.length === 0 ? true : false,
+        });
+        if (collection?.assetId) {
+          setShowSuccess(true);
+          setCollection(collection);
+        } else {
+          setShowPayment(false);
+          Toast('Failed to create collection', true);
+        }
+      }
+    } catch (error) {
+      setShowPayment(false);
+      Toast(error.message, true);
+      console.log(error);
     }
   };
 
@@ -194,7 +304,7 @@ function IssueCollection() {
           </Pressable>
         </View>
 
-        <View style={{paddingHorizontal:wp(16)}}>
+        <View style={{ paddingHorizontal: wp(16) }}>
           <AppText variant="body2" style={styles.textInputTitle}>
             {assets.collectionName}
           </AppText>
@@ -234,19 +344,87 @@ function IssueCollection() {
           />
 
           <AppText variant="body2" style={styles.textInputTitle}>
-            {home.totalSupplyAmount}
+            Supply Policy
           </AppText>
-          <TextField
-            ref={totalSupplyInputRef}
-            value={formatNumber(totalSupplyAmt)}
-            onChangeText={text => handleTotalSupplyChange(text)}
-            placeholder={assets.enterTotSupplyPlaceholder}
-            keyboardType="numeric"
-            style={styles.input}
-            returnKeyType="done"
-            error={assetTotSupplyValidationError}
-          />
+          <View style={styles.radioButtonWrapper}>
+            <View style={styles.radioButtonContainer}>
+              <RadioButton.Android
+                value="fixed"
+                status={isFixedSupply ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setisFixedSupply(true);
+                }}
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+              />
+              <AppText variant="heading3" style={styles.textRadioButton}>
+                Fixed
+              </AppText>
+            </View>
+            <View style={styles.radioButtonContainer}>
+              <RadioButton.Android
+                value="expandable"
+                status={!isFixedSupply ? 'checked' : 'unchecked'}
+                onPress={() => {
+                  setisFixedSupply(false);
+                }}
+                color={theme.colors.accent1}
+                uncheckedColor={theme.colors.headingColor}
+              />
+              <AppText variant="heading3" style={styles.textRadioButton}>
+                Expandable
+              </AppText>
+            </View>
+          </View>
+          <AppText variant="caption" style={styles.textNote}>
+            Declared Size + Policy will be committed on-chain.
+          </AppText>
+          {isFixedSupply && (
+            <View>
+              <AppText variant="body2" style={styles.textInputTitle}>
+                Number of items
+              </AppText>
+              <TextField
+                ref={totalSupplyInputRef}
+                value={formatNumber(totalSupplyAmt)}
+                onChangeText={text => handleTotalSupplyChange(text)}
+                placeholder={assets.enterTotSupplyPlaceholder}
+                keyboardType="numeric"
+                style={styles.input}
+                returnKeyType="done"
+                error={assetTotSupplyValidationError}
+              />
+            </View>
+          )}
+
+          <AppText variant="body2" style={styles.textInputTitle}>
+            Verification(optional)
+          </AppText>
+          <View style={styles.verificationContainer}>
+            <AppTouchable onPress={() => setIsVerification(!isVerification)}>
+              {checkIcon}
+            </AppTouchable>
+            <AppText variant="body1" style={styles.textVerification}>
+              Issuer verification (X and domain)
+            </AppText>
+          </View>
+          <AppText variant="caption" style={styles.textNote}>
+            Verification adds fee and requires X account + domain attestation.
+          </AppText>
         </View>
+
+        {colorable.length === 0 && (
+          <View style={styles.reservedSatsWrapper}>
+            <View style={styles.checkIconWrapper}>
+              {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
+            </View>
+            <View style={styles.reservedSatsWrapper1}>
+              <AppText variant="body2" style={styles.reservedSatsText}>
+                {assets.reservedSats}
+              </AppText>
+            </View>
+          </View>
+        )}
 
         <View style={styles.buttonWrapper}>
           <PrimaryCTA
@@ -261,26 +439,48 @@ function IssueCollection() {
         </View>
       </KeyboardAvoidView>
 
-      <View
-        style={styles.headerCtr}>
+      <View style={styles.headerCtr}>
         <AppHeader title={assets.issueCollection} />
       </View>
 
       <ModalContainer
-        title={showSuccess? assets.collectionPaymentConfirm:assets.collectionPayment}
-        subTitle={showSuccess? assets.collectionPaymentConfirmSubtitle : assets.collectionPaymentSubtitle}
+        title={
+          showSuccess
+            ? assets.collectionPaymentConfirm
+            : assets.collectionPayment
+        }
+        subTitle={
+          showSuccess
+            ? assets.collectionPaymentConfirmSubtitle
+            : assets.collectionPaymentSubtitle
+        }
         visible={showPayment}
         enableCloseIcon={false}
-        onDismiss={() => {}}>
+        onDismiss={() => {
+          setShowPayment(false);
+        }}>
         <CreateCollectionConfirmation
           showSuccess={showSuccess}
-          setShowSuccess={setShowSuccess}
-          baseFee={'10k'}
-          total={'200'}
-          rate={'2,000,000'}
+          onSwiped={payFees}
+          baseFee={fees.collectionFee.fee}
+          verificationFee={fees.issuanceFee.fee}
+          isVerification={isVerification}
+          collection={collection}
           closeModal={mode => {
             setShowPayment(false);
             setShowSuccess(false);
+            setTimeout(() => {
+              if (mode === 'add') {
+                navigation.replace(NavigationRoutes.COLLECTIONDETAILS, {
+                  collectionId: collection._id,
+                });
+              } else {
+                navigation.replace(NavigationRoutes.ADDCOLLECTIONITEM, {
+                  collectionId: collection._id,
+                });
+              }
+            }, 300);
+
           }}
         />
       </ModalContainer>
@@ -337,7 +537,7 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
     },
     buttonWrapper: {
       marginTop: hp(30),
-      paddingHorizontal:wp(18)
+      paddingHorizontal: wp(18),
     },
     contentWrapper: {
       flex: 1,
@@ -370,10 +570,49 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
       left: hp(16),
       borderColor: 'rgba(86, 86, 86, 1)', // border color
     },
-    headerCtr:{
-          position: 'absolute',
-          top: insets.top,
-          marginHorizontal: hp(16),
-        }
+    headerCtr: {
+      position: 'absolute',
+      top: insets.top,
+      marginHorizontal: hp(16),
+    },
+    radioButtonWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(10),
+    },
+    radioButtonContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: wp(5),
+      marginRight: wp(20),
+    },
+    textRadioButton: {},
+    textNote: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    verificationContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: hp(10),
+    },
+    textVerification: {
+      marginLeft: wp(10),
+    },
+    reservedSatsWrapper: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginVertical: hp(20),
+    },
+    checkIconWrapper: {
+      width: '10%',
+    },
+    reservedSatsWrapper1: {
+      width: '90%',
+    },
+    reservedSatsText: {
+      color: theme.colors.secondaryHeadingColor,
+    },
   });
 export default IssueCollection;

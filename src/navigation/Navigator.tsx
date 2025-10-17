@@ -96,6 +96,7 @@ import { GroupInfo } from 'src/screens/community/GroupInfo';
 import GroupQr from 'src/screens/community/GroupQr';
 import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
 import { EditGroup } from 'src/screens/community/EditGroup';
+import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -379,6 +380,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.COLLECTIONDETAILS}
           component={CollectionDetailsScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ADDCOLLECTIONITEM}
+          component={AddCollectionItem}
         />
         <Stack.Screen
           name={NavigationRoutes.CREATEGROUP}

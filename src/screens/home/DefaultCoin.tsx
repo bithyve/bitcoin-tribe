@@ -1,6 +1,6 @@
 import { Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useMemo } from 'react';
-  import { Asset, AssetVisibility, Coin, Collectible, UniqueDigitalAsset, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
+  import { Asset, AssetVisibility, Coin, Collectible, Collection, UniqueDigitalAsset, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -167,6 +167,9 @@ const DefaultCoin = ({
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(RealmSchema.UniqueDigitalAsset, collection =>
+    collection.filtered(`visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`, AssetVisibility.HIDDEN),
+  );
+  const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const nonDefaultCoins = coinsResult.filter(
@@ -200,8 +203,8 @@ const DefaultCoin = ({
   ]);
 
   const totalAssets = useMemo(() => {
-    return nonDefaultCoins + collectibles.length + udas.length;
-  }, [nonDefaultCoins, collectibles, udas]);
+    return nonDefaultCoins + collectibles.length + udas.length + collections.length;
+  }, [nonDefaultCoins, collectibles, udas, collections]);
 
   return (
     <View

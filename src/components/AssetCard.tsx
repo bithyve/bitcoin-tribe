@@ -16,7 +16,6 @@ import GradientView from './GradientView';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
-import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type AssetCardProps = {
   asset: Asset;
@@ -33,7 +32,7 @@ const COLLECTION_CARD_COLOR_2 = 'rgba(112, 112, 112, 1)';
 const AssetCard = (props: AssetCardProps) => {
   const { tag, onPress, asset, precision } = props;
   const theme: AppTheme = useTheme();
-  const isCollection = true; //! needs to be dynamic
+  const isCollection = asset.slug ? true : false;
 
   const balance = useMemo(() => {
     return (
@@ -57,9 +56,18 @@ const AssetCard = (props: AssetCardProps) => {
     });
   }, [asset?.media?.filePath, asset?.token?.media.filePath]);
 
-  const isVerified = asset?.issuer?.verifiedBy.some(
+  const isVerified = useMemo(() => asset?.issuer?.verifiedBy?.some(
     item => item.verified === true,
-  );
+  ) ?? false, [asset?.issuer?.verifiedBy]);
+
+  const detailsText = useMemo(() => {
+    if(asset.details.includes('tribecollection://')) {
+      return asset.details.split('tribecollection://')[0];
+    } else if(asset.details.includes('tribecollectionitem://')) {
+      return asset.details.split('tribecollectionitem://')[0];
+    }
+    return asset.details;
+  }, [asset.details]);
 
   return (
     <>
@@ -110,7 +118,7 @@ const AssetCard = (props: AssetCardProps) => {
               )}
             </View>
           <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
-              {details.trim()}
+              {detailsText}
             </AppText>
           </View>
         </GradientView>

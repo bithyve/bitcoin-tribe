@@ -49,6 +49,7 @@ import {
   Asset,
   Coin,
   Collectible,
+  Collection,
   InvoiceType,
   IssuerVerificationMethod,
   NodeInfo,
@@ -77,6 +78,10 @@ import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
 import { Asset as ImageAsset } from 'react-native-image-picker';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
+import { v4 as uuidv4 } from 'uuid';
+
 const ECPair = ECPairFactory(ecc);
 
 export class ApiHandler {
@@ -259,7 +264,9 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage: !isRestore ? registerApp?.app?.imageUrl : walletImage || '',
+            walletImage: !isRestore
+              ? registerApp?.app?.imageUrl
+              : walletImage || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -522,12 +529,12 @@ export class ApiHandler {
           passcode: '',
           walletImage: backup?.app?.imageUrl || '',
           mnemonic: mnemonic,
-          isRestore: true
+          isRestore: true,
         });
         await ApiHandler.makeWalletOnline();
         await ApiHandler.refreshRgbWallet();
         await ApiHandler.fetchPresetAssets();
-        await ApiHandler.viewUtxos()
+        await ApiHandler.viewUtxos();
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
           'version',
@@ -888,7 +895,11 @@ export class ApiHandler {
     }
   }
 
-  static async payServiceFee({ feeDetails }): Promise<{ txid: string }> {
+  static async payServiceFee({
+    feeDetails,
+    feeType = ServiceFeeType.REGISTER_ASSET_FEE,
+    collectionId,
+  }): Promise<{ txid: string }> {
     const wallet: Wallet = dbManager
       .getObjectByIndex(RealmSchema.Wallet)
       .toJSON();
@@ -935,6 +946,8 @@ export class ApiHandler {
           metadata: {
             assetId: '',
             note: '',
+            feeType: feeType,
+            collectionId,
           },
         },
       });
@@ -1357,6 +1370,7 @@ export class ApiHandler {
 
       if (assets.uda) {
         const udas = [];
+        const collections = [];
         if (
           ApiHandler.appType === AppType.NODE_CONNECT ||
           ApiHandler.appType === AppType.SUPPORTED_RLN
@@ -1403,14 +1417,123 @@ export class ApiHandler {
                 };
               }
             }
-            udas.push(uda);
+            if (uda.details.includes('tribecollection://')) {
+              const slug = uda.details.split('tribecollection://')[1];
+              const collection = urlParamsToObject(slug);
+              const parsedItemsCount = parseInt(collection.itemsCount as string, 10);
+              collections.push({
+                ...collection,
+                ...uda,
+                itemsCount: isNaN(parsedItemsCount) || !isFinite(parsedItemsCount) ? 0 : parsedItemsCount,
+                isFixedSupply: collection.isFixedSupply === 'true',
+                issuedSupply: String(uda.issuedSupply),
+                slug: slug,
+                balance: {
+                  settled: String(uda.balance.settled),
+                  spendable: String(uda.balance.spendable),
+                  future: String(uda.balance.future),
+                  offchainOutbound: uda.balance.offchainOutbound
+                    ? String(uda.balance.offchainOutbound)
+                    : undefined,
+                  offchainInbound: uda.balance.offchainInbound
+                    ? String(uda.balance.offchainInbound)
+                    : undefined,
+                },
+              });
+            } else if (uda.details.includes('tribecollectionitem://')) {
+              const collectionId = uda.details.split(
+                'tribecollectionitem://',
+              )[1];
+              const collection = dbManager.getObjectByPrimaryId(
+                RealmSchema.Collection,
+                '_id',
+                collectionId,
+              );
+              if(collection) {
+                // First, create/update the UDA object in the database
+                const udaData = {
+                  ...uda,
+                  issuedSupply: String(uda.issuedSupply),
+                  balance: {
+                    settled: String(uda.balance.settled),
+                    spendable: String(uda.balance.spendable),
+                    future: String(uda.balance.future),
+                    offchainOutbound: uda.balance.offchainOutbound
+                      ? String(uda.balance.offchainOutbound)
+                      : undefined,
+                    offchainInbound: uda.balance.offchainInbound
+                      ? String(uda.balance.offchainInbound)
+                      : undefined,
+                  },
+                };
+                
+                // Create or update the UDA
+                dbManager.createObject(
+                  RealmSchema.UniqueDigitalAsset,
+                  udaData,
+                  Realm.UpdateMode.Modified,
+                );
+                
+                // Get the actual Realm UDA object
+                const udaObject = dbManager.getObjectByPrimaryId(
+                  RealmSchema.UniqueDigitalAsset,
+                  'assetId',
+                  uda.assetId,
+                );
+                
+                if (udaObject) {
+                  // Check if the item is already in the collection
+                  const existingItem = collection.items.find(
+                    (item: any) => item.assetId === uda.assetId,
+                  );
+                  
+                  if (!existingItem) {
+                    // Add the Realm object to the collection's items
+                    dbManager.updateObjectByPrimaryId(
+                      RealmSchema.Collection,
+                      '_id',
+                      collectionId,
+                      {
+                        items: [...collection.items, udaObject],
+                      },
+                    );
+                  }
+                }
+              } else {
+                // Collection doesn't exist yet, add to udas to be processed
+                udas.push({
+                  ...uda,
+                  balance: {
+                    settled: String(uda.balance.settled),
+                    spendable: String(uda.balance.spendable),
+                    future: String(uda.balance.future),
+                    offchainOutbound: uda.balance.offchainOutbound
+                      ? String(uda.balance.offchainOutbound)
+                      : undefined,
+                    offchainInbound: uda.balance.offchainInbound
+                      ? String(uda.balance.offchainInbound)
+                      : undefined,
+                  },
+                });
+              }
+            } else {
+              udas.push(uda);
+            }
           }
         }
-        dbManager.createObjectBulk(
-          RealmSchema.UniqueDigitalAsset,
-          udas,
-          Realm.UpdateMode.Modified,
-        );
+        if (collections.length > 0) {
+          dbManager.createObjectBulk(
+            RealmSchema.Collection,
+            collections,
+            Realm.UpdateMode.Modified,
+          );
+        } else if (udas.length > 0) {
+          dbManager.createObjectBulk(
+            RealmSchema.UniqueDigitalAsset,
+            udas,
+            Realm.UpdateMode.Modified,
+          );
+        }
       }
       await ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
@@ -1497,6 +1620,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1560,6 +1684,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.CREATE_COLLECTION_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1621,6 +1746,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1636,12 +1762,143 @@ export class ApiHandler {
     }
   }
 
+  static async mintCollectionItem({
+    name,
+    ticker,
+    details,
+    mediaFilePath,
+    attachmentsFilePaths,
+    collectionId,
+  }: {
+    name: string;
+    ticker: string;
+    details: string;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+    collectionId: string;
+  }) {
+    try {
+      const assetResponse = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      console.log('assetResponse', assetResponse);
+      const response = ApiHandler.parseAssetResponse(assetResponse);
+      console.log('response', response);
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const asset = dbManager.getObjectByPrimaryId(
+          RealmSchema.UniqueDigitalAsset,
+          'assetId',
+          response?.assetId,
+        ) as unknown as UniqueDigitalAsset;
+        const mintCollectionItemResponse = await Relay.mintCollectionItem(
+          collectionId,
+          asset,
+          app.id,
+          app.authToken,
+        );
+        console.log('mintCollectionItemResponse', mintCollectionItemResponse);
+        return response
+      }
+    } catch (error) {
+      console.log('mintCollectionItem', error);
+      throw error;
+    }
+  }
+
+  static async issueNewCollection({
+    name,
+    ticker = 'TCOLP',
+    details,
+    totalSupplyAmt,
+    isFixedSupply,
+    mediaFilePath,
+    attachmentsFilePaths,
+    createUtxos,
+  }: {
+    name: string;
+    ticker?: string;
+    details: string;
+    totalSupplyAmt: number;
+    isFixedSupply: boolean;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+    createUtxos: boolean;
+  }): Promise<Collection | null> {
+    try {
+      if (createUtxos) {
+        await ApiHandler.createUtxos();
+      }
+      const collectionId = uuidv4();
+      const slug =
+        'tribecollection://' +
+        objectToUrlParams({
+          _id: collectionId,
+          name: name,
+          description: details,
+          itemsCount: totalSupplyAmt,
+          isFixedSupply: isFixedSupply,
+        });
+      const response = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details.trim() + ' ' + slug,
+        mediaFilePath,
+        attachmentsFilePaths,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const collection = dbManager.getObjectByPrimaryId(
+          RealmSchema.Collection,
+          '_id',
+          collectionId,
+        ) as unknown as Collection;
+        console.log('new collection', collection);
+        const registerCollectionResponse = await Relay.registerCollection(
+          app.id,
+          { ...collection },
+          app.authToken,
+        );
+        await ApiHandler.getAssetTransactions({
+          assetId: collection.assetId,
+          schema: RealmSchema.Collection,
+          isCollection: true,
+          collectionId: collectionId,
+        });
+        if (registerCollectionResponse.created) {
+          return collection;
+        } else {
+          return null;
+        }
+      }
+      console.log('response', response);
+      return null;
+    } catch (error) {
+      console.log('issueNewCollection', error);
+      throw error;
+    }
+  }
+
   static async getAssetTransactions({
     assetId,
     schema,
+    isCollection = false,
+    collectionId,
   }: {
     assetId: string;
     schema: RealmSchema;
+    isCollection: boolean;
+    collectionId: string;
   }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(
@@ -1649,8 +1906,19 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (response.length > 0) {
+      if (response.length > 0 && !isCollection) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
+          transactions: response,
+        });
+      }
+      if (isCollection) {
+        const collection = dbManager.getObjectByPrimaryId(
+          RealmSchema.Collection,
+            '_id',
+            collectionId,
+          ).toJSON as unknown as Collection;
+          collection.transactions = response;
+          dbManager.updateObjectByPrimaryId(RealmSchema.Collection, '_id', collectionId, {
           transactions: response,
         });
       }
@@ -1922,19 +2190,19 @@ export class ApiHandler {
           )}`,
         );
       }
-      if(response.length > 0) {
-      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-        RealmSchema.RgbWallet,
-      );
-      const utxosData = response.map(utxo => JSON.stringify(utxo));
-      dbManager.updateObjectByPrimaryId(
-        RealmSchema.RgbWallet,
-        'mnemonic',
-        rgbWallet.mnemonic,
-        {
-          utxos: utxosData,
-        },
-      );
+      if (response.length > 0) {
+        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+        const utxosData = response.map(utxo => JSON.stringify(utxo));
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            utxos: utxosData,
+          },
+        );
         return utxosData;
       } else {
         return [];

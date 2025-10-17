@@ -17,6 +17,7 @@ import LabelledItem from './LabelledItem';
 import TransactionInfoSection from './TransactionInfoSection';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -85,6 +86,18 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
     ));
   }, [transaction?.inputs]);
 
+  const note = useMemo(() => {
+    if(transaction.metadata.feeType === ServiceFeeType.CREATE_COLLECTION_FEE) {
+      return 'Created a new collection';
+    } else  {
+      if(transaction.metadata.note) {
+        return transaction.metadata.note;
+      } else {
+        return 'Availibe to issue a new asset';
+      }
+    }
+  }, [transaction.metadata]);
+
   return (
     <ScrollView
       overScrollMode="never"
@@ -144,11 +157,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       {transaction.transactionKind === TransactionKind.SERVICE_FEE && (
         <LabeledContent
           label={'Note'}
-          content={
-            transaction.metadata?.note
-              ? transaction.metadata?.note
-              : 'Availibe to issue a new asset'
-          }
+          content={note}
         />
       )}
     </ScrollView>

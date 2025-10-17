@@ -1,34 +1,64 @@
-import { FlatList, Image, StyleSheet, View } from 'react-native';
-import React from 'react';
-import { useTheme } from '@react-navigation/native';
+import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
 import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
 import { SizedBox } from 'src/components/SizedBox';
-import { CollectionStatsContainer } from 'src/components/CollectionStatsContainer';
 import AssetCard from 'src/components/AssetCard';
-
-const MOCK_BANNER = require('src/assets/images/mockBanner.png');
-const MOCK_COLLECTION = require('src/assets/images/mockCollection.png');
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { Collection, TransferKind } from 'src/models/interfaces/RGBWallet';
+import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
+import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
   // @ts-ignore
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, insets);
+  const { collectionId } = useRoute().params;
+  const collection = useQuery<Collection>(RealmSchema.Collection, collection =>
+    collection.filtered(`_id == $0`, collectionId),
+  )[0] as Collection;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const navigation = useNavigation();
+  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+
+  const hasIssuanceTransaction = collection?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      mutate({
+        assetId: collection.assetId,
+        schema: RealmSchema.Collection,
+        isCollection: true,
+        collectionId: collection._id,
+      });
+    });
+    return unsubscribe;
+  }, [navigation, collection.assetId, collection._id]);
 
   const ListHeader = () => {
     return (
       <>
         <Image
-          source={MOCK_BANNER}
+          source={{ uri: collection.token?.media?.filePath }}
           resizeMode="cover"
           style={styles.bannerImage}
         />
         <Image
-          source={MOCK_COLLECTION}
+          source={{ uri: collection.token?.attachments[0]?.filePath }}
           resizeMode="cover"
           style={styles.image}
         />
@@ -36,19 +66,21 @@ const CollectionDetailsScreen = () => {
           <AppHeader />
         </View>
         <View style={styles.contentCtr}>
-          <AppText variant="body1Bold">@artist_maya</AppText>
-          <SizedBox height={hp(10)} />
-          <AppText variant="caption">
-            A curated series of digital artworks inspired by blockchain culture.
-          </AppText>
+          <View style={styles.nameCtr}>
+            <AppText variant="body1Bold">{collection.name}</AppText>
+            <SizedBox height={hp(10)} />
+            <AppText variant="caption">{collection.description || ''}</AppText>
+          </View>
+
+          <View style={styles.mintedCtr}>
+            <AppText variant="body2">
+              {`Minted: ${collection.items.length}${
+                collection.isFixedSupply ? `/${collection.itemsCount}` : ''
+              }`}
+            </AppText>
+          </View>
           <View />
           <SizedBox height={hp(20)} />
-          <CollectionStatsContainer
-            items={'15'}
-            minted={'7'}
-            totalMinted={'15'}
-            supply={'200'}
-          />
         </View>
       </>
     );
@@ -62,7 +94,7 @@ const CollectionDetailsScreen = () => {
         showsVerticalScrollIndicator={false}
         numColumns={2}
         columnWrapperStyle={styles.udaCtr}
-        data={ASSETS}
+        data={collection.items}
         keyExtractor={item => item.assetId}
         renderItem={({ item, index }) => {
           return (
@@ -70,13 +102,33 @@ const CollectionDetailsScreen = () => {
               <AssetCard
                 asset={item}
                 tag={'COLLECTIBLE'}
-                onPress={() => console.log(item)}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.UDADETAILS, {
+                    assetId: item.assetId,
+                  })
+                }
                 precision={item.precision}
               />
             </View>
           );
         }}
       />
+
+      {hasIssuanceTransaction && (
+        <AppTouchable
+          style={
+            isThemeDark
+              ? styles.addNewIconWrapper
+              : styles.addNewIconWrapperLight
+          }
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.ADDCOLLECTIONITEM, {
+              collectionId: collection._id,
+            });
+          }}>
+          {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+        </AppTouchable>
+      )}
     </View>
   );
 };
@@ -114,223 +166,45 @@ const getStyles = (theme: AppTheme, insets) =>
     assetWrapper: {
       flexWrap: 'wrap',
     },
-    contentCtr: { paddingHorizontal: wp(16), position: 'relative', top: -20 },
+    contentCtr: {
+      paddingHorizontal: wp(16),
+      position: 'relative',
+      top: -20,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    nameCtr: {
+      flex: 1,
+    },
     udaCtr: {
       justifyContent: 'space-between',
       paddingHorizontal: wp(16),
     },
+    mintedCtr: {
+      borderWidth: 1,
+      borderColor: 'rgba(255, 255, 255, 0.20)',
+      paddingHorizontal: wp(10),
+      paddingVertical: hp(5),
+      borderRadius: 20,
+      backgroundColor: theme.colors.inputBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    addNewIconWrapper: {
+      position: 'absolute',
+      bottom: Platform.select({
+        ios: hp(60),
+        android: hp(90),
+      }),
+      right: wp(20),
+    },
+    addNewIconWrapperLight: {
+      position: 'absolute',
+      bottom: Platform.select({
+        ios: hp(25),
+        android: hp(60),
+      }),
+      right: 0,
+    },
   });
 export default CollectionDetailsScreen;
-
-// ! To be removed
-const ASSETS = [
-  {
-    addedAt: 1760344637,
-    assetId: 'rgb:9AJH_o_B-CuB~XlJ-baYfg1a-eFaC_jp-bjK2WF0-J31wtfI',
-    assetSchema: 'NIA',
-    assetSource: 'Internal',
-    balance: {
-      future: '100',
-      offchainInbound: null,
-      offchainOutbound: null,
-      settled: '100',
-      spendable: '100',
-    },
-    campaign: {},
-    disclaimer: {},
-    iconUrl: null,
-    isDefault: null,
-    isIssuedPosted: false,
-    isVerifyPosted: null,
-    issuedSupply: '100',
-    issuer: { isDomainVerified: true, verified: true },
-    metaData: [Object],
-    name: 'Coin 1',
-    precision: 0,
-    ticker: 'COIN1',
-    timestamp: 1760344637,
-    transactions: [],
-    visibility: 'DEFAULT',
-  },
-  {
-    addedAt: 1760344637,
-    assetId: 'rgb:9AJH_o_B-aaB~XlJ-baYfg1a-eFaC_jp-bjK2WF0-J31wtfI',
-    assetSchema: 'NIA',
-    assetSource: 'Internal',
-    balance: {
-      future: '100',
-      offchainInbound: null,
-      offchainOutbound: null,
-      settled: '100',
-      spendable: '100',
-    },
-    campaign: {},
-    disclaimer: {},
-    iconUrl: null,
-    isDefault: null,
-    isIssuedPosted: false,
-    isVerifyPosted: null,
-    issuedSupply: '100',
-    issuer: { isDomainVerified: true, verified: true },
-    metaData: [Object],
-    name: 'Coin 1',
-    precision: 0,
-    ticker: 'COIN1',
-    timestamp: 1760344637,
-    transactions: [],
-    visibility: 'DEFAULT',
-  },
-  {
-    addedAt: 1760344637,
-    assetId: 'rgb:9AJH_o_B-vvB~XlJ-baYfg1a-eFaC_jp-bjK2WF0-J31wtfI',
-    assetSchema: 'NIA',
-    assetSource: 'Internal',
-    balance: {
-      future: '100',
-      offchainInbound: null,
-      offchainOutbound: null,
-      settled: '100',
-      spendable: '100',
-    },
-    campaign: {},
-    disclaimer: {},
-    iconUrl: null,
-    isDefault: null,
-    isIssuedPosted: false,
-    isVerifyPosted: null,
-    issuedSupply: '100',
-    issuer: { isDomainVerified: true, verified: true },
-    metaData: [Object],
-    name: 'Coin 1',
-    precision: 0,
-    ticker: 'COIN1',
-    timestamp: 1760344637,
-    transactions: [],
-    visibility: 'DEFAULT',
-  },
-  {
-    addedAt: 1760344637,
-    assetId: 'rgb:9AJH_o_B-dfB~XlJ-baYfg1a-eFaC_jp-bjK2WF0-J31wtfI',
-    assetSchema: 'NIA',
-    assetSource: 'Internal',
-    balance: {
-      future: '100',
-      offchainInbound: null,
-      offchainOutbound: null,
-      settled: '100',
-      spendable: '100',
-    },
-    campaign: {},
-    disclaimer: {},
-    iconUrl: null,
-    isDefault: null,
-    isIssuedPosted: false,
-    isVerifyPosted: null,
-    issuedSupply: '100',
-    issuer: { isDomainVerified: true, verified: true },
-    metaData: [Object],
-    name: 'Coin 1',
-    precision: 0,
-    ticker: 'COIN1',
-    timestamp: 1760344637,
-    transactions: [],
-    visibility: 'DEFAULT',
-  },
-  {
-    addedAt: 1760344637,
-    assetId: 'rgb:9AJH_o_B-CdB~XlJ-baYfg1a-eFaC_jp-bjK2WF0-J31wtfI',
-    assetSchema: 'NIA',
-    assetSource: 'Internal',
-    balance: {
-      future: '100',
-      offchainInbound: null,
-      offchainOutbound: null,
-      settled: '100',
-      spendable: '100',
-    },
-    campaign: {},
-    disclaimer: {},
-    iconUrl: null,
-    isDefault: null,
-    isIssuedPosted: false,
-    isVerifyPosted: null,
-    issuedSupply: '100',
-    issuer: { isDomainVerified: true, verified: true },
-    metaData: [Object],
-    name: 'Coin 1',
-    precision: 0,
-    ticker: 'COIN1',
-    timestamp: 1760344637,
-    transactions: [],
-    visibility: 'DEFAULT',
-  },
-  {
-    addedAt: 1760355320,
-    assetId: 'rgb:zqjXF0Vq-C3LIZK7-hkjT04k-npZL~zS-KpK_2BM-QbEXKtU',
-    balance: {
-      future: '1',
-      settled: '1',
-      spendable: '1',
-      offchainOutbound: null,
-      offchainInbound: null,
-    },
-    details: 'UDA secs ',
-    issuedSupply: '1',
-    name: 'UDA 1',
-    precision: 0,
-    ticker: 'UDA1',
-    timestamp: 1760355320,
-    token: {
-      attachments: [
-        {
-          filePath:
-            '/Users/vaibhav/Library/Developer/CoreSimulator/Devices/CDF30B0F-E5E9-428B-99BB-59774CC415FE/data/Containers/Data/Application/D5143049-7E62-4259-9404-7584E07C856C/Documents/.rgb/2a9696e5/media_files/86c0cb1625ebaa1068f1d04e25798ed31aa259a46e3a497eb13a2ecde6c3d33b.png',
-          mime: 'image/png',
-          base64Image: null,
-        },
-        {
-          filePath:
-            '/Users/vaibhav/Library/Developer/CoreSimulator/Devices/CDF30B0F-E5E9-428B-99BB-59774CC415FE/data/Containers/Data/Application/D5143049-7E62-4259-9404-7584E07C856C/Documents/.rgb/2a9696e5/media_files/03dae272f0cd3ca6524098f87df376887b433278ccfc6b608e74c181091309be.jpeg',
-          mime: 'image/jpeg',
-          base64Image: null,
-        },
-      ],
-      embeddedMedia: false,
-      index: 0,
-      media: {
-        filePath:
-          '/Users/vaibhav/Library/Developer/CoreSimulator/Devices/CDF30B0F-E5E9-428B-99BB-59774CC415FE/data/Containers/Data/Application/D5143049-7E62-4259-9404-7584E07C856C/Documents/.rgb/2a9696e5/media_files/efb210ff2a8e0acb41ee0405106dffe583f33496601841213450ab8b95d4a6b0.jpeg',
-        mime: 'image/jpeg',
-        base64Image: null,
-      },
-      reserves: false,
-    },
-    transactions: [
-      {
-        batchTransferIdx: 2,
-        createdAt: 1760355320,
-        idx: 2,
-        kind: 'issuance',
-        status: 'settled',
-        transportEndpoints: [],
-        updatedAt: 1760355320,
-        txid: null,
-        recipientId: null,
-        expiration: null,
-        requestedAssignment: null,
-        assignments: [{ amount: null, type: 'NonFungible' }],
-        receiveUtxo: null,
-        changeUtxo: null,
-        invoiceString: null,
-        transaction: null,
-      },
-    ],
-    metaData: null,
-    issuer: { verified: false, isDomainVerified: false, verifiedBy: [] },
-    visibility: 'DEFAULT',
-    isVerifyPosted: null,
-    isIssuedPosted: false,
-    assetSchema: 'UDA',
-    assetSource: 'Internal',
-  },
-];

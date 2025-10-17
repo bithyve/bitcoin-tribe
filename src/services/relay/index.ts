@@ -2,7 +2,12 @@ import config from 'src/utils/config';
 import RestClient from '../rest/RestClient';
 import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
-import { Asset, Coin } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collection,
+  UniqueDigitalAsset,
+} from 'src/models/interfaces/RGBWallet';
 import { Platform } from 'react-native';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Storage, Keys } from 'src/storage';
@@ -99,7 +104,8 @@ export default class Relay {
           throw new Error(err.code);
         }
       }
-      const { exchangeRates, averageTxFees, serviceFee } = res.data || res.json;      return {
+      const { exchangeRates, averageTxFees, serviceFee } = res.data || res.json;
+      return {
         exchangeRates,
         averageTxFees,
         serviceFee,
@@ -471,9 +477,143 @@ export default class Relay {
     }
   };
 
+  public static registerCollection = async (
+    appID: string,
+    collection: Collection,
+    authToken: string,
+  ): Promise<{ created: boolean }> => {
+    try {
+      let res;
+      try {
+        const formData = new FormData();
+        formData.append('appID', appID);
+        formData.append('network', config.NETWORK_TYPE.toString());
+        formData.append('assetId', collection.assetId);
+        formData.append('itemsCount', collection.itemsCount);
+        formData.append('isFixedSupply', collection.isFixedSupply);
+        formData.append('slug', collection.slug);
+        formData.append('_id', collection._id);
+        formData.append('asset', JSON.stringify(collection));
+        if (collection?.token?.media) {
+          formData.append('media', {
+            uri: Platform.select({
+              android: `file://${collection.token.media.filePath}`,
+              ios: collection.token.media.filePath,
+            }),
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${collection.token.media.filePath
+              .split('/')
+              .pop()}`,
+            type: collection.token.media.mime,
+          });
+        }
+        if (collection?.token?.attachments) {
+          collection.token.attachments.forEach(attachment => {
+            formData.append('attachments', {
+              uri: Platform.select({
+                android: `file://${attachment.filePath}`,
+                ios: attachment.filePath,
+              }),
+              name: `${Math.random()
+                .toString(36)
+                .substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
+              type: attachment.mime,
+            });
+          });
+        }
+        res = await RestClient.post(`${RELAY}/collections/create`, formData, {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
+        });
+      } catch (err) {
+        if (err.response) {
+          throw new Error(err.response.data.err);
+        }
+        if (err.code) {
+          throw new Error(err.code);
+        }
+      }
+      return res.data || res.json;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static mintCollectionItem = async (
+    collectionId: string,
+    item: UniqueDigitalAsset,
+    appID: string,
+    authToken: string,
+  ): Promise<{ status: boolean }> => {
+    try {
+      const formData = new FormData();
+      formData.append('appID', appID);
+      formData.append('network', config.NETWORK_TYPE.toString());
+      formData.append('assetId', item.assetId);
+      formData.append('collectionId', collectionId);
+      formData.append('item', JSON.stringify(item));
+      if (item?.token?.media) {
+        formData.append('media', {
+          uri: Platform.select({
+            android: `file://${item.token.media.filePath}`,
+            ios: item.token.media.filePath,
+          }),
+          name: `${Math.random()
+            .toString(36)
+            .substring(2, 11)}_${item.token.media.filePath
+            .split('/')
+            .pop()}`,
+          type: item.token.media.mime,
+        });
+      }
+      if (item?.token?.attachments) {
+        item.token.attachments.forEach(attachment => {
+          formData.append('attachments', {
+            uri: Platform.select({
+              android: `file://${attachment.filePath}`,
+              ios: attachment.filePath,
+            }),
+            name: `${Math.random()
+              .toString(36)
+              .substring(2, 11)}_${attachment.filePath.split('/').pop()}`,
+            type: attachment.mime,
+          });
+        });
+      }
+      console.log('/collections/additem');
+      const res = await RestClient.post(
+        `${RELAY}/collections/additem`,
+        formData,
+        {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${authToken}`,
+        },
+      );
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getCollectionDetails = async (
+    collectionId: string,
+  ): Promise<{
+    collection: Collection;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(`${RELAY}/collections/${collectionId}`);
+      return res.data;
+    }
+    catch (err) {
+      throw new Error(err);
+    }
+  };
+
   public static registerAsset = async (
     appID: string,
-    asset: Asset,
+    asset: Collection,
     authToken: string,
   ): Promise<{ status: boolean }> => {
     try {
