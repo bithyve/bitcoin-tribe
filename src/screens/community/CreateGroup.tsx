@@ -90,15 +90,6 @@ export const CreateGroup = () => {
         }}
       />
 
-      {/* Root Peer Connection Status Banner */}
-      {!isInitializing && !isRootPeerConnected && (
-        <View style={styles.disconnectedBanner}>
-          <AppText variant="body2" style={styles.disconnectedText}>
-            ⚠️ Server Offline - Cannot create/join rooms
-          </AppText>
-        </View>
-      )}
-
       <TabView
         renderTabBar={props => <TabHeader {...props} />}
         navigationState={{ index, routes }}
@@ -180,10 +171,10 @@ const CreateTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
 
     try {
       await createRoom(name, HolepunchRoomType.GROUP, desc, image);
-      Toast('✅ Room created successfully!', false);
+      Toast('Room created successfully!', false);
     } catch (err) {
       console.error('Failed to create room:', err);
-      Toast('❌ Failed to create room', true);
+      Toast('Failed to create room', true);
     }
   };
 
@@ -221,7 +212,7 @@ const CreateTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
           }
           keyboardType={'default'}
           returnKeyType="next"
-          maxLength={100}
+          maxLength={300}
           multiline={true}
           numberOfLines={2}
           style={[styles.input, desc && styles.descInput]}
@@ -311,17 +302,17 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
 
 
     if (!isRootPeerConnected) {
-      Toast('⚠️ Cannot join room - server is offline', true);
+      Toast('Cannot join room - server is offline', true);
       return;
     }
 
     try {
       if(!parsedJoinData?.roomKey) throw new Error('Invalid join data');
       await joinRoom(parsedJoinData.roomKey, parsedJoinData.roomName, parsedJoinData.roomType, parsedJoinData.roomDescription);
-      Toast('✅ Joined room successfully!', false);
+      Toast('Joined room successfully!', false);
     } catch (err) {
       console.error('Failed to join room:', err);
-      Toast('❌ Failed to join room - invalid key or connection error', true);
+      Toast('Failed to join room - invalid key or connection error', true);
     }
   };
 

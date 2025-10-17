@@ -31,7 +31,7 @@ function Community() {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { community } = translations;
-  const { isCommunityServerOffline, setIsCommunityServerOffline } =
+  const {communityStatus,setCommunityStatus } =
     useContext(AppContext);
 
   // Initialize P2P chat with useChat hook
@@ -89,7 +89,7 @@ function Community() {
         );
         try {
           await reconnectRootPeer();
-          Toast('Reconnected to server', false);
+          setCommunityStatus('connected');
         } catch (reconnectError) {
           console.error('[Community] Failed to reconnect:', reconnectError);
           Toast('Could not reconnect to server', true);
@@ -107,9 +107,9 @@ function Community() {
 
   useEffect(() => {
   if(!isInitializing && !isRootPeerConnected)
-    setIsCommunityServerOffline(true);
-  else if(isCommunityServerOffline)
-    setIsCommunityServerOffline(false)
+    setCommunityStatus('offline');
+  else if(communityStatus)
+    setCommunityStatus('online');
   }, [isInitializing,isRootPeerConnected]);
 
 
