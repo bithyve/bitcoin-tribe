@@ -443,6 +443,7 @@ const UDADetailsScreen = () => {
       <ScrollView
         style={styles.dataContainer}
         bounces={false}
+        scrollEnabled={!imageView}
         overScrollMode="never">
         <AppHeader
           title={imageView ? '' : assets.udaDetails}

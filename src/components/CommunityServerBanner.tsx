@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useTheme } from 'react-native-paper';
@@ -11,7 +11,7 @@ import { windowHeight } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 
 export const CommunityServerBanner = () => {
-  const { isCommunityServerOffline} =
+  const { communityStatus,setCommunityStatus} =
     useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -19,13 +19,39 @@ export const CommunityServerBanner = () => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
 
+  const status = useMemo(()=>{
+    switch (communityStatus) {
+      case "connected": {
+        setTimeout(() => {
+          setCommunityStatus(null);
+        }, 1000);
+        return {
+          message:"Connected to community server",
+          color:Colors.GOGreen
+        }
+      };
+      case "offline": return {
+        message:"Community server offline",
+        color:Colors.FireOpal
+      };
+      case "online":{
+        setTimeout(() => {
+          setCommunityStatus(null);
+        }, 1000);
+        return {
+          message:"Community server online",
+          color:Colors.GOGreen
+        }};
+    }
+  },[communityStatus])
+
   const onPress = React.useCallback(() => {
     console.log('Pressed');
   }, []);
 
-  return isCommunityServerOffline ? (
-    <AppTouchable style={styles.errorContainer} onPress={onPress}>
-      <AppText style={styles.text}>{'Community server offline'}</AppText>
+  return  communityStatus? (
+    <AppTouchable style={[styles.errorContainer, status?.color &&{backgroundColor:status.color}]} onPress={onPress}>
+      <AppText style={styles.text}>{status.message}</AppText>
     </AppTouchable>
   ) : null;
 };
@@ -43,7 +69,6 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : 16,
       left: 0,
       right: 0,
-      backgroundColor: Colors.GOGreen,
       zIndex: 1000,
       alignItems: 'center',
     },
@@ -73,7 +98,6 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : 16,
       left: 0,
       right: 0,
-      backgroundColor: Colors.SelectiveYellow,
       zIndex: 1000, // Ensures the banner is above everything
       alignItems: 'center',
     },
