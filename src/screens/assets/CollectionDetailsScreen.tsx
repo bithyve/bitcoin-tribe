@@ -1,6 +1,6 @@
 import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useEffect } from 'react';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -19,6 +19,8 @@ import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
+import { useTheme } from 'react-native-paper';
+import Colors from 'src/theme/Colors';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -53,12 +55,22 @@ const CollectionDetailsScreen = () => {
     return (
       <>
         <Image
-          source={{ uri: collection.token?.media?.filePath }}
+          source={{
+            uri: Platform.select({
+              android: `file://${collection.token?.media?.filePath}`,
+              ios: `${collection.token?.media?.filePath}`,
+            }),
+          }}
           resizeMode="cover"
           style={styles.bannerImage}
         />
         <Image
-          source={{ uri: collection.token?.attachments[0]?.filePath }}
+          source={{
+            uri: Platform.select({
+              android: `file://${collection.token?.attachments[0]?.filePath}`,
+              ios: `${collection.token?.attachments[0]?.filePath}`,
+            }),
+          }}
           resizeMode="cover"
           style={styles.image}
         />
@@ -151,12 +163,12 @@ const getStyles = (theme: AppTheme, insets) =>
     image: {
       height: hp(80),
       width: hp(80),
-      borderWidth: 1,
+      borderWidth: 2,
       borderRadius: 10,
       position: 'relative',
       top: -40,
       left: hp(16),
-      borderColor: 'rgba(86, 86, 86, 1)', // border color
+      borderColor: theme.dark ? Colors.Black : Colors.White
     },
     headerCtr: {
       position: 'absolute',
@@ -186,7 +198,7 @@ const getStyles = (theme: AppTheme, insets) =>
       paddingHorizontal: wp(10),
       paddingVertical: hp(5),
       borderRadius: 20,
-      backgroundColor: theme.colors.inputBackground,
+      backgroundColor: theme.colors.roundedCtaBg,
       justifyContent: 'center',
       alignItems: 'center',
     },
