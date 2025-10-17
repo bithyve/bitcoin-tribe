@@ -202,9 +202,10 @@ function IssueCollection() {
       ) {
         setShowPayment(false);
         Toast(
-          `Insufficient sats. You need to have at least ${
-            colorable.length === 0 ? totalFee : totalFee + 2000
-          } sats and transaction fee in your wallet to create a new collection.`,
+          assets.insufficientSatsForCollection.replace(
+            '{amount}',
+            `${colorable.length === 0 ? totalFee : totalFee + 2000}`,
+          ),
           true,
         );
         return;
@@ -255,7 +256,7 @@ function IssueCollection() {
           setCollection(collection);
         } else {
           setShowPayment(false);
-          Toast('Failed to create collection', true);
+          Toast(assets.failedToCreateCollection, true);
         }
       }
     } catch (error) {
@@ -344,7 +345,7 @@ function IssueCollection() {
           />
 
           <AppText variant="body2" style={styles.textInputTitle}>
-            Supply Policy
+            {assets.supplyPolicy}
           </AppText>
           <View style={styles.radioButtonWrapper}>
             <View style={styles.radioButtonContainer}>
@@ -358,7 +359,7 @@ function IssueCollection() {
                 uncheckedColor={theme.colors.headingColor}
               />
               <AppText variant="heading3" style={styles.textRadioButton}>
-                Fixed
+                {assets.fixed}
               </AppText>
             </View>
             <View style={styles.radioButtonContainer}>
@@ -372,17 +373,17 @@ function IssueCollection() {
                 uncheckedColor={theme.colors.headingColor}
               />
               <AppText variant="heading3" style={styles.textRadioButton}>
-                Expandable
+                {assets.expandable}
               </AppText>
             </View>
           </View>
           <AppText variant="caption" style={styles.textNote}>
-            Declared Size + Policy will be committed on-chain.
+            {assets.supplyPolicyNote}
           </AppText>
           {isFixedSupply && (
             <View>
               <AppText variant="body2" style={styles.textInputTitle}>
-                Number of items
+                {assets.numberOfItems}
               </AppText>
               <TextField
                 ref={totalSupplyInputRef}
@@ -398,18 +399,18 @@ function IssueCollection() {
           )}
 
           <AppText variant="body2" style={styles.textInputTitle}>
-            Verification(optional)
+            {assets.verificationOptional}
           </AppText>
           <View style={styles.verificationContainer}>
             <AppTouchable onPress={() => setIsVerification(!isVerification)}>
               {checkIcon}
             </AppTouchable>
             <AppText variant="body1" style={styles.textVerification}>
-              Issuer verification (X and domain)
+              {assets.issuerVerificationXDomain}
             </AppText>
           </View>
           <AppText variant="caption" style={styles.textNote}>
-            Verification adds fee and requires X account + domain attestation.
+            {assets.verificationNote}
           </AppText>
         </View>
 

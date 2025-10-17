@@ -778,7 +778,17 @@
     "collectionPaymentSubtitle":"Review and Confirm Your Transaction",
     "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs.",
     "totalItems":"Total Items",
-    "minted":"Minted"
+    "minted":"Minted",
+    "supplyPolicy":"Supply Policy",
+    "fixed":"Fixed",
+    "expandable":"Expandable",
+    "supplyPolicyNote":"Declared Size + Policy will be committed on-chain.",
+    "numberOfItems":"Number of items",
+    "verificationOptional":"Verification(optional)",
+    "issuerVerificationXDomain":"Issuer verification (X and domain)",
+    "verificationNote":"Verification adds fee and requires X account + domain attestation.",
+    "insufficientSatsForCollection":"Insufficient sats. You need to have at least {amount} sats and transaction fee in your wallet to create a new collection.",
+    "failedToCreateCollection":"Failed to create collection"
   },
   "community": {
     "fnfTitle": "Community",

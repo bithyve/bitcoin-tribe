@@ -777,7 +777,17 @@
     "collectionPaymentSubtitle": "Rivedi e conferma la tua transazione",
     "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs.",
     "totalItems": "Elementi totali",
-    "minted": "Coniato"
+    "minted": "Coniato",
+    "supplyPolicy":"Politica di fornitura",
+    "fixed":"Fisso",
+    "expandable":"Espandibile",
+    "supplyPolicyNote":"La dimensione dichiarata + politica verrà impegnata on-chain.",
+    "numberOfItems":"Numero di articoli",
+    "verificationOptional":"Verifica (opzionale)",
+    "issuerVerificationXDomain":"Verifica dell'emittente (X e dominio)",
+    "verificationNote":"La verifica aggiunge una commissione e richiede account X + attestazione dominio.",
+    "insufficientSatsForCollection":"Sats insufficienti. Devi avere almeno {amount} sats e la commissione di transazione nel tuo portafoglio per creare una nuova collezione.",
+    "failedToCreateCollection":"Impossibile creare la collezione"
   },
   "community": {
     "fnfTitle": "Comunità",

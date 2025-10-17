@@ -777,7 +777,17 @@
     "collectionPaymentSubtitle": "Revisa y confirma tu transacción",
     "collectionPaymentConfirmSubtitle": "Colección anclada en la cadena.\nAhora puedes empezar a agregar UDAs.",
     "totalItems": "Artículos totales",
-    "minted": "Acuñado"
+    "minted": "Acuñado",
+    "supplyPolicy":"Política de suministro",
+    "fixed":"Fijo",
+    "expandable":"Expandible",
+    "supplyPolicyNote":"El tamaño declarado + política se confirmará en la cadena.",
+    "numberOfItems":"Número de artículos",
+    "verificationOptional":"Verificación (opcional)",
+    "issuerVerificationXDomain":"Verificación del emisor (X y dominio)",
+    "verificationNote":"La verificación agrega una tarifa y requiere cuenta de X + certificación de dominio.",
+    "insufficientSatsForCollection":"Sats insuficientes. Necesitas tener al menos {amount} sats y la tarifa de transacción en tu billetera para crear una nueva colección.",
+    "failedToCreateCollection":"Error al crear la colección"
   },
   "community": {
     "fnfTitle": "Comunidad",

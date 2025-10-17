@@ -777,7 +777,17 @@
     "collectionPaymentSubtitle": "अपने लेन-देन की समीक्षा करें और पुष्टि करें",
     "collectionPaymentConfirmSubtitle": "कलेक्शन चेन पर एंकर हो गया है।\nअब आप UDAs जोड़ना शुरू कर सकते हैं।",
     "totalItems": "कुल आइटम",
-    "minted": "मिंट किया गया"
+    "minted": "मिंट किया गया",
+    "supplyPolicy":"आपूर्ति नीति",
+    "fixed":"निश्चित",
+    "expandable":"विस्तार योग्य",
+    "supplyPolicyNote":"घोषित आकार + नीति ऑन-चेन प्रतिबद्ध की जाएगी।",
+    "numberOfItems":"आइटम की संख्या",
+    "verificationOptional":"सत्यापन (वैकल्पिक)",
+    "issuerVerificationXDomain":"जारीकर्ता सत्यापन (X और डोमेन)",
+    "verificationNote":"सत्यापन शुल्क जोड़ता है और X खाता + डोमेन प्रमाणीकरण की आवश्यकता होती है।",
+    "insufficientSatsForCollection":"अपर्याप्त सैट्स। एक नया कलेक्शन बनाने के लिए आपके वॉलेट में कम से कम {amount} सैट्स और लेनदेन शुल्क होना आवश्यक है।",
+    "failedToCreateCollection":"कलेक्शन बनाने में विफल"
   },
   "community": {
     "fnfTitle": "समुदाय",
