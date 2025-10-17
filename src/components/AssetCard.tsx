@@ -61,13 +61,13 @@ const AssetCard = (props: AssetCardProps) => {
   ) ?? false, [asset?.issuer?.verifiedBy]);
 
   const detailsText = useMemo(() => {
-    if(asset.details.includes('tribecollection://')) {
-      return asset.details.split('tribecollection://')[0];
-    } else if(asset.details.includes('tribecollectionitem://')) {
-      return asset.details.split('tribecollectionitem://')[0];
+    if(asset?.details?.includes('tribecollection://')) {
+      return asset?.details?.split('tribecollection://')[0];
+    } else if(asset?.details?.includes('tribecollectionitem://')) {
+      return asset?.details?.split('tribecollectionitem://')[0];
     }
-    return asset.details;
-  }, [asset.details]);
+    return asset?.details;
+  }, [asset?.details]);
 
   return (
     <>
