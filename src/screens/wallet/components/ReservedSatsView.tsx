@@ -10,16 +10,15 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useBalance from 'src/hooks/useBalance';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import { Keys } from 'src/storage';
-import dbManager from 'src/storage/realm/dbManager';
 import { AppTheme } from 'src/theme';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import ReserveAmtIcon from 'src/assets/images/reserveAmtIcon.svg';
 import ReserveAmtIconLight from 'src/assets/images/reserveAmtIcon_light.svg';
-import { RealmSchema } from 'src/storage/enum';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+import useRgbWallets from 'src/hooks/useRgbWallets';
 
 function ReservedSatsView() {
   const navigation = useNavigation();
@@ -33,12 +32,8 @@ function ReservedSatsView() {
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-    RealmSchema.RgbWallet,
-  );
-
+  const rgbWallet = useRgbWallets({}).wallets[0];
   const unspent: RgbUnspent[] = useMemo(() => {
-    if (!rgbWallet || !rgbWallet.utxos) return [];
     return rgbWallet.utxos.map(utxo => JSON.parse(utxo));
   }, [rgbWallet]);
 

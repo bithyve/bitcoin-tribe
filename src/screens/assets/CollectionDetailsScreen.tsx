@@ -1,0 +1,210 @@
+import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import { hp, wp } from 'src/constants/responsive';
+import { AppTheme } from 'src/theme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import AppHeader from 'src/components/AppHeader';
+import AppText from 'src/components/AppText';
+import { SizedBox } from 'src/components/SizedBox';
+import AssetCard from 'src/components/AssetCard';
+import { RealmSchema } from 'src/storage/enum';
+import { useQuery } from '@realm/react';
+import { Collection, TransferKind } from 'src/models/interfaces/RGBWallet';
+import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
+import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
+import AppTouchable from 'src/components/AppTouchable';
+import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys } from 'src/storage';
+import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useMutation } from 'react-query';
+
+const CollectionDetailsScreen = () => {
+  const insets = useSafeAreaInsets();
+  // @ts-ignore
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme, insets);
+  const { collectionId } = useRoute().params;
+  const collection = useQuery<Collection>(RealmSchema.Collection, collection =>
+    collection.filtered(`_id == $0`, collectionId),
+  )[0] as Collection;
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const navigation = useNavigation();
+  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+
+  const hasIssuanceTransaction = collection?.transactions.some(
+    transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
+  );
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      mutate({
+        assetId: collection.assetId,
+        schema: RealmSchema.Collection,
+        isCollection: true,
+        collectionId: collection._id,
+      });
+    });
+    return unsubscribe;
+  }, [navigation, collection.assetId, collection._id]);
+
+  const ListHeader = () => {
+    return (
+      <>
+        <Image
+          source={{ uri: collection.token?.media?.filePath }}
+          resizeMode="cover"
+          style={styles.bannerImage}
+        />
+        <Image
+          source={{ uri: collection.token?.attachments[0]?.filePath }}
+          resizeMode="cover"
+          style={styles.image}
+        />
+        <View style={styles.headerCtr}>
+          <AppHeader />
+        </View>
+        <View style={styles.contentCtr}>
+          <View style={styles.nameCtr}>
+            <AppText variant="body1Bold">{collection.name}</AppText>
+            <SizedBox height={hp(10)} />
+            <AppText variant="caption">{collection.description || ''}</AppText>
+          </View>
+
+          <View style={styles.mintedCtr}>
+            <AppText variant="body2">
+              {`Minted: ${collection.items.length}${
+                collection.isFixedSupply ? `/${collection.itemsCount}` : ''
+              }`}
+            </AppText>
+          </View>
+          <View />
+          <SizedBox height={hp(20)} />
+        </View>
+      </>
+    );
+  };
+
+  return (
+    <View style={styles.parentContainer}>
+      <FlatList
+        ListHeaderComponent={ListHeader}
+        stickyHeaderHiddenOnScroll={true}
+        showsVerticalScrollIndicator={false}
+        numColumns={2}
+        columnWrapperStyle={styles.udaCtr}
+        data={collection.items}
+        keyExtractor={item => item.assetId}
+        renderItem={({ item, index }) => {
+          return (
+            <View style={styles.assetWrapper}>
+              <AssetCard
+                asset={item}
+                tag={'COLLECTIBLE'}
+                onPress={() =>
+                  navigation.navigate(NavigationRoutes.UDADETAILS, {
+                    assetId: item.assetId,
+                  })
+                }
+                precision={item.precision}
+              />
+            </View>
+          );
+        }}
+      />
+
+      {hasIssuanceTransaction && (
+        <AppTouchable
+          style={
+            isThemeDark
+              ? styles.addNewIconWrapper
+              : styles.addNewIconWrapperLight
+          }
+          onPress={() => {
+            navigation.navigate(NavigationRoutes.ADDCOLLECTIONITEM, {
+              collectionId: collection._id,
+            });
+          }}>
+          {isThemeDark ? <AddNewAsset /> : <AddNewAssetLight />}
+        </AppTouchable>
+      )}
+    </View>
+  );
+};
+const getStyles = (theme: AppTheme, insets) =>
+  StyleSheet.create({
+    parentContainer: {
+      flex: 1,
+      backgroundColor: theme.colors.primaryBackground,
+      paddingBottom: insets.bottom,
+    },
+    bannerImage: {
+      paddingTop: 20,
+      height: hp(280),
+      width: '100%',
+      borderWidth: 1,
+      paddingHorizontal: hp(16),
+      borderBottomLeftRadius: 14,
+      borderBottomRightRadius: 14,
+    },
+    image: {
+      height: hp(80),
+      width: hp(80),
+      borderWidth: 1,
+      borderRadius: 10,
+      position: 'relative',
+      top: -40,
+      left: hp(16),
+      borderColor: 'rgba(86, 86, 86, 1)', // border color
+    },
+    headerCtr: {
+      position: 'absolute',
+      top: insets.top,
+      marginHorizontal: hp(16),
+    },
+    assetWrapper: {
+      flexWrap: 'wrap',
+    },
+    contentCtr: {
+      paddingHorizontal: wp(16),
+      position: 'relative',
+      top: -20,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    nameCtr: {
+      flex: 1,
+    },
+    udaCtr: {
+      justifyContent: 'space-between',
+      paddingHorizontal: wp(16),
+    },
+    mintedCtr: {
+      borderWidth: 1,
+      borderColor: 'rgba(255, 255, 255, 0.20)',
+      paddingHorizontal: wp(10),
+      paddingVertical: hp(5),
+      borderRadius: 20,
+      backgroundColor: theme.colors.inputBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    addNewIconWrapper: {
+      position: 'absolute',
+      bottom: Platform.select({
+        ios: hp(60),
+        android: hp(90),
+      }),
+      right: wp(20),
+    },
+    addNewIconWrapperLight: {
+      position: 'absolute',
+      bottom: Platform.select({
+        ios: hp(25),
+        android: hp(60),
+      }),
+      right: 0,
+    },
+  });
+export default CollectionDetailsScreen;

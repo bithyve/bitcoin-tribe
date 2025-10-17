@@ -125,7 +125,10 @@ function AddAsset() {
   const navigateToIssue = useCallback(
     (addToRegistry: boolean, issueAssetType) => {
       setTimeout(() => {
-        if (issueAssetType === AssetType.Coin) {
+        if(issueAssetType === AssetType.Collection) {
+          navigation.replace(NavigationRoutes.ISSUECOLLECTION);
+        }
+        else if (issueAssetType === AssetType.Coin) {
           navigation.replace(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry,
@@ -172,6 +175,20 @@ function AddAsset() {
               navigateToIssue(false, AssetType.Collectible);
             }
           }}
+        />
+         <RibbonCard
+          title={"Create Collection"}
+          subTitle={"Create a new Tribe UDAs Collection"}
+          backColor={theme.colors.inputBackground}
+          style={styles.optionStyle}
+          onPress={() => {
+            if (!canProceed) {
+              setVisible(true);
+            } else {
+              navigateToIssue(false, AssetType.Collection);
+            }
+          }}
+          testID="issue_collection"
         />
         <RibbonCard
           title={home.addAssets}

@@ -225,7 +225,7 @@ export interface UniqueDigitalAsset {
   assetSource: AssetSource;
 }
 
-export interface Asset extends Coin, Collectible, UniqueDigitalAsset {}
+export interface Asset extends Coin, Collectible, UniqueDigitalAsset, Collection {}
 export interface RgbAllocation {
   amount: number;
   assetId: string;
@@ -324,4 +324,36 @@ export interface NodeInfo {
   channelCapacityMaxSat?: number;
   channelAssetMinAmount?: number;
   channelAssetMaxAmount?: number;
+}
+
+export interface Collection {
+  _id: string;
+  name: string;
+  description: string;
+  itemsCount: number;
+  isFixedSupply: boolean;
+  slug: string;
+  assetId: string;
+  ticker: string;
+  media: Media;
+  attachments: Media[];
+  issuer: Issuer;
+  visibility: AssetVisibility;
+  assetSchema: AssetSchema;
+  addedAt: number;
+  balance: Balance;
+  details: string;
+  issuedSupply: string;
+  precision: number;
+  timestamp: number;
+  token: {
+    attachments: Media[];
+    embeddedMedia: boolean;
+    index: number;
+    media: Media;
+    reserves: boolean;
+  };
+  transactions: Transfer[];
+  metaData: MetaData;
+  items: UniqueDigitalAsset[];
 }

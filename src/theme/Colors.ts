@@ -67,6 +67,7 @@ const Colors = {
   // Options card gradient
   CharcoalGray: 'rgba(36, 38, 43, 1)',
   CloudGray:'rgba(229, 229, 229, 1)',
+  mediumGray: 'rgba(120, 120, 120, 1)',
   Gray48: 'rgba(120, 120, 120, 1)',
 };
 export default Colors;

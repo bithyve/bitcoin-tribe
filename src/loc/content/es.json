@@ -78,6 +78,12 @@
     "verify": "Verificar",
     "tapToCopy": "Toca para copiar",
     "retry": "Reintentar",
+    "baseFee": "Tarifa base",
+    "satsPerArt": "sats por obra",
+    "totalUda": "Total de UDAs",
+    "feeRate": "Tasa de comisión",
+    "swipeToPay": "Desliza para pagar ahora",
+    "loading": "Cargando",
     "create": "Crear",
     "join": "Unirse",
     "joinNow": "Únete ahora"
@@ -224,7 +230,8 @@
     "pullDownInfo2": "Todos los saldos y estados de transacciones en Bitcoin Tribe se actualizan automáticamente en segundo plano. Solo necesitas deslizar hacia abajo para una actualización forzada si es necesario.",
     "pullDownInfo3": "¿Cuándo usar la actualización forzada?",
     "pullDownInfo4": "Para ver rápidamente las últimas actualizaciones después de realizar una transacción.",
-    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante."
+    "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante.",
+    "udaName": "Nombre de UDA"
   },
   "settings": {
     "setting": "Configuraciones",
@@ -523,7 +530,7 @@
   "assets": {
     "assetCreateMsg": "Activo creado con éxito",
     "insufficientSatsMainWallet": "Satoshis insuficientes en la billetera principal, fallo al crear nuevos UTXOs",
-    "insufficientSats": "Satoshis insuficientes, fallo al crear nuevos UTXOs",
+    "insufficientSats": "Satoshis insuficientes. Necesitas tener al menos {amount} sats en tu billetera para crear un nuevo UTXO.",
     "receiveAssetTitle": "Recibir activo",
     "receiveAssetSubTitle": "Escanear o copiar y pegar la factura RGB",
     "insufficientSatsRGB": "Sats reservados para transacciones de activos",
@@ -722,7 +729,7 @@
     "waitingVerificationSubTitle": "La transacción está en verificación. El proceso continuará una vez que se completen las comprobaciones.",
     "failedTitle": "Fallido",
     "failedSubTitle": "La transacción ha fallado. No se movieron fondos.",
-    "platformFeeTitle": "Tarifa de plataforma (Listado en el registro)",
+    "platformFeeTitle": "Tarifa de plataforma",
     "platformFeeSubTitle": "Esta transacción se inició para listar tu activo en el registro público.",
     "noAssetsFoundMsg": "No tienes activos en tu billetera o podrían estar ocultos.",
     "txnInfoTitle": "Información",
@@ -756,7 +763,21 @@
     "searchAssetPlaceholder": "Buscar en el registro RGB de Tribe",
     "totalBalance": "Saldo Total",
     "bitcoinBalance": "Saldo Bitcoin",
-    "otherAssets": "Otros Activos"
+    "otherAssets": "Otros Activos",
+    "udaDetails": "Detalles de UDA",
+    "issueCollection": "Crear colección",
+    "collectionName": "Nombre de la colección",
+    "collectionNamePlaceholder": "Ingresa un nombre para tu colección",
+    "enterCollectionName": "Por favor ingresa el nombre de la colección",
+    "collectionDesc": "Descripción de la colección",
+    "collectionDescPlaceholder": "Describe tu colección",
+    "enterCollectionDescription": "Por favor ingresa la descripción de la colección",
+    "collectionPayment": "Confirmación de pago",
+    "collectionPaymentConfirm": "Pago confirmado.",
+    "collectionPaymentSubtitle": "Revisa y confirma tu transacción",
+    "collectionPaymentConfirmSubtitle": "Colección anclada en la cadena.\nAhora puedes empezar a agregar UDAs.",
+    "totalItems": "Artículos totales",
+    "minted": "Acuñado"
   },
   "community": {
     "fnfTitle": "Comunidad",

@@ -89,11 +89,14 @@ import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
+import IssueCollection from 'src/screens/collectiblesCoins/IssueCollection';
+import CollectionDetailsScreen from 'src/screens/assets/CollectionDetailsScreen';
 import { CreateGroup } from 'src/screens/community/CreateGroup';
 import { GroupInfo } from 'src/screens/community/GroupInfo';
 import GroupQr from 'src/screens/community/GroupQr';
 import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
 import { EditGroup } from 'src/screens/community/EditGroup';
+import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
 import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 
 function LoginStack() {
@@ -215,6 +218,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUECOLLECTIBLESCREEN}
           component={IssueCollectible}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUECOLLECTION}
+          component={IssueCollection}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}
@@ -359,7 +366,8 @@ function AppStack() {
           name={NavigationRoutes.GETBTCWITHRAMP}
           component={GetBTCWithRamp}
         />
-        <Stack.Screen name={NavigationRoutes.REQUESTORSEND}
+        <Stack.Screen
+          name={NavigationRoutes.REQUESTORSEND}
           component={RequestOrSend}
         />
         <Stack.Screen
@@ -371,25 +379,24 @@ function AppStack() {
           component={WebViewScreen}
         />
         <Stack.Screen
+          name={NavigationRoutes.COLLECTIONDETAILS}
+          component={CollectionDetailsScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ADDCOLLECTIONITEM}
+          component={AddCollectionItem}
+        />
+        <Stack.Screen
           name={NavigationRoutes.CREATEGROUP}
           component={CreateGroup}
         />
-        <Stack.Screen
-          name={NavigationRoutes.GROUPINFO}
-          component={GroupInfo}
-        />
-        <Stack.Screen
-          name={NavigationRoutes.GROUPQR}
-          component={GroupQr}
-        />
+        <Stack.Screen name={NavigationRoutes.GROUPINFO} component={GroupInfo} />
+        <Stack.Screen name={NavigationRoutes.GROUPQR} component={GroupQr} />
         <Stack.Screen
           name={NavigationRoutes.SCANQRSCREEN}
           component={ScanQrScreen}
         />
-        <Stack.Screen
-          name={NavigationRoutes.EDITGROUP}
-          component={EditGroup}
-        />
+        <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
       </Stack.Navigator>
     </RealmProvider>
   );

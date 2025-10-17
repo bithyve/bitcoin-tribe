@@ -78,6 +78,12 @@
     "verify": "Verifica",
     "tapToCopy": "Tocca per copiare",
     "retry": "Riprova",
+    "baseFee": "Tariffa base",
+    "satsPerArt": "sats per opera",
+    "totalUda": "Totale UDAs",
+    "feeRate": "Tariffa",
+    "swipeToPay": "Scorri per pagare ora",
+    "loading": "Caricamento",
     "create": "Crea",
     "join": "Unisciti",
     "joinNow": "Unisciti ora"
@@ -224,7 +230,8 @@
     "pullDownInfo2": "Tutti i saldi e gli stati delle transazioni in Bitcoin Tribe si aggiornano automaticamente in background. È necessario scorrere verso il basso solo per un aggiornamento forzato se necessario.",
     "pullDownInfo3": "Quando usare l'aggiornamento forzato?",
     "pullDownInfo4": "Per vedere rapidamente gli ultimi aggiornamenti dopo una transazione.",
-    "pullDownInfo5": "Per assicurarti che l'app rifletta immediatamente i dati più recenti."
+    "pullDownInfo5": "Per assicurarti che l'app rifletta immediatamente i dati più recenti.",
+    "udaName": "Nome UDA"
   },
   "settings": {
     "setting": "Impostazioni",
@@ -523,7 +530,7 @@
   "assets": {
     "assetCreateMsg": "Risorsa creata con successo",
     "insufficientSatsMainWallet": "Sats insufficienti nel portafoglio principale, creazione di nuovi UTXO non riuscita",
-    "insufficientSats": "Sats insufficienti, creazione di nuovi UTXO non riuscita",
+    "insufficientSats": "Sats insufficienti. Devi avere almeno {amount} sats nel tuo portafoglio per creare un nuovo UTXO.",
     "receiveAssetTitle": "Ricevi risorsa",
     "receiveAssetSubTitle": "Scansiona o copia incolla la fattura RGB",
     "insufficientSatsRGB": "Sats riservati per la transazione della risorsa",
@@ -722,7 +729,7 @@
     "waitingVerificationSubTitle": "La transazione è in fase di verifica. Il processo continuerà una volta completati i controlli.",
     "failedTitle": "Fallita",
     "failedSubTitle": "Transazione non riuscita. Nessun fondo è stato trasferito.",
-    "platformFeeTitle": "Commissione della piattaforma (Elenco nel registro)",
+    "platformFeeTitle": "Commissione della piattaforma",
     "platformFeeSubTitle": "Questa transazione è stata avviata per elencare il tuo asset nel registro pubblico.",
     "noAssetsFoundMsg": "Non hai alcun asset nel tuo wallet oppure potrebbero essere nascosti.",
     "txnInfoTitle": "Informazioni",
@@ -756,7 +763,21 @@
     "searchAssetPlaceholder": "Cerca nel registro RGB di Tribe",
     "totalBalance": "Saldo Totale",
     "bitcoinBalance": "Saldo Bitcoin",
-    "otherAssets": "Altri Asset"
+    "otherAssets": "Altri Asset",
+    "udaDetails": "Dettagli UDA",
+    "issueCollection": "Crea collezione",
+    "collectionName": "Nome della collezione",
+    "collectionNamePlaceholder": "Inserisci un nome per la tua collezione",
+    "enterCollectionName": "Per favore inserisci il nome della collezione",
+    "collectionDesc": "Descrizione della collezione",
+    "collectionDescPlaceholder": "Descrivi la tua collezione",
+    "enterCollectionDescription": "Per favore inserisci la descrizione della collezione",
+    "collectionPayment": "Conferma pagamento",
+    "collectionPaymentConfirm": "Pagamento confermato.",
+    "collectionPaymentSubtitle": "Rivedi e conferma la tua transazione",
+    "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs.",
+    "totalItems": "Elementi totali",
+    "minted": "Coniato"
   },
   "community": {
     "fnfTitle": "Comunità",

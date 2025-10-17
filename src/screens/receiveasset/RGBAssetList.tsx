@@ -137,8 +137,9 @@ function RGBAssetList(props: DropdownProps) {
             const filePath = item?.media?.filePath || item?.asset?.media?.file;
             const showImage =
               item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
-              item?.asset?.assetSchema?.toUpperCase() ===
-                AssetSchema.Collectible ||
+              item?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
+              item?.asset?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
+              item?.asset?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
               item?.asset?.iconUrl ||
               item?.iconUrl;
 

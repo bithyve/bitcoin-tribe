@@ -6,6 +6,7 @@ import CommonStyles from 'src/common/styles/CommonStyles';
 export enum TextVariants {
   heading1 = 'heading1',
   heading2 = 'heading2',
+  heading2Bold="heading2Bold",
   heading3 = 'heading3',
   heading3SemiBold='heading3SemiBold',
   pageTitle1 = 'pageTitle1',
@@ -23,6 +24,8 @@ export enum TextVariants {
   subtitle2 = 'subtitle2',
   walletBalance = 'walletBalance',
   caption = 'caption',
+  captionBold = 'captionBold',
+  muted = 'muted',
 }
 
 type VariantProp = keyof typeof TextVariants;
@@ -50,6 +53,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.heading1;
       case TextVariants.heading2:
         return CommonStyles.heading2;
+      case TextVariants.heading2Bold:
+        return CommonStyles.heading2Bold;
       case TextVariants.heading3:
         return CommonStyles.heading3;
       case TextVariants.heading3SemiBold:
@@ -68,6 +73,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.body2;
       case TextVariants.caption:
         return CommonStyles.caption;
+      case TextVariants.captionBold:
+        return CommonStyles.captionBold;
       // Should be removed - body 3, 4, 5, 6 and 7
       case TextVariants.body3:
         return CommonStyles.body3;
@@ -86,6 +93,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.walletBalance;
       case TextVariants.smallCTA:
         return CommonStyles.smallCTA;
+      case TextVariants.muted:
+        return CommonStyles.muted;
       default:
         return CommonStyles.body1;
     }

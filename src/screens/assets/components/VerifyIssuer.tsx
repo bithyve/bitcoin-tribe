@@ -35,6 +35,7 @@ import VerificationSection from './VerificationSection';
 import AppText from 'src/components/AppText';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 
 const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
@@ -400,7 +401,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   onPay={async () => {
                     setDisabledCTA(true);
                     await ApiHandler.refreshWallets({ wallets: [wallet] });
-                    payServiceFeeFeeMutation.mutate({ feeDetails });
+                    payServiceFeeFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
                   }}
                   feeDetails={feeDetails}
                   status={payServiceFeeFeeMutation.status}
