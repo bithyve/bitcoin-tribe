@@ -36,6 +36,8 @@ import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import ModalLoading from 'src/components/ModalLoading';
+import { urlParamsToObject } from 'src/utils/urlUtils';
+import { DEEPLINK_PREFIX } from './GroupQr';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -299,7 +301,7 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
   const handleJoinRoom = async () => {
     let parsedJoinData;
     try {
-      parsedJoinData = JSON.parse(joinData);
+      parsedJoinData = urlParamsToObject(joinData.replace(DEEPLINK_PREFIX, ''));
       if (!parsedJoinData?.roomKey || !parsedJoinData?.roomType) {
         Toast('Invalid join data, missing room key or room type', true);
         return;

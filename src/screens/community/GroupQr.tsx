@@ -22,8 +22,10 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import ViewShot from 'react-native-view-shot';
 import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { objectToUrlParams } from 'src/utils/urlUtils';
 
 const qrSize = (windowWidth * 65) / 100;
+export const DEEPLINK_PREFIX = 'tribecommunity://';
 
 export const GroupQr = () => {
   const route = useRoute<RouteProp<{ params: { room: HolepunchRoom } }>>();
@@ -33,12 +35,12 @@ export const GroupQr = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles();
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const share = JSON.stringify({
+  const share = DEEPLINK_PREFIX + objectToUrlParams({
     roomKey: room.roomKey,
     roomName: room.roomName,
     roomType: room.roomType,
     roomDescription: room.roomDescription,
-  }) 
+  })
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 
