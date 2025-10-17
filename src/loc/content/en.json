@@ -78,6 +78,12 @@
     "verify": "Verify",
     "tapToCopy": "TAP TO COPY",
     "retry": "Retry",
+    "baseFee":"Base Fee",
+    "satsPerArt":"sats per Art",
+    "totalUda":"Total UDAs",
+    "feeRate":"Fee Rate",
+    "swipeToPay":"Swipe to pay now",
+    "loading": "loading",
     "create":"Create",
     "join":"Join",
     "joinNow":"Join Now"
@@ -224,7 +230,8 @@
     "pullDownInfo2": "All balances and transaction statuses in Bitcoin Tribe update automatically in the background. You only need to pull down to refresh for a forced update if needed.",
     "pullDownInfo3": "When to Use Forced Refresh?",
     "pullDownInfo4": "To quickly see the latest updates after making a transaction.",
-    "pullDownInfo5": "To ensure your app reflects the most recent data instantly."
+    "pullDownInfo5": "To ensure your app reflects the most recent data instantly.",
+    "udaName": "UDA name"
   },
   "settings": {
     "setting": "Settings",
@@ -523,7 +530,7 @@
   "assets": {
     "assetCreateMsg": "Asset created successfully",
     "insufficientSatsMainWallet": "Insufficient sats in the main Wallet, failed to create new UTXOs",
-    "insufficientSats": "Insufficient sats, failed to create new UTXOs",
+    "insufficientSats": "Insufficient sats. You need to have at least {amount} sats in your wallet to create a new UTXO.",
     "receiveAssetTitle": "Receive Assset",
     "receiveAssetSubTitle": "Scan or copy paste the RGB Invoice",
     "insufficientSatsRGB": "Sats reserved for asset transaction",
@@ -722,7 +729,7 @@
     "waitingVerificationSubTitle": "Transaction is under verification. Processing will continue once checks are complete.",
     "failedTitle": "Failed",
     "failedSubTitle": "Transaction was unsuccessful. No funds were moved.",
-    "platformFeeTitle": "Platform Fee (Registry Listing)",
+    "platformFeeTitle": "Platform Fee",
     "platformFeeSubTitle": "This transaction was initiated to list your asset on the public registry.",
     "noAssetsFoundMsg": "You don’t have any assets in your wallet, or they might be hidden.",
     "txnInfoTitle": "Info",
@@ -757,7 +764,21 @@
     "oneDay": "1 Day",
     "twoDays": "2 Days",
     "searchAssetPlaceholder": "Search from Tribe RGB registry",
-    "availableBalance": "Available Balance"
+    "availableBalance": "Available Balance",
+    "udaDetails":"UDA Details",
+    "issueCollection":"Create Collection",
+    "collectionName":"Collection Name",
+    "collectionNamePlaceholder":"Enter a name for your collection",
+    "enterCollectionName": "Please enter collection name",
+    "collectionDesc":"Collection Description",
+    "collectionDescPlaceholder":"Describe your collection",
+    "enterCollectionDescription": "Please enter collection description",
+    "collectionPayment":"Payment Confirmation",
+    "collectionPaymentConfirm":"Payment confirmed.",
+    "collectionPaymentSubtitle":"Review and Confirm Your Transaction",
+    "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs.",
+    "totalItems":"Total Items",
+    "minted":"Minted"
   },
   "community": {
     "fnfTitle": "Community",

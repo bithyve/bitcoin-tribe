@@ -18,6 +18,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  Collection,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -59,7 +60,10 @@ function Collectibles() {
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     collection =>
-      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+      collection.filtered(`visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`, AssetVisibility.HIDDEN),
+  );
+  const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
@@ -77,10 +81,10 @@ function Collectibles() {
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
-    return [...coins, ...collectibles, ...udas]
+    return [...coins, ...collectibles, ...udas, ...collections]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles, udas, coins]);
+  }, [collectibles, udas, coins, collections]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -129,6 +133,10 @@ function Collectibles() {
           ) {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
+            });
+          } else if(asset.slug) {
+            handleNavigation(NavigationRoutes.COLLECTIONDETAILS, {
+              collectionId: asset._id,
             });
           } else {
             handleNavigation(NavigationRoutes.UDADETAILS, {

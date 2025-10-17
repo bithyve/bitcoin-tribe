@@ -280,14 +280,14 @@ function HomeScreen() {
       );
     }
     setAppType(app?.appType);
-    refreshWallet.mutate({ wallets: [wallet] });
     ApiHandler.checkVersion();
     ApiHandler.getFeeAndExchangeRates();
     ApiHandler.syncFcmToken();
     if (walletOnline) {
       fetchUTXOs();
+      refreshWallet.mutate({ wallets: [wallet] });
     }
-  }, [app?.appType]);
+  }, [app?.appType, walletOnline]);
 
   const handleNavigation = (route, params?) => {
     navigation.dispatch(CommonActions.navigate(route, params));

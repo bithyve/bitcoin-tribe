@@ -54,6 +54,7 @@ import {
 import { ElectrumTransactionSchema, VinSchema, VoutSchema } from './electrumTransaction';
 import { HolepunchRoomSchema, HolepunchMessageSchema } from './messaging';
 
+import { CollectionSchema } from './collection';
 export default [
   TribeAppSchema,
   WalletSchema,
@@ -107,4 +108,5 @@ export default [
   VoutSchema,
   HolepunchRoomSchema,
   HolepunchMessageSchema,
+  CollectionSchema,
 ];

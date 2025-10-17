@@ -706,7 +706,7 @@ import CloudKit
   @objc func initiate(btcNetwork: String, mnemonic: String, accountXpubVanilla: String, accountXpubColored: String, masterFingerprint: String, timeout: NSNumber, callback: @escaping ((String) -> Void)) async {
       do {
           self.rgbManager = RgbManager.shared
-        let response = try runWithTimeout(seconds: Double(timeout)){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+        let response = try runWithTimeout(seconds: Double(timeout)){ self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: true)
         }
           if response.status {
 //              if let logPath = Utility.getRgbDir()?.appendingPathComponent(masterFingerprint).appendingPathComponent("log"),
@@ -728,7 +728,7 @@ import CloudKit
               if containsAny {
                 deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
                 
-              let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+              let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: true)
                 writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
                 let data: [String: Any] = [
                     "status": retryResponse.status,
@@ -748,7 +748,7 @@ import CloudKit
           }
       } catch TimeoutError.timedOut {
         deleteRuntimeLockFile(masterFingerprint: masterFingerprint)
-      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: false)
+      let retryResponse = self.rgbManager.initialize(bitcoinNetwork: btcNetwork, accountXpubVanilla: accountXpubVanilla, accountXpubColored: accountXpubColored, mnemonic: mnemonic, masterFingerprint: masterFingerprint, skipConsistencyCheck: true)
         writeToLogFile(masterFingerprint: masterFingerprint, content: retryResponse.error)
         let data: [String: Any] = [
             "status": retryResponse.status,
@@ -781,6 +781,26 @@ import CloudKit
           print("Runtime lock deleted successfully.")
       } catch {
           print("Failed to delete runtime lock: \(error)")
+      }
+  }
+  
+  func deleteBdkDbFile(masterFingerprint: String) {
+      guard let bdkDbPath = Utility.getRgbDir()?
+          .appendingPathComponent(masterFingerprint)
+          .appendingPathComponent("bdk_db") else {
+          print("Could not construct bdk_db path for fingerprint: \(masterFingerprint)")
+          return
+      }
+      guard FileManager.default.fileExists(atPath: bdkDbPath.path) else {
+          print("No bdk_db file exists at path.")
+          return
+      }
+      do {
+          print("Deleting bdk_db at: \(bdkDbPath.path)")
+          try FileManager.default.removeItem(at: bdkDbPath)
+          print("Runtime lock deleted successfully.")
+      } catch {
+          print("Failed to delete bdk_db: \(error)")
       }
   }
   
@@ -932,6 +952,7 @@ import CloudKit
       guard let wallet = self.rgbManager.rgbWallet, let online = self.rgbManager.online else {
         throw NSError(domain: "RGBHelper", code: -1, userInfo: [NSLocalizedDescriptionKey: "RGB wallet or online not initialized"])
       }
+      print("witnessSats: \(witnessSats)")
       var recipientMap: [String: [Recipient]] = [:]
       let assignment: Assignment = schema.uppercased() == "UDA"
           ? .nonFungible

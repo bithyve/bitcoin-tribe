@@ -20,3 +20,8 @@ export interface LNPayments {
   updated_at: number;
   payee_pubkey: string;
 }
+
+export enum ServiceFeeType {
+  REGISTER_ASSET_FEE = 'REGISTER_ASSET_FEE',
+  CREATE_COLLECTION_FEE = 'CREATE_COLLECTION_FEE',
+}

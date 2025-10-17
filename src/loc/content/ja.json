@@ -78,6 +78,12 @@
     "verify": "確認する",
     "tapToCopy": "タップしてコピー",
     "retry": "再試行",
+    "baseFee": "基本料金",
+    "satsPerArt": "アートあたりのサトシ",
+    "totalUda": "合計 UDA",
+    "feeRate": "手数料率",
+    "swipeToPay": "今すぐ支払うにはスワイプしてください",
+    "loading": "読み込み中",
     "create": "作成",
     "join": "参加",
     "joinNow": "今すぐ参加"
@@ -224,7 +230,8 @@
     "pullDownInfo2": "Bitcoin Tribeのすべての残高と取引ステータスは、バックグラウンドで自動的に更新されます。強制的に更新が必要な場合のみ、下にスワイプしてください。",
     "pullDownInfo3": "強制更新が必要なときは？",
     "pullDownInfo4": "取引後に最新の更新情報をすぐに確認するため。",
-    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。"
+    "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。",
+    "udaName": "UDA名"
   },
   "settings": {
     "setting": "設定",
@@ -523,7 +530,7 @@
   "assets": {
     "assetCreateMsg": "アセットが正常に作成されました",
     "insufficientSatsMainWallet": "メインウォレットのサットが不足しているため、新しいUTXOの作成に失敗しました",
-    "insufficientSats": "サットが不足しているため、新しいUTXOの作成に失敗しました",
+    "insufficientSats": "satsが不足しています。新しいUTXOを作成するには、ウォレットに少なくとも{amount} satsが必要です。",
     "receiveAssetTitle": "アセットを受け取る",
     "receiveAssetSubTitle": "RGB請求書をスキャンまたはコピーして貼り付け",
     "insufficientSatsRGB": "アセット取引のためにサットが予約されました",
@@ -722,7 +729,7 @@
     "waitingVerificationSubTitle": "取引は検証中です。確認が完了すると処理が続行されます。",
     "failedTitle": "失敗",
     "failedSubTitle": "取引が失敗しました。資金は移動されていません。",
-    "platformFeeTitle": "プラットフォーム手数料（登録リスト）",
+    "platformFeeTitle": "プラットフォーム手数料",
     "platformFeeSubTitle": "この取引は、あなたの資産を公開レジストリに登録するために開始されました。",
     "noAssetsFoundMsg": "ウォレットに資産が見つかりません。非表示になっている可能性もあります。",
     "txnInfoTitle": "情報",
@@ -756,7 +763,21 @@
     "searchAssetPlaceholder": "Tribe RGB レジストリから検索",
     "totalBalance": "総残高",
     "bitcoinBalance": "ビットコイン残高",
-    "otherAssets": "その他のアセット"
+    "otherAssets": "その他のアセット",
+    "udaDetails": "UDA の詳細",
+    "issueCollection": "コレクションを作成",
+    "collectionName": "コレクション名",
+    "collectionNamePlaceholder": "コレクションの名前を入力してください",
+    "enterCollectionName": "コレクション名を入力してください",
+    "collectionDesc": "コレクションの説明",
+    "collectionDescPlaceholder": "コレクションについて説明してください",
+    "enterCollectionDescription": "コレクションの説明を入力してください",
+    "collectionPayment": "支払い確認",
+    "collectionPaymentConfirm": "支払いが確認されました。",
+    "collectionPaymentSubtitle": "取引内容を確認して承認してください",
+    "collectionPaymentConfirmSubtitle": "コレクションがオンチェーンに固定されました。\nこれでUDAを追加できます。",
+    "totalItems": "合計アイテム",
+    "minted": "ミント済み"
   },
   "community": {
     "fnfTitle": "コミュニティ",

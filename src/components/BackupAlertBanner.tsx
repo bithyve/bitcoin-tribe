@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { Modal, Portal, useTheme } from 'react-native-paper';
-
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight } from 'src/constants/responsive';
