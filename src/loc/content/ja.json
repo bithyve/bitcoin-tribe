@@ -77,7 +77,10 @@
     "registry": "レジストリ",
     "verify": "確認する",
     "tapToCopy": "タップしてコピー",
-    "retry": "再試行"
+    "retry": "再試行",
+    "create": "作成",
+    "join": "参加",
+    "joinNow": "今すぐ参加"
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -763,7 +766,24 @@
     "profileInfoTitle": "プロフィール情報",
     "profileInfoSubTitle": "QRコードをスキャンまたは共有して、すぐに接続します。",
     "shareQrMessage": "このQRコードをスキャンしてTribeで私と接続するか、Tribeアプリで開く",
-    "createGroup": "グループを作成"
+    "createGroup": "グループを作成",
+    "group": "グループ",
+    "groupName": "グループ名",
+    "groupNamePlaceholder": "グループ名を入力してください",
+    "groupDesc": "グループの説明",
+    "groupDescPlaceholder": "グループの説明を入力してください",
+    "groupPic": "グループの写真",
+    "uploadFile": "ここにファイルをアップロード",
+    "uploadFileDesc": "グループのプロフィール写真用の画像をアップロードしてください（例：ロゴやアートワーク）",
+    "joinExisting": "既存のグループに参加",
+    "viaChannelId": "チャンネルIDで参加",
+    "viaChannelIdPlaceholder": "IDを貼り付け",
+    "viaQR": "QRスキャンで参加",
+    "scanChannelTitle": "チャンネルIDをスキャン",
+    "scanChannelSubTitle": "チャンネルIDのQRコードをスキャン",
+    "scanChannelError": "有効なチャンネルIDをスキャンしてください",
+    "groupInfo": "グループ情報",
+    "members": "メンバー"
   },
   "node": {
     "viewNodeInfoTitle": "ノード情報を表示",

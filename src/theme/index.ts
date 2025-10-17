@@ -111,6 +111,7 @@ type CustomColors = {
   onboardingBackColor: string;
   optionsCardGradient1:string;
   optionsCardGradient2:string;
+  mutedTab:string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -230,6 +231,7 @@ const CombinedDefaultTheme: AppTheme = {
     onboardingBackColor: Colors.BrightGray,
     optionsCardGradient1: Colors.GhostWhite,
     optionsCardGradient2: Colors.CloudGray,
+    mutedTab:Colors.ChineseSilver
   },
   fonts: {
     regular: {
@@ -357,7 +359,7 @@ const CombinedDarkTheme: AppTheme = {
     onboardingBackColor: Colors.ChineseBlack,
     optionsCardGradient1: Colors.Black,
     optionsCardGradient2: Colors.CharcoalGray,
-
+    mutedTab:Colors.Gray48
   },
   fonts: {
     regular: {

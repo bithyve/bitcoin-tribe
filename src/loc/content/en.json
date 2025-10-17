@@ -77,7 +77,10 @@
     "registry": "Registry",
     "verify": "Verify",
     "tapToCopy": "TAP TO COPY",
-    "retry": "Retry"
+    "retry": "Retry",
+    "create":"Create",
+    "join":"Join",
+    "joinNow":"Join Now"
   },
   "onBoarding": {
     "welcome": "Welcome",
@@ -764,7 +767,24 @@
     "profileInfoTitle": "Profile Info",
     "profileInfoSubTitle": "Scan or share your QR code to connect instantly.",
     "shareQrMessage": "Scan this QR code to connect with me on Tribe or open in Tribe app",
-    "createGroup": "Create Group"
+    "createGroup": "Create Group",
+    "group":"Group",
+    "groupName": "Group name",
+    "groupNamePlaceholder": "Enter group name",
+    "groupDesc":"Group description",
+    "groupDescPlaceholder":"Enter a group description",
+    "groupPic":"Group Picture",
+    "uploadFile":"Upload you file here",
+    "uploadFileDesc":"Upload a picture for your group profile photo (e.g., logo or artwork)",
+    "joinExisting":"Join an existing group",
+    "viaChannelId":"Join via Channel ID",
+    "viaChannelIdPlaceholder":"Paste ID",
+    "viaQR":"Join via QR Scan",
+    "scanChannelTitle": "Scan Channel ID",
+    "scanChannelSubTitle": "Scan Channel ID QR",
+    "scanChannelError":"Please scan a valid Channel Id",
+    "groupInfo":"Group Info",
+    "members":"Members"
   },
   "node": {
     "viewNodeInfoTitle": "View Node Info",

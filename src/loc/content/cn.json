@@ -77,7 +77,10 @@
     "registry": "注册表",
     "verify": "验证",
     "tapToCopy": "点击复制",
-    "retry": "重试"
+    "retry": "重试",
+    "create": "创建",
+    "join": "加入",
+    "joinNow": "立即加入"
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -763,7 +766,24 @@
     "profileInfoTitle": "个人资料信息",
     "profileInfoSubTitle": "扫描或分享您的二维码以立即连接。",
     "shareQrMessage": "扫描此二维码以在Tribe上与我连接或在Tribe应用中打开",
-    "createGroup": "创建群组"
+    "createGroup": "创建群组",
+    "group": "群组",
+    "groupName": "群组名称",
+    "groupNamePlaceholder": "输入群组名称",
+    "groupDesc": "群组描述",
+    "groupDescPlaceholder": "输入群组描述",
+    "groupPic": "群组图片",
+    "uploadFile": "在此上传您的文件",
+    "uploadFileDesc": "为群组头像上传图片（例如徽标或艺术作品）",
+    "joinExisting": "加入现有群组",
+    "viaChannelId": "通过频道 ID 加入",
+    "viaChannelIdPlaceholder": "粘贴 ID",
+    "viaQR": "通过二维码扫描加入",
+    "scanChannelTitle": "扫描频道 ID",
+    "scanChannelSubTitle": "扫描频道 ID 二维码",
+    "scanChannelError": "请扫描有效的频道 ID",
+    "groupInfo": "群组信息",
+    "members": "成员"
   },
   "node": {
     "viewNodeInfoTitle": "查看节点信息",

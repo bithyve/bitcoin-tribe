@@ -7,6 +7,7 @@ export enum TextVariants {
   heading1 = 'heading1',
   heading2 = 'heading2',
   heading3 = 'heading3',
+  heading3SemiBold='heading3SemiBold',
   pageTitle1 = 'pageTitle1',
   pageTitle2 = 'pageTitle2',
   subTitle = 'subTitle',
@@ -51,6 +52,8 @@ const AppText: React.FC<Props> = ({
         return CommonStyles.heading2;
       case TextVariants.heading3:
         return CommonStyles.heading3;
+      case TextVariants.heading3SemiBold:
+        return CommonStyles.heading3SemiBold;
       case TextVariants.pageTitle1:
         return CommonStyles.pageTitle1;
       case TextVariants.pageTitle2:
