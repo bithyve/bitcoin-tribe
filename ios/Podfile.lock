@@ -130,9 +130,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - MMKV (2.2.2):
-    - MMKVCore (~> 2.2.2)
-  - MMKVCore (2.2.2)
+  - MMKV (2.2.4):
+    - MMKVCore (~> 2.2.4)
+  - MMKVCore (2.2.4)
   - nanopb (3.30910.0):
     - nanopb/decode (= 3.30910.0)
     - nanopb/encode (= 3.30910.0)
@@ -1070,7 +1070,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+5e5bff)":
+  - "react-native-bare-kit (0.5.6+40dc69)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1729,7 +1729,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.20.0):
+  - RNSentry (6.22.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1750,7 +1750,7 @@ PODS:
     - React-utils
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.53.2)
+    - Sentry/HybridSDK (= 8.56.2)
     - Yoga
   - RNShare (11.1.0):
     - DoubleConversion
@@ -1773,9 +1773,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSVG (15.12.1):
+  - RNSVG (15.14.0):
     - React-Core
-  - Sentry/HybridSDK (8.53.2)
+  - Sentry/HybridSDK (8.56.2)
   - SocketRocket (0.7.0)
   - TOCropViewController (2.7.4)
   - VisionCamera (4.3.2):
@@ -2120,8 +2120,8 @@ SPEC CHECKSUMS:
   hermes-engine: 16b8530de1b383cdada1476cf52d1b52f0692cbc
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 45707364bd70cffa7602fa1a1abb40dee5f3c0e0
-  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
-  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
+  MMKV: 1a8e7dbce7f9cad02c52e1b1091d07bd843aefaf
+  MMKVCore: f2dd4c9befea04277a55e84e7812f930537993df
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 5dc73daec3476616d19e8a53f0156176f7b55461
@@ -2149,7 +2149,7 @@ SPEC CHECKSUMS:
   React-logger: 6070f362a1657bb53335eb1fc903d3f49fd79842
   React-Mapbuffer: 2c95cbabc3d75a17747452381e998c35208ea3ee
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 020b142a41f16e8043daebbb0d7330ec6ddfc8e5
+  react-native-bare-kit: 59487479984147eb0afcc78d23a481bab98140a9
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 207ec2bf853b9a3b7751e3a29f7f497e69010b44
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -2203,10 +2203,10 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: 1a788dc6e3b39e9a9c3131019c71af47835c5436
   RNReanimated: ccb4f238e07505cf6f7878aa1c30185f7248b3c7
   RNScreens: ef68e50aea531dd00c592ba4683bbcb89d4d2e1a
-  RNSentry: 0ad8d976a1cffd1f65a5c0106a9082290a7d8b8c
+  RNSentry: fe83c6f6223ae64a2378a27bb5993313e13c0321
   RNShare: 6631d3939e823034cd8c6454d98116d8bc35db3c
-  RNSVG: d39a9be65c439dfb061955f7615f1f71a51ecede
-  Sentry: 59993bffde4a1ac297ba6d268dc4bbce068d7c1b
+  RNSVG: 197ddaa1219171ebb0542bc4d10bcde7d6f39f57
+  Sentry: b53951377b78e21a734f5dc8318e333dbfc682d7
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   VisionCamera: 6ad4b86176f6fea45e90e380d3d530bc5e1abff9

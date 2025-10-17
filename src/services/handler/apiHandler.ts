@@ -76,7 +76,6 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import ChatPeerManager from '../p2p/ChatPeerManager';
 import { Asset as ImageAsset } from 'react-native-image-picker';
 const ECPair = ECPairFactory(ecc);
 
@@ -239,9 +238,6 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ChatPeerManager.getInstance();
-          await cm.init(primarySeed.toString('hex'));
-          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             appName,
             appID,
@@ -252,7 +248,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -273,10 +268,6 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -385,12 +376,9 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ChatPeerManager.getInstance();
           if (!rgbNodeConnectParams.nodeId) {
             throw new Error('Missing nodeId');
           }
-          await cm.init(rgbNodeConnectParams.nodeId);
-          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
@@ -401,7 +389,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -422,10 +409,6 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -589,8 +572,6 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    // const cm = ChatPeerManager.getInstance();
-    // await cm.init(app.primarySeed);
     // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     // const isWalletOnline = await RGBServices.initiate(
     //   rgbWallet.mnemonic,
@@ -676,8 +657,6 @@ export class ApiHandler {
         rgbWallet.accountXpubColored,
         rgbWallet.masterFingerprint,
       );
-      // const cm = ChatPeerManager.getInstance();
-      // await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
@@ -715,8 +694,6 @@ export class ApiHandler {
           rgbWallet.masterFingerprint,
           timeout,
         );
-        // const cm = ChatPeerManager.getInstance();
-        // await cm.init(app.primarySeed);
         return isWalletOnline;
       }
     } catch (error) {

@@ -46,4 +46,6 @@ export enum RealmSchema {
   Disclaimer = 'Disclaimer',
   DisclaimerContent = 'DisclaimerContent',
   ElectrumTransaction = 'ElectrumTransaction',
+  HolepunchRoom = 'HolepunchRoom',
+  HolepunchMessage = 'HolepunchMessage',
 }

@@ -16,7 +16,6 @@ export const TribeAppSchema: ObjectSchema = {
     enableAnalytics: { type: 'bool', default: false },
     appType: { type: 'string', default: AppType.ON_CHAIN },
     authToken: 'string',
-    contactsKey: 'string?{}',
   },
   primaryKey: 'id',
 };

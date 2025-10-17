@@ -141,7 +141,6 @@ export default class Relay {
     fcmToken = '',
     signature: string,
     walletImage: ImageAsset | null,
-    contactKey: string,
   ): Promise<{ status: boolean; error?: string; app: TribeApp }> => {
     let res;
     try {
@@ -161,7 +160,6 @@ export default class Relay {
       formData.append('network', network);
       formData.append('fcmToken', fcmToken);
       formData.append('signature', signature);
-      formData.append('contactKey', contactKey);
       res = await RestClient.post(`${RELAY}/app/new`, formData, {
         'Content-Type': 'multipart/form-data',
       });

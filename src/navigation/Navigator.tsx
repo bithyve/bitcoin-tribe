@@ -91,6 +91,11 @@ import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
 import IssueCollection from 'src/screens/collectiblesCoins/IssueCollection';
 import CollectionDetailsScreen from 'src/screens/assets/CollectionDetailsScreen';
+import { CreateGroup } from 'src/screens/community/CreateGroup';
+import { GroupInfo } from 'src/screens/community/GroupInfo';
+import GroupQr from 'src/screens/community/GroupQr';
+import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
+import { EditGroup } from 'src/screens/community/EditGroup';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -359,7 +364,8 @@ function AppStack() {
           name={NavigationRoutes.GETBTCWITHRAMP}
           component={GetBTCWithRamp}
         />
-        <Stack.Screen name={NavigationRoutes.REQUESTORSEND}
+        <Stack.Screen
+          name={NavigationRoutes.REQUESTORSEND}
           component={RequestOrSend}
         />
         <Stack.Screen
@@ -374,6 +380,17 @@ function AppStack() {
           name={NavigationRoutes.COLLECTIONDETAILS}
           component={CollectionDetailsScreen}
         />
+        <Stack.Screen
+          name={NavigationRoutes.CREATEGROUP}
+          component={CreateGroup}
+        />
+        <Stack.Screen name={NavigationRoutes.GROUPINFO} component={GroupInfo} />
+        <Stack.Screen name={NavigationRoutes.GROUPQR} component={GroupQr} />
+        <Stack.Screen
+          name={NavigationRoutes.SCANQRSCREEN}
+          component={ScanQrScreen}
+        />
+        <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
       </Stack.Navigator>
     </RealmProvider>
   );

@@ -1,16 +1,13 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import AppText from 'src/components/AppText';
 import moment from 'moment';
 import {
   Message,
-  MessageType,
-  RequestStatus,
 } from 'src/models/interfaces/Community';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
-import AppTouchable from 'src/components/AppTouchable';
-import { numberWithCommas } from 'src/utils/numberWithCommas';
+import { HolepunchMessage, HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -119,15 +116,15 @@ const getStyles = (theme: AppTheme) =>
 const MessageItem = ({
   message,
   previousMessage,
-  appId,
+  peerPubKey,
   onImagePress,
   onPressReject,
   onPressApprove,
   viewTransaction,
 }: {
-  message: Message;
-  previousMessage: Message;
-  appId: string;
+  message: HolepunchMessage;
+  previousMessage: HolepunchMessage;
+  peerPubKey: string;
   onImagePress: (image: string) => void;
   onPressReject: (message: Message) => void;
   onPressApprove: (message: Message) => void;
@@ -136,28 +133,24 @@ const MessageItem = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const isSender = React.useMemo(
-    () => message.sender === appId,
-    [message.sender, appId],
+    () => message.senderId === peerPubKey,
+    [message.senderId],
   );
   const time = React.useMemo(
-    () => moment(message.createdAt).format('hh:mm A'),
-    [message.createdAt],
+    () => moment(message.timestamp).format('hh:mm A'),
+    [message.timestamp],
   );
 
   const isSameDay = React.useMemo(() => {
     if (!previousMessage) return false;
-    return moment(message.createdAt).isSame(
-      moment(previousMessage.createdAt),
+    return moment(message.timestamp).isSame(
+      moment(previousMessage.timestamp),
       'day',
     );
-  }, [message.createdAt, previousMessage?.createdAt]);
+  }, [message.timestamp, previousMessage?.timestamp]);
 
   const Message = () =>
-    message.type === MessageType.Alert ? (
-      <View style={styles.containerAlert}>
-        <AppText style={styles.textAlert}>{message.text}</AppText>
-      </View>
-    ) : (
+   (
       <View
         style={isSender ? styles.containerSender : styles.containerReceiver}>
         <View
@@ -167,117 +160,12 @@ const MessageItem = ({
               : styles.messageContainerReceiver
           }>
           {(() => {
-            switch (message.type) {
-              case MessageType.Image:
-                return (
-                  <View style={styles.imageContainer}>
-                    <AppTouchable onPress={() => onImagePress(message.fileUrl)}>
-                      <Image
-                        source={{ uri: message.fileUrl }}
-                        style={styles.image}
-                      />
-                    </AppTouchable>
-                    <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
-                      {message.text}
-                    </AppText>
-                    <AppText
-                      variant="body2"
-                      style={
-                        isSender
-                          ? styles.textTimeSender
-                          : styles.textTimeReceiver
-                      }>
-                      {time}
-                    </AppText>
-                  </View>
-                );
-              case MessageType.RequestSats:
-                return (
-                  <AppTouchable
-                    style={styles.requestContainer}
-                    onPress={() => viewTransaction(message)}>
-                    <View>
-                      <Image
-                        source={{
-                          uri: 'https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1747033579',
-                        }}
-                        style={styles.imgRequestSats}
-                      />
-                      <AppText
-                        style={{ color: theme.dark ? 'white' : 'black' }}>
-                        {isSender
-                          ? `You requested ${numberWithCommas(
-                              message.request?.amount,
-                            )} sats`
-                          : `Requested ${numberWithCommas(
-                              message.request?.amount,
-                            )} sats`}
-                      </AppText>
-                      <AppText
-                        style={{
-                          color: theme.dark ? 'white' : 'black',
-                          fontSize: 12,
-                        }}>
-                        {message.text}
-                      </AppText>
-                    </View>
-
-                    {!isSender &&
-                      message?.request?.status === RequestStatus.Pending && (
-                        <View style={styles.containerButtons}>
-                          <AppTouchable
-                            style={styles.buttonReject}
-                            onPress={() => {
-                              onPressReject(message);
-                            }}>
-                            <AppText variant="body2" style={{ color: 'white' }}>
-                              Reject
-                            </AppText>
-                          </AppTouchable>
-                          <AppTouchable
-                            style={styles.buttonApprove}
-                            onPress={() => {
-                              onPressApprove(message);
-                            }}>
-                            <AppText variant="body2" style={{ color: 'black' }}>
-                              Approve
-                            </AppText>
-                          </AppTouchable>
-                        </View>
-                      )}
-
-                    {message?.request?.status === RequestStatus.Rejected && (
-                      <View style={styles.buttonReject}>
-                        <AppText variant="body2" style={{ color: 'black' }}>
-                          Rejected
-                        </AppText>
-                      </View>
-                    )}
-
-                    {message?.request?.status === RequestStatus.Accepted && (
-                      <View style={styles.buttonApprove}>
-                        <AppText variant="body2" style={{ color: 'black' }}>
-                          Approved
-                        </AppText>
-                      </View>
-                    )}
-
-                    <AppText
-                      variant="body2"
-                      style={
-                        isSender
-                          ? styles.textTimeSender
-                          : styles.textTimeReceiver
-                      }>
-                      {time}
-                    </AppText>
-                  </AppTouchable>
-                );
-              default:
+            switch (message.messageType) {
+              case HolepunchMessageType.TEXT:
                 return (
                   <View>
                     <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
-                      {message.text || message.type}
+                      {message.content}
                     </AppText>
                     <AppText
                       variant="body2"
@@ -301,7 +189,7 @@ const MessageItem = ({
   ) : (
     <View>
       <AppText variant="body2" style={styles.textDay}>
-        {moment(message.createdAt).format('MMM DD, YYYY')}
+        {moment(message.timestamp).format('MMM DD, YYYY')}
       </AppText>
       <Message />
     </View>
