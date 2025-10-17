@@ -25,7 +25,6 @@ import RibbonCard from 'src/components/RibbonCardCard';
 import AppText from 'src/components/AppText';
 import SwipeToAction from 'src/components/SwipeToAction';
 import SkipButton from 'src/components/SkipButton';
-import SelectOption from 'src/components/SelectOption';
 
 export const ServiceFee = ({
   feeDetails,
@@ -150,7 +149,7 @@ function AddAsset() {
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
 
       <View style={styles.container}>
-        <SelectOption
+        <RibbonCard
           title={assets.issueNewCoin}
           subTitle={assets.issueNewCoinSubtitle}
           backColor={theme.colors.inputBackground}
@@ -164,7 +163,7 @@ function AddAsset() {
           }}
         />
 
-        <SelectOption
+        <RibbonCard
           title={assets.issueCollectibles}
           subTitle={assets.issueCollectiblesSubtitle}
           backColor={theme.colors.inputBackground}
@@ -177,9 +176,9 @@ function AddAsset() {
             }
           }}
         />
-         <SelectOption
+         <RibbonCard
           title={"Create Collection"}
-          // title={"Organize your assets into a single showcase."}
+          subTitle={"Create a new Tribe UDAs Collection"}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -191,7 +190,7 @@ function AddAsset() {
           }}
           testID="issue_collection"
         />
-        <SelectOption
+        <RibbonCard
           title={home.addAssets}
           subTitle={home.receiveAssetsSubtitle}
           backColor={theme.colors.inputBackground}
