@@ -139,6 +139,7 @@ const getStyles = (theme: AppTheme) =>
     groupImage: {
       height: wp(150),
       width: wp(150),
+      borderRadius:wp(150)
     },
     title: {
       marginTop: hp(22),
