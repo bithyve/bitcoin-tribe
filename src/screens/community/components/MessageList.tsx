@@ -22,14 +22,16 @@ const MessageList = ({
   onPressApprove,
   viewTransaction,
 }) => {
+  const reversedMessages = React.useMemo(() => [...messages].reverse(), [messages]);
+
   return (
     <FlatList
       ref={flatListRef}
-      data={messages}
+      data={reversedMessages}
       style={{ flex: 1, paddingBottom: 10 }}
       extraData={[messages, sending]}
       contentContainerStyle={styles.list}
-      // inverted={true}
+      inverted={true}
       showsVerticalScrollIndicator={false}
       // ListEmptyComponent={() => (
       //   <Text style={styles.textEmpty}>No messages</Text>
@@ -38,7 +40,7 @@ const MessageList = ({
       renderItem={({ item, index }) => (
         <MessageItem
           message={item}
-          previousMessage={messages[index - 1]}
+          previousMessage={reversedMessages[index + 1]}
           peerPubKey={peerPubKey}
           onImagePress={onImagePress}
           onPressReject={onPressReject}
