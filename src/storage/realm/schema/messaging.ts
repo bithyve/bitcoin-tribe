@@ -29,3 +29,13 @@ export const HolepunchMessageSchema: ObjectSchema = {
     timestamp: 'int',
   },
 };
+
+export const HolepunchPeerSchema: ObjectSchema = {
+  name: 'HolepunchPeer',
+  primaryKey: 'peerId',
+  properties: {
+    peerId: 'string',           // Peer's public key (primary key)
+    peerName: 'string?',         // Display name
+    peerImage: 'string?',        // Image URL
+  },
+};
