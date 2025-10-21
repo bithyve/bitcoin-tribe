@@ -16,7 +16,8 @@ const MessageList = ({
   messages,
   sending,
   flatListRef,
-  peerPubKey,
+  currentPeerPubKey,
+  peersMap,
   onImagePress,
   onPressReject,
   onPressApprove,
@@ -37,17 +38,20 @@ const MessageList = ({
       //   <Text style={styles.textEmpty}>No messages</Text>
       // )}
       ItemSeparatorComponent={() => <View style={styles.divider} />}
-      renderItem={({ item, index }) => (
-        <MessageItem
+      renderItem={({ item, index }) => {
+        const peer = peersMap.get(item.senderId);
+
+        return (<MessageItem
           message={item}
           previousMessage={reversedMessages[index + 1]}
-          peerPubKey={peerPubKey}
+          currentPeerPubKey={currentPeerPubKey}
+          peer={peer}
           onImagePress={onImagePress}
           onPressReject={onPressReject}
           onPressApprove={onPressApprove}
           viewTransaction={viewTransaction}
-        />
-      )}
+        />);
+      }}
     />
   );
 };
