@@ -11,7 +11,7 @@ export class TextProcessor implements MessageProcessor {
   }
 
   async process(message: HolepunchMessage, context: ProcessorContext): Promise<ProcessResult> {
-    console.log('[TextProcessor] Processing text message from:', message.senderId.substring(0, 8));
+    console.log('[TextProcessor] Processing text message from:', message.senderId);
     
     // Text messages are displayed as-is
     return {

@@ -14,7 +14,7 @@ export class PeerStorage {
   static async savePeer(peer: HolepunchPeer): Promise<void> {
     try {
       RealmDatabase.create(RealmSchema.HolepunchPeer, peer, 'modified');
-      console.log('[PeerStorage] Peer saved:', peer.peerId.substring(0, 8), peer.peerName);
+      console.log('[PeerStorage] Peer saved:', peer.peerId, peer.peerName);
     } catch (error) {
       console.error('[PeerStorage] Failed to save peer:', error);
       throw error;
@@ -92,7 +92,7 @@ export class PeerStorage {
         if (!peers.includes(peerId)) {
           peers.push(peerId);
           room.peers = peers;
-          console.log('[PeerStorage] Peer added to room:', peerId.substring(0, 8), 'in', roomId.substring(0, 8));
+          console.log('[PeerStorage] Peer added to room:', peerId, 'in', roomId);
         }
       });
     } catch (error) {
@@ -118,7 +118,7 @@ export class PeerStorage {
         if (index > -1) {
           peers.splice(index, 1);
           room.peers = peers;
-          console.log('[PeerStorage] Peer removed from room:', peerId.substring(0, 8));
+          console.log('[PeerStorage] Peer removed from room:', peerId);
         }
       });
     } catch (error) {

@@ -13,7 +13,7 @@ export class IdentityProcessor implements MessageProcessor {
 
   async process(message: HolepunchMessage, context: ProcessorContext): Promise<ProcessResult> {
     try {
-      console.log('[IdentityProcessor] Processing identity message from:', message.senderId.substring(0, 8));
+      console.log('[IdentityProcessor] Processing identity message from:', message.senderId);
       
       // Parse identity data from message content
       const identity = JSON.parse(message.content);
