@@ -93,14 +93,27 @@ export class ChatAdapter extends EventEmitter {
    * Create a new chat room
    * Generates room key, derives topic, saves metadata
    */
-  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string): Promise<HolepunchRoom> {
+  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string): Promise<HolepunchRoom> {
 
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
     }
 
-    // Generate new room key (64-char hex)
-    const roomKey = MessageEncryption.generateRoomKey();
+    let roomKey: string;
+    let creator: string;
+    if (roomKeyToJoin) {
+      // case: join a room created by someone else
+      if (!MessageEncryption.isValidRoomKey(roomKeyToJoin)) {
+        throw new Error('Invalid room key format');
+      }
+      roomKey = roomKeyToJoin;
+      creator = '';
+    } else {
+      // case: create a new room
+      roomKey = MessageEncryption.generateRoomKey();
+      creator = this.keyPair.publicKey;
+    }
+
     // Derive room topic (hash of room key)
     const roomTopic = MessageEncryption.deriveRoomId(roomKey);
 
@@ -112,16 +125,15 @@ export class ChatAdapter extends EventEmitter {
       roomName: roomName,
       roomDescription: roomDescription,
       peers: [],
-      creator: this.keyPair.publicKey,
+      creator: creator,
       createdAt: Date.now(),
       lastActive: Date.now(),
+      initializedIdentity: false,
       roomImage: roomImage,
     };
 
     // Save to storage
     await RoomStorage.saveRoom(this.currentRoom);
-    await this.manager.joinRoom(roomTopic, roomKey);
-
     console.log('[ChatAdapter] ✅ Room created:', this.currentRoom.roomName);
     this.emit('chat:room-created', this.currentRoom);
     return this.currentRoom;
@@ -130,7 +142,7 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Join existing room with room key
    */
-  async joinRoom(roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string): Promise<HolepunchRoom> {
+  async joinRoom(roomKey: string, lastSyncIndex: number): Promise<HolepunchRoom> {
     // Validate room key
     if (!MessageEncryption.isValidRoomKey(roomKey)) {
       throw new Error('Invalid room key format');
@@ -143,34 +155,24 @@ export class ChatAdapter extends EventEmitter {
     const allRooms = await RoomStorage.getAllRooms();
     const existingRoom = allRooms.find(r => r.roomKey === roomKey);
 
-    // Create room object
-    if(existingRoom) {
+    if (!existingRoom) throw new Error('Room not found with key: ' + roomKey);
       this.currentRoom = existingRoom;
-    } else {
-      // TODO: update fields once meta data for the new room is communicated ()
-      this.currentRoom =  {
-        roomId: roomTopic,
-        roomKey: roomKey,
-        roomType: roomType || HolepunchRoomType.GROUP,
-        roomName: roomName || `Room ${roomTopic.substring(0, 8)}`,
-        roomDescription: roomDescription || `Description for room ${roomTopic.substring(0, 8)}`,
-        peers: [],
-        creator: '', 
-        createdAt: Date.now(),
-        lastActive: Date.now(),
-        roomImage: roomImage,
-      };
-
-      await RoomStorage.saveRoom(this.currentRoom);
-    }
 
     // Join via HyperswarmManager (will sync messages from root peer)
-    await this.manager.joinRoom(roomTopic, roomKey);
+    const { success, alreadyJoined } = await this.manager.joinRoom(roomTopic, roomKey);
+    if (!success) throw new Error('Failed to join room');
 
     console.log('[ChatAdapter] ✅ Room joined:', this.currentRoom.roomName);
     this.emit('chat:room-joined', this.currentRoom);
+
+    const syncResponse = await this.requestSync(this.currentRoom.roomId, lastSyncIndex) // essentially sync the room before sending the identity message(resolves sync conflict)
+    
+    if (syncResponse.success && !existingRoom.initializedIdentity) {
+      console.log('[ChatAdapter] 📢 Sending identity message');
+      await this.sendIdentityMessage(this.currentRoom) // Send identity message after joining a room for the first time
+    }
     return this.currentRoom;
-  }
+  };
 
   /**
    * Send message to current room
