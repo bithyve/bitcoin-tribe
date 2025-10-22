@@ -24,7 +24,7 @@ export class ChatService {
    * Initialize chat service with user info
    * This initializes both the adapter AND the underlying HyperswarmManager
    */
-  async initialize(seed: string): Promise<void> {
+  async initialize(seed: string, userProfile: { name?: string; image?: string }): Promise<void> {
     if (this.initialized) {
       console.warn('[ChatService] Already initialized');
       return;
@@ -36,7 +36,7 @@ export class ChatService {
     this.adapter = new ChatAdapter();
 
     // Initialize HyperswarmManager (loads seed, starts worklet)
-    await this.adapter.initialize(seed);
+    await this.adapter.initialize(seed, userProfile);
 
     this.initialized = true;
     console.log('[ChatService] Initialized successfully');

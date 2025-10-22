@@ -40,10 +40,11 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Initialize the manager with seed (call once on app startup)
    */
-  async initialize(seed: string): Promise<void> {
+  async initialize(seed: string, userProfile: { name?: string; image?: string }): Promise<void> {
     await this.manager.initialize(seed);
 
     this.keyPair = await this.manager.getKeys();
+    this.userProfile = userProfile;
   }
 
   /**
@@ -270,6 +271,33 @@ export class ChatAdapter extends EventEmitter {
    */
   isRootPeerConnected(): boolean {
     return this.manager.isRootPeerConnected();
+  }
+
+  /**
+   * Send identity message to announce presence in room
+   * Called automatically after joining a room
+   */
+  public async sendIdentityMessage(room: HolepunchRoom): Promise<void> {
+    if (!this.currentRoom || !this.keyPair) {
+      console.warn('[ChatAdapter] Cannot send identity - no room or keypair');
+      return;
+    }
+
+    try {
+      const identity = {
+        name: this.userProfile?.name || 'Anonymous',
+        publicKey: this.keyPair.publicKey,
+        image: this.userProfile?.image || '',
+      };
+
+      console.log('[ChatAdapter] 📢 Sending identity message:', identity.name);
+      await this.sendMessage(JSON.stringify(identity), HolepunchMessageType.IDENTITY);
+      console.log('[ChatAdapter] ✅ Identity message sent');
+      await RoomStorage.updateInitializedIdentity(room.roomId);
+    } catch (error) {
+      console.error('[ChatAdapter] ❌ Failed to send identity message:', error);
+      // Don't throw - identity message failure shouldn't block room join
+    }
   }
 
   /**
