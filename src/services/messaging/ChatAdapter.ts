@@ -12,7 +12,9 @@ import { MessageEncryption } from './holepunch/crypto/MessageEncryption';
 
 import { RoomStorage, HolepunchRoom, HolepunchRoomType } from './holepunch/storage/RoomStorage';
 import { MessageStorage, HolepunchMessage, HolepunchMessageType } from './holepunch/storage/MessageStorage';
-import { KeyPair } from './holepunch/network/types/network.types';
+import { MessageProcessorRegistry } from './holepunch/processors/MessageProcessor';
+import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
+import { TextProcessor } from './holepunch/processors/TextProcessor';
 
 
 
@@ -20,10 +22,18 @@ export class ChatAdapter extends EventEmitter {
   private manager: HyperswarmManager;
   private currentRoom: HolepunchRoom | null = null;
   private keyPair: KeyPair | null = null;
+  private processorRegistry: MessageProcessorRegistry;
+  private userProfile: { name?: string; image?: string } | null = null;
 
   constructor() {
     super();
     this.manager = HyperswarmManager.getInstance();
+
+    // Initialize message processor registry
+    this.processorRegistry = new MessageProcessorRegistry();
+    this.processorRegistry.register(new IdentityProcessor());
+    this.processorRegistry.register(new TextProcessor());
+
     this.setupEventForwarding();
   }
 
@@ -164,7 +174,7 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Send message to current room
    */
-  async sendMessage(text: string, messageType: HolepunchMessageType): Promise<void> {
+  async sendMessage(content: string, messageType: HolepunchMessageType): Promise<void> {
     if (!this.currentRoom) {
       throw new Error('No active room');
     }
@@ -179,31 +189,33 @@ export class ChatAdapter extends EventEmitter {
       roomId: this.currentRoom.roomId,
       senderId: this.keyPair.publicKey,
       messageType: messageType,
-      content: text,
+      content,
       timestamp: Date.now(),
     };
 
     // Send message over the network using topic hash
-    const result = await this.manager.sendMessage(this.currentRoom.roomId, message);
+    const { success, sentTo } = await this.manager.sendMessage(this.currentRoom.roomId, message);
+    if (!success) throw new Error('Failed to send message');
 
-    if (!result.success) {
-      throw new Error('Failed to send message');
-    }
 
-    // Persist own message to storage
-    if (this.currentRoom) {
-      await MessageStorage.saveMessage(message);
-      this.emit('chat:message-sent', {
-        message,
-        sentTo: result.sentTo,
-      });
-    }
+    // Process message (handles identity, text, etc.)
+    const result = await this.processorRegistry.process(message, {
+      roomId: this.currentRoom.roomId,
+      currentPeerPubKey: this.keyPair.publicKey,
+    });
+
+    // Note 📢: Self messages are pesisted upon synching w/ the root peer (maintains total message order across all peers)
+    // if (result.shouldSave) {
+    //   await MessageStorage.saveMessage(result.processedMessage);
+    // }
+
+    if (result.shouldDisplay) this.emit('chat:message-sent', result.processedMessage); // emit the message to the session
   }
 
   /**
    * Request sync from root peer
    */
-  async requestSync(roomId: string, lastIndex: number): Promise <{ success: boolean }> {
+  async requestSync(roomId: string, lastIndex: number): Promise<{ success: boolean }> {
     return await this.manager.requestSync(roomId, lastIndex);
   }
 

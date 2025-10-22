@@ -87,7 +87,7 @@ export class HyperswarmManager {
       this.createRootPeerConnectPromise();
       
       const discoveryKey = config.HOLEPUNCH_ROOT_PEER_DISCOVERY;
-      if(!discoveryKey) throw new Error('Discovery key not found');
+      if (!discoveryKey) throw new Error('Discovery key not found');
       
       await this.worklet.start('/app.bundle', bundle, [seed, discoveryKey]);
       
@@ -350,7 +350,7 @@ export class HyperswarmManager {
     // Store room key for encryption/decryption (NOT sent to worklet)
     this.roomKeys.set(roomTopic, roomKey);
     
-    console.log('[HyperswarmManager] Joining room:', roomTopic.substring(0, 16), '(with encryption)');
+    console.log('[HyperswarmManager] Joining room:', roomTopic, '(with encryption)');
     
     // Send only roomTopic to worklet (room key stays in React Native)
     const request = this.rpc!.request(CommandIds[WorkletCommand.JOIN_ROOM]);
@@ -390,7 +390,7 @@ export class HyperswarmManager {
       throw new Error('Room key not found - room not joined or key not stored');
     }
     
-    console.log('[HyperswarmManager] 🔐 Encrypting and sending message to room:', roomTopic.substring(0, 16));
+    console.log('[HyperswarmManager] 🔐 Encrypting and sending message to room:', roomTopic);
     
     try {
       // Encrypt message in React Native
@@ -399,14 +399,17 @@ export class HyperswarmManager {
       
       // Send encrypted data to worklet (worklet doesn't decrypt, just forwards)
       const request = this.rpc!.request(CommandIds[WorkletCommand.SEND_MESSAGE]);
-      request.send(JSON.stringify({ 
-        roomTopic, 
+      const envelope = {
         message: encryptedData, // Send encrypted string instead of plain message
+        roomTopic,
         encrypted: true, // Flag to indicate this is encrypted
-      }));
+        // senderPublicKey: this.keyPair.publicKey (added by the worklet)
+      };
+      request.send(JSON.stringify(envelope));
       
       const reply = await request.reply();
       const response = JSON.parse(b4a.toString(reply));
+      if(!response.success) throw new Error(response.error)
       
       return response;
     } catch (error) {
@@ -423,7 +426,7 @@ export class HyperswarmManager {
   async requestSync(roomTopic: string, lastIndex: number = 0): Promise<{ success: boolean }> {
     this.ensureInitialized();
     
-    console.log('[HyperswarmManager] 🔄 Requesting sync from index:', lastIndex, 'for room:', roomTopic.substring(0, 16));
+    console.log('[HyperswarmManager] 🔄 Requesting sync from index:', lastIndex, 'for room:', roomTopic);
     
     const request = this.rpc!.request(CommandIds[WorkletCommand.REQUEST_SYNC]);
     request.send(JSON.stringify({ roomTopic, lastIndex }));
