@@ -13,6 +13,7 @@ export const HolepunchRoomSchema: ObjectSchema = {
     creator: 'string',
     createdAt: 'int',
     lastActive: 'int',
+    initializedIdentity: 'bool',
     roomImage: 'string?',
   },
 };
