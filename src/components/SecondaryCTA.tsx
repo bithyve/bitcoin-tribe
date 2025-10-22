@@ -55,8 +55,6 @@ const getStyles = (theme: AppTheme, width, height) =>
       // flexDirection: 'row',
       // alignItems: 'center',
       borderRadius: 18,
-      // marginHorizontal: 10,
-      marginHorizontal: 4,
     },
     ctaContainerStyle: {
       borderRadius: 20,
@@ -68,6 +66,7 @@ const getStyles = (theme: AppTheme, width, height) =>
     labelStyle: {
       // minWidth: width,
       marginVertical: height,
+      marginHorizontal:0
     },
     primaryCTATitle: {
       fontSize: 15,
