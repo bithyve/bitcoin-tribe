@@ -259,10 +259,14 @@ class RPCManager {
 
       // Step2: Send to all connected peers in the room
       let sentCount = 0;
+      const peerMessage = {
+        type: 'p2p-message',
+        ...envelope,
+      };
       for (const peerKey of peersInRoom) {
         const connection = state.getConnection(peerKey);
         if (connection && peerKey !== state.rootPeerKey) { // Don't send regular messages to root peer
-          connection.write(JSON.stringify(envelope));
+          connection.write(JSON.stringify(peerMessage));
           sentCount++;
         }
       }
@@ -441,44 +445,47 @@ function setupConnectionHandlers(connection, peerKey) {
       const response = JSON.parse(data.toString());
       console.log('[Worklet] 📨 Received response:', response.type, 'from peer:', peerKey);
 
-      // Check if this is a root peer announcement
-      if (response.type === 'root-peer-announce' && response.username === 'RootPeer') {
-        handleRootPeerAnnouncement(connection, peerKey, data);
-        return;
-      }
+      switch (response.type) {
+        case 'root-peer-announce':
+          if (response.username === 'RootPeer') handleRootPeerAnnouncement(connection, peerKey, data);
+          else throw new Error('Invalid root peer announcement');
+          break;
 
-      // Check if this is a sync response from root peer
-      if (response.type === 'sync-response') {
-        console.log('[Worklet] 📥 Received sync response:', response.messages?.length || 0, 'messages');
-        // Forward each message to React Native
-        if (response.messages && response.messages.length > 0) {
-          const messages = []
-          response.messages.forEach((msg) => {
-            messages.push({
-              message: msg.message,
-              senderPublicKey: msg.senderPublicKey,
+        case 'sync-response':
+          console.log('[Worklet] 📥 Received sync response:', response.messages?.length || 0, 'messages');
+          // Forward each message to React Native
+          if (response.messages && response.messages.length > 0) {
+            const messages = []
+            response.messages.forEach((msg) => {
+              messages.push({
+                message: msg.message,
+                senderPublicKey: msg.senderPublicKey,
+                roomTopic: response.roomTopic,
+                encrypted: true, // Messages stored at root peer are always encrypted
+                fromRootPeer: true,
+                storedAt: msg.storedAt,
+              })
+            });
+            rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, { messages })
+          }
+          break;
+
+        case 'p2p-message':
+          rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, {
+            messages: [{
+              message: response.message,
+              senderPublicKey: response.senderPublicKey,
               roomTopic: response.roomTopic,
-              encrypted: true, // Messages stored at root peer are always encrypted
-              fromRootPeer: true,
-              storedAt: msg.storedAt,
-            })
+              encrypted: response.encrypted,
+              fromRootPeer: false,
+              storedAt: null,
+            }]
           });
-          rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, { messages })
-        }
-        return;
-      }
+          break;
 
-      // Regular P2P message
-      rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, {
-        messages: [{
-          message: response.message,
-          senderPublicKey: response.senderPublicKey,
-          roomTopic: response.roomTopic,
-          encrypted: response.encrypted,
-          fromRootPeer: false,
-          storedAt: null,
-        }]
-      });
+        default:
+          throw new Error('[Worklet] Invalid response type: ' + response.type);
+      }
     } catch (error) {
       console.error('[Worklet] Failed to parse message:', error);
       rpcManager.sendEvent(WorkletEvent.ERROR, {
