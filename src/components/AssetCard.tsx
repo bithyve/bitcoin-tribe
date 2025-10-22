@@ -16,6 +16,7 @@ import GradientView from './GradientView';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
+import Colors from 'src/theme/Colors';
 
 type AssetCardProps = {
   asset: Asset;
@@ -26,9 +27,6 @@ type AssetCardProps = {
 
 const CARD_WIDTH = 160;
 const CARD_HEIGHT = 210;
-const COLLECTION_CARD_COLOR_1 = 'rgba(143, 143, 143, 1)'; // ! need light mode color
-const COLLECTION_CARD_COLOR_2 = 'rgba(112, 112, 112, 1)';
-
 const AssetCard = (props: AssetCardProps) => {
   const { tag, onPress, asset, precision } = props;
   const theme: AppTheme = useTheme();
@@ -193,13 +191,26 @@ const getStyles = (theme: AppTheme) =>
   });
 export default AssetCard;
 
-const DummyCards = ({ styles }) => (
-  <>
+const DummyCards = ({ styles }) => {
+  const theme: AppTheme = useTheme();
+  const colors = {
+    light: {
+      collectionCardColor1: Colors.SilverSand,
+      collectionCardColor2: Colors.ChineseWhite,
+    },
+    dark: {
+      collectionCardColor1: Colors.SpanishGray,
+      collectionCardColor2: Colors.SonicSilver,
+    },
+  }
+
+
+  return <>
     <View
       style={[
         styles.backgroundCard,
         {
-          backgroundColor: COLLECTION_CARD_COLOR_1,
+          backgroundColor: colors[theme.dark ? 'dark' : 'light'].collectionCardColor1,
           width: CARD_WIDTH * 0.88,
           top: 5,
         },
@@ -209,11 +220,11 @@ const DummyCards = ({ styles }) => (
       style={[
         styles.backgroundCard,
         {
-          backgroundColor: COLLECTION_CARD_COLOR_2,
+          backgroundColor: colors[theme.dark ? 'dark' : 'light'].collectionCardColor2,
           width: CARD_WIDTH * 0.96,
           top: 10,
         },
       ]}
     />
   </>
-);
+};

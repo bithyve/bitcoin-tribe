@@ -444,6 +444,7 @@ const UDADetailsScreen = () => {
         style={styles.dataContainer}
         bounces={false}
         scrollEnabled={!imageView}
+        showsVerticalScrollIndicator={!imageView}
         overScrollMode="never">
         <AppHeader
           title={imageView ? '' : assets.udaDetails}
@@ -784,7 +785,10 @@ const getStyles = (theme: AppTheme, insets) =>
     // Bottom Container
     bottomContainer: {
       position: 'absolute',
-      bottom: insets.bottom,
+      bottom: insets.bottom + Platform.select({
+        ios: hp(5),
+        android: hp(10),
+      }),
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
