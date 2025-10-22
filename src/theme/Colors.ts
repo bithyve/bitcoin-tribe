@@ -69,5 +69,6 @@ const Colors = {
   CloudGray:'rgba(229, 229, 229, 1)',
   mediumGray: 'rgba(120, 120, 120, 1)',
   Gray48: 'rgba(120, 120, 120, 1)',
+  AmberBlaze:"rgba(255, 149, 0, 1)"
 };
 export default Colors;

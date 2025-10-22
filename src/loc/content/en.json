@@ -778,7 +778,12 @@
     "collectionPaymentSubtitle":"Review and Confirm Your Transaction",
     "collectionPaymentConfirmSubtitle":"Collection anchored on-chain.\nYou can now start adding UDAs.",
     "totalItems":"Total Items",
-    "minted":"Minted"
+    "minted": "Minted",
+    "collectionVerificationTitle": "Verification",
+    "collectionVerificationSubTitle": "Link your identity to the asset by verifying via X or domain, and share it to make it official.",
+    "verified": "Verified",
+    "viaX": "via X",
+    "unverified": "Unverified"
   },
   "community": {
     "fnfTitle": "Community",

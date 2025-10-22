@@ -777,7 +777,12 @@
     "collectionPaymentSubtitle": "Revisa y confirma tu transacción",
     "collectionPaymentConfirmSubtitle": "Colección anclada en la cadena.\nAhora puedes empezar a agregar UDAs.",
     "totalItems": "Artículos totales",
-    "minted": "Acuñado"
+    "minted": "Acuñado",
+    "collectionVerificationTitle": "Verificación",
+    "collectionVerificationSubTitle": "Vincula tu identidad al activo verificando a través de X o dominio, y compártelo para hacerlo oficial.",
+    "verified": "Verificado",
+    "viaX": "vía X",
+    "unverified": "No verificado"
   },
   "community": {
     "fnfTitle": "Comunidad",

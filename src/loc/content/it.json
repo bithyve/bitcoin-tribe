@@ -777,7 +777,12 @@
     "collectionPaymentSubtitle": "Rivedi e conferma la tua transazione",
     "collectionPaymentConfirmSubtitle": "Collezione ancorata on-chain.\nOra puoi iniziare ad aggiungere UDAs.",
     "totalItems": "Elementi totali",
-    "minted": "Coniato"
+    "minted": "Coniato",
+    "collectionVerificationTitle": "Verifica",
+    "collectionVerificationSubTitle": "Collega la tua identità all'asset verificando tramite X o dominio, e condividilo per renderlo ufficiale.",
+    "verified": "Verificato",
+    "viaX": "via X",
+    "unverified": "Non verificato"
   },
   "community": {
     "fnfTitle": "Comunità",
