@@ -54,6 +54,13 @@ const CollectionDetailsScreen = () => {
   const ListHeader = () => {
     return (
       <>
+      <View style={styles.mintedCtr}>
+            <AppText variant="muted">
+              {`Minted: ${collection.items.length}${
+                collection.isFixedSupply ? `/${collection.itemsCount}` : ''
+              }`}
+            </AppText>
+          </View>
         <Image
           source={{
             uri: Platform.select({
@@ -82,14 +89,6 @@ const CollectionDetailsScreen = () => {
             <AppText variant="body1Bold">{collection.name}</AppText>
             <SizedBox height={hp(10)} />
             <AppText variant="caption">{collection.description || ''}</AppText>
-          </View>
-
-          <View style={styles.mintedCtr}>
-            <AppText variant="body2">
-              {`Minted: ${collection.items.length}${
-                collection.isFixedSupply ? `/${collection.itemsCount}` : ''
-              }`}
-            </AppText>
           </View>
           <View />
           <SizedBox height={hp(20)} />
@@ -194,13 +193,16 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     mintedCtr: {
       borderWidth: 1,
-      borderColor: 'rgba(255, 255, 255, 0.20)',
+      borderColor: theme.dark ? Colors.mediumGray : Colors.ChineseWhite,
       paddingHorizontal: wp(10),
       paddingVertical: hp(5),
       borderRadius: 20,
       backgroundColor: theme.colors.roundedCtaBg,
       justifyContent: 'center',
       alignItems: 'center',
+      position:"absolute",
+      right:wp(16),
+      top:hp(290)
     },
     addNewIconWrapper: {
       position: 'absolute',
