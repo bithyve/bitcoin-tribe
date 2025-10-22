@@ -89,7 +89,7 @@ function IssueCollection() {
     RealmSchema.RgbWallet,
   );
   const navigation = useNavigation();
-  const [collection, setCollection] = useState(null)
+  const [collection, setCollection] = useState(null);
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
   );
@@ -281,6 +281,9 @@ function IssueCollection() {
           }
           resizeMode="cover"
           style={styles.bannerImage}>
+          <View style={styles.headerCtr}>
+            <AppHeader title={assets.issueCollection} />
+          </View>
           <AppTouchable onPress={handlePickImage} style={styles.pencilIcon}>
             <PencilRound />
           </AppTouchable>
@@ -438,11 +441,6 @@ function IssueCollection() {
           />
         </View>
       </KeyboardAvoidView>
-
-      <View style={styles.headerCtr}>
-        <AppHeader title={assets.issueCollection} />
-      </View>
-
       <ModalContainer
         title={
           showSuccess
@@ -480,7 +478,6 @@ function IssueCollection() {
                 });
               }
             }, 300);
-
           }}
         />
       </ModalContainer>
@@ -574,6 +571,7 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
       position: 'absolute',
       top: insets.top,
       marginHorizontal: hp(16),
+      width: '100%',
     },
     radioButtonWrapper: {
       flexDirection: 'row',
@@ -601,9 +599,9 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
       marginVertical: hp(20),
+      marginHorizontal: hp(16),
     },
     checkIconWrapper: {
       width: '10%',
