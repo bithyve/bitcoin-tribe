@@ -33,6 +33,7 @@ import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import PencilRound from 'src/assets/images/pencil_round.svg';
+import PencilRoundLight from 'src/assets/images/pencil_round_light.svg';
 import ModalContainer from 'src/components/ModalContainer';
 import PrimaryCTA from 'src/components/PrimaryCTA';
 import { CreateCollectionConfirmation } from 'src/components/CollectionConfirmationModal';
@@ -47,9 +48,13 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
+import Colors from 'src/theme/Colors';
+import { SizedBox } from 'src/components/SizedBox';
 
 const MOCK_BANNER = require('src/assets/images/mockBanner.png');
+const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');
 const MOCK_COLLECTION = require('src/assets/images/mockCollection.png');
+const MOCK_COLLECTION_LIGHT = require('src/assets/images/mockCollectionLight.png');
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueCollection() {
@@ -89,7 +94,7 @@ function IssueCollection() {
     RealmSchema.RgbWallet,
   );
   const navigation = useNavigation();
-  const [collection, setCollection] = useState(null)
+  const [collection, setCollection] = useState(null);
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
   );
@@ -271,7 +276,9 @@ function IssueCollection() {
         <ImageBackground
           source={
             !image?.trim()
-              ? MOCK_BANNER
+              ? isThemeDark
+                ? MOCK_BANNER
+                : MOCK_BANNER_LIGHT
               : {
                   uri:
                     Platform.OS === 'ios'
@@ -280,31 +287,35 @@ function IssueCollection() {
                 }
           }
           resizeMode="cover"
-          style={styles.bannerImage}>
+          style={styles.bannerImage}
+          imageStyle={styles.bannerImageCtr}>
+          <View style={styles.headerCtr}>
+            <AppHeader title={assets.issueCollection} />
+          </View>
           <AppTouchable onPress={handlePickImage} style={styles.pencilIcon}>
-            <PencilRound />
+            {isThemeDark ? <PencilRound /> : <PencilRoundLight />}
           </AppTouchable>
         </ImageBackground>
-        <View>
-          <Pressable onPress={handlePickCollectionImage}>
-            <Image
-              source={
-                !collectionImage?.trim()
+        <Pressable onPress={handlePickCollectionImage} style={styles.imageCtr}>
+          <Image
+            source={
+              !collectionImage?.trim()
+                ? isThemeDark
                   ? MOCK_COLLECTION
-                  : {
-                      uri:
-                        Platform.OS === 'ios'
-                          ? collectionImage.replace('file://', '')
-                          : collectionImage,
-                    }
-              }
-              resizeMode="cover"
-              style={styles.image}
-            />
-          </Pressable>
-        </View>
+                  : MOCK_COLLECTION_LIGHT
+                : {
+                    uri:
+                      Platform.OS === 'ios'
+                        ? collectionImage.replace('file://', '')
+                        : collectionImage,
+                  }
+            }
+            resizeMode="cover"
+            style={styles.image}
+          />
+        </Pressable>
 
-        <View style={{ paddingHorizontal: wp(16) }}>
+        <View style={styles.inputContainer}>
           <AppText variant="body2" style={styles.textInputTitle}>
             {assets.collectionName}
           </AppText>
@@ -379,6 +390,7 @@ function IssueCollection() {
           <AppText variant="caption" style={styles.textNote}>
             Declared Size + Policy will be committed on-chain.
           </AppText>
+          <SizedBox height={hp(10)} />
           {isFixedSupply && (
             <View>
               <AppText variant="body2" style={styles.textInputTitle}>
@@ -394,6 +406,7 @@ function IssueCollection() {
                 returnKeyType="done"
                 error={assetTotSupplyValidationError}
               />
+              <SizedBox height={hp(10)} />
             </View>
           )}
 
@@ -438,11 +451,6 @@ function IssueCollection() {
           />
         </View>
       </KeyboardAvoidView>
-
-      <View style={styles.headerCtr}>
-        <AppHeader title={assets.issueCollection} />
-      </View>
-
       <ModalContainer
         title={
           showSuccess
@@ -480,7 +488,6 @@ function IssueCollection() {
                 });
               }
             }, 300);
-
           }}
         />
       </ModalContainer>
@@ -549,6 +556,10 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
       marginTop: hp(5),
       marginBottom: hp(3),
     },
+    bannerImageCtr: {
+      borderBottomLeftRadius: hp(10),
+      borderBottomRightRadius: hp(10),
+    },
     bannerImage: {
       paddingTop: insets.top,
       height: hp(280),
@@ -560,20 +571,30 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
       right: hp(16),
       bottom: hp(16),
     },
-    image: {
+    imageCtr: {
       height: hp(80),
       width: hp(80),
-      borderWidth: 1,
-      borderRadius: 10,
       position: 'relative',
       top: -40,
       left: hp(16),
-      borderColor: 'rgba(86, 86, 86, 1)', // border color
+    },
+    image: {
+      height: '100%',
+      width: '100%',
+      borderWidth: 1,
+      borderRadius: 10,
+      borderColor: theme.dark ? Colors.Quartz : Colors.ChineseWhite,
     },
     headerCtr: {
       position: 'absolute',
       top: insets.top,
       marginHorizontal: hp(16),
+      width: '100%',
+    },
+    inputContainer: {
+      paddingHorizontal: wp(16),
+      position: 'relative',
+      top: -30,
     },
     radioButtonWrapper: {
       flexDirection: 'row',
@@ -601,9 +622,9 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
       marginVertical: hp(20),
+      marginHorizontal: hp(16),
     },
     checkIconWrapper: {
       width: '10%',
