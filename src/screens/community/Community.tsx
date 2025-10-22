@@ -75,7 +75,7 @@ function Community() {
   const handleOpenRoom = (room: HolepunchRoom) => {
     // Navigate immediately without waiting for join
     (navigation as any).navigate(NavigationRoutes.CHAT, {
-      room: room,
+      roomId: room.roomId,
     });
   };
 
