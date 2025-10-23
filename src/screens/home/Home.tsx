@@ -133,6 +133,7 @@ function HomeScreen() {
 
   useEffect(() => {
     const initializeWalletOnline = async () => {
+      if(isWalletOnline === WalletOnlineStatus.Online) return
       try {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
         const response = await ApiHandler.makeWalletOnline();
@@ -156,7 +157,7 @@ function HomeScreen() {
     if (!walletOnline) {
       initializeWalletOnline();
     }
-  }, [isWalletOnline]);
+  }, []);
 
   useEffect(() => {
     const fetchStatus = async () => {
