@@ -120,10 +120,10 @@ const UDADetailsScreen = () => {
     hasIssuedAsset,
     setHasIssuedAsset,
   } = useContext(AppContext);
-  const uda = useObject<UniqueDigitalAsset>(
+  const uda: UniqueDigitalAsset = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
-  ).toJSON();
+  ).toJSON() as UniqueDigitalAsset;
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -547,7 +547,7 @@ const UDADetailsScreen = () => {
                 </View>
                 <Item
                   value={home.assetDescription}
-                  title={uda.details as string}
+                  title={uda.details.split('tribecollectionitem://')[0]}
                 />
 
                 <View style={styles.gutter}>
@@ -582,6 +582,7 @@ const UDADetailsScreen = () => {
                       showVerifyIssuer={showVerifyIssuer}
                       showDomainVerifyIssuer={showDomainVerifyIssuer}
                       asset={uda}
+                      collectionId={uda?.details.split('tribecollectionitem://')[1]}
                       onPressShare={() => {
                         if (!uda?.isIssuedPosted) {
                           setVisibleIssuedPostOnTwitter(true);
