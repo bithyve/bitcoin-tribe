@@ -39,10 +39,10 @@ function TransferDetails({ route, navigation }) {
   );
 
   const amount = useMemo(() => {
-    if (transaction.requestedAssignment?.amount) {
-      return transaction.requestedAssignment.amount;
+    if (transaction?.requestedAssignment?.amount) {
+      return transaction?.requestedAssignment?.amount;
     }
-    return transaction.assignments[0].amount;
+    return transaction?.assignments[0]?.amount;
   }, [transaction]);
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function TransferDetails({ route, navigation }) {
       <AppHeader title={wallet.transferDetails} />
       <TransferDetailsContainer
         assetName={coin}
-        transAmount={`${Number(amount) / 10 ** precision}`}
+        transAmount={`${amount ? Number(amount) / 10 ** precision : ''}`}
         assetId={assetId}
         schema={schema}
         transaction={transaction}
