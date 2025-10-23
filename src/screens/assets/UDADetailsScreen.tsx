@@ -564,6 +564,7 @@ const UDADetailsScreen = () => {
                             transactions: uda?.transactions,
                             assetName: uda?.name,
                             schema: RealmSchema.UniqueDigitalAsset,
+                            hidePrecision:true
                           },
                         );
                       }}

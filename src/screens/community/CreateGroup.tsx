@@ -36,6 +36,8 @@ import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import ModalLoading from 'src/components/ModalLoading';
+import { urlParamsToObject } from 'src/utils/urlUtils';
+import { DEEPLINK_PREFIX } from './GroupQr';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -54,11 +56,9 @@ export const CreateGroup = () => {
   const {
     isInitializing,
     isCreatingRoom,
-    isJoiningRoom,
     isRootPeerConnected,
     currentRoom,
     createRoom,
-    joinRoom,
     error,
   } = useChat();
 
@@ -66,7 +66,7 @@ export const CreateGroup = () => {
   useEffect(() => {
     if (currentRoom) {
       (navigation as any).navigate(NavigationRoutes.CHAT, {
-        room: currentRoom
+        roomId: currentRoom.roomId,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -81,7 +81,7 @@ export const CreateGroup = () => {
 
   return (
     <ScreenContainer>
-      <ModalLoading visible={isInitializing || isCreatingRoom || isJoiningRoom} />
+      <ModalLoading visible={isInitializing || isCreatingRoom} />
       <AppHeader
         title={community.group}
         enableBack={true}
@@ -95,7 +95,7 @@ export const CreateGroup = () => {
         navigationState={{ index, routes }}
         renderScene={SceneMap({
           create: () => <CreateTab createRoom={createRoom} isCreatingRoom={isCreatingRoom} isRootPeerConnected={isRootPeerConnected} />,
-          join: () => <JoinTab joinRoom={joinRoom} isJoiningRoom={isJoiningRoom} isRootPeerConnected={isRootPeerConnected} />,
+          join: () => <JoinTab createRoom={createRoom} isCreatingRoom={isCreatingRoom} isRootPeerConnected={isRootPeerConnected} />,
         })}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
@@ -256,7 +256,7 @@ const CreateTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
   );
 };
 
-const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
+const JoinTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { community, common, sendScreen } = translations;
@@ -290,7 +290,7 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
   const handleJoinRoom = async () => {
     let parsedJoinData;
     try {
-      parsedJoinData = JSON.parse(joinData);
+      parsedJoinData = urlParamsToObject(joinData.replace(DEEPLINK_PREFIX, ''));
       if (!parsedJoinData?.roomKey || !parsedJoinData?.roomType) {
         Toast('Invalid join data, missing room key or room type', true);
         return;
@@ -308,7 +308,7 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
 
     try {
       if(!parsedJoinData?.roomKey) throw new Error('Invalid join data');
-      await joinRoom(parsedJoinData.roomKey, parsedJoinData.roomName, parsedJoinData.roomType, parsedJoinData.roomDescription);
+      await createRoom(parsedJoinData.roomName, parsedJoinData.roomType, parsedJoinData.roomDescription, parsedJoinData.roomImage, parsedJoinData.roomKey);
       Toast('Joined room successfully!', false);
     } catch (err) {
       console.error('Failed to join room:', err);
@@ -377,8 +377,8 @@ const JoinTab = ({ joinRoom, isJoiningRoom, isRootPeerConnected }) => {
       </ScrollView>
       <View style={styles.buttonWrapper}>
         <PrimaryCTA
-          title={isJoiningRoom ? 'Joining...' : common.joinNow}
-          disabled={!joinData || isJoiningRoom}
+          title={isCreatingRoom ? 'Joining...' : common.joinNow}
+          disabled={!joinData || isCreatingRoom}
           width={'100%'}
           onPress={handleJoinRoom}
         />

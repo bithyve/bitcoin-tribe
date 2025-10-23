@@ -16,6 +16,7 @@ export interface HolepunchRoom {
   creator: string,
   createdAt: number,
   lastActive: number,
+  initializedIdentity: boolean,  // true if the identity message has been sent to the room
   roomImage?: string,
 }
 
@@ -26,7 +27,7 @@ export class RoomStorage {
   static async saveRoom(room: HolepunchRoom): Promise<void> {
     try {
       RealmDatabase.create(RealmSchema.HolepunchRoom, room, 'modified');
-      console.log('[RoomStorage] Room saved:', room.roomId.substring(0, 8));
+      console.log('[RoomStorage] Room saved:', room.roomId);
     } catch (error) {
       console.error('[RoomStorage] Failed to save room:', error);
       throw error;
@@ -51,6 +52,7 @@ export class RoomStorage {
         creator: String(r.creator),
         createdAt: Number(r.createdAt),
         lastActive: Number(r.lastActive),
+        initializedIdentity: Boolean(r.initializedIdentity),
         roomImage: r.roomImage ? String(r.roomImage) : undefined,
       }));
       // Sort by last active (most recent first)
@@ -81,6 +83,7 @@ export class RoomStorage {
         creator: String(r.creator),
         createdAt: Number(r.createdAt),
         lastActive: Number(r.lastActive),
+        initializedIdentity: Boolean(r.initializedIdentity),
         roomImage: r.roomImage ? String(r.roomImage) : undefined,
       };
     } catch (error) {
@@ -89,23 +92,23 @@ export class RoomStorage {
     }
   }
 
-  /**
-   * Update room's last active timestamp (maps to updatedAt)
+    /**
+   * Update room's initialized identity flag
    */
-  static async updateLastActive(roomId: string): Promise<void> {
-    try {
-      const realmRooms = RealmDatabase.get(RealmSchema.HolepunchRoom);
-      if (!realmRooms) return;
-      const r = (realmRooms as Realm.Results<any>).filtered('roomId == $0', roomId)[0];
-      if (r) {
-        RealmDatabase.write(() => {
-          r.lastActive = new Date();
-        });
+    static async updateInitializedIdentity(roomId: string): Promise<void> {
+      try {
+        const realmRooms = RealmDatabase.get(RealmSchema.HolepunchRoom);
+        if (!realmRooms) return;
+        const r = (realmRooms as Realm.Results<any>).filtered('roomId == $0', roomId)[0];
+        if (r) {
+          RealmDatabase.write(() => {
+            r.initializedIdentity = true;
+          });
+        }
+      } catch (error) {
+        console.error('[RoomStorage] Failed to update initialized identity:', error);
       }
-    } catch (error) {
-      console.error('[RoomStorage] Failed to update last active:', error);
     }
-  }
 
   /**
    * Delete a room
@@ -117,7 +120,7 @@ export class RoomStorage {
       const r = (realmRooms as Realm.Results<any>).filtered('roomId == $0', roomId)[0];
       if (r) {
         RealmDatabase.delete(r);
-        console.log('[RoomStorage] Room deleted:', roomId.substring(0, 8));
+        console.log('[RoomStorage] Room deleted:', roomId);
       }
     } catch (error) {
       console.error('[RoomStorage] Failed to delete room:', error);

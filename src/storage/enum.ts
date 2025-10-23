@@ -49,4 +49,5 @@ export enum RealmSchema {
   ElectrumTransaction = 'ElectrumTransaction',
   HolepunchRoom = 'HolepunchRoom',
   HolepunchMessage = 'HolepunchMessage',
+  HolepunchPeer = 'HolepunchPeer',
 }

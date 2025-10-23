@@ -28,7 +28,7 @@ function CoinAllTransaction() {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
-  const { assetId, schema } = useRoute().params as { assetId: string, schema: RealmSchema };
+  const { assetId, schema, hidePrecision=false } = useRoute().params as { assetId: string, schema: RealmSchema, hidePrecision:boolean };
   const asset = useObject<Asset>(schema, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
@@ -58,6 +58,7 @@ function CoinAllTransaction() {
             transaction={item}
             coin={asset?.name}
             precision={asset?.precision}
+            hidePrecision={hidePrecision}
             onPress={() => {
               navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
                 transaction: item,

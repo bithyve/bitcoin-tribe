@@ -8,6 +8,7 @@ import {
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { HolepunchMessage, HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
+import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -35,6 +36,11 @@ const getStyles = (theme: AppTheme) =>
       borderTopRightRadius: 10,
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 10,
+    },
+    textSenderName: {
+      color: '#808080',
+      textAlign: 'left',
+      fontSize: 11,
     },
     textTimeSender: {
       color: '#808080',
@@ -111,12 +117,23 @@ const getStyles = (theme: AppTheme) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    systemMessageContainer: {
+      alignItems: 'center',
+      paddingVertical: 8,
+      marginVertical: 4,
+    },
+    systemMessageText: {
+      fontSize: 12,
+      color: '#808080',
+      fontStyle: 'italic',
+    },
   });
 
 const MessageItem = ({
   message,
   previousMessage,
-  peerPubKey,
+  currentPeerPubKey,
+  peer,
   onImagePress,
   onPressReject,
   onPressApprove,
@@ -124,7 +141,8 @@ const MessageItem = ({
 }: {
   message: HolepunchMessage;
   previousMessage: HolepunchMessage;
-  peerPubKey: string;
+  currentPeerPubKey: string;
+  peer: HolepunchPeer;
   onImagePress: (image: string) => void;
   onPressReject: (message: Message) => void;
   onPressApprove: (message: Message) => void;
@@ -133,7 +151,7 @@ const MessageItem = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   const isSender = React.useMemo(
-    () => message.senderId === peerPubKey,
+    () => message.senderId === currentPeerPubKey,
     [message.senderId],
   );
   const time = React.useMemo(
@@ -149,8 +167,23 @@ const MessageItem = ({
     );
   }, [message.timestamp, previousMessage?.timestamp]);
 
-  const Message = () =>
-   (
+  // Check if message is a system message
+  const isSystemMessage = message.messageType === HolepunchMessageType.SYSTEM;
+
+  const Message = () => {
+    // Render system messages differently
+    if (isSystemMessage) {
+      return (
+        <View style={styles.systemMessageContainer}>
+          <AppText style={styles.systemMessageText}>
+            {message.content}
+          </AppText>
+        </View>
+      );
+    }
+
+    // Render regular messages
+    return (
       <View
         style={isSender ? styles.containerSender : styles.containerReceiver}>
         <View
@@ -164,6 +197,12 @@ const MessageItem = ({
               case HolepunchMessageType.TEXT:
                 return (
                   <View>
+                    {!isSender ? 
+                    <AppText variant="body2" style={styles.textSenderName}>
+                      {(peer?.peerName || peer?.peerId?.substring(0, 10))}
+                    </AppText> : 
+                    null}
+
                     <AppText style={{ color: theme.dark ? 'white' : 'black' }}>
                       {message.content}
                     </AppText>
@@ -183,6 +222,7 @@ const MessageItem = ({
         </View>
       </View>
     );
+  };
 
   return isSameDay ? (
     <Message />
