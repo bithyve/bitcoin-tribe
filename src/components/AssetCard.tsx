@@ -111,7 +111,7 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {!isCollection && (
+              {!isCollection && precision != null && (
                 <AppText
                   variant="body2"
                   numberOfLines={1}

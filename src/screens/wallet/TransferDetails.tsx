@@ -5,7 +5,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { Transfer } from 'src/models/interfaces/RGBWallet';
+import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
 import TransferDetailsContainer from './components/TransferDetailsContainer';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
@@ -39,12 +39,12 @@ function TransferDetails({ route, navigation }) {
   );
 
   const amount = useMemo(() => {
-    if (transaction?.requestedAssignment?.amount) {
+    if (transaction.kind.toUpperCase() === TransferKind.SEND) {
       return transaction?.requestedAssignment?.amount;
     }
     return transaction?.assignments[0]?.amount;
   }, [transaction]);
-
+  
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
