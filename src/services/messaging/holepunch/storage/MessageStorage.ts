@@ -3,6 +3,8 @@ import RealmDatabase from 'src/storage/realm/realm';
 
 export enum HolepunchMessageType {
   TEXT = 'TEXT',
+  IDENTITY = 'IDENTITY',  // Peer identity announcement
+  SYSTEM = 'SYSTEM',      // System messages (join notifications)
 }
 
 export interface HolepunchMessage {
@@ -22,7 +24,7 @@ export class MessageStorage {
     try {
       RealmDatabase.create(RealmSchema.HolepunchMessage, message, 'modified');
       // Optionally, handle message status updates elsewhere
-      console.log('[MessageStorage] Message saved:', message.messageId.substring(0, 8));
+      console.log('[MessageStorage] Message saved:', message.messageId);
     } catch (error) {
       console.error('[MessageStorage] Failed to save message:', error);
       throw error;
@@ -86,7 +88,7 @@ export class MessageStorage {
       const m = (realmMessages as Realm.Results<any>).filtered('_id == $0', messageId)[0];
       if (m) {
         RealmDatabase.delete(m);
-        console.log('[MessageStorage] Message deleted:', messageId.substring(0, 8));
+        console.log('[MessageStorage] Message deleted:', messageId);
       }
     } catch (error) {
       console.error('[MessageStorage] Failed to delete message:', error);

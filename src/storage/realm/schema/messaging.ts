@@ -13,6 +13,7 @@ export const HolepunchRoomSchema: ObjectSchema = {
     creator: 'string',
     createdAt: 'int',
     lastActive: 'int',
+    initializedIdentity: 'bool',
     roomImage: 'string?',
   },
 };
@@ -27,5 +28,15 @@ export const HolepunchMessageSchema: ObjectSchema = {
     messageType: 'string',
     content: 'string',
     timestamp: 'int',
+  },
+};
+
+export const HolepunchPeerSchema: ObjectSchema = {
+  name: 'HolepunchPeer',
+  primaryKey: 'peerId',
+  properties: {
+    peerId: 'string',           // Peer's public key (primary key)
+    peerName: 'string?',         // Display name
+    peerImage: 'string?',        // Image URL
   },
 };

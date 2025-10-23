@@ -19,7 +19,7 @@ import type {
   WorkletReadyListener,
   PeerConnectedListener,
   PeerDisconnectedListener,
-  MessageReceivedListener,
+  MessagesReceivedListener,
   WorkletErrorListener,
 } from '../types/network.types';
 import { HolepunchMessage } from '../../storage/MessageStorage';
@@ -30,26 +30,26 @@ import { HolepunchMessage } from '../../storage/MessageStorage';
 
 export class HyperswarmManager {
   private static instance: HyperswarmManager;
-  
+
   private worklet: Worklet;
   private rpc: RPC | null = null;
   private initialized = false;
-  
+
   // Root peer connection tracking
   private rootPeerConnected = false;
   private rootPeerConnectPromise: Promise<void> | null = null;
   private rootPeerConnectResolve: (() => void) | null = null;
-  
+
   // Room key storage for encryption/decryption
   // Map: roomId (public topic) -> roomKey (secret for encryption)
   private roomKeys: Map<string, string> = new Map();
-  
+
   // Event listeners
   private listeners = {
     ready: new Set<WorkletReadyListener>(),
     peerConnected: new Set<PeerConnectedListener>(),
     peerDisconnected: new Set<PeerDisconnectedListener>(),
-    messageReceived: new Set<MessageReceivedListener>(),
+    messagesReceived: new Set<MessagesReceivedListener>(),
     error: new Set<WorkletErrorListener>(),
     rootPeerConnected: new Set<() => void>(),
     rootPeerDisconnected: new Set<() => void>(),
@@ -82,18 +82,18 @@ export class HyperswarmManager {
 
     try {
       console.log('[HyperswarmManager] Starting worklet...');
-      
+
       // Create promise for root peer connection
       this.createRootPeerConnectPromise();
-      
+
       const discoveryKey = config.HOLEPUNCH_ROOT_PEER_DISCOVERY;
-      if(!discoveryKey) throw new Error('Discovery key not found');
-      
+      if (!discoveryKey) throw new Error('Discovery key not found');
+
       await this.worklet.start('/app.bundle', bundle, [seed, discoveryKey]);
-      
+
       this.setupRPC();
       this.initialized = true;
-      
+
       console.log('[HyperswarmManager] Initialized successfully');
       console.log('[HyperswarmManager] ⏳ Waiting for root peer connection...');
     } catch (error) {
@@ -113,7 +113,7 @@ export class HyperswarmManager {
       try {
         const data = b4a.toString(req.data);
         const payload = JSON.parse(data);
-        
+
         this.handleWorkletEvent(req.command, payload);
       } catch (error) {
         console.error('[HyperswarmManager] Error processing worklet event:', error);
@@ -126,99 +126,97 @@ export class HyperswarmManager {
       case CommandIds[WorkletEvent.READY]:
         this.emit('ready', payload);
         break;
-      
+
       case CommandIds[WorkletEvent.PEER_CONNECTED]:
         // Check if this is the root peer
         if (payload.isRootPeer === true) {
           console.log('[HyperswarmManager] 🏰 Root peer connected!');
           this.rootPeerConnected = true;
-          
+
           // Resolve the promise if anyone is waiting
           if (this.rootPeerConnectResolve) {
             this.rootPeerConnectResolve();
             this.rootPeerConnectResolve = null;
           }
-          
+
           // Emit root peer connected event
           this.emitRootPeerEvent('rootPeerConnected');
         }
         this.emit('peerConnected', payload);
         break;
-      
+
       case CommandIds[WorkletEvent.PEER_DISCONNECTED]:
         // Check if this is the root peer
         if (payload.isRootPeer === true) {
           console.log('[HyperswarmManager] 👋 Root peer disconnected!');
           this.rootPeerConnected = false;
-          
+
           // Create new promise for next connection
           this.createRootPeerConnectPromise();
-          
+
           // Emit root peer disconnected event
           this.emitRootPeerEvent('rootPeerDisconnected');
         }
         this.emit('peerDisconnected', payload);
         break;
-      
-      case CommandIds[WorkletEvent.MESSAGE_RECEIVED]:
-        // Decrypt message if encrypted
-        this.handleMessageReceived(payload);
+
+      case CommandIds[WorkletEvent.MESSAGES_RECEIVED]:
+        // Decrypt messages if encrypted
+        this.handleMessagesReceived(payload);
         break;
-      
+
       case CommandIds[WorkletEvent.ERROR]:
         this.emit('error', payload);
         break;
-      
+
       default:
         console.warn('[HyperswarmManager] Unknown event type:', eventType);
     }
   }
 
   /**
-   * Handle received message - decrypt if encrypted
+   * Handle received messages - decrypt if encrypted
    */
-  private handleMessageReceived(payload: any): void {
+  private handleMessagesReceived(payload: any): void {
     try {
-        const roomTopic = payload.roomTopic || payload.message.roomTopic;
-        const roomKey = this.roomKeys.get(roomTopic);
-        
-        if (!roomKey) {
-          console.error('[HyperswarmManager] ❌ Cannot decrypt - room key not found for:', roomTopic?.substring(0, 16));
-          this.emit('error', { error: 'Cannot decrypt message - room key not found' });
-          return;
-        }
-        
-        console.log('[HyperswarmManager] 🔓 Decrypting received message...');
-        
-        // Decrypt the message - handle different formats
-        let encryptedData: string;
-        
-        if (typeof payload.message === 'string') {
-          // Direct encrypted string (from P2P messages)
-          encryptedData = payload.message;
-        } else if (payload.message && typeof payload.message === 'object') {
-          // Object with metadata from root peer sync
-          // Backend stores as: { message: "encrypted_string", storedAt, fromPeer, senderPublicKey }
-          if (payload.message.message && typeof payload.message.message === 'string') {
-            encryptedData = payload.message.message;
-          } else {
-            throw new Error('Could not find encrypted data in message object');
-          }
-        } else {
-          throw new Error('Invalid message format');
-        }
-        
-        const decryptedMessage = MessageEncryption.decrypt(roomKey, encryptedData);
-        
+      // Extract messages array from payload
+      const messages = payload.messages || [];
+
+      if (!Array.isArray(messages) || messages.length === 0) {
+        console.warn('[HyperswarmManager] ⚠️ No messages found in payload');
+        return;
+      }
+
+      console.log(`[HyperswarmManager] 📦 Processing ${messages.length} message(s)...`);
+
+      const processedMessages: { message: HolepunchMessage, senderPublicKey: string, roomTopic: string, fromRootPeer: boolean }[] = [];
+      // Process each message
+      for (const msg of messages) {
+        const roomKey = this.roomKeys.get(msg.roomTopic);
+        if (!roomKey) throw new Error('Cannot decrypt messages - room key not found' + msg.roomTopic);
+
+        // Decrypt the message
+        console.log('[HyperswarmManager] 🔓 Decrypting message...');
+        const decryptedMessage = msg.encrypted ? MessageEncryption.decrypt(roomKey, msg.message) : msg.message;
+
         console.log('[HyperswarmManager] ✅ Message decrypted successfully');
-        
-        // Emit decrypted message
-        this.emit('messageReceived', decryptedMessage);
+
+        processedMessages.push({
+          message: decryptedMessage,
+          senderPublicKey: msg.senderPublicKey,
+          roomTopic: msg.roomTopic,
+          fromRootPeer: msg.fromRootPeer,
+        });
+      }
+
+      // Emit decrypted messages with metadata
+      this.emit('messagesReceived', { messages: processedMessages});
+      console.log('[HyperswarmManager] ✅ Finished processing all messages');
 
     } catch (error) {
-      console.error('[HyperswarmManager] ❌ Decryption failed:', error);
-      this.emit('error', { 
-        error: 'Failed to decrypt message',
+      console.error('[HyperswarmManager] ❌ Failed to process messages:', error);
+      this.emit('error', {
+        error: 'Failed to process messages',
         details: error.message,
       });
     }
@@ -230,25 +228,25 @@ export class HyperswarmManager {
 
   async getKeys(): Promise<KeyPair> {
     this.ensureInitialized();
-    
+
     const request = this.rpc!.request(CommandIds[WorkletCommand.GET_KEYS]);
     request.send('');
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     return response;
   }
 
   async getConnectedPeers(): Promise<string[]> {
     this.ensureInitialized();
-    
+
     const request = this.rpc!.request(CommandIds[WorkletCommand.GET_CONNECTED_PEERS]);
     request.send('');
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     return response;
   }
 
@@ -258,15 +256,15 @@ export class HyperswarmManager {
    */
   async reconnectRootPeer(): Promise<{ success: boolean; alreadyConnected?: boolean }> {
     this.ensureInitialized();
-    
+
     console.log('[HyperswarmManager] 🔄 Triggering manual root peer reconnection...');
-    
+
     const request = this.rpc!.request(CommandIds[WorkletCommand.RECONNECT_ROOT_PEER]);
     request.send('');
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     return response;
   }
 
@@ -331,7 +329,7 @@ export class HyperswarmManager {
    */
   async joinRoom(roomTopic: string, roomKey: string): Promise<{ success: boolean; alreadyJoined?: boolean }> {
     this.ensureInitialized();
-    
+
     // ⚠️ IMPORTANT: Wait for root peer connection before allowing room join
     if (!this.rootPeerConnected) {
       console.log('[HyperswarmManager] 🚫 Root peer not connected. Waiting...');
@@ -341,38 +339,38 @@ export class HyperswarmManager {
         throw new Error('Cannot join room: Root peer is not connected. Please ensure the backend server is running and try again.');
       }
     }
-    
+
     // Validate room key format
     if (!MessageEncryption.isValidRoomKey(roomKey)) {
       throw new Error('Invalid room key format - must be 64 hex characters');
     }
-    
+
     // Store room key for encryption/decryption (NOT sent to worklet)
     this.roomKeys.set(roomTopic, roomKey);
-    
-    console.log('[HyperswarmManager] Joining room:', roomTopic.substring(0, 16), '(with encryption)');
-    
+
+    console.log('[HyperswarmManager] Joining room:', roomTopic, '(with encryption)');
+
     // Send only roomTopic to worklet (room key stays in React Native)
     const request = this.rpc!.request(CommandIds[WorkletCommand.JOIN_ROOM]);
     request.send(JSON.stringify({ roomTopic }));
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     return response;
   }
 
   async leaveRoom(roomTopic: string): Promise<{ success: boolean }> {
     this.ensureInitialized();
-    
+
     console.log('[HyperswarmManager] Leaving room:', roomTopic);
-    
+
     const request = this.rpc!.request(CommandIds[WorkletCommand.LEAVE_ROOM]);
     request.send(JSON.stringify({ roomTopic }));
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     return response;
   }
 
@@ -383,31 +381,34 @@ export class HyperswarmManager {
    */
   async sendMessage(roomTopic: string, message: HolepunchMessage): Promise<{ success: boolean; sentTo: number }> {
     this.ensureInitialized();
-    
+
     // Get room key for encryption
     const roomKey = this.roomKeys.get(roomTopic);
     if (!roomKey) {
       throw new Error('Room key not found - room not joined or key not stored');
     }
-    
-    console.log('[HyperswarmManager] 🔐 Encrypting and sending message to room:', roomTopic.substring(0, 16));
-    
+
+    console.log('[HyperswarmManager] 🔐 Encrypting and sending message to room:', roomTopic);
+
     try {
       // Encrypt message in React Native
       const encryptedData = MessageEncryption.encrypt(roomKey, message);
       console.log('[HyperswarmManager] ✅ Message encrypted, size:', encryptedData.length, 'bytes');
-      
+
       // Send encrypted data to worklet (worklet doesn't decrypt, just forwards)
       const request = this.rpc!.request(CommandIds[WorkletCommand.SEND_MESSAGE]);
-      request.send(JSON.stringify({ 
-        roomTopic, 
+      const envelope = {
         message: encryptedData, // Send encrypted string instead of plain message
+        roomTopic,
         encrypted: true, // Flag to indicate this is encrypted
-      }));
-      
+        // senderPublicKey: this.keyPair.publicKey (added by the worklet)
+      };
+      request.send(JSON.stringify(envelope));
+
       const reply = await request.reply();
       const response = JSON.parse(b4a.toString(reply));
-      
+      if(!response.success) throw new Error(response.error)
+
       return response;
     } catch (error) {
       console.error('[HyperswarmManager] ❌ Encryption failed:', error);
@@ -422,17 +423,17 @@ export class HyperswarmManager {
    */
   async requestSync(roomTopic: string, lastIndex: number = 0): Promise<{ success: boolean }> {
     this.ensureInitialized();
-    
-    console.log('[HyperswarmManager] 🔄 Requesting sync from index:', lastIndex, 'for room:', roomTopic.substring(0, 16));
-    
+
+    console.log('[HyperswarmManager] 🔄 Requesting sync from index:', lastIndex, 'for room:', roomTopic);
+
     const request = this.rpc!.request(CommandIds[WorkletCommand.REQUEST_SYNC]);
     request.send(JSON.stringify({ roomTopic, lastIndex }));
-    
+
     const reply = await request.reply();
     const response = JSON.parse(b4a.toString(reply));
-    
+
     console.log('[HyperswarmManager] ✅ Sync request sent');
-    
+
     return response;
   }
 
@@ -473,9 +474,9 @@ export class HyperswarmManager {
     return () => this.listeners.rootPeerDisconnected.delete(listener);
   }
 
-  onMessageReceived(listener: MessageReceivedListener): () => void {
-    this.listeners.messageReceived.add(listener);
-    return () => this.listeners.messageReceived.delete(listener);
+  onMessagesReceived(listener: MessagesReceivedListener): () => void {
+    this.listeners.messagesReceived.add(listener);
+    return () => this.listeners.messagesReceived.delete(listener);
   }
 
   onError(listener: WorkletErrorListener): () => void {
@@ -529,14 +530,14 @@ export class HyperswarmManager {
 
   async destroy(): Promise<void> {
     console.log('[HyperswarmManager] Shutting down...');
-    
+
     // Clear all listeners
     Object.values(this.listeners).forEach(set => set.clear());
-    
+
     // TODO: Add worklet.terminate() if available
     this.initialized = false;
     this.rpc = null;
-    
+
     console.log('[HyperswarmManager] Shutdown complete');
   }
 }

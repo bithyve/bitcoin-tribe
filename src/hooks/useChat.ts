@@ -9,7 +9,9 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
-import { HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
+import { HolepunchMessage, HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
+import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
+import { PeerStorage } from 'src/services/messaging/holepunch/storage/PeerStorage';
 
 interface UseChatResult {
   // State
@@ -18,17 +20,19 @@ interface UseChatResult {
   isRootPeerConnected: boolean; // True when root peer is connected
   currentRoom: any | null;
   connectedPeers: string[];
+  sessionMessages: HolepunchMessage[];
 
   // Actions
-  createRoom: (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string) => Promise<void>;
-  joinRoom: (roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string) => Promise<HolepunchRoom>;
-  sendMessage: (text: string) => Promise<void>;
+  createRoom: (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string) => Promise<void>;
+  joinRoom: (roomKey: string, lastSyncIndex: number) => Promise<HolepunchRoom>;
+  sendMessage: (text: string, messageType: HolepunchMessageType) => Promise<void>;
   leaveRoom: () => Promise<void>;
   reconnectRootPeer: () => Promise<void>;
 
   // Fetchers
   getAllRooms: () => Promise<any[]>;
-  getPubKey: () => string | null;
+  getCurrentPeerPubKey: () => string | null;
+  getPeersForRoom: (roomId: string) => Promise<HolepunchPeer[]>;
   // getMessagesForRoom: (roomId: string) => Promise<any[]>;
 
   // Loading states
@@ -53,6 +57,7 @@ export function useChat(): UseChatResult {
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sessionMessages, setSessionMessages] = useState<HolepunchMessage[]>([]);
 
   const chatService = ChatService.getInstance();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
@@ -62,10 +67,17 @@ export function useChat(): UseChatResult {
   useEffect(() => {
     if (seed && !chatService.isInitialized()) {
       setIsInitializing(true);
+
+      // Set user profile from TribeApp
+      const userProfile = {
+        name: app?.appName || 'Anonymous',
+        image: app?.walletImage || app?.imageUrl || '',
+      };
       console.log('[useChat] Initializing with seed:', seed)
-      chatService.initialize(seed)
+      chatService.initialize(seed, userProfile)
         .then(() => {
           console.log('[useChat] ✅ Initialized');
+          
           setIsInitializing(false);
         })
         .catch(err => {
@@ -75,7 +87,7 @@ export function useChat(): UseChatResult {
         });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [seed]);
+  }, [seed, app]);
 
 
   // Set up event listeners
@@ -90,11 +102,12 @@ export function useChat(): UseChatResult {
     const initialStatus = adapter.isRootPeerConnected();
     setIsRootPeerConnected(initialStatus);
 
-    const handleMessage = () => {
-      // console.log('[useChat] Received message:', message);
+    const handleSessionMessage = (message: HolepunchMessage) => {
+      console.log('[useChat] Received message:', { message });
+      setSessionMessages((prevMessages) => [...prevMessages, message]);
     };
 
-    const handleRoomCreated = (room: any) => {
+    const handleRoomCreated = (room: HolepunchRoom) => {
       console.log('[useChat] Created room:', room);
       setCurrentRoom(room);
       setIsConnected(true);
@@ -126,7 +139,8 @@ export function useChat(): UseChatResult {
       setIsRootPeerConnected(false);
     };
 
-    adapter.on('chat:message-received', handleMessage);
+    adapter.on('chat:message-received', handleSessionMessage);
+    adapter.on('chat:message-sent', handleSessionMessage);
     adapter.on('chat:room-created', handleRoomCreated);
     adapter.on('chat:room-joined', handleRoomJoined);
     adapter.on('chat:peer-connected', handlePeerConnected);
@@ -135,7 +149,8 @@ export function useChat(): UseChatResult {
     adapter.on('chat:root-peer-disconnected', handleRootPeerDisconnected);
 
     return () => {
-      adapter.off('chat:message-received', handleMessage);
+      adapter.off('chat:message-received', handleSessionMessage);
+      adapter.off('chat:message-sent', handleSessionMessage);
       adapter.off('chat:room-created', handleRoomCreated);
       adapter.off('chat:room-joined', handleRoomJoined);
       adapter.off('chat:peer-connected', handlePeerConnected);
@@ -145,12 +160,12 @@ export function useChat(): UseChatResult {
     };
   }, [chatService.isInitialized()]);
 
-  const createRoom = useCallback(async (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string) => {
+  const createRoom = useCallback(async (roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string) => {
     setIsCreatingRoom(true);
     setError(null);
     try {
       const adapter = chatService.getAdapter();
-      await adapter.createRoom(roomName, roomType, roomDescription, roomImage);
+      await adapter.createRoom(roomName, roomType, roomDescription, roomImage, roomKeyToJoin);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -159,13 +174,13 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
-  const joinRoom = useCallback(async (roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string): Promise<HolepunchRoom> => {
+  const joinRoom = useCallback(async (roomKey: string, lastSyncIndex: number): Promise<HolepunchRoom> => {
     setIsJoiningRoom(true);
     setError(null);
     try {
       console.log('[useChat] Joining room with key:', roomKey);
       const adapter = chatService.getAdapter();
-      return await adapter.joinRoom(roomKey, roomName, roomType, roomDescription, roomImage);
+      return await adapter.joinRoom(roomKey, lastSyncIndex);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -174,12 +189,12 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
-  const sendMessage = useCallback(async (text: string) => {
+  const sendMessage = useCallback(async (text: string, messageType: HolepunchMessageType) => {
     setIsSendingMessage(true);
     setError(null);
     try {
       const adapter = chatService.getAdapter();
-      await adapter.sendMessage(text, HolepunchMessageType.TEXT);
+      await adapter.sendMessage(text, messageType);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -195,6 +210,7 @@ export function useChat(): UseChatResult {
       setIsConnected(false);
       setCurrentRoom(null);
       setConnectedPeers([]);
+      setSessionMessages([]);
     } catch (err: any) {
       setError(err.message);
       throw err;
@@ -258,9 +274,14 @@ export function useChat(): UseChatResult {
   }, []);
 
   // Get the peer public key
-  const getPubKey = useCallback(() => {
+  const getCurrentPeerPubKey = useCallback(() => {
     const adapter = chatService.getAdapter();
     return adapter.getKeyPair().publicKey;
+  }, []);
+
+  // Get peers for a specific room
+  const getPeersForRoom = useCallback(async (roomId: string) => {
+    return await PeerStorage.getPeersForRoom(roomId);
   }, []);
 
   // Fetch all messages for a given room using chatAdapter
@@ -275,13 +296,15 @@ export function useChat(): UseChatResult {
     isRootPeerConnected,
     currentRoom,
     connectedPeers,
+    sessionMessages,
     createRoom,
     joinRoom,
     sendMessage,
     leaveRoom,
     reconnectRootPeer,
     getAllRooms,
-    getPubKey,
+    getCurrentPeerPubKey,
+    getPeersForRoom,
     // getMessagesForRoom,
     isCreatingRoom,
     isJoiningRoom,

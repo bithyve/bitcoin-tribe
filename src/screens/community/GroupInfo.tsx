@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View, FlatList, Platform } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -15,12 +15,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
-
-// TODO: Replace with actual members from P2P network
-// const STATIC_MEMBERS_EXAMPLE = [
-//   { image: 'https://...', name: 'John Doe', desc: 'Blockchain dev' },
-//   ...
-// ];
+import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
 
 export const GroupInfo = () => {
   const theme: AppTheme = useTheme();
@@ -28,20 +23,21 @@ export const GroupInfo = () => {
   const { community, common } = translations;
   const styles = getStyles(theme);
   const navigation = useNavigation();
-  const route = useRoute<RouteProp<{ params: { room: HolepunchRoom } }>>();
-  const { room } = route.params;
-  // TODO: Replace with actual members from P2P network
-  const [members] = useState([]); // Empty for now, will be populated with actual peer data
- 
-  const renderItem = ({ item }) => (
+  const route = useRoute<RouteProp<{ params: { room: HolepunchRoom, peersMap: Map<string, HolepunchPeer> } }>>();
+  const { room, peersMap } = route.params;
+  const [members, setMembers] = useState<HolepunchPeer[]>(Array.from(peersMap.values()));
+
+  const renderMemberItem = ({ item }: { item: HolepunchPeer }) => (
     <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.avatar} />
-      <View>
-        <AppText variant="heading3SemiBold">{item.name}</AppText>
-        <AppText variant="caption" style={styles.desc}>
-          {item.desc}
-        </AppText>
-      </View>
+      {item.peerImage ? (
+        <Image source={{ uri: item.peerImage }} style={styles.avatar} />
+      ) : (
+        <View style={[styles.avatar, styles.placeholderImage]}>
+          <AppText variant="heading3SemiBold">{(item.peerName || item.peerId)?.charAt(0).toUpperCase() || '?'}</AppText>
+        </View>
+      )}
+      <AppText variant="heading3SemiBold">{item.peerName || item.peerId?.substring(0, 20)}</AppText>
+      {/* <AppText variant="body2" style={{ fontSize: 11 }}>{` pubKey: ${item.peerId?.substring(0, 20)}`}</AppText> */}
     </View>
   );
 
@@ -83,9 +79,12 @@ export const GroupInfo = () => {
           {room.roomDescription || 'No description available'}
         </AppText>
         <View style={styles.divider} />
-        {/* <AppText variant="body1Bold" style={{ marginBottom: hp(20) }}>
-          {`${members.length} ${community.members}`}
-        </AppText> */}
+        {members.length ? (
+          <AppText variant="body1Bold" style={{ marginBottom: hp(20) }}>
+            {`${members.length > 1 ? community.members : 'Member'}`}
+          </AppText>
+        ) : null}
+
       </>
     );
   };
@@ -109,8 +108,8 @@ export const GroupInfo = () => {
         onBackNavigation={() => navigation.goBack()}
         rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
         onSettingsPress={handleScan}
-        // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
-        // onTernaryIconPress={onEditGroupInfo}
+      // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
+      // onTernaryIconPress={onEditGroupInfo}
       />
 
       <View style={styles.bodyWrapper}>
@@ -118,7 +117,7 @@ export const GroupInfo = () => {
           ListHeaderComponent={HeaderComponent}
           data={members}
           keyExtractor={(_, index) => index.toString()}
-          renderItem={renderItem}
+          renderItem={renderMemberItem}
           showsVerticalScrollIndicator={false}
         />
       </View>
@@ -139,7 +138,7 @@ const getStyles = (theme: AppTheme) =>
     groupImage: {
       height: wp(150),
       width: wp(150),
-      borderRadius:wp(150)
+      borderRadius: wp(150)
     },
     title: {
       marginTop: hp(22),

@@ -42,10 +42,13 @@ export interface PeerDisconnectedEvent {
   timestamp: number;
 }
 
-export interface MessageReceivedEvent {
-  peerPublicKey: string;
-  message: HolepunchMessage;
-  timestamp: number;
+export interface MessagesReceivedEvent {
+  messages: {
+    message: HolepunchMessage;
+    senderPublicKey: string;
+    roomTopic: string;
+    fromRootPeer: boolean;
+  }[];
 }
 
 export interface WorkletErrorEvent {
@@ -60,5 +63,5 @@ export interface WorkletErrorEvent {
 export type WorkletReadyListener = (event: WorkletReadyEvent) => void;
 export type PeerConnectedListener = (event: PeerConnectedEvent) => void;
 export type PeerDisconnectedListener = (event: PeerDisconnectedEvent) => void;
-export type MessageReceivedListener = (event: MessageReceivedEvent) => void;
+export type MessagesReceivedListener = (event: MessagesReceivedEvent) => void;
 export type WorkletErrorListener = (event: WorkletErrorEvent) => void;

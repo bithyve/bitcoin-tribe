@@ -25,7 +25,7 @@ export enum WorkletEvent {
   READY = 'READY',
   PEER_CONNECTED = 'PEER_CONNECTED',
   PEER_DISCONNECTED = 'PEER_DISCONNECTED',
-  MESSAGE_RECEIVED = 'MESSAGE_RECEIVED',
+  MESSAGES_RECEIVED = 'MESSAGES_RECEIVED',
   ERROR = 'ERROR',
 }
 
@@ -47,6 +47,6 @@ export const CommandIds = {
   [WorkletEvent.READY]: 10,
   [WorkletEvent.PEER_CONNECTED]: 11,
   [WorkletEvent.PEER_DISCONNECTED]: 12,
-  [WorkletEvent.MESSAGE_RECEIVED]: 13,
+  [WorkletEvent.MESSAGES_RECEIVED]: 13,
   [WorkletEvent.ERROR]: 14,
 } as const;

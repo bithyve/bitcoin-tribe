@@ -12,7 +12,10 @@ import { MessageEncryption } from './holepunch/crypto/MessageEncryption';
 
 import { RoomStorage, HolepunchRoom, HolepunchRoomType } from './holepunch/storage/RoomStorage';
 import { MessageStorage, HolepunchMessage, HolepunchMessageType } from './holepunch/storage/MessageStorage';
-import { KeyPair } from './holepunch/network/types/network.types';
+import { KeyPair, MessagesReceivedEvent } from './holepunch/network/types/network.types';
+import { MessageProcessorRegistry } from './holepunch/processors/MessageProcessor';
+import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
+import { TextProcessor } from './holepunch/processors/TextProcessor';
 
 
 
@@ -20,20 +23,29 @@ export class ChatAdapter extends EventEmitter {
   private manager: HyperswarmManager;
   private currentRoom: HolepunchRoom | null = null;
   private keyPair: KeyPair | null = null;
+  private processorRegistry: MessageProcessorRegistry;
+  private userProfile: { name?: string; image?: string } | null = null;
 
   constructor() {
     super();
     this.manager = HyperswarmManager.getInstance();
+
+    // Initialize message processor registry
+    this.processorRegistry = new MessageProcessorRegistry();
+    this.processorRegistry.register(new IdentityProcessor());
+    this.processorRegistry.register(new TextProcessor());
+
     this.setupEventForwarding();
   }
 
   /**
    * Initialize the manager with seed (call once on app startup)
    */
-  async initialize(seed: string): Promise<void> {
+  async initialize(seed: string, userProfile: { name?: string; image?: string }): Promise<void> {
     await this.manager.initialize(seed);
 
     this.keyPair = await this.manager.getKeys();
+    this.userProfile = userProfile;
   }
 
   /**
@@ -57,19 +69,22 @@ export class ChatAdapter extends EventEmitter {
       this.emit('chat:root-peer-disconnected');
     });
 
-    this.manager.onMessageReceived(async (data: any) => {
-      // Persist message to storage
-      if (this.currentRoom) {
-        const savedMsg: HolepunchMessage = {
-          messageId: data.messageId,
-          roomId: data.roomId,
-          senderId: data.senderId,
-          messageType: data.messageType,
-          content: data.content,
-          timestamp: data.timestamp,
-        };
-        await MessageStorage.saveMessage(savedMsg);
-        this.emit('chat:message-received', savedMsg);
+    this.manager.onMessagesReceived(async (event: MessagesReceivedEvent) => {
+      // Processes and emits messages sequentially
+      for (const { message, senderPublicKey, roomTopic, fromRootPeer } of event.messages) {
+        // Process message (handles identity, text, etc.)
+        const result = await this.processorRegistry.process(message, {
+          roomId: this.currentRoom?.roomId,
+          currentPeerPubKey: this.keyPair?.publicKey,
+        });
+
+        // Note 📢: Incoming messages are pesisted/commited only if they are from the ROOT Peer (maintains total message order across all peers)
+        if (result.shouldSave && fromRootPeer) { // commited message stream (realm)
+          await MessageStorage.saveMessage(result.processedMessage);
+        }
+
+        // Emit the display message (could be transformed, e.g., IDENTITY -> SYSTEM)
+        if (result.shouldDisplay && !fromRootPeer) this.emit('chat:message-received', result.processedMessage); // emit the message to the session, uncommited message stream (sessoin messages) --> commited when resynced w/ the root peer (eventual total order consistency)
       }
     });
 
@@ -82,14 +97,27 @@ export class ChatAdapter extends EventEmitter {
    * Create a new chat room
    * Generates room key, derives topic, saves metadata
    */
-  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string): Promise<HolepunchRoom> {
+  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string): Promise<HolepunchRoom> {
 
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
     }
 
-    // Generate new room key (64-char hex)
-    const roomKey = MessageEncryption.generateRoomKey();
+    let roomKey: string;
+    let creator: string;
+    if (roomKeyToJoin) {
+      // case: join a room created by someone else
+      if (!MessageEncryption.isValidRoomKey(roomKeyToJoin)) {
+        throw new Error('Invalid room key format');
+      }
+      roomKey = roomKeyToJoin;
+      creator = '';
+    } else {
+      // case: create a new room
+      roomKey = MessageEncryption.generateRoomKey();
+      creator = this.keyPair.publicKey;
+    }
+
     // Derive room topic (hash of room key)
     const roomTopic = MessageEncryption.deriveRoomId(roomKey);
 
@@ -101,16 +129,15 @@ export class ChatAdapter extends EventEmitter {
       roomName: roomName,
       roomDescription: roomDescription,
       peers: [],
-      creator: this.keyPair.publicKey,
+      creator: creator,
       createdAt: Date.now(),
       lastActive: Date.now(),
+      initializedIdentity: false,
       roomImage: roomImage,
     };
 
     // Save to storage
     await RoomStorage.saveRoom(this.currentRoom);
-    await this.manager.joinRoom(roomTopic, roomKey);
-
     console.log('[ChatAdapter] ✅ Room created:', this.currentRoom.roomName);
     this.emit('chat:room-created', this.currentRoom);
     return this.currentRoom;
@@ -119,7 +146,7 @@ export class ChatAdapter extends EventEmitter {
   /**
    * Join existing room with room key
    */
-  async joinRoom(roomKey: string, roomName?: string, roomType?: HolepunchRoomType, roomDescription?: string, roomImage?: string): Promise<HolepunchRoom> {
+  async joinRoom(roomKey: string, lastSyncIndex: number): Promise<HolepunchRoom> {
     // Validate room key
     if (!MessageEncryption.isValidRoomKey(roomKey)) {
       throw new Error('Invalid room key format');
@@ -132,39 +159,29 @@ export class ChatAdapter extends EventEmitter {
     const allRooms = await RoomStorage.getAllRooms();
     const existingRoom = allRooms.find(r => r.roomKey === roomKey);
 
-    // Create room object
-    if(existingRoom) {
-      this.currentRoom = existingRoom;
-    } else {
-      // TODO: update fields once meta data for the new room is communicated ()
-      this.currentRoom =  {
-        roomId: roomTopic,
-        roomKey: roomKey,
-        roomType: roomType || HolepunchRoomType.GROUP,
-        roomName: roomName || `Room ${roomTopic.substring(0, 8)}`,
-        roomDescription: roomDescription || `Description for room ${roomTopic.substring(0, 8)}`,
-        peers: [],
-        creator: '', 
-        createdAt: Date.now(),
-        lastActive: Date.now(),
-        roomImage: roomImage,
-      };
-
-      await RoomStorage.saveRoom(this.currentRoom);
-    }
+    if (!existingRoom) throw new Error('Room not found with key: ' + roomKey);
+    this.currentRoom = existingRoom;
 
     // Join via HyperswarmManager (will sync messages from root peer)
-    await this.manager.joinRoom(roomTopic, roomKey);
+    const { success, alreadyJoined } = await this.manager.joinRoom(roomTopic, roomKey);
+    if (!success) throw new Error('Failed to join room');
 
     console.log('[ChatAdapter] ✅ Room joined:', this.currentRoom.roomName);
     this.emit('chat:room-joined', this.currentRoom);
+
+    const syncResponse = await this.requestSync(this.currentRoom.roomId, lastSyncIndex) // essentially sync the room before sending the identity message(resolves sync conflict)
+    
+    if (syncResponse.success && !existingRoom.initializedIdentity) {
+      console.log('[ChatAdapter] 📢 Sending identity message');
+      await this.sendIdentityMessage(this.currentRoom) // Send identity message after joining a room for the first time
+    }
     return this.currentRoom;
-  }
+  };
 
   /**
    * Send message to current room
    */
-  async sendMessage(text: string, messageType: HolepunchMessageType): Promise<void> {
+  async sendMessage(content: string, messageType: HolepunchMessageType): Promise<void> {
     if (!this.currentRoom) {
       throw new Error('No active room');
     }
@@ -179,31 +196,33 @@ export class ChatAdapter extends EventEmitter {
       roomId: this.currentRoom.roomId,
       senderId: this.keyPair.publicKey,
       messageType: messageType,
-      content: text,
+      content,
       timestamp: Date.now(),
     };
 
     // Send message over the network using topic hash
-    const result = await this.manager.sendMessage(this.currentRoom.roomId, message);
+    const { success, sentTo } = await this.manager.sendMessage(this.currentRoom.roomId, message);
+    if (!success) throw new Error('Failed to send message');
 
-    if (!result.success) {
-      throw new Error('Failed to send message');
-    }
 
-    // Persist own message to storage
-    if (this.currentRoom) {
-      await MessageStorage.saveMessage(message);
-      this.emit('chat:message-sent', {
-        message,
-        sentTo: result.sentTo,
-      });
-    }
+    // Process message (handles identity, text, etc.)
+    const result = await this.processorRegistry.process(message, {
+      roomId: this.currentRoom.roomId,
+      currentPeerPubKey: this.keyPair.publicKey,
+    });
+
+    // Note 📢: Self messages are pesisted upon synching w/ the root peer (maintains total message order across all peers)
+    // if (result.shouldSave) {
+    //   await MessageStorage.saveMessage(result.processedMessage);
+    // }
+
+    if (result.shouldDisplay) this.emit('chat:message-sent', result.processedMessage); // emit the message to the session
   }
 
   /**
    * Request sync from root peer
    */
-  async requestSync(roomId: string, lastIndex: number): Promise <{ success: boolean }> {
+  async requestSync(roomId: string, lastIndex: number): Promise<{ success: boolean }> {
     return await this.manager.requestSync(roomId, lastIndex);
   }
 
@@ -258,6 +277,33 @@ export class ChatAdapter extends EventEmitter {
    */
   isRootPeerConnected(): boolean {
     return this.manager.isRootPeerConnected();
+  }
+
+  /**
+   * Send identity message to announce presence in room
+   * Called automatically after joining a room
+   */
+  public async sendIdentityMessage(room: HolepunchRoom): Promise<void> {
+    if (!this.currentRoom || !this.keyPair) {
+      console.warn('[ChatAdapter] Cannot send identity - no room or keypair');
+      return;
+    }
+
+    try {
+      const identity = {
+        name: this.userProfile?.name || 'Anonymous',
+        publicKey: this.keyPair.publicKey,
+        image: this.userProfile?.image || '',
+      };
+
+      console.log('[ChatAdapter] 📢 Sending identity message:', identity.name);
+      await this.sendMessage(JSON.stringify(identity), HolepunchMessageType.IDENTITY);
+      console.log('[ChatAdapter] ✅ Identity message sent');
+      await RoomStorage.updateInitializedIdentity(room.roomId);
+    } catch (error) {
+      console.error('[ChatAdapter] ❌ Failed to send identity message:', error);
+      // Don't throw - identity message failure shouldn't block room join
+    }
   }
 
   /**

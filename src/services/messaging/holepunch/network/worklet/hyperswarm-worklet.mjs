@@ -34,7 +34,7 @@ const WorkletEvent = {
   READY: 10,
   PEER_CONNECTED: 11,
   PEER_DISCONNECTED: 12,
-  MESSAGE_RECEIVED: 13,
+  MESSAGES_RECEIVED: 13,
   ERROR: 14,
 };
 
@@ -116,7 +116,7 @@ class WorkletState {
     this.rootPeerConnection = connection;
     this.rootPeerKey = peerKey;
     this.isConnectedToRootPeer = true;
-    console.log('[Worklet] 🏰 Connected to root peer:', peerKey.substring(0, 16));
+    console.log('[Worklet] 🏰 Connected to root peer:', peerKey);
   }
 
   removeRootPeer() {
@@ -146,36 +146,36 @@ class RPCManager {
 
     try {
       const data = req.data ? b4a.toString(req.data) : '';
-      
+
       switch (req.command) {
         case WorkletCommand.GET_KEYS:
           this.handleGetKeys(req);
           break;
-        
+
         case WorkletCommand.GET_CONNECTED_PEERS:
           this.handleGetConnectedPeers(req);
           break;
-        
+
         case WorkletCommand.JOIN_ROOM:
           this.handleJoinRoom(req, JSON.parse(data));
           break;
-        
+
         case WorkletCommand.LEAVE_ROOM:
           this.handleLeaveRoom(req, JSON.parse(data));
           break;
-        
+
         case WorkletCommand.SEND_MESSAGE:
           this.handleSendMessage(req, JSON.parse(data));
           break;
-        
+
         case WorkletCommand.REQUEST_SYNC:
           this.handleRequestSync(req, JSON.parse(data));
           break;
-        
+
         case WorkletCommand.RECONNECT_ROOT_PEER:
           this.handleReconnectRootPeer(req);
           break;
-        
+
         default:
           console.warn('[Worklet] Unknown command:', req.command);
           req.reply(JSON.stringify({ error: 'Unknown command' }));
@@ -215,11 +215,11 @@ class RPCManager {
       await state.swarm.flush();
 
       console.log('[Worklet] Joined room:', roomTopic);
-      
+
       // Register room with root peer if connected
       if (state.isConnectedToRootPeer) {
         registerRoomWithRootPeer(roomTopic);
-        
+
         // NOTE: Sync is now controlled by React Native via REQUEST_SYNC command
         // This allows React Native to pass the correct lastIndex for incremental sync
         console.log('[Worklet] ℹ️  Room registered. Waiting for React Native to request sync...');
@@ -235,7 +235,7 @@ class RPCManager {
   async handleLeaveRoom(req, { roomTopic }) {
     try {
       const discovery = state.removeRoom(roomTopic);
-      
+
       if (discovery) {
         await discovery.destroy();
         console.log('[Worklet] Left room:', roomTopic);
@@ -248,38 +248,34 @@ class RPCManager {
     }
   }
 
-  handleSendMessage(req, { roomTopic, message, encrypted }) {
+  handleSendMessage(req, envelope) {
     try {
-      const peersInRoom = state.getPeersInRoom(roomTopic);
-      
-      // Wrap message with encryption metadata for P2P transport
-      const envelope = {
-        roomTopic,
-        message,
-        encrypted: encrypted || false, // Flag to indicate if content is encrypted
-        timestamp: Date.now(),
-      };
-      
-      const messageData = JSON.stringify(envelope);
-      let sentCount = 0;
+      const peersInRoom = state.getPeersInRoom(envelope.roomTopic);
+      if (!envelope.roomTopic || !envelope.message) throw new Error('Missing envelope parameters');
+      envelope.senderPublicKey = state.keyPair.publicKey.toString('hex');
 
-      // Send to all connected peers in the room
+      // Step1: Store with root peer for offline delivery (message is already encrypted)
+      storeMessageWithRootPeer(envelope);
+
+      // Step2: Send to all connected peers in the room
+      let sentCount = 0;
+      const peerMessage = {
+        type: 'p2p-message',
+        ...envelope,
+      };
       for (const peerKey of peersInRoom) {
         const connection = state.getConnection(peerKey);
         if (connection && peerKey !== state.rootPeerKey) { // Don't send regular messages to root peer
-          connection.write(messageData);
+          connection.write(JSON.stringify(peerMessage));
           sentCount++;
         }
       }
 
-      // Also store with root peer for offline delivery (message is already encrypted)
-      storeMessageWithRootPeer(roomTopic, message);
-
-      const logMsg = encrypted 
+      const logMsg = envelope.encrypted
         ? `[Worklet] 🔐 Forwarded encrypted message to ${sentCount} peers`
         : `[Worklet] Sent message to ${sentCount} peers`;
-      console.log(logMsg, 'in room', roomTopic.substring(0, 16));
-      
+      console.log(logMsg, 'in room', envelope.roomTopic);
+
       req.reply(JSON.stringify({ success: true, sentTo: sentCount, storedWithRootPeer: state.isConnectedToRootPeer }));
     } catch (error) {
       console.error('[Worklet] Failed to send message:', error);
@@ -289,11 +285,11 @@ class RPCManager {
 
   handleRequestSync(req, { roomTopic, lastIndex }) {
     try {
-      console.log('[Worklet] 📨 Sync requested for room:', roomTopic.substring(0, 16), 'from index:', lastIndex);
-      
+      console.log('[Worklet] 📨 Sync requested for room:', roomTopic, 'from index:', lastIndex);
+
       // Request sync from root peer with the specified lastIndex
       requestSyncFromRootPeer(roomTopic, lastIndex);
-      
+
       req.reply(JSON.stringify({ success: true }));
     } catch (error) {
       console.error('[Worklet] Failed to request sync:', error);
@@ -304,7 +300,7 @@ class RPCManager {
   async handleReconnectRootPeer(req) {
     try {
       console.log('[Worklet] 🔄 Manual root peer reconnection requested...');
-      
+
       if (state.isConnectedToRootPeer) {
         console.log('[Worklet] ✅ Already connected to root peer');
         req.reply(JSON.stringify({ success: true, alreadyConnected: true }));
@@ -314,7 +310,7 @@ class RPCManager {
       // Rejoin the discovery swarm to actively search for root peer
       const discoveryTopic = crypto.hash(Buffer.from(state.discoveryKey));
       console.log('[Worklet] 🔍 Rejoining root peer discovery swarm...');
-      
+
       // Leave and rejoin to refresh discovery
       const existingDiscovery = state.rooms.get(discoveryTopic.toString('hex'));
       if (existingDiscovery) {
@@ -326,7 +322,7 @@ class RPCManager {
         client: true,
         server: false
       });
-      
+
       state.rooms.set(discoveryTopic.toString('hex'), discovery);
       await state.swarm.flush();
 
@@ -353,23 +349,20 @@ let rpcManager;
 function handleRootPeerAnnouncement(connection, peerKey, data) {
   try {
     const message = JSON.parse(data.toString());
-    
-    if (message.type === 'root-peer-announce' && message.username === 'ChatRootPeer') {
-      console.log('[Worklet] 🏰 Root peer detected!');
-      state.setRootPeer(peerKey, connection);
-      
-      // Register all current rooms with root peer
-      for (const [roomTopic] of state.rooms.entries()) {
-        registerRoomWithRootPeer(roomTopic);
-      }
-      
-      // Notify React Native
-      rpcManager.sendEvent(WorkletEvent.PEER_CONNECTED, {
-        peerPublicKey: peerKey,
-        timestamp: Date.now(),
-        isRootPeer: true,
-      });
+    console.log('[Worklet] 🏰 Root peer detected!');
+    state.setRootPeer(peerKey, connection);
+
+    // Register all current rooms with root peer
+    for (const [roomTopic] of state.rooms.entries()) {
+      registerRoomWithRootPeer(roomTopic);
     }
+
+    // Notify React Native
+    rpcManager.sendEvent(WorkletEvent.PEER_CONNECTED, {
+      peerPublicKey: peerKey,
+      timestamp: Date.now(),
+      isRootPeer: true,
+    });
   } catch (error) {
     // Not a root peer announcement, handle as regular message
   }
@@ -388,28 +381,29 @@ function registerRoomWithRootPeer(roomTopic) {
 
   try {
     state.rootPeerConnection.write(JSON.stringify(registrationMessage));
-    console.log('[Worklet] 📝 Registered room with root peer:', roomTopic.substring(0, 16));
+    console.log('[Worklet] 📝 Registered room with root peer:', roomTopic);
   } catch (error) {
     console.error('[Worklet] ❌ Failed to register room:', error);
   }
 }
 
-function storeMessageWithRootPeer(roomTopic, message) {
-  if (!state.isConnectedToRootPeer || !state.rootPeerConnection) {
-    return; // No root peer, skip storage
-  }
+function storeMessageWithRootPeer(envelope) {
+  if (!state.isConnectedToRootPeer || !state.rootPeerConnection) throw new Error('Not connected to root peer');
+  if (!envelope.roomTopic || !envelope.message || !envelope.senderPublicKey) throw new Error('Missing envelope parameters');
 
   const storeMessage = {
     type: 'store-message',
-    roomName: roomTopic,
-    message: message,
+    roomName: envelope.roomTopic,
+    message: envelope.message,
+    senderPublicKey: envelope.senderPublicKey,
   };
 
   try {
     state.rootPeerConnection.write(JSON.stringify(storeMessage));
-    console.log('[Worklet] 💾 Stored message with root peer for room:', roomTopic.substring(0, 16));
+    console.log('[Worklet] 💾 Stored message with root peer for room:', envelope.roomTopic);
   } catch (error) {
     console.error('[Worklet] ❌ Failed to store message with root peer:', error);
+    throw new Error('Failed to store message with root peer');
   }
 }
 
@@ -426,7 +420,7 @@ function requestSyncFromRootPeer(roomTopic, lastIndex = 0) {
 
   try {
     state.rootPeerConnection.write(JSON.stringify(syncRequest));
-    console.log('[Worklet] 🔄 Requested sync from index:', lastIndex, 'for room:', roomTopic.substring(0, 16));
+    console.log('[Worklet] 🔄 Requested sync from index:', lastIndex, 'for room:', roomTopic);
   } catch (error) {
     console.error('[Worklet] ❌ Failed to request sync:', error);
   }
@@ -448,49 +442,55 @@ function setupConnectionHandlers(connection, peerKey) {
   // Handle incoming data
   connection.on('data', (data) => {
     try {
-      const message = JSON.parse(data.toString());
-      console.log('[Worklet] 📨 Received message:', message.type, 'from peer:', peerKey.substring(0, 8));
-      
-      // Check if this is a root peer announcement
-      if (message.type === 'root-peer-announce' && message.username === 'ChatRootPeer') {
-        handleRootPeerAnnouncement(connection, peerKey, data);
-        return;
-      }
-      
-      // Check if this is a sync response from root peer
-      if (message.type === 'sync-response') {
-        console.log('[Worklet] 📥 Received sync response:', message.messages?.length || 0, 'messages');
-        // Forward each message to React Native
-        if (message.messages && message.messages.length > 0) {
-          message.messages.forEach((msg) => {
-            // Use the original sender's public key from the message, not the root peer's key
-            rpcManager.sendEvent(WorkletEvent.MESSAGE_RECEIVED, {
-              peerPublicKey: msg.senderPublicKey || state.rootPeerKey || peerKey,
-              message: msg,
-              timestamp: msg.timestamp || Date.now(),
-              fromRootPeer: true,
-              encrypted: true, // Messages from root peer are always encrypted
-              roomTopic: message.roomName,
+      const response = JSON.parse(data.toString());
+      console.log('[Worklet] 📨 Received response:', response.type, 'from peer:', peerKey);
+
+      switch (response.type) {
+        case 'root-peer-announce':
+          if (response.username === 'RootPeer') handleRootPeerAnnouncement(connection, peerKey, data);
+          else throw new Error('Invalid root peer announcement');
+          break;
+
+        case 'sync-response':
+          console.log('[Worklet] 📥 Received sync response:', response.messages?.length || 0, 'messages');
+          // Forward each message to React Native
+          if (response.messages && response.messages.length > 0) {
+            const messages = []
+            response.messages.forEach((msg) => {
+              messages.push({
+                message: msg.message,
+                senderPublicKey: msg.senderPublicKey,
+                roomTopic: response.roomTopic,
+                encrypted: true, // Messages stored at root peer are always encrypted
+                fromRootPeer: true,
+                storedAt: msg.storedAt,
+              })
             });
+            rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, { messages })
+          }
+          break;
+
+        case 'p2p-message':
+          rpcManager.sendEvent(WorkletEvent.MESSAGES_RECEIVED, {
+            messages: [{
+              message: response.message,
+              senderPublicKey: response.senderPublicKey,
+              roomTopic: response.roomTopic,
+              encrypted: response.encrypted,
+              fromRootPeer: false,
+              storedAt: null,
+            }]
           });
-        }
-        return;
+          break;
+
+        default:
+          throw new Error('[Worklet] Invalid response type: ' + response.type);
       }
-      
-      // Regular P2P message - preserve encryption flag
-      rpcManager.sendEvent(WorkletEvent.MESSAGE_RECEIVED, {
-        peerPublicKey: peerKey,
-        message: message.message || message, // Support both envelope and direct format
-        timestamp: message.timestamp || Date.now(),
-        encrypted: message.encrypted || false,
-        roomTopic: message.roomTopic,
-      });
     } catch (error) {
       console.error('[Worklet] Failed to parse message:', error);
       rpcManager.sendEvent(WorkletEvent.ERROR, {
         error: 'Failed to parse message',
         context: 'data handler',
-        peerPublicKey: peerKey,
       });
     }
   });
@@ -498,15 +498,15 @@ function setupConnectionHandlers(connection, peerKey) {
   // Handle connection close
   connection.on('close', () => {
     console.log('[Worklet] Connection closed:', peerKey);
-    
+
     // Check if this was the root peer (BEFORE removing it!)
     const wasRootPeer = (peerKey === state.rootPeerKey);
-    
+
     if (wasRootPeer) {
       console.log('[Worklet] 🚨 Root peer disconnected!');
       state.removeRootPeer();
     }
-    
+
     state.removeConnection(peerKey);
 
     rpcManager.sendEvent(WorkletEvent.PEER_DISCONNECTED, {
@@ -519,7 +519,7 @@ function setupConnectionHandlers(connection, peerKey) {
   // Handle connection errors
   connection.on('error', (error) => {
     console.error('[Worklet] Connection error:', peerKey, error);
-    
+
     rpcManager.sendEvent(WorkletEvent.ERROR, {
       error: error.message,
       context: 'connection error',
@@ -535,7 +535,7 @@ function setupConnectionHandlers(connection, peerKey) {
 async function initializeWorklet() {
   try {
     console.log('[Worklet] 🚀 Starting worklet initialization...');
-    
+
     // Get seed and discovery key from React Native (passed as arguments)
     const seed = Buffer.from(Bare.argv[0], 'hex');
     state.discoveryKey = Bare.argv[1];
@@ -560,15 +560,15 @@ async function initializeWorklet() {
       const peerKey = info.publicKey.toString('hex');
       console.log('[Worklet] Connection from peer:', peerKey);
       console.log('[Worklet] Connection info.topics:', info.topics ? info.topics.map(t => t.toString('hex')) : 'none');
-      
+
       state.addConnection(peerKey, connection);
-      
+
       // Associate peer with the rooms they're connecting through
       if (info.topics && info.topics.length > 0) {
         for (const topic of info.topics) {
           const roomTopic = topic.toString('hex');
           console.log('[Worklet] Associating peer', peerKey, 'with room topic:', roomTopic);
-          
+
           // Check if this topic is one of our joined rooms (not our own public key)
           const isRoomTopic = state.hasRoom(roomTopic);
           if (isRoomTopic) {
@@ -586,16 +586,16 @@ async function initializeWorklet() {
           console.log('[Worklet] 🔄 Added peer to room (fallback):', roomTopic);
         }
       }
-      
+
       setupConnectionHandlers(connection, peerKey);
     });
 
     // Start listening on own public key
-    state.swarm.join(state.keyPair.publicKey, { 
-      server: true, 
-      client: false 
+    state.swarm.join(state.keyPair.publicKey, {
+      server: true,
+      client: false
     });
-    
+
     // Join root peer discovery swarm
     const discoveryTopic = crypto.hash(Buffer.from(state.discoveryKey));
     console.log('[Worklet] 🔍 Joining root peer discovery swarm...');
@@ -604,7 +604,7 @@ async function initializeWorklet() {
       server: false  // We are not a root peer
     });
     console.log('[Worklet] ✅ Joined root peer discovery swarm');
-    
+
     console.log('[Worklet] ⏳ Flushing swarm connections...');
     await state.swarm.flush();
     console.log('[Worklet] ✅ Swarm flush complete');
