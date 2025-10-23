@@ -86,7 +86,11 @@
     "loading": "लोड हो रहा है",
     "create": "बनाएं",
     "join": "शामिल हों",
-    "joinNow": "अभी शामिल हों"
+    "joinNow": "अभी शामिल हों",
+    "communityServerUnavailable": "समुदाय सर्वर वर्तमान में अनुपलब्ध या पहुंच योग्य नहीं है।",
+    "connectedToCommunityServer": "समुदाय सर्वर से जुड़ा हुआ",
+    "communityServerOffline": "समुदाय सर्वर ऑफ़लाइन",
+    "communityServerOnline": "समुदाय सर्वर ऑनलाइन"
   },
   "onBoarding": {
     "welcome": "स्वागत है",

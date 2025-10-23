@@ -86,7 +86,11 @@
     "loading": "加载中",
     "create": "创建",
     "join": "加入",
-    "joinNow": "立即加入"
+    "joinNow": "立即加入",
+    "communityServerUnavailable": "社区服务器当前不可用或无法访问。",
+    "connectedToCommunityServer": "已连接到社区服务器",
+    "communityServerOffline": "社区服务器离线",
+    "communityServerOnline": "社区服务器在线"
   },
   "onBoarding": {
     "welcome": "欢迎",

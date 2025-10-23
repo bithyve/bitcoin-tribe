@@ -86,7 +86,11 @@
     "loading": "Caricamento",
     "create": "Crea",
     "join": "Unisciti",
-    "joinNow": "Unisciti ora"
+    "joinNow": "Unisciti ora",
+    "communityServerUnavailable": "Il server della comunità non è attualmente disponibile o non raggiungibile.",
+    "connectedToCommunityServer": "Connesso al server della comunità",
+    "communityServerOffline": "Server della comunità offline",
+    "communityServerOnline": "Server della comunità online"
   },
   "onBoarding": {
     "welcome": "Benvenuto",
