@@ -19,7 +19,7 @@ import type {
   WorkletReadyListener,
   PeerConnectedListener,
   PeerDisconnectedListener,
-  MessageReceivedListener,
+  MessagesReceivedListener,
   WorkletErrorListener,
 } from '../types/network.types';
 import { HolepunchMessage } from '../../storage/MessageStorage';
@@ -49,7 +49,7 @@ export class HyperswarmManager {
     ready: new Set<WorkletReadyListener>(),
     peerConnected: new Set<PeerConnectedListener>(),
     peerDisconnected: new Set<PeerDisconnectedListener>(),
-    messageReceived: new Set<MessageReceivedListener>(),
+    messagesReceived: new Set<MessagesReceivedListener>(),
     error: new Set<WorkletErrorListener>(),
     rootPeerConnected: new Set<() => void>(),
     rootPeerDisconnected: new Set<() => void>(),
@@ -160,9 +160,9 @@ export class HyperswarmManager {
         this.emit('peerDisconnected', payload);
         break;
       
-      case CommandIds[WorkletEvent.MESSAGE_RECEIVED]:
-        // Decrypt message if encrypted
-        this.handleMessageReceived(payload);
+      case CommandIds[WorkletEvent.MESSAGES_RECEIVED]:
+        // Decrypt messages if encrypted
+        this.handleMessagesReceived(payload);
         break;
       
       case CommandIds[WorkletEvent.ERROR]:
@@ -476,9 +476,9 @@ export class HyperswarmManager {
     return () => this.listeners.rootPeerDisconnected.delete(listener);
   }
 
-  onMessageReceived(listener: MessageReceivedListener): () => void {
-    this.listeners.messageReceived.add(listener);
-    return () => this.listeners.messageReceived.delete(listener);
+  onMessagesReceived(listener: MessagesReceivedListener): () => void {
+    this.listeners.messagesReceived.add(listener);
+    return () => this.listeners.messagesReceived.delete(listener);
   }
 
   onError(listener: WorkletErrorListener): () => void {

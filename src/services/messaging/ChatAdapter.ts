@@ -12,6 +12,7 @@ import { MessageEncryption } from './holepunch/crypto/MessageEncryption';
 
 import { RoomStorage, HolepunchRoom, HolepunchRoomType } from './holepunch/storage/RoomStorage';
 import { MessageStorage, HolepunchMessage, HolepunchMessageType } from './holepunch/storage/MessageStorage';
+import { KeyPair, MessagesReceivedEvent } from './holepunch/network/types/network.types';
 import { MessageProcessorRegistry } from './holepunch/processors/MessageProcessor';
 import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
 import { TextProcessor } from './holepunch/processors/TextProcessor';
@@ -68,19 +69,22 @@ export class ChatAdapter extends EventEmitter {
       this.emit('chat:root-peer-disconnected');
     });
 
-    this.manager.onMessageReceived(async (data: any) => {
-      // Persist message to storage
-      if (this.currentRoom) {
-        const savedMsg: HolepunchMessage = {
-          messageId: data.messageId,
-          roomId: data.roomId,
-          senderId: data.senderId,
-          messageType: data.messageType,
-          content: data.content,
-          timestamp: data.timestamp,
-        };
-        await MessageStorage.saveMessage(savedMsg);
-        this.emit('chat:message-received', savedMsg);
+    this.manager.onMessagesReceived(async (event: MessagesReceivedEvent) => {
+      // Processes and emits messages sequentially
+      for (const { message, senderPublicKey, roomTopic, fromRootPeer } of event.messages) {
+        // Process message (handles identity, text, etc.)
+        const result = await this.processorRegistry.process(message, {
+          roomId: this.currentRoom?.roomId,
+          currentPeerPubKey: this.keyPair?.publicKey,
+        });
+
+        // Note 📢: Incoming messages are pesisted/commited only if they are from the ROOT Peer (maintains total message order across all peers)
+        if (result.shouldSave && fromRootPeer) { // commited message stream (realm)
+          await MessageStorage.saveMessage(result.processedMessage);
+        }
+
+        // Emit the display message (could be transformed, e.g., IDENTITY -> SYSTEM)
+        if (result.shouldDisplay && !fromRootPeer) this.emit('chat:message-received', result.processedMessage); // emit the message to the session, uncommited message stream (sessoin messages) --> commited when resynced w/ the root peer (eventual total order consistency)
       }
     });
 
@@ -156,7 +160,7 @@ export class ChatAdapter extends EventEmitter {
     const existingRoom = allRooms.find(r => r.roomKey === roomKey);
 
     if (!existingRoom) throw new Error('Room not found with key: ' + roomKey);
-      this.currentRoom = existingRoom;
+    this.currentRoom = existingRoom;
 
     // Join via HyperswarmManager (will sync messages from root peer)
     const { success, alreadyJoined } = await this.manager.joinRoom(roomTopic, roomKey);
