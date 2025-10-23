@@ -346,7 +346,7 @@ function IssueCollection() {
             }}
             keyboardType={'default'}
             returnKeyType="done"
-            maxLength={100}
+            maxLength={500}
             multiline={true}
             numberOfLines={2}
             style={[styles.input, description && styles.descInput]}

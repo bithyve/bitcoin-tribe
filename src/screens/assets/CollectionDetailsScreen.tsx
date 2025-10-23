@@ -27,6 +27,7 @@ import { useTheme } from 'react-native-paper';
 import Colors from 'src/theme/Colors';
 import SelectOption from 'src/components/SelectOption';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import BackTranslucent from 'src/assets/images/backTranslucent.svg';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -91,7 +92,7 @@ const CollectionDetailsScreen = () => {
           style={styles.image}
         />
         <View style={styles.headerCtr}>
-          <AppHeader />
+          <AppHeader backIcon={<BackTranslucent />} />
         </View>
         <View style={styles.contentCtr}>
           <View style={styles.nameCtr}>
@@ -108,7 +109,7 @@ const CollectionDetailsScreen = () => {
             <SizedBox height={hp(4)} />
             <View style={styles.verifiedRow}>
               <AppText variant="caption" style={styles.verifiedLabel}>
-                {assets.viaX}
+                {`${assets.viaX}: `}
               </AppText>
               <AppText
                 variant="caption"
@@ -119,7 +120,7 @@ const CollectionDetailsScreen = () => {
             <SizedBox height={hp(2)} />
             <View style={styles.verifiedRow}>
               <AppText variant="caption" style={styles.verifiedLabel}>
-                {assets.domain}
+                {`${assets.domain}: `}
               </AppText>
               <AppText
                 variant="caption"
@@ -167,7 +168,6 @@ const CollectionDetailsScreen = () => {
                     assetId: item.assetId,
                   })
                 }
-                precision={item.precision}
               />
             </View>
           );
