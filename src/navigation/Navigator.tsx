@@ -99,6 +99,7 @@ import { EditGroup } from 'src/screens/community/EditGroup';
 import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
 import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
+import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -159,6 +160,7 @@ function LoginStack() {
 }
 
 function AppStack() {
+  useKeepAwake();
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
     <RealmProvider>
