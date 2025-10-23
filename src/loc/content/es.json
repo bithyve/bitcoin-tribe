@@ -791,7 +791,12 @@
     "issuerVerificationXDomain":"Verificación del emisor (X y dominio)",
     "verificationNote":"La verificación agrega una tarifa y requiere cuenta de X + certificación de dominio.",
     "insufficientSatsForCollection":"Sats insuficientes. Necesitas tener al menos {amount} sats y la tarifa de transacción en tu billetera para crear una nueva colección.",
-    "failedToCreateCollection":"Error al crear la colección"
+    "failedToCreateCollection":"Error al crear la colección",
+    "collectionVerificationTitle": "Verificación",
+    "collectionVerificationSubTitle": "Vincula tu identidad al activo verificando a través de X o dominio, y compártelo para hacerlo oficial.",
+    "verified": "Verificado",
+    "viaX": "vía X",
+    "unverified": "No verificado"
   },
   "community": {
     "fnfTitle": "Comunidad",

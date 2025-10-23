@@ -791,7 +791,12 @@
     "issuerVerificationXDomain":"Verifica dell'emittente (X e dominio)",
     "verificationNote":"La verifica aggiunge una commissione e richiede account X + attestazione dominio.",
     "insufficientSatsForCollection":"Sats insufficienti. Devi avere almeno {amount} sats e la commissione di transazione nel tuo portafoglio per creare una nuova collezione.",
-    "failedToCreateCollection":"Impossibile creare la collezione"
+    "failedToCreateCollection":"Impossibile creare la collezione",
+    "collectionVerificationTitle": "Verifica",
+    "collectionVerificationSubTitle": "Collega la tua identità all'asset verificando tramite X o dominio, e condividilo per renderlo ufficiale.",
+    "verified": "Verificato",
+    "viaX": "via X",
+    "unverified": "Non verificato"
   },
   "community": {
     "fnfTitle": "Comunità",

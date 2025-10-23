@@ -791,7 +791,12 @@
     "issuerVerificationXDomain":"जारीकर्ता सत्यापन (X और डोमेन)",
     "verificationNote":"सत्यापन शुल्क जोड़ता है और X खाता + डोमेन प्रमाणीकरण की आवश्यकता होती है।",
     "insufficientSatsForCollection":"अपर्याप्त सैट्स। एक नया कलेक्शन बनाने के लिए आपके वॉलेट में कम से कम {amount} सैट्स और लेनदेन शुल्क होना आवश्यक है।",
-    "failedToCreateCollection":"कलेक्शन बनाने में विफल"
+    "failedToCreateCollection":"कलेक्शन बनाने में विफल",
+    "collectionVerificationTitle": "सत्यापन",
+    "collectionVerificationSubTitle": "X या डोमेन के माध्यम से सत्यापन करके अपनी पहचान को एसेट से लिंक करें, और इसे आधिकारिक बनाने के लिए साझा करें।",
+    "verified": "सत्यापित",
+    "viaX": "X के माध्यम से",
+    "unverified": "असत्यापित"
   },
   "community": {
     "fnfTitle": "समुदाय",
