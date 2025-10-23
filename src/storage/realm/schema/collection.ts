@@ -12,7 +12,7 @@ export const CollectionSchema: ObjectSchema = {
     itemsCount: 'int',
     isFixedSupply: 'bool',
     slug: 'string',
-        addedAt: 'int',
+    addedAt: 'int',
     assetId: 'string',
     balance: RealmSchema.Balance,
     details: 'string',

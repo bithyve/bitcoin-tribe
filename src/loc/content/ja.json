@@ -781,7 +781,22 @@
     "collectionPaymentSubtitle": "取引内容を確認して承認してください",
     "collectionPaymentConfirmSubtitle": "コレクションがオンチェーンに固定されました。\nこれでUDAを追加できます。",
     "totalItems": "合計アイテム",
-    "minted": "ミント済み"
+    "minted": "ミント済み",
+    "supplyPolicy":"供給ポリシー",
+    "fixed":"固定",
+    "expandable":"拡張可能",
+    "supplyPolicyNote":"宣言されたサイズ + ポリシーがオンチェーンにコミットされます。",
+    "numberOfItems":"アイテム数",
+    "verificationOptional":"認証（オプション）",
+    "issuerVerificationXDomain":"発行者の認証（X およびドメイン）",
+    "verificationNote":"認証には手数料が追加され、X アカウント + ドメイン認証が必要です。",
+    "insufficientSatsForCollection":"Sats が不足しています。新しいコレクションを作成するには、ウォレットに少なくとも {amount} sats とトランザクション手数料が必要です。",
+    "failedToCreateCollection":"コレクションの作成に失敗しました",
+    "collectionVerificationTitle": "認証",
+    "collectionVerificationSubTitle": "Xまたはドメインで認証してアセットにあなたのアイデンティティをリンクし、公式にするために共有してください。",
+    "verified": "認証済み",
+    "viaX": "X経由",
+    "unverified": "未認証"
   },
   "community": {
     "fnfTitle": "コミュニティ",

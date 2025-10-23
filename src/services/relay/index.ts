@@ -581,7 +581,6 @@ export default class Relay {
           });
         });
       }
-      console.log('/collections/additem');
       const res = await RestClient.post(
         `${RELAY}/collections/additem`,
         formData,

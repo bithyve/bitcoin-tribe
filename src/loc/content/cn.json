@@ -781,7 +781,22 @@
     "collectionPaymentSubtitle": "查看并确认您的交易",
     "collectionPaymentConfirmSubtitle": "集合已上链。\n您现在可以开始添加 UDA。",
     "totalItems": "总项目",
-    "minted": "已铸造"
+    "minted": "已铸造",
+    "supplyPolicy":"供应政策",
+    "fixed":"固定",
+    "expandable":"可扩展",
+    "supplyPolicyNote":"声明的大小 + 政策将在链上承诺。",
+    "numberOfItems":"项目数量",
+    "verificationOptional":"验证（可选）",
+    "issuerVerificationXDomain":"发行人验证（X 和域名）",
+    "verificationNote":"验证会增加费用并需要 X 账户 + 域名认证。",
+    "insufficientSatsForCollection":"Sats 不足。您需要在钱包中至少拥有 {amount} sats 和交易费用才能创建新集合。",
+    "failedToCreateCollection":"创建集合失败",
+    "collectionVerificationTitle": "验证",
+    "collectionVerificationSubTitle": "通过X或域名验证将您的身份与资产关联，并分享使其正式化。",
+    "verified": "已验证",
+    "viaX": "通过X",
+    "unverified": "未验证"
   },
   "community": {
     "fnfTitle": "社区",

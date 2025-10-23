@@ -98,6 +98,7 @@ import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
 import { EditGroup } from 'src/screens/community/EditGroup';
 import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
 import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
+import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -397,6 +398,7 @@ function AppStack() {
           component={ScanQrScreen}
         />
         <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
+        <Stack.Screen name={NavigationRoutes.COLLECTIONVERIFICATIONSCREEN} component={CollectionVerificationScreen} />
       </Stack.Navigator>
     </RealmProvider>
   );

@@ -47,21 +47,26 @@ const AssetCard = (props: AssetCardProps) => {
 
   const uri = useMemo(() => {
     if (asset.assetSchema === AssetSchema.Coin) return '';
-    const media = asset?.media?.filePath || asset.token.media.filePath;
-    return Platform.select({
-      android: `file://${media}`,
-      ios: media,
-    });
+    const media = asset?.media?.filePath || asset?.token?.media?.filePath;
+    if(media){
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
   }, [asset?.media?.filePath, asset?.token?.media.filePath]);
 
-  const isVerified = useMemo(() => asset?.issuer?.verifiedBy?.some(
-    item => item.verified === true,
-  ) ?? false, [asset?.issuer?.verifiedBy]);
+  const isVerified = useMemo(
+    () =>
+      asset?.issuer?.verifiedBy?.some(item => item.verified === true) ?? false,
+    [asset?.issuer?.verifiedBy],
+  );
 
   const detailsText = useMemo(() => {
-    if(asset?.details?.includes('tribecollection://')) {
+    if (asset?.details?.includes('tribecollection://')) {
       return asset?.details?.split('tribecollection://')[0];
-    } else if(asset?.details?.includes('tribecollectionitem://')) {
+    } else if (asset?.details?.includes('tribecollectionitem://')) {
       return asset?.details?.split('tribecollectionitem://')[0];
     }
     return asset?.details;
@@ -115,7 +120,10 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
               )}
             </View>
-          <AppText variant="body2" numberOfLines={1} style={styles.textDetails}>
+            <AppText
+              variant="body2"
+              numberOfLines={1}
+              style={styles.textDetails}>
               {detailsText}
             </AppText>
           </View>
@@ -187,44 +195,102 @@ const getStyles = (theme: AppTheme) =>
       height: CARD_HEIGHT / 2,
       alignSelf: 'center',
       borderRadius: 15,
+      padding: 1,
+    },
+    innerCard: {
+      flex: 1,
+      borderRadius: 15,
     },
   });
 export default AssetCard;
 
 const DummyCards = ({ styles }) => {
   const theme: AppTheme = useTheme();
-  const colors = {
-    light: {
-      collectionCardColor1: Colors.SilverSand,
-      collectionCardColor2: Colors.ChineseWhite,
-    },
-    dark: {
-      collectionCardColor1: Colors.SpanishGray,
-      collectionCardColor2: Colors.SonicSilver,
-    },
-  }
+  const cardColor: GradientColors = useMemo(() => {
+    if (theme.dark) {
+      return {
+        outerBorder: [
+          Colors.DarkCharcoal,
+          'rgba(21, 21, 21, 1)',
+          'rgba(21, 21, 21, 1)',
+        ],
+        outerColor: [
+          'rgba(26, 26, 26, 1)',
+          'rgba(18, 18, 18, 1)',
+          'rgba(18, 18, 18, 1)',
+        ],
+        innerBorder: [
+          Colors.DarkCharcoal,
+          'rgba(21, 21, 21, 1)',
+          'rgba(21, 21, 21, 1)',
+        ],
+        innerColor: [
+          'rgba(26, 26, 26, 1)',
+          'rgba(18, 18, 18, 1)',
+          'rgba(18, 18, 18, 1)',
+        ],
+      };
+    } else {
+      return {
+        outerBorder: [
+          'rgba(232, 232, 232, 1)',
+          'rgba(232, 232, 232, 1)',
+          'rgba(232, 232, 232, 1)',
+        ],
+        outerColor: [
+          'rgba(255, 255, 255, 1)',
+          'rgba(255, 255, 255, 1)',
+          'rgba(255, 255, 255, 1)',
+        ],
+        innerBorder: [
+          'rgba(232, 232, 232, 1)',
+          'rgba(232, 232, 232, 1)',
+          'rgba(232, 232, 232, 1)',
+        ],
+        innerColor: [
+          'rgba(255, 255, 255, 1)',
+          'rgba(255, 255, 255, 1)',
+          'rgba(255, 255, 255, 1)',
+        ],
+      };
+    }
+  }, [theme]);
 
+  return (
+    <>
+      <GradientView
+        colors={cardColor?.outerBorder}
+        style={[
+          styles.backgroundCard,
+          {
+            width: CARD_WIDTH * 0.88,
+            top: 5,
+          },
+        ]}>
+        <GradientView colors={cardColor?.outerColor} style={styles.innerCard}>
+          <></>
+        </GradientView>
+      </GradientView>
+      <GradientView
+        colors={cardColor?.innerBorder}
+        style={[
+          styles.backgroundCard,
+          {
+            width: CARD_WIDTH * 0.96,
+            top: 10,
+          },
+        ]}>
+        <GradientView colors={cardColor?.innerColor} style={styles.innerCard}>
+          <></>
+        </GradientView>
+      </GradientView>
+    </>
+  );
+};
 
-  return <>
-    <View
-      style={[
-        styles.backgroundCard,
-        {
-          backgroundColor: colors[theme.dark ? 'dark' : 'light'].collectionCardColor1,
-          width: CARD_WIDTH * 0.88,
-          top: 5,
-        },
-      ]}
-    />
-    <View
-      style={[
-        styles.backgroundCard,
-        {
-          backgroundColor: colors[theme.dark ? 'dark' : 'light'].collectionCardColor2,
-          width: CARD_WIDTH * 0.96,
-          top: 10,
-        },
-      ]}
-    />
-  </>
+type GradientColors = {
+  outerBorder: [string, string, string];
+  outerColor: [string, string, string];
+  innerBorder: [string, string, string];
+  innerColor: [string, string, string];
 };

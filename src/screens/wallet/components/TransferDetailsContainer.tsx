@@ -31,7 +31,7 @@ import { useObject } from '@realm/react';
 
 type WalletTransactionsProps = {
   assetName: string;
-  transAmount: string;
+  transAmount: string | null;
   assetId: string;
   transaction: Transfer;
   onPress: () => void;
@@ -212,7 +212,11 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
               label={assets.assetName}
               content={assetName}
             />
-            <TransferLabelContent label={wallet.amount} content={transAmount} />
+            {
+              transAmount && (
+                <TransferLabelContent label={wallet.amount} content={transAmount} />
+              )
+            }
             {transfer.txid && (
               <AppTouchable
                 onPress={() => redirectToBlockExplorer(transfer.txid)}>

@@ -1,6 +1,10 @@
 import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
-import React, { useEffect } from 'react';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useContext, useEffect } from 'react';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -21,12 +25,15 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import Colors from 'src/theme/Colors';
+import SelectOption from 'src/components/SelectOption';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
   // @ts-ignore
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, insets);
+  const { assets } = useContext(LocalizationContext).translations;
   const { collectionId } = useRoute().params;
   const collection = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`_id == $0`, collectionId),
@@ -51,16 +58,18 @@ const CollectionDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, collection.assetId, collection._id]);
 
+  const isVerified = false; // ! for mocking
+
   const ListHeader = () => {
     return (
       <>
-      <View style={styles.mintedCtr}>
-            <AppText variant="muted">
-              {`Minted: ${collection.items.length}${
-                collection.isFixedSupply ? `/${collection.itemsCount}` : ''
-              }`}
-            </AppText>
-          </View>
+        <View style={styles.mintedCtr}>
+          <AppText variant="muted">
+            {`Minted: ${collection.items.length}${
+              collection.isFixedSupply ? `/${collection.itemsCount}` : ''
+            }`}
+          </AppText>
+        </View>
         <Image
           source={{
             uri: Platform.select({
@@ -92,6 +101,46 @@ const CollectionDetailsScreen = () => {
           </View>
           <View />
           <SizedBox height={hp(20)} />
+          <View style={styles.verifiedCtr}>
+            <AppText style={{ color: Colors.UFOGreen1 }} variant="heading3">
+              {assets.verified}
+            </AppText>
+            <SizedBox height={hp(4)} />
+            <View style={styles.verifiedRow}>
+              <AppText variant="caption" style={styles.verifiedLabel}>
+                {assets.viaX}
+              </AppText>
+              <AppText
+                variant="caption"
+                style={!isVerified && styles.orangeText}>
+                {isVerified ? '@bitcointribe_' : assets.unverified}
+              </AppText>
+            </View>
+            <SizedBox height={hp(2)} />
+            <View style={styles.verifiedRow}>
+              <AppText variant="caption" style={styles.verifiedLabel}>
+                {assets.domain}
+              </AppText>
+              <AppText
+                variant="caption"
+                style={!isVerified && styles.orangeText}>
+                {isVerified ? 'www.bitcointribe.app' : assets.unverified}
+              </AppText>
+            </View>
+          </View>
+          <SizedBox height={hp(10)} />
+          <SelectOption
+            title={'Verification'}
+            subTitle={''}
+            onPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate(
+                  NavigationRoutes.COLLECTIONVERIFICATIONSCREEN,
+                ),
+              )
+            }
+            testID={'collection_verification'}
+          />
         </View>
       </>
     );
@@ -167,7 +216,7 @@ const getStyles = (theme: AppTheme, insets) =>
       position: 'relative',
       top: -40,
       left: hp(16),
-      borderColor: theme.dark ? Colors.Black : Colors.White
+      borderColor: theme.dark ? Colors.Black : Colors.White,
     },
     headerCtr: {
       position: 'absolute',
@@ -181,7 +230,6 @@ const getStyles = (theme: AppTheme, insets) =>
       paddingHorizontal: wp(16),
       position: 'relative',
       top: -20,
-      flexDirection: 'row',
       justifyContent: 'space-between',
     },
     nameCtr: {
@@ -200,9 +248,9 @@ const getStyles = (theme: AppTheme, insets) =>
       backgroundColor: theme.colors.roundedCtaBg,
       justifyContent: 'center',
       alignItems: 'center',
-      position:"absolute",
-      right:wp(16),
-      top:hp(290)
+      position: 'absolute',
+      right: wp(16),
+      top: hp(290),
     },
     addNewIconWrapper: {
       position: 'absolute',
@@ -219,6 +267,17 @@ const getStyles = (theme: AppTheme, insets) =>
         android: hp(60),
       }),
       right: 0,
+    },
+    verifiedCtr: {
+      borderWidth: 1,
+      borderColor: Colors.UFOGreen1,
+      borderRadius: 12,
+      padding: wp(14),
+    },
+    verifiedRow: { flexDirection: 'row' },
+    verifiedLabel: { color: theme.colors.mutedTab },
+    orangeText: {
+      color: Colors.AmberBlaze,
     },
   });
 export default CollectionDetailsScreen;

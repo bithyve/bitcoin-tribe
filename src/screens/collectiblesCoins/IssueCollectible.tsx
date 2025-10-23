@@ -312,7 +312,7 @@ function IssueCollectibleScreen() {
       !assetName ||
       !assetTicker ||
       !description ||
-      !attachments?.length ||
+      // !attachments?.length ||
       !image
     );
   }, [
@@ -702,7 +702,7 @@ function IssueCollectibleScreen() {
               {assets.assetImageCaption}
             </AppText>
 
-            <AppText
+            {/* <AppText
               variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.attachments}
@@ -740,7 +740,7 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
                 </AppTouchable>
               )}
-            />
+            /> */}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
               {assets.attachmentsCaption}
