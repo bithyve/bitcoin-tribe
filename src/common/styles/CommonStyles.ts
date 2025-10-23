@@ -55,7 +55,7 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     fontFamily: Fonts.LufgaMedium,
-    lineHeight: 16,
+    lineHeight: 16*1.4,
   },
   body2: {
     fontSize: 14,
