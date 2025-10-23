@@ -18,7 +18,7 @@ import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RadioButton } from 'react-native-paper';
-import pickImage from 'src/utils/imagePicker';
+import ImagePicker from 'react-native-image-crop-picker';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import { formatNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
@@ -127,8 +127,12 @@ function IssueCollection() {
   const handlePickImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(false);
-      setImage(result);
+      const result = await await ImagePicker.openPicker({
+        width: 500,
+        height: 382,
+        cropping: true,
+      });
+      setImage(result.path);
     } catch (error) {
       console.error(error);
     }
@@ -137,8 +141,12 @@ function IssueCollection() {
   const handlePickCollectionImage = async () => {
     Keyboard.dismiss();
     try {
-      const result = await pickImage(false);
-      setCollectionImage(result);
+      const result =  await ImagePicker.openPicker({
+        width: 200,
+        height: 200,
+        cropping: true,
+      });
+      setCollectionImage(result.path);
     } catch (error) {
       console.error(error);
     }
