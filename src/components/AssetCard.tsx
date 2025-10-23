@@ -47,11 +47,14 @@ const AssetCard = (props: AssetCardProps) => {
 
   const uri = useMemo(() => {
     if (asset.assetSchema === AssetSchema.Coin) return '';
-    const media = asset?.media?.filePath || asset.token.media.filePath;
-    return Platform.select({
-      android: `file://${media}`,
-      ios: media,
-    });
+    const media = asset?.media?.filePath || asset?.token?.media?.filePath;
+    if(media){
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
   }, [asset?.media?.filePath, asset?.token?.media.filePath]);
 
   const isVerified = useMemo(
