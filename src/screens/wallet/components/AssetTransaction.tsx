@@ -223,6 +223,7 @@ const getStyles = (theme: AppTheme, backColor, assetFace) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
+      justifyContent: 'space-between',
       backgroundColor: backColor,
       padding: backColor ? 15 : 0,
       borderRadius: backColor ? 10 : 0,
