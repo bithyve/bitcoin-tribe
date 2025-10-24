@@ -290,7 +290,7 @@ function IssueCollectibleScreen() {
   return (
     <ScreenContainer>
       <AppHeader
-        title={'Mint UDA'}
+        title={'Issue UDA'}
         rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
       />
