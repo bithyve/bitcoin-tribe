@@ -1,10 +1,25 @@
-import { Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useMemo } from 'react';
-  import { Asset, AssetVisibility, Coin, Collectible, Collection, UniqueDigitalAsset, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
+import {
+  FlatList,
+  ImageBackground,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native';
+import React, { useContext, useMemo, useState } from 'react';
+import {
+  Asset,
+  AssetSchema,
+  AssetVisibility,
+  Coin,
+  Collectible,
+  Collection,
+  UniqueDigitalAsset,
+  WalletOnlineStatus,
+} from 'src/models/interfaces/RGBWallet';
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AssetIcon from 'src/components/AssetIcon';
@@ -30,12 +45,14 @@ import RefreshControlView from 'src/components/RefreshControlView';
 import Fonts from 'src/constants/Fonts';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import LinearGradient from 'react-native-linear-gradient';
+import IconVerified from 'src/assets/images/issuer_verified.svg';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      marginHorizontal: wp(15),
+      marginHorizontal: wp(10),
       backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContainer: {
@@ -45,11 +62,22 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       backgroundColor: isThemeDark ? '#111' : '#fff',
       padding: hp(20),
       marginBottom: hp(10),
-      alignItems: 'center'
+      alignItems: 'center',
+    },
+    largeHeaderContainer1: {
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      borderRadius: hp(20),
+      backgroundColor: isThemeDark ? '#111' : '#fff',
+      marginBottom: hp(10),
+      alignItems: 'center',
     },
     row: {
       flexDirection: 'row',
       marginBottom: hp(20),
+    },
+    list: {
+      height: 245,
     },
     coinNameContainer: {
       flex: 1,
@@ -98,6 +126,61 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       backgroundColor: isThemeDark ? '#111111' : '#E9EEEF',
       padding: hp(20),
     },
+    imageBackground: {
+      width: '100%',
+      height: 245,
+      borderRadius: hp(15),
+    },
+    textCollectibleNameContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'flex-end',
+      justifyContent: 'space-between',
+    },
+    textCollectibleNameContainer2: {
+      flex: 1,
+      alignItems: 'flex-end',
+      flexDirection: 'row',
+      paddingBottom: hp(10),
+      paddingTop: hp(15),
+    },
+    textCollectibleNameContainer1: {
+      flex: 1,
+      alignItems: 'center',
+      flexDirection: 'row',
+      paddingBottom: hp(10),
+      paddingTop: hp(15),
+    },
+    textCollectibleName: {
+      marginLeft: wp(10),
+      marginRight: wp(5),
+      fontWeight: '500',
+      color: 'white',
+    },
+    textCollectibleDescription: {
+      marginHorizontal: wp(10),
+      fontSize: 14,
+      color: 'white',
+    },
+    containerScrollIndicator: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginLeft: wp(2),
+    },
+    scrollIndicatorItem: {
+      width: 6,
+      height: 6,
+      borderRadius: 5,
+      backgroundColor: isThemeDark ? '#272726' : 'lightgrey',
+      marginVertical: wp(2),
+    },
+    scrollIndicatorItemCurrent: {
+      width: 6,
+      height: 6,
+      borderRadius: 5,
+      backgroundColor: isThemeDark ? 'white' : 'black',
+      marginVertical: wp(2),
+    },
   });
 
 const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
@@ -109,25 +192,25 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
 
   return (
     <View style={styles.row}>
-      <AppText 
-        variant="heading1" 
+      <AppText
+        variant="heading1"
         style={styles.totalBalance}
         numberOfLines={1}
         ellipsizeMode="tail">
         {formatLargeNumber(Number(integerPart))}
       </AppText>
       {fractionalPart && (
-        <AppText 
-          variant="body1" 
+        <AppText
+          variant="body1"
           style={styles.totalBalanceDecimal}
           numberOfLines={1}
           ellipsizeMode="tail">
-          .{fractionalPart.substring(0,2)}
+          .{fractionalPart.substring(0, 2)}
         </AppText>
       )}
       {unit && (
-        <AppText 
-          variant="heading2" 
+        <AppText
+          variant="heading2"
           style={styles.textUnit}
           numberOfLines={1}
           ellipsizeMode="tail">
@@ -138,13 +221,170 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
   );
 };
 
+const CollectionItem = ({
+  item: asset,
+  isCollectible,
+  isCollection,
+}: {
+  item: Asset;
+  isCollectible: boolean;
+  isCollection: boolean;
+}) => {
+  const navigation = useNavigation();
+  const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = getStyles(theme, isThemeDark);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
+
+  const description = useMemo(() => {
+    if (isCollectible) {
+      return asset.details;
+    } else if (isCollection) {
+      return `Issued: ${asset.items.length}/${
+        asset.itemsCount === 0 ? '∞' : asset.itemsCount
+      }`;
+    }
+    return asset.description;
+  }, [isCollectible, asset.details, asset.description]);
+
+  return (
+    <AppTouchable
+      activeOpacity={0.95}
+      onPress={() => {
+        if(isCollectible) {
+          navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
+            assetId: asset.assetId,
+          });
+        } else if(isCollection) {
+          navigation.navigate(NavigationRoutes.COLLECTIONDETAILS, {
+            collectionId: asset.collectionId,
+          });
+        } 
+      }}
+      style={[
+        styles.largeHeaderContainer1,
+        {
+          marginTop: asset?.campaign?.isActive === 'true' ? -hp(50) : 0,
+        },
+      ]}>
+      <ImageBackground
+        source={{
+          uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
+        }}
+        resizeMode="cover"
+        style={styles.imageBackground}
+        imageStyle={styles.imageBackground}>
+        <View style={styles.textCollectibleNameContainer}>
+          <LinearGradient
+            colors={[
+              'rgba(0, 0, 0, 0)',
+              'rgba(0, 0, 0, 0.4)',
+              'rgba(0, 0, 0, 0.9)',
+            ]}
+            style={styles.textCollectibleNameContainer1}>
+            <View style={styles.textCollectibleNameContainer2}>
+              <AppText variant="heading2" style={styles.textCollectibleName}>
+                {asset.name}
+              </AppText>
+              {asset.issuer?.verified ? <IconVerified width={24} height={24} /> : null}
+            </View>
+            {
+              <AppText
+                variant="body2"
+                style={styles.textCollectibleDescription}>
+                {description}
+              </AppText>
+            }
+          </LinearGradient>
+        </View>
+      </ImageBackground>
+    </AppTouchable>
+  );
+};
+
+const CoinItem = ({
+  item: asset,
+  isWalletOnline,
+}: {
+  item: Asset;
+  isWalletOnline: WalletOnlineStatus;
+}) => {
+  const navigation = useNavigation();
+  const theme: AppTheme = useTheme();
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = getStyles(theme, isThemeDark);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
+  const coin : Coin = useQuery(RealmSchema.Coin, collection =>
+    collection.filtered(`assetId = $0`, asset.assetId),
+  )[0];
+
+  return (
+    <AppTouchable
+      activeOpacity={0.95}
+      onPress={() =>
+        navigation.navigate(NavigationRoutes.COINDETAILS, {
+          assetId: asset.assetId,
+        })
+      }
+      style={[
+        styles.largeHeaderContainer,
+        {
+          marginTop: asset?.campaign?.isActive === 'true' ? -hp(50) : 0,
+        },
+      ]}>
+      <View style={styles.row}>
+        <View style={styles.coinNameContainer}>
+          <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
+          <AppText style={styles.totalBalanceLabel} variant="body2">
+            {assets.totalBalance}
+          </AppText>
+          <DecimalText
+            value={Number(coin?.balance?.spendable) / 10 ** coin?.precision}
+            unit={formatTUsdt(asset.ticker)}
+          />
+        </View>
+        <AssetIcon
+          iconUrl={asset.iconUrl}
+          assetID={asset.assetId}
+          size={80}
+          verified={asset?.issuer?.verified}
+        />
+      </View>
+
+      <TransactionButtons
+        onPressSend={() => {
+          navigation.navigate(NavigationRoutes.SCANASSET, {
+            assetId: asset.assetId,
+            rgbInvoice: '',
+            wallet: wallet,
+          });
+        }}
+        onPressReceive={() => {
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            invoiceAssetId: asset.assetId,
+            chosenAsset: asset,
+          });
+        }}
+        sendCtaWidth={wp(150)}
+        receiveCtaWidth={wp(150)}
+        disabled={
+          isWalletOnline === WalletOnlineStatus.Error ||
+          isWalletOnline === WalletOnlineStatus.InProgress
+        }
+      />
+    </AppTouchable>
+  );
+};
+
 const DefaultCoin = ({
-  asset,
+  presetAssets,
   loading,
   refreshingStatus,
   onRefresh,
 }: {
-  asset: Asset;
+  presetAssets: Asset[];
   loading: boolean;
   refreshingStatus: boolean;
   onRefresh: () => void;
@@ -163,28 +403,23 @@ const DefaultCoin = ({
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-    const collectibles = useQuery<Collectible>(RealmSchema.Collectible, collection =>
-    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const collectibles = useQuery<Collectible>(
+    RealmSchema.Collectible,
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-  const udas = useQuery<UniqueDigitalAsset>(RealmSchema.UniqueDigitalAsset, collection =>
-    collection.filtered(`visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`, AssetVisibility.HIDDEN),
+  const udas = useQuery<UniqueDigitalAsset>(
+    RealmSchema.UniqueDigitalAsset,
+    collection =>
+      collection.filtered(
+        `visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`,
+        AssetVisibility.HIDDEN,
+      ),
   );
   const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
-  const nonDefaultCoins = coinsResult.filter(
-    coin => coin.assetId !== asset.assetId,
-  ).length;
-  const transactionsData =
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
-      ? Object.values({
-          ...asset?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
-      : asset?.transactions.slice(0, 3);
 
   const btcBalance = useMemo(() => {
     if (
@@ -203,8 +438,8 @@ const DefaultCoin = ({
   ]);
 
   const totalAssets = useMemo(() => {
-    return nonDefaultCoins + collectibles.length + udas.length + collections.length;
-  }, [nonDefaultCoins, collectibles, udas, collections]);
+    return collectibles.length + udas.length + collections.length;
+  }, [collectibles, udas, collections]);
 
   return (
     <View
@@ -216,83 +451,77 @@ const DefaultCoin = ({
           onRefresh={onRefresh}
         />
       }>
-      {asset.campaign.isActive === 'true' && (
-        <AppTouchable
-          activeOpacity={0.95}
-          onPress={() =>
-            navigation.navigate(NavigationRoutes.COINDETAILS, {
-              assetId: asset.assetId,
-            })
-          }>
-          <GradientBorderAnimated
-            height={hp(95)}
-            radius={hp(20)}
-            strokeWidth={2}
-            style={styles.campaignContainer}>
-            <AppText
-              style={{
-                color: theme.colors.headingColor,
-                textAlign: 'center',
-                marginTop: hp(15),
-                fontSize: 16,
-                fontWeight: '400',
-                fontFamily: Fonts.LufgaMedium,
-                lineHeight: 16 * 1.6,
-              }}>
-              {asset.campaign.name}
-            </AppText>
-          </GradientBorderAnimated>
-        </AppTouchable>
-      )}
-      <AppTouchable
-        activeOpacity={0.95}
-        onPress={() =>
-          navigation.navigate(NavigationRoutes.COINDETAILS, {
-            assetId: asset.assetId,
-          })
-        }
-        style={[
-          styles.largeHeaderContainer,
-          { marginTop: asset.campaign.isActive === 'true' ? -hp(50) : 0 },
-        ]}>
-        <View style={styles.row}>
-          <View style={styles.coinNameContainer}>
-            <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
-            <AppText style={styles.totalBalanceLabel} variant="body2">
-              {assets.totalBalance}
-            </AppText>
-            <DecimalText
-              value={Number(asset?.balance?.spendable) / 10 ** asset.precision}
-              unit={formatTUsdt(asset.ticker)}
-            />
-          </View>
-          <AssetIcon
-            iconUrl={asset.iconUrl}
-            assetID={asset.assetId}
-            size={80}
-            verified={asset?.issuer?.verified}
-          />
-        </View>
+      <View style={styles.row}>
+        <FlatList
+          data={presetAssets}
+          style={styles.list}
+          pagingEnabled
+          showsVerticalScrollIndicator={false}
+          onScroll={event => {
+            const { contentOffset } = event.nativeEvent;
+            const index = Math.round(contentOffset.y / 245);
+            setCurrentIndex(index);
+          }}
+          renderItem={({ item: asset }) => (
+            <View>
+              {asset?.campaign?.isActive === 'true' && (
+                <AppTouchable
+                  activeOpacity={0.95}
+                  onPress={() =>
+                    navigation.navigate(NavigationRoutes.COINDETAILS, {
+                      assetId: asset.assetId,
+                    })
+                  }>
+                  <GradientBorderAnimated
+                    height={hp(95)}
+                    radius={hp(20)}
+                    strokeWidth={2}
+                    style={styles.campaignContainer}>
+                    <AppText
+                      style={{
+                        color: theme.colors.headingColor,
+                        textAlign: 'center',
+                        marginTop: hp(15),
+                        fontSize: 16,
+                        fontWeight: '400',
+                        fontFamily: Fonts.LufgaMedium,
+                        lineHeight: 16 * 1.6,
+                      }}>
+                      {asset?.campaign?.name}
+                    </AppText>
+                  </GradientBorderAnimated>
+                </AppTouchable>
+              )}
 
-        <TransactionButtons
-          onPressSend={() => {
-            navigation.navigate(NavigationRoutes.SCANASSET, {
-              assetId: asset.assetId,
-              rgbInvoice: '',
-              wallet: wallet,
-            });
-          }}
-          onPressReceive={() => {
-            navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-              invoiceAssetId: asset.assetId,
-              chosenAsset: asset,
-            });
-          }}
-          sendCtaWidth={wp(150)}
-          receiveCtaWidth={wp(150)}
-          disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
+              {asset.collectionSchema ? (
+                <CollectionItem
+                  item={asset}
+                  isCollectible={false}
+                  isCollection={true}
+                />
+              ) : asset.metaData.assetSchema === AssetSchema.Collectible ? (
+                <CollectionItem item={asset} isCollectible={true} isCollection={false} />
+              ) : asset.metaData.assetSchema === AssetSchema.UDA ? (
+                <CollectionItem item={asset} isCollectible={false} isCollection={false} />
+              ) : asset.metaData.assetSchema === AssetSchema.Coin ? (
+                <CoinItem item={asset} isWalletOnline={isWalletOnline} />
+              ) : null}
+            </View>
+          )}
         />
-      </AppTouchable>
+        <View style={styles.containerScrollIndicator}>
+          {presetAssets.map((asset, index) => (
+            <View
+              key={index}
+              style={
+                currentIndex === index
+                  ? styles.scrollIndicatorItemCurrent
+                  : styles.scrollIndicatorItem
+              }
+            />
+          ))}
+        </View>
+      </View>
 
       <View style={styles.row}>
         <AppTouchable
@@ -332,15 +561,15 @@ const DefaultCoin = ({
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
-        transactions={transactionsData}
+        transactions={[]}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
         navigation={navigation}
         wallet={wallet}
-        coin={asset.name}
-        assetId={asset.assetId}
-        precision={asset.precision}
+        coin={''}
+        assetId={''}
+        precision={0}
         scrollY={0}
         schema={RealmSchema.Coin}
       />

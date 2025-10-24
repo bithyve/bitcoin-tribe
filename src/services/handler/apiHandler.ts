@@ -47,6 +47,7 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Asset,
+  AssetSchema,
   Coin,
   Collectible,
   Collection,
@@ -1948,7 +1949,6 @@ export class ApiHandler {
           '_id',
           collectionId,
         ) as unknown as Collection;
-        console.log('new collection', collection);
         const registerCollectionResponse = await Relay.registerCollection(
           app.id,
           { ...collection },
@@ -3010,38 +3010,70 @@ export class ApiHandler {
 
   static fetchPresetAssets = async () => {
     try {
-      const { coins = [] } = (await Relay.getPresetAssets()) || {};
-      coins.forEach((coin: Coin) => {
-        const exists = dbManager.getObjectByPrimaryId(
-          RealmSchema.Coin,
-          'assetId',
-          coin.assetId,
-        );
-        if (exists) {
-          dbManager.updateObjectByPrimaryId(
-            RealmSchema.Coin,
-            'assetId',
-            coin.assetId,
-            {
-              isDefault: coin.isDefault,
-              disclaimer: coin.disclaimer,
-              iconUrl: coin.iconUrl,
-              issuer: coin.issuer,
-              assetSource: coin.assetSource,
-              campaign: coin.campaign,
-              metaData: coin.metaData,
-            },
-          );
-        } else {
-          dbManager.createObjectBulk(
-            RealmSchema.Coin,
-            [coin],
-            Realm.UpdateMode.Modified,
-          );
-        }
-      });
+      const { status, results } = (await Relay.getPresetAssets()) || {};
+      if (status && results) {
+        Storage.set(Keys.PRESET_ASSETS, JSON.stringify(results));
+        results.forEach(result => {
+          if(result.metaData.assetSchema === AssetSchema.Coin) {
+            dbManager.createObject(RealmSchema.Coin, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if(result.metaData.assetSchema === AssetSchema.Collectible) {
+            dbManager.createObject(RealmSchema.Collectible, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if(result.collectionSchema) {
+            dbManager.createObject(RealmSchema.Collection, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if(result.metaData.assetSchema === AssetSchema.UDA) {
+            dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          }
+        });
+        return true;
+      }
+      return false;
     } catch (error) {
-      return error;
+      console.error('Error fetching preset assets:', error);
+      return false;
     }
   };
 
