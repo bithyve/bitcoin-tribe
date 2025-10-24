@@ -370,6 +370,18 @@ const UDADetailsScreen = () => {
     }
   };
 
+  const mediaPath = useMemo(() => {
+    const media = uda?.media?.filePath || uda?.token?.media?.filePath;
+    if(media) {
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
+  }, [uda?.media?.filePath, uda?.token?.media?.filePath]);
+
+
   return (
     <>
       {imageView && (
@@ -459,10 +471,7 @@ const UDADetailsScreen = () => {
           onResponderEnd={onResponderEnd}>
           <ImageBackground
             source={{
-              uri: Platform.select({
-                android: `file://${imagesList[activeImageIndex].filePath}`,
-                ios: imagesList[activeImageIndex].filePath,
-              }),
+              uri: mediaPath,
             }}
             resizeMode="cover"
             style={styles.imageStyle}>
