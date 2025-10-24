@@ -331,7 +331,6 @@ const JoinTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
           onChangeText={setJoinData}
           placeholder={community.viaChannelIdPlaceholder}
           multiline={true}
-          maxLength={100}
           contentStyle={
             joinData ? styles.channelMultiLine : styles.channelIdInput
           }
