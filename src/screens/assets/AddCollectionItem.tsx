@@ -15,7 +15,6 @@ import {
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
-  FlatList,
   Image,
   Keyboard,
   Platform,
@@ -57,6 +56,7 @@ import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from 'src/screens/collectiblesCoins/components/UDACollectiblesInfoModal';
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
+import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 
 function IssueCollectibleScreen() {
   const { collectionId } = useRoute().params;
@@ -143,10 +143,19 @@ function IssueCollectibleScreen() {
       if (colorable.length === 0) {
         await ApiHandler.createUtxos();
       }
+      const collection = dbManager.getObjectByPrimaryId(
+        RealmSchema.Collection,
+        '_id',
+        collectionId,
+      );
+      const deepLinking = DeepLinking.buildUrl(DeepLinkFeature.COLLECTION_ITEM, {
+        collectionId: collectionId,
+        assetId: collection.assetId,
+      });
       const response = await ApiHandler.mintCollectionItem({
         collectionId: collectionId,
         name: assetName.trim(),
-        details: description.trim() + ' tribecollectionitem://' + collectionId,
+        details: description.trim() + ' ' + deepLinking,
         ticker: assetTicker,
         mediaFilePath: Platform.select({
           android:

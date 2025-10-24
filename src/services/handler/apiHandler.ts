@@ -82,6 +82,7 @@ import { Asset as ImageAsset } from 'react-native-image-picker';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
+import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -1419,43 +1420,20 @@ export class ApiHandler {
                 };
               }
             }
-            if (uda.details.includes('tribecollection://')) {
-              const slug = uda.details.split('tribecollection://')[1];
-              const collection = urlParamsToObject(slug);
-              const parsedItemsCount = parseInt(collection.itemsCount as string, 10);
-              collections.push({
-                ...collection,
-                ...uda,
-                itemsCount: isNaN(parsedItemsCount) || !isFinite(parsedItemsCount) ? 0 : parsedItemsCount,
-                isFixedSupply: collection.isFixedSupply === 'true',
-                issuedSupply: String(uda.issuedSupply),
-                slug: slug,
-                balance: {
-                  settled: String(uda.balance.settled),
-                  spendable: String(uda.balance.spendable),
-                  future: String(uda.balance.future),
-                  offchainOutbound: uda.balance.offchainOutbound
-                    ? String(uda.balance.offchainOutbound)
-                    : undefined,
-                  offchainInbound: uda.balance.offchainInbound
-                    ? String(uda.balance.offchainInbound)
-                    : undefined,
-                },
-              });
-            } else if (uda.details.includes('tribecollectionitem://')) {
-              const collectionId = uda.details.split(
-                'tribecollectionitem://',
-              )[1];
-              const collection = dbManager.getObjectByPrimaryId(
-                RealmSchema.Collection,
-                '_id',
-                collectionId,
-              );
-              if(collection) {
-                // First, create/update the UDA object in the database
-                const udaData = {
+            if (uda.details.includes(DeepLinking.scheme)) {
+              const deepLinking = DeepLinking.processDeepLink(DeepLinking.scheme + uda.details.split(DeepLinking.scheme )[1]);
+              if(deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION && deepLinking.params.collectionId) {
+                const slug = uda.details.split(DeepLinking.scheme + '://')[1];
+                const collection = urlParamsToObject(slug);
+                const parsedItemsCount = parseInt(collection.itemsCount as string, 10);
+                collections.push({
+                  _id: collection.collectionId,
+                  ...collection,
                   ...uda,
+                  itemsCount: isNaN(parsedItemsCount) || !isFinite(parsedItemsCount) ? 0 : parsedItemsCount,
+                  isFixedSupply: collection.isFixedSupply === 'true',
                   issuedSupply: String(uda.issuedSupply),
+                  slug: slug,
                   balance: {
                     settled: String(uda.balance.settled),
                     spendable: String(uda.balance.spendable),
@@ -1467,127 +1445,153 @@ export class ApiHandler {
                       ? String(uda.balance.offchainInbound)
                       : undefined,
                   },
-                };
-                
-                // Create or update the UDA
-                dbManager.createObject(
-                  RealmSchema.UniqueDigitalAsset,
-                  udaData,
-                  Realm.UpdateMode.Modified,
+                });
+              } else if (deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION_ITEM && deepLinking.params.collectionId) {
+                const collectionId = deepLinking.params.collectionId;
+                const collection = dbManager.getObjectByPrimaryId(
+                  RealmSchema.Collection,
+                  '_id',
+                  collectionId,
                 );
-                
-                // Get the actual Realm UDA object
-                const udaObject = dbManager.getObjectByPrimaryId(
-                  RealmSchema.UniqueDigitalAsset,
-                  'assetId',
-                  uda.assetId,
-                );
-                
-                if (udaObject) {
-                  // Check if the item is already in the collection
-                  const existingItem = collection.items.find(
-                    (item: any) => item.assetId === uda.assetId,
-                  );
-                  
-                  if (!existingItem) {
-                    // Add the Realm object to the collection's items
-                    dbManager.updateObjectByPrimaryId(
-                      RealmSchema.Collection,
-                      '_id',
-                      collectionId,
-                      {
-                        items: [...collection.items, udaObject],
-                      },
-                    );
-                  }
-                }
-              } else {
-                const collectionResponse = await Relay.getCollectionDetails(collectionId);
-                if(collectionResponse.status) {
-                  const collection = collectionResponse.collection;
-                  const params = urlParamsToObject(collection.slug);
-                  collection.description = params.description as string;
-                  collection.details = collection.details + ' ' + collection.slug;
-                  collection.itemsCount = parseInt(params.itemsCount as string, 10);
-                  collection.isFixedSupply = params.isFixedSupply === 'true';
-                  collection.issuedSupply = String(uda.issuedSupply);
-                  collection.slug = collection.slug;
-                  collection.addedAt = Date.now();
-                  collection.media = {
-                    filePath: collection.media.file,
-                    mime: collection.media.mime,
-                    base64Image: '',
-                    digest: '',
-                  };
-                  collection.attachments = collection.attachments.map(attachment => ({
-                    filePath: attachment.file,
-                    mime: attachment.mime,
-                    base64Image: '',
-                    digest: '',
-                  }));
-                  collection.token = {
-                    attachments: collection.attachments,
-                    embeddedMedia: false,
-                    index: 0,
-                    media: collection.media,
-                    reserves: false,
-                  };
-                  collection.balance = {
-                    settled: String(uda.balance.settled),
-                    spendable: String(uda.balance.spendable),
-                    future: String(uda.balance.future),
-                    offchainOutbound: uda.balance.offchainOutbound
-                      ? String(uda.balance.offchainOutbound)
-                      : undefined,
-                    offchainInbound: uda.balance.offchainInbound
-                      ? String(uda.balance.offchainInbound)
-                      : undefined,
-                  };
-                  collection.items = [];
-                  dbManager.createObject(
-                    RealmSchema.Collection,
-                    collection,
-                    Realm.UpdateMode.Modified,
-                  );
-
-                dbManager.createObject(
-                  RealmSchema.UniqueDigitalAsset,
-                  {
+                if(collection) {
+                  // First, create/update the UDA object in the database
+                  const udaData = {
                     ...uda,
+                    issuedSupply: String(uda.issuedSupply),
                     balance: {
                       settled: String(uda.balance.settled),
                       spendable: String(uda.balance.spendable),
                       future: String(uda.balance.future),
+                      offchainOutbound: uda.balance.offchainOutbound
+                        ? String(uda.balance.offchainOutbound)
+                        : undefined,
+                      offchainInbound: uda.balance.offchainInbound
+                        ? String(uda.balance.offchainInbound)
+                        : undefined,
                     },
-                  },
-                  Realm.UpdateMode.Modified,
-                );
-                
-                // Get the actual Realm UDA object
-                const udaObject = dbManager.getObjectByPrimaryId(
-                  RealmSchema.UniqueDigitalAsset,
-                  'assetId',
-                  uda.assetId,
-                );
-                if (udaObject) {
-                  // Check if the item is already in the collection
-                  const existingItem = collection.items.find(
-                    (item: any) => item.assetId === uda.assetId,
+                  };
+                  
+                  // Create or update the UDA
+                  dbManager.createObject(
+                    RealmSchema.UniqueDigitalAsset,
+                    udaData,
+                    Realm.UpdateMode.Modified,
                   );
                   
-                  if (!existingItem) {
-                    // Add the Realm object to the collection's items
-                    dbManager.updateObjectByPrimaryId(
-                      RealmSchema.Collection,
-                      '_id',
-                      collectionId,
-                      {
-                        items: [...collection.items, udaObject],
-                      },
+                  // Get the actual Realm UDA object
+                  const udaObject = dbManager.getObjectByPrimaryId(
+                    RealmSchema.UniqueDigitalAsset,
+                    'assetId',
+                    uda.assetId,
+                  );
+                  
+                  if (udaObject) {
+                    // Check if the item is already in the collection
+                    const existingItem = collection.items.find(
+                      (item: any) => item.assetId === uda.assetId,
                     );
+                    
+                    if (!existingItem) {
+                      // Add the Realm object to the collection's items
+                      dbManager.updateObjectByPrimaryId(
+                        RealmSchema.Collection,
+                        '_id',
+                        collectionId,
+                        {
+                          items: [...collection.items, udaObject],
+                        },
+                      );
+                    }
                   }
-                }
-                }
+                } else {
+                  const collectionResponse = await Relay.getCollectionDetails(collectionId);
+                  if(collectionResponse.status) {
+                    const collection = collectionResponse.collection;
+                    const params = urlParamsToObject(collection.slug);
+                    collection.description = params.description as string;
+                    collection.details = collection.details + ' ' + collection.slug;
+                    collection.itemsCount = parseInt(params.itemsCount as string, 10);
+                    collection.isFixedSupply = params.isFixedSupply === 'true';
+                    collection.issuedSupply = String(uda.issuedSupply);
+                    collection.slug = collection.slug;
+                    collection.addedAt = Date.now();
+                    collection.media = {
+                      filePath: collection.media.file,
+                      mime: collection.media.mime,
+                      base64Image: '',
+                      digest: '',
+                    };
+                    collection.attachments = collection.attachments.map(attachment => ({
+                      filePath: attachment.file,
+                      mime: attachment.mime,
+                      base64Image: '',
+                      digest: '',
+                    }));
+                    collection.token = {
+                      attachments: collection.attachments,
+                      embeddedMedia: false,
+                      index: 0,
+                      media: collection.media,
+                      reserves: false,
+                    };
+                    collection.balance = {
+                      settled: String(uda.balance.settled),
+                      spendable: String(uda.balance.spendable),
+                      future: String(uda.balance.future),
+                      offchainOutbound: uda.balance.offchainOutbound
+                        ? String(uda.balance.offchainOutbound)
+                        : undefined,
+                      offchainInbound: uda.balance.offchainInbound
+                        ? String(uda.balance.offchainInbound)
+                        : undefined,
+                    };
+                    collection.items = [];
+                    dbManager.createObject(
+                      RealmSchema.Collection,
+                      collection,
+                      Realm.UpdateMode.Modified,
+                    );
+  
+                  dbManager.createObject(
+                    RealmSchema.UniqueDigitalAsset,
+                    {
+                      ...uda,
+                      balance: {
+                        settled: String(uda.balance.settled),
+                        spendable: String(uda.balance.spendable),
+                        future: String(uda.balance.future),
+                      },
+                    },
+                    Realm.UpdateMode.Modified,
+                  );
+                  
+                  // Get the actual Realm UDA object
+                  const udaObject = dbManager.getObjectByPrimaryId(
+                    RealmSchema.UniqueDigitalAsset,
+                    'assetId',
+                    uda.assetId,
+                  );
+                  if (udaObject) {
+                    // Check if the item is already in the collection
+                    const existingItem = collection.items.find(
+                      (item: any) => item.assetId === uda.assetId,
+                    );
+                    
+                    if (!existingItem) {
+                      // Add the Realm object to the collection's items
+                      dbManager.updateObjectByPrimaryId(
+                        RealmSchema.Collection,
+                        '_id',
+                        collectionId,
+                        {
+                          items: [...collection.items, udaObject],
+                        },
+                      );
+                    }
+                  }
+                  }
+
+            } 
                 // Collection doesn't exist yet, add to udas to be processed
                 // udas.push({
                 //   ...uda,
@@ -1924,14 +1928,14 @@ export class ApiHandler {
       }
       const collectionId = uuidv4();
       const slug =
-        'tribecollection://' +
-        objectToUrlParams({
-          _id: collectionId,
+        DeepLinking.buildUrl(DeepLinkFeature.COLLECTION, {
+          collectionId: collectionId,
           name: name,
           description: details,
           itemsCount: totalSupplyAmt,
           isFixedSupply: isFixedSupply,
         });
+        console.log('slug', slug);
       const response = await RGBServices.issueAssetUda(
         name,
         ticker,
@@ -1941,6 +1945,7 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      console.log('response', response);
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
@@ -1966,7 +1971,6 @@ export class ApiHandler {
           return null;
         }
       }
-      console.log('response', response);
       return null;
     } catch (error) {
       console.log('issueNewCollection', error);

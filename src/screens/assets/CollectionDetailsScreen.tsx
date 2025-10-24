@@ -31,6 +31,7 @@ import Colors from 'src/theme/Colors';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import DeepLinking from 'src/utils/DeepLinking';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -126,13 +127,13 @@ const CollectionDetailsScreen = () => {
               {isVerified && <IconVerified width={20} height={20} />}
             </View>
             <SizedBox height={hp(10)} />
-            <AppText variant="caption">{collection.description.split('tribecollection://')[0] || ''}</AppText>
+            <AppText variant="caption">{collection.description.split(`${DeepLinking.scheme}://`)[0] || ''}</AppText>
           </View>
           <View />
           <SizedBox height={hp(20)} />
           <View style={styles.verifiedCtr}>
-            <AppText style={{ color: Colors.UFOGreen1 }} variant="heading3">
-              {assets.verified}
+            <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: Colors.AmberBlaze }} variant="heading3">
+              {isVerified ? assets.verified : assets.unverified}
             </AppText>
             <SizedBox height={hp(4)} />
             <View style={styles.verifiedRow}>

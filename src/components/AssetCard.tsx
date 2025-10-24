@@ -17,6 +17,7 @@ import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
 import Colors from 'src/theme/Colors';
+import DeepLinking from 'src/utils/DeepLinking';
 
 type AssetCardProps = {
   asset: Asset;
@@ -70,10 +71,10 @@ const AssetCard = (props: AssetCardProps) => {
   );
 
   const detailsText = useMemo(() => {
-    if (asset?.details?.includes('tribecollection://')) {
-      return asset?.details?.split('tribecollection://')[0];
-    } else if (asset?.details?.includes('tribecollectionitem://')) {
-      return asset?.details?.split('tribecollectionitem://')[0];
+    if (asset?.details?.includes(`${DeepLinking.scheme}://`)) {
+      return asset?.details?.split(`${DeepLinking.scheme}://`)[0];
+    } else if (asset?.details?.includes(`${DeepLinking.scheme}://collectionitem`)) {
+      return asset?.details?.split(`${DeepLinking.scheme}://collectionitem`)[0];
     }
     return asset?.details;
   }, [asset?.details]);

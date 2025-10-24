@@ -47,6 +47,7 @@ import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LinearGradient from 'react-native-linear-gradient';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
+import DeepLinking from 'src/utils/DeepLinking';
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
@@ -413,7 +414,7 @@ const DefaultCoin = ({
     RealmSchema.UniqueDigitalAsset,
     collection =>
       collection.filtered(
-        `visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`,
+        `visibility != $0 && NOT details CONTAINS '${DeepLinking.scheme}://'`,
         AssetVisibility.HIDDEN,
       ),
   );

@@ -79,6 +79,7 @@ import Colors from 'src/theme/Colors';
 import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SizedBox } from 'src/components/SizedBox';
+import DeepLinking from 'src/utils/DeepLinking';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -556,7 +557,7 @@ const UDADetailsScreen = () => {
                 </View>
                 <Item
                   value={home.assetDescription}
-                  title={uda.details.split('tribecollectionitem://')[0]}
+                  title={uda.details.split(`${DeepLinking.scheme}://`)[0] || ''}
                 />
 
                 <View style={styles.gutter}>
@@ -592,7 +593,7 @@ const UDADetailsScreen = () => {
                       showVerifyIssuer={showVerifyIssuer}
                       showDomainVerifyIssuer={showDomainVerifyIssuer}
                       asset={uda}
-                      collectionId={uda?.details.split('tribecollectionitem://')[1]}
+                      collectionId={uda?.details.split(`${DeepLinking.scheme}://`)[1]}
                       onPressShare={() => {
                         if (!uda?.isIssuedPosted) {
                           setVisibleIssuedPostOnTwitter(true);
