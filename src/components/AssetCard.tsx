@@ -33,6 +33,12 @@ const AssetCard = (props: AssetCardProps) => {
   const isCollection = asset.slug ? true : false;
 
   const balance = useMemo(() => {
+    if(asset.assetSchema === AssetSchema.UDA) {
+      if(asset.balance.spendable === '1'){
+        return 'Owned'
+      } 
+      return ''
+    }
     return (
       formatLargeNumber(Number(asset?.balance?.future) / 10 ** precision) ?? 0
     );
@@ -111,14 +117,12 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {!isCollection && precision != null && (
                 <AppText
                   variant="body2"
                   numberOfLines={1}
                   style={styles.amountText}>
                   {balance}
                 </AppText>
-              )}
             </View>
             <AppText
               variant="body2"
