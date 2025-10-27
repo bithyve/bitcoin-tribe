@@ -19,7 +19,7 @@ import {
 import AppText from 'src/components/AppText';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AssetIcon from 'src/components/AssetIcon';
@@ -237,16 +237,19 @@ const CollectionItem = ({
   const styles = getStyles(theme, isThemeDark);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
-
+  const collectible = useQuery<Collectible>(RealmSchema.Collectible, collection =>
+    collection.filtered(`assetId = $0`, asset.assetId),
+  )[0];
+  
   const description = useMemo(() => {
     if (isCollectible) {
-      return asset.details;
+      return `${assets.totalBalance}: ${formatLargeNumber(Number(collectible?.balance.spendable) / 10 ** collectible?.precision)}`;
     } else if (isCollection) {
       return `Issued: ${asset.items.length}/${
         asset.itemsCount === 0 ? '∞' : asset.itemsCount
       }`;
     }
-    return asset.description;
+    return '';
   }, [isCollectible, asset.details, asset.description]);
 
   return (
@@ -261,7 +264,11 @@ const CollectionItem = ({
           navigation.navigate(NavigationRoutes.COLLECTIONDETAILS, {
             collectionId: asset.collectionId,
           });
-        } 
+        } else{
+          navigation.navigate(NavigationRoutes.UDADETAILS, {
+            assetId: asset.assetId,
+          });
+        }
       }}
       style={[
         styles.largeHeaderContainer1,
@@ -359,7 +366,6 @@ const CoinItem = ({
           navigation.navigate(NavigationRoutes.SCANASSET, {
             assetId: asset.assetId,
             rgbInvoice: '',
-            wallet: wallet,
           });
         }}
         onPressReceive={() => {
@@ -381,12 +387,10 @@ const CoinItem = ({
 
 const DefaultCoin = ({
   presetAssets,
-  loading,
   refreshingStatus,
   onRefresh,
 }: {
   presetAssets: Asset[];
-  loading: boolean;
   refreshingStatus: boolean;
   onRefresh: () => void;
 }) => {
@@ -401,10 +405,11 @@ const DefaultCoin = ({
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const rgbWallet = useRgbWallets({}).wallets[0];
   const { getBalance, getCurrencyIcon } = useBalance();
-  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
+  const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentAssetSchema, setCurrentAssetSchema] = useState(null)
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
     collection =>
@@ -441,6 +446,24 @@ const DefaultCoin = ({
   const totalAssets = useMemo(() => {
     return collectibles.length + udas.length + collections.length;
   }, [collectibles, udas, collections]);
+  
+  const currentAsset = useMemo(() => {
+    const asset = presetAssets[currentIndex];
+    if(asset?.metaData?.assetSchema === AssetSchema.Coin) {
+      setCurrentAssetSchema(RealmSchema.Coin);
+      return coins.find(coin => coin.assetId === asset.assetId);
+    } else if(asset?.metaData?.assetSchema === AssetSchema.Collectible) {
+      setCurrentAssetSchema(RealmSchema.Collectible);
+      return collectibles.find(collectible => collectible.assetId === asset.assetId);
+    } else if(asset?.collectionSchema) {
+      setCurrentAssetSchema(RealmSchema.Collection);
+      return collections.find(collection => collection.assetId === asset.assetId);
+    } else if(asset?.metaData?.assetSchema === AssetSchema.UDA) {
+      setCurrentAssetSchema(RealmSchema.UniqueDigitalAsset);
+      return udas.find(uda => uda.assetId === asset.assetId);
+    }
+    return null;
+  }, [currentIndex, presetAssets]);
 
   return (
     <View
@@ -562,17 +585,16 @@ const DefaultCoin = ({
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
-        transactions={[]}
+        transactions={currentAsset.transactions}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
-        navigation={navigation}
         wallet={wallet}
-        coin={''}
-        assetId={''}
-        precision={0}
+        coin={currentAsset?.name || ''}
+        assetId={currentAsset?.assetId || ''}
+        precision={currentAsset?.precision || 0}
         scrollY={0}
-        schema={RealmSchema.Coin}
+        schema={currentAssetSchema}
       />
     </View>
   );
