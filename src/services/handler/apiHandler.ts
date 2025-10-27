@@ -1422,16 +1422,17 @@ export class ApiHandler {
             }
             if (uda.details.includes(DeepLinking.scheme)) {
               const deepLinking = DeepLinking.processDeepLink(DeepLinking.scheme + uda.details.split(DeepLinking.scheme )[1]);
-              if(deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION && deepLinking.params.collectionId) {
+              if(deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION && deepLinking.params.id) {
                 const slug = uda.details.split(DeepLinking.scheme + '://')[1];
                 const collection = urlParamsToObject(slug);
-                const parsedItemsCount = parseInt(collection.itemsCount as string, 10);
+                const parsedItemsCount = parseInt(collection.no as string, 10);
                 collections.push({
-                  _id: collection.collectionId,
+                  _id: collection.id,
+                  description: uda.details.split(DeepLinking.scheme + '://')[0],
                   ...collection,
                   ...uda,
                   itemsCount: isNaN(parsedItemsCount) || !isFinite(parsedItemsCount) ? 0 : parsedItemsCount,
-                  isFixedSupply: collection.isFixedSupply === 'true',
+                  isFixedSupply: collection.fxd === 'true',
                   issuedSupply: String(uda.issuedSupply),
                   slug: slug,
                   balance: {
@@ -1903,6 +1904,19 @@ export class ApiHandler {
     }
   }
 
+  static generateCollectionSlug(collectionId: string, itemsCount: number, isFixedSupply: boolean) {
+    return `${collectionId},${itemsCount},${isFixedSupply ? 'true' : 'false'}`;
+  }
+
+  static parseCollectionSlug(slug: string) {
+    const [collectionId, itemsCount, isFixedSupply] = slug.split(',');
+    return {
+      collectionId: collectionId,
+      itemsCount: parseInt(itemsCount, 10),
+      isFixedSupply: isFixedSupply === 'true',
+    };
+  }
+
   static async issueNewCollection({
     name,
     ticker = 'TCOLP',
@@ -1926,16 +1940,13 @@ export class ApiHandler {
       if (createUtxos) {
         await ApiHandler.createUtxos();
       }
-      const collectionId = uuidv4();
+      const collectionId = uuidv4().split('-')[0];
       const slug =
         DeepLinking.buildUrl(DeepLinkFeature.COLLECTION, {
-          collectionId: collectionId,
-          name: name,
-          description: details,
-          itemsCount: totalSupplyAmt,
-          isFixedSupply: isFixedSupply,
+          id: collectionId,
+          no: totalSupplyAmt,
+          fxd: isFixedSupply,
         });
-        console.log('slug', slug);
       const response = await RGBServices.issueAssetUda(
         name,
         ticker,
@@ -1945,7 +1956,6 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      console.log('response', response);
       if (response?.assetId) {
         await ApiHandler.refreshRgbWallet();
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
@@ -1967,11 +1977,10 @@ export class ApiHandler {
         });
         if (registerCollectionResponse.created) {
           return collection;
-        } else {
-          return null;
         }
+        throw new Error('Failed to register collection');
       }
-      return null;
+      throw new Error('Failed to issue collection');
     } catch (error) {
       console.log('issueNewCollection', error);
       throw error;
