@@ -80,6 +80,7 @@ import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SizedBox } from 'src/components/SizedBox';
 import DeepLinking from 'src/utils/DeepLinking';
+import { isWebUrl } from 'src/utils/url';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -374,6 +375,9 @@ const UDADetailsScreen = () => {
   const mediaPath = useMemo(() => {
     const media = uda?.media?.filePath || uda?.token?.media?.filePath;
     if(media) {
+      if(isWebUrl(media)){
+        return media;
+      }
       return Platform.select({
         android: `file://${media}`,
         ios: media,
