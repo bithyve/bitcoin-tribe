@@ -249,7 +249,7 @@ function IssueCollection() {
         name: collectionName,
         ticker: 'TCOLP',
         details: description,
-        totalSupplyAmt: parseInt(totalSupplyAmt),
+        totalSupplyAmt: parseInt(totalSupplyAmt || '0'),
         isFixedSupply: isFixedSupply,
         mediaFilePath: Platform.select({
           android:
@@ -378,7 +378,7 @@ function IssueCollection() {
             }}
             keyboardType={'default'}
             returnKeyType="done"
-            maxLength={500}
+            maxLength={200}
             multiline={true}
             numberOfLines={2}
             style={[styles.input, description && styles.descInput]}
