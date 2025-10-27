@@ -28,13 +28,78 @@ export enum Keys {
   RATE_LIMIT_KEY = 'TWITTER_RATE_LIMIT_TIME',
   RATE_LIMITED_TWEET_URL_KEY = 'RATE_LIMITED_TWEET_URL',
   PARTICIPATED_CAMPAIGNS = 'PARTICIPATED_CAMPAIGNS',
+  PRESET_ASSETS = 'PRESET_ASSETS',
 }
 
 export class Storage {
-  static set = (key: Keys, value: string | number | boolean): void =>
-    MMKVStorage.set(key, value);
+  static set = (key: Keys, value: string | number | boolean): void => {
+    if (!this.isInitialized()) {
+      throw new Error('Storage is not initialized');
+    }
 
-  static clear = (): void => MMKVStorage.clearAll();
+    if (typeof value === 'string') {
+      MMKVStorage.set(key, value);
+    } else if (typeof value === 'number') {
+      MMKVStorage.set(key, value);
+    } else if (typeof value === 'boolean') {
+      MMKVStorage.set(key, value);
+    } else {
+      console.warn('Unsupported value type:', value, key);
+    }
+  };
 
-  static get = (key: Keys): string | undefined => MMKVStorage.getString(key);
+  static get = (key: Keys): string | number | boolean | undefined => {
+    if (!this.isInitialized()) {
+      console.warn('Storage is not initialized');
+      return undefined;
+    }
+
+    const stringValue = MMKVStorage.getString(key);
+    if (stringValue !== undefined) {
+      return stringValue;
+    }
+
+    const numberValue = MMKVStorage.getNumber(key);
+    if (numberValue !== undefined) {
+      return numberValue;
+    }
+
+    const booleanValue = MMKVStorage.getBoolean(key);
+    if (booleanValue !== undefined) {
+      return booleanValue;
+    }
+
+    return undefined;
+  };
+
+  static clear = (): void => {
+    if (!this.isInitialized()) {
+      console.warn('Storage is not initialized');
+      return;
+    }
+    MMKVStorage.clearAll();
+  };
+
+  static readAll() {
+    const keys = MMKVStorage.getAllKeys();
+    const allData = {};
+  
+    keys.forEach((key) => {
+      allData[key] = MMKVStorage.getString(key) || MMKVStorage.getNumber(key) || MMKVStorage.getBoolean(key);
+    });
+  
+    return allData;
+  }
+
+  static isInitialized(): boolean {
+    try {
+      MMKVStorage.set('__init_test__', 'ok');
+      const test = MMKVStorage.getString('__init_test__');
+      MMKVStorage.delete('__init_test__');
+      return test === 'ok';
+    } catch (e) {
+      console.error('Storage initialization check failed:', e);
+      return false;
+    }
+  }
 }

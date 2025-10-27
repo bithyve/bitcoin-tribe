@@ -39,6 +39,8 @@ export const CollectionSchema: ObjectSchema = {
       default: AssetSchema.UDA,
       optional: true,
     },
+    media: `${RealmSchema.CollectibleMedia}?`,
+    attachments: `${RealmSchema.CollectibleMedia}[]`,
     assetSource: {
       type: 'string',
       default: AssetSource.Internal,

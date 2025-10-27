@@ -1,7 +1,6 @@
 import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import {
-  CommonActions,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -14,7 +13,11 @@ import { SizedBox } from 'src/components/SizedBox';
 import AssetCard from 'src/components/AssetCard';
 import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
-import { Collection, TransferKind } from 'src/models/interfaces/RGBWallet';
+import {
+  Collection,
+  IssuerVerificationMethod,
+  TransferKind,
+} from 'src/models/interfaces/RGBWallet';
 import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import AppTouchable from 'src/components/AppTouchable';
@@ -25,9 +28,10 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import Colors from 'src/theme/Colors';
-import SelectOption from 'src/components/SelectOption';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
+import IconVerified from 'src/assets/images/issuer_verified.svg';
+import DeepLinking from 'src/utils/DeepLinking';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -59,34 +63,56 @@ const CollectionDetailsScreen = () => {
     return unsubscribe;
   }, [navigation, collection.assetId, collection._id]);
 
-  const isVerified = false; // ! for mocking
+  const isVerified = collection?.issuer?.verifiedBy.some(
+    item => item.verified === true,
+  );
+
+  const mediaPath = useMemo(() => {
+    if(collection?.token?.media?.filePath) {
+      return Platform.select({
+        android: `file://${collection?.token?.media?.filePath}`,
+        ios: collection?.token?.media?.filePath,
+      });
+    } else if(collection?.attachments[0]?.filePath) {
+      return collection?.attachments[0]?.filePath
+    }
+    return null;
+  }, [collection?.token?.media?.filePath, collection?.token?.attachments[0]?.filePath]);
+
+  const headerImage = useMemo(() => {
+    if(collection?.token?.media?.filePath) {
+      return Platform.select({
+        android: `file://${collection?.token?.media?.filePath}`,
+        ios: collection?.token?.media?.filePath,
+      });
+    } else if(collection?.media?.filePath) {
+      return collection?.media?.filePath
+    }
+    return null;
+  }, [collection?.token?.media?.filePath, collection?.media?.filePath]);
 
   const ListHeader = () => {
     return (
       <>
         <View style={styles.mintedCtr}>
           <AppText variant="muted">
-            {`Minted: ${collection.items.length}${
-              collection.isFixedSupply ? `/${collection.itemsCount}` : ''
+            {`Issued: ${collection.items.length}${
+              collection.itemsCount !== 0
+                ? `/${collection.itemsCount.toString()}`
+                : '/∞'
             }`}
           </AppText>
         </View>
         <Image
           source={{
-            uri: Platform.select({
-              android: `file://${collection.token?.media?.filePath}`,
-              ios: `${collection.token?.media?.filePath}`,
-            }),
+            uri: headerImage,
           }}
           resizeMode="cover"
           style={styles.bannerImage}
         />
         <Image
           source={{
-            uri: Platform.select({
-              android: `file://${collection.token?.attachments[0]?.filePath}`,
-              ios: `${collection.token?.attachments[0]?.filePath}`,
-            }),
+            uri: mediaPath,
           }}
           resizeMode="cover"
           style={styles.image}
@@ -96,15 +122,18 @@ const CollectionDetailsScreen = () => {
         </View>
         <View style={styles.contentCtr}>
           <View style={styles.nameCtr}>
-            <AppText variant="body1Bold">{collection.name}</AppText>
+            <View style={styles.nameCtrRow}>
+              <AppText variant="body1Bold">{collection.name}</AppText>
+              {isVerified && <IconVerified width={20} height={20} />}
+            </View>
             <SizedBox height={hp(10)} />
-            <AppText variant="caption">{collection.description || ''}</AppText>
+            <AppText variant="caption">{collection.description.split(`${DeepLinking.scheme}://`)[0] || ''}</AppText>
           </View>
           <View />
           <SizedBox height={hp(20)} />
           <View style={styles.verifiedCtr}>
-            <AppText style={{ color: Colors.UFOGreen1 }} variant="heading3">
-              {assets.verified}
+            <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: Colors.AmberBlaze }} variant="heading3">
+              {isVerified ? assets.verified : assets.unverified}
             </AppText>
             <SizedBox height={hp(4)} />
             <View style={styles.verifiedRow}>
@@ -114,7 +143,11 @@ const CollectionDetailsScreen = () => {
               <AppText
                 variant="caption"
                 style={!isVerified && styles.orangeText}>
-                {isVerified ? '@bitcointribe_' : assets.unverified}
+                {isVerified
+                  ? collection?.issuer?.verifiedBy.find(
+                      item => item.type === IssuerVerificationMethod.TWITTER,
+                    )?.username
+                  : assets.unverified}
               </AppText>
             </View>
             <SizedBox height={hp(2)} />
@@ -125,12 +158,16 @@ const CollectionDetailsScreen = () => {
               <AppText
                 variant="caption"
                 style={!isVerified && styles.orangeText}>
-                {isVerified ? 'www.bitcointribe.app' : assets.unverified}
+                {isVerified
+                  ? collection?.issuer?.verifiedBy.find(
+                      item => item.type === IssuerVerificationMethod.DOMAIN,
+                    )?.name
+                  : assets.unverified}
               </AppText>
             </View>
           </View>
           <SizedBox height={hp(10)} />
-          <SelectOption
+          {/* <SelectOption
             title={'Verification'}
             subTitle={''}
             onPress={() =>
@@ -141,11 +178,12 @@ const CollectionDetailsScreen = () => {
               )
             }
             testID={'collection_verification'}
-          />
+          /> */}
         </View>
       </>
     );
   };
+
 
   return (
     <View style={styles.parentContainer}>
@@ -278,6 +316,10 @@ const getStyles = (theme: AppTheme, insets) =>
     verifiedLabel: { color: theme.colors.mutedTab },
     orangeText: {
       color: Colors.AmberBlaze,
+    },
+    nameCtrRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   });
 export default CollectionDetailsScreen;

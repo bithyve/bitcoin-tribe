@@ -38,7 +38,9 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
       type: 'string',
       default: AssetSource.Internal,
       optional: true,
-    }
+    },
+    media: `${RealmSchema.CollectibleMedia}?`,
+    attachments: `${RealmSchema.CollectibleMedia}[]`,
   },
 };
 

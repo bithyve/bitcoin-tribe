@@ -30,9 +30,9 @@ export default class Relay {
     }
   };
 
-  public static getPresetAssets = async (): Promise<{ coins: Coin[] }> => {
+  public static getPresetAssets = async (): Promise<{ status: true, results: [] }> => {
     try {
-      const res = await RestClient.get(`${RELAY}/app/preset-assets`);
+      const res = await RestClient.get(`${RELAY}/registry/featured`);
       return res.data;
     } catch (error) {
       console.log(error);

@@ -64,7 +64,7 @@ export const CreateCollectionConfirmation = ({
         loop={false}
       />
       <Buttons
-        primaryTitle={'Mint UDA'}
+        primaryTitle={'Issue UDA'}
         primaryOnPress={() => closeModal('done')}
         secondaryTitle={'View Collection'}
         secondaryOnPress={() => closeModal('add')}

@@ -17,3 +17,6 @@ export const objectToUrlParams = (obj: Record<string, string | number | boolean>
     return result;
   };
   
+  export const isWebUrl = (url: string) => {
+    return url.startsWith('http') || url.startsWith('https');
+  };

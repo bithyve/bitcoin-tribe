@@ -17,6 +17,8 @@ import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetIcon from './AssetIcon';
 import Colors from 'src/theme/Colors';
+import DeepLinking from 'src/utils/DeepLinking';
+import { isWebUrl } from 'src/utils/url';
 
 type AssetCardProps = {
   asset: Asset;
@@ -33,6 +35,12 @@ const AssetCard = (props: AssetCardProps) => {
   const isCollection = asset.slug ? true : false;
 
   const balance = useMemo(() => {
+    if (asset.assetSchema === AssetSchema.UDA) {
+      if (asset.balance.spendable === '1') {
+        return 'Owned';
+      }
+      return '';
+    }
     return (
       formatLargeNumber(Number(asset?.balance?.future) / 10 ** precision) ?? 0
     );
@@ -48,7 +56,10 @@ const AssetCard = (props: AssetCardProps) => {
   const uri = useMemo(() => {
     if (asset.assetSchema === AssetSchema.Coin) return '';
     const media = asset?.media?.filePath || asset?.token?.media?.filePath;
-    if(media){
+    if (media) {
+      if (isWebUrl(media)) {
+        return media;
+      }
       return Platform.select({
         android: `file://${media}`,
         ios: media,
@@ -64,10 +75,12 @@ const AssetCard = (props: AssetCardProps) => {
   );
 
   const detailsText = useMemo(() => {
-    if (asset?.details?.includes('tribecollection://')) {
-      return asset?.details?.split('tribecollection://')[0];
-    } else if (asset?.details?.includes('tribecollectionitem://')) {
-      return asset?.details?.split('tribecollectionitem://')[0];
+    if (asset?.details?.includes(`${DeepLinking.scheme}://`)) {
+      return asset?.details?.split(`${DeepLinking.scheme}://`)[0];
+    } else if (
+      asset?.details?.includes(`${DeepLinking.scheme}://collectionitem`)
+    ) {
+      return asset?.details?.split(`${DeepLinking.scheme}://collectionitem`)[0];
     }
     return asset?.details;
   }, [asset?.details]);
@@ -111,14 +124,12 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {!isCollection && precision != null && (
-                <AppText
-                  variant="body2"
-                  numberOfLines={1}
-                  style={styles.amountText}>
-                  {balance}
-                </AppText>
-              )}
+              <AppText
+                variant="body2"
+                numberOfLines={1}
+                style={styles.amountText}>
+                {balance}
+              </AppText>
             </View>
             <AppText
               variant="body2"

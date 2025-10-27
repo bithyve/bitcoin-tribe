@@ -27,6 +27,7 @@ import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
+import DeepLinking from 'src/utils/DeepLinking';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
@@ -58,9 +59,9 @@ function Collectibles() {
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
-    RealmSchema.UniqueDigitalAsset,
+    RealmSchema.UniqueDigitalAsset, 
     collection =>
-      collection.filtered(`visibility != $0 && NOT details CONTAINS 'tribecollectionitem://'`, AssetVisibility.HIDDEN),
+      collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.scheme}://'`, AssetVisibility.HIDDEN),
   );
   const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),

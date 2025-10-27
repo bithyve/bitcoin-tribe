@@ -34,6 +34,7 @@ import useWallets from 'src/hooks/useWallets';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 import {
+  Asset,
   AssetType,
   AssetVisibility,
   Coin,
@@ -53,6 +54,7 @@ import { getMessaging, onMessage } from '@react-native-firebase/messaging';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import DefaultCoin from './DefaultCoin';
 import RefreshControlView from 'src/components/RefreshControlView';
+import { Keys, Storage } from 'src/storage';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -81,6 +83,8 @@ function HomeScreen() {
     setIsWalletOnline,
     isWalletOnline,
   } = useContext(AppContext);
+  const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
+
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
       setBackupDone(true);
@@ -115,7 +119,6 @@ function HomeScreen() {
       .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
       .sorted('timestamp', true),
   );
-  const defaultCoin = coinsResult.find(c => c.isDefault);
   const coins = useMemo(() => {
     if (!coinsResult) return [];
     const coinsArray = coinsResult.slice();
@@ -195,12 +198,6 @@ function HomeScreen() {
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app?.appType === AppType.ON_CHAIN) {
-        if (defaultCoin) {
-          listPaymentsMutate({
-            assetId: defaultCoin.assetId,
-            schema: RealmSchema.Coin,
-          });
-        }
         if (isWalletOnline === WalletOnlineStatus.Online) {
           checkBackupRequired();
         }
@@ -345,9 +342,9 @@ function HomeScreen() {
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
-        <HomeHeader showBalance={!defaultCoin} showScanner={true} />
+        <HomeHeader showBalance={false} showScanner={true} />
       </View>
-      {defaultCoin ? (
+      {presetAssets.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{
@@ -368,14 +365,7 @@ function HomeScreen() {
               />
             )
           }>
-          <DefaultCoin
-            asset={defaultCoin}
-            loading={refreshing && !isBackupInProgress && !isBackupDone}
-            onRefresh={handleRefresh}
-            refreshingStatus={
-              refreshing && !isBackupInProgress && !isBackupDone
-            }
-          />
+            <DefaultCoin presetAssets={presetAssets}/>
         </ScrollView>
       ) : (
         <CoinAssetsList

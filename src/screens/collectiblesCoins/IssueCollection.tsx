@@ -1,4 +1,4 @@
-import React, { useContext, useState, useMemo, useEffect, useRef } from 'react';
+import React, { useContext, useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -234,43 +234,7 @@ function IssueCollection() {
       });
       if (response.txid) {
         // setShowSuccess(true);
-        const collection = await ApiHandler.issueNewCollection({
-          name: collectionName,
-          ticker: 'TCOLP',
-          details: description,
-          totalSupplyAmt: parseInt(totalSupplyAmt),
-          isFixedSupply: isFixedSupply,
-          mediaFilePath: Platform.select({
-            android:
-              appType === AppType.NODE_CONNECT ||
-              appType === AppType.SUPPORTED_RLN
-                ? image.startsWith('file://')
-                  ? image
-                  : `file://${path}`
-                : image.replace('file://', ''),
-            ios: image.replace('file://', ''),
-          }),
-          attachmentsFilePaths: [
-            Platform.select({
-              android:
-                appType === AppType.NODE_CONNECT ||
-                appType === AppType.SUPPORTED_RLN
-                  ? collectionImage.startsWith('file://')
-                    ? collectionImage
-                    : `file://${path}`
-                  : collectionImage.replace('file://', ''),
-              ios: collectionImage.replace('file://', ''),
-            }),
-          ],
-          createUtxos: colorable.length === 0 ? true : false,
-        });
-        if (collection?.assetId) {
-          setShowSuccess(true);
-          setCollection(collection);
-        } else {
-          setShowPayment(false);
-          Toast(assets.failedToCreateCollection, true);
-        }
+        issueCollection();
       }
     } catch (error) {
       setShowPayment(false);
@@ -278,6 +242,66 @@ function IssueCollection() {
       console.log(error);
     }
   };
+
+  const issueCollection = useCallback(async () => {
+    try {
+      const collection = await ApiHandler.issueNewCollection({
+        name: collectionName,
+        ticker: 'TCOLP',
+        details: description,
+        totalSupplyAmt: parseInt(totalSupplyAmt || '0'),
+        isFixedSupply: isFixedSupply,
+        mediaFilePath: Platform.select({
+          android:
+            appType === AppType.NODE_CONNECT ||
+            appType === AppType.SUPPORTED_RLN
+              ? image.startsWith('file://')
+                ? image
+                : `file://${path}`
+              : image.replace('file://', ''),
+          ios: image.replace('file://', ''),
+        }),
+        attachmentsFilePaths: [
+          Platform.select({
+            android:
+              appType === AppType.NODE_CONNECT ||
+              appType === AppType.SUPPORTED_RLN
+                ? collectionImage.startsWith('file://')
+                  ? collectionImage
+                  : `file://${path}`
+                : collectionImage.replace('file://', ''),
+            ios: collectionImage.replace('file://', ''),
+          }),
+        ],
+        createUtxos: colorable.length === 0 ? true : false,
+      });
+      if (collection?.assetId) {
+        setLoading(false);
+        setCollection(collection);
+        setTimeout(() => {
+          setShowSuccess(true);
+          setShowPayment(true);
+        }, 400);
+      } else {
+        setLoading(false);
+        setShowPayment(false);
+        Toast(assets.failedToCreateCollection, true);
+      }
+    } catch (error) {
+      console.log(error);
+      Toast(error.message, true);
+    }
+  }, [collectionName, description, totalSupplyAmt, isFixedSupply, isVerification, colorable, image, collectionImage, appType]);
+
+  const onPressProceed = useCallback(() => {
+    if(fees.collectionFee.fee > 0) {
+      setShowPayment(true);
+    } else {
+      setLoading(true);
+      issueCollection();
+    }
+  }, [fees.collectionFee.fee, issueCollection]);
+
 
   return (
     <View style={styles.parentContainer}>
@@ -354,7 +378,7 @@ function IssueCollection() {
             }}
             keyboardType={'default'}
             returnKeyType="done"
-            maxLength={500}
+            maxLength={200}
             multiline={true}
             numberOfLines={2}
             style={[styles.input, description && styles.descInput]}
@@ -451,7 +475,7 @@ function IssueCollection() {
         <View style={styles.buttonWrapper}>
           <PrimaryCTA
             title={common.proceed}
-            onPress={() => setShowPayment(true)}
+            onPress={onPressProceed}
             width={'100%'}
             textColor={theme.colors.popupSentCTATitleColor}
             buttonColor={theme.colors.popupSentCTABackColor}

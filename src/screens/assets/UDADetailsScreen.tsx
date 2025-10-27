@@ -79,6 +79,8 @@ import Colors from 'src/theme/Colors';
 import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { SizedBox } from 'src/components/SizedBox';
+import DeepLinking from 'src/utils/DeepLinking';
+import { isWebUrl } from 'src/utils/url';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -120,10 +122,10 @@ const UDADetailsScreen = () => {
     hasIssuedAsset,
     setHasIssuedAsset,
   } = useContext(AppContext);
-  const uda = useObject<UniqueDigitalAsset>(
+  const uda: UniqueDigitalAsset = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
     assetId,
-  ).toJSON();
+  ).toJSON() as UniqueDigitalAsset;
 
   const listPaymentshMutation = useMutation(ApiHandler.listPayments);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
@@ -368,6 +370,21 @@ const UDADetailsScreen = () => {
     }
   };
 
+  const mediaPath = useMemo(() => {
+    const media = uda?.media?.filePath || uda?.token?.media?.filePath;
+    if(media) {
+      if(isWebUrl(media)){
+        return media;
+      }
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
+  }, [uda?.media?.filePath, uda?.token?.media?.filePath]);
+
+
   return (
     <>
       {imageView && (
@@ -519,7 +536,7 @@ const UDADetailsScreen = () => {
                 </View>
                 <Item
                   value={home.assetDescription}
-                  title={uda.details as string}
+                  title={uda.details.split(`${DeepLinking.scheme}://`)[0] || ''}
                 />
 
                 <View style={styles.gutter}>
@@ -555,6 +572,7 @@ const UDADetailsScreen = () => {
                       showVerifyIssuer={showVerifyIssuer}
                       showDomainVerifyIssuer={showDomainVerifyIssuer}
                       asset={uda}
+                      collectionId={uda?.details.split(`${DeepLinking.scheme}://`)[1]}
                       onPressShare={() => {
                         if (!uda?.isIssuedPosted) {
                           setVisibleIssuedPostOnTwitter(true);
