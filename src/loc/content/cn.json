@@ -612,6 +612,8 @@
     "attachmentsCaption": "附加任何支持的图片或文件（最大 16MB）",
     "issueNewCoin": "发行硬币",
     "issueNewCoinSubtitle": "发行用于贸易和社区使用的硬币。",
+    "mintUDA": "铸造UDA",
+    "issueUDA": "发行UDA",
     "swipeToPay": "滑动支付",
     "payInprocess": "支付中",
     "listYourAssetInRegTitle": "在注册表中列出您的资产",
@@ -770,6 +772,7 @@
     "otherAssets": "其他资产",
     "udaDetails": "UDA 详情",
     "issueCollection": "创建集合",
+    "createNewTribeUdasCollection": "创建新的 Tribe UDAs 集合",
     "collectionName": "集合名称",
     "collectionNamePlaceholder": "请输入您的集合名称",
     "enterCollectionName": "请输入集合名称",
@@ -796,7 +799,8 @@
     "collectionVerificationSubTitle": "通过X或域名验证将您的身份与资产关联，并分享使其正式化。",
     "verified": "已验证",
     "viaX": "通过X",
-    "unverified": "未验证"
+    "unverified": "未验证",
+    "viewCollection": "查看收藏"
   },
   "community": {
     "fnfTitle": "社区",

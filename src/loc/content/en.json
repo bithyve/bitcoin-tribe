@@ -612,6 +612,8 @@
     "attachmentsCaption": "Attach any supporting images or files (max 16MB)",
     "issueNewCoin": "Issue Coin",
     "issueNewCoinSubtitle": "Issue a coin for trade and community use.",
+    "mintUDA": "Mint UDA",
+    "issueUDA": "Issue UDA",
     "swipeToPay": "Swipe to Pay",
     "payInprocess": "Paying",
     "listYourAssetInRegTitle": "List Your Asset In Registry",
@@ -771,6 +773,7 @@
     "availableBalance": "Available Balance",
     "udaDetails":"UDA Details",
     "issueCollection":"Create Collection",
+    "createNewTribeUdasCollection": "Create a new Tribe UDAs Collection",
     "collectionName":"Collection Name",
     "collectionNamePlaceholder":"Enter a name for your collection",
     "enterCollectionName": "Please enter collection name",
@@ -797,7 +800,8 @@
     "collectionVerificationSubTitle": "Link your identity to the asset by verifying via X or domain, and share it to make it official.",
     "verified": "Verified",
     "viaX": "via X",
-    "unverified": "Unverified"
+    "unverified": "Unverified",
+    "viewCollection": "View Collection"
   },
   "community": {
     "fnfTitle": "Community",

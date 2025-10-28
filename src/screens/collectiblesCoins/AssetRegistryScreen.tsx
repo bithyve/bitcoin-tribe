@@ -238,14 +238,14 @@ function AssetRegistryScreen() {
           )}
           {!!feeDetails && (
             <View style={styles.skipWrapper}>
-              <SkipButton
+             {!disabledCTA && <SkipButton
                 disabled={disabledCTA}
                 onPress={() => {
                   setHasIssuedAsset(true);
                   setTimeout(() => routeMap(false), 500);
                 }}
                 title={assets.skipForNow}
-              />
+              />}
             </View>
           )}
         </View>

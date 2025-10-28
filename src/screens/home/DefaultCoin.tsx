@@ -87,7 +87,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     totalBalance: {
       marginTop: hp(10),
       color: theme.colors.headingColor,
-      fontSize: 30,
+      fontSize: 40,
     },
     totalBalanceDecimal: {
       color: theme.colors.headingColor,
@@ -162,8 +162,9 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     textCollectibleDescription: {
       marginHorizontal: wp(10),
-      fontSize: 14,
       color: 'white',
+      fontFamily: Fonts.LufgaMedium,
+      fontWeight: '500',
     },
     containerScrollIndicator: {
       alignItems: 'center',
@@ -247,7 +248,7 @@ const CollectionItem = ({
     if (isCollectible) {
       return `${assets.totalBalance}: ${formatLargeNumber(Number(collectible?.balance.spendable) / 10 ** collectible?.precision)}`;
     } else if (isCollection) {
-      return `Issued: ${asset.items.length}/${
+      return `${assets.minted}: ${asset.items.length}/${
         asset.itemsCount === 0 ? '∞' : asset.itemsCount
       }`;
     }
@@ -294,14 +295,14 @@ const CollectionItem = ({
             ]}
             style={styles.textCollectibleNameContainer1}>
             <View style={styles.textCollectibleNameContainer2}>
-              <AppText variant="heading2" style={styles.textCollectibleName}>
+              <AppText variant="body1Bold" style={styles.textCollectibleName}>
                 {asset.name}
               </AppText>
               {asset.issuer?.verified ? <IconVerified width={24} height={24} /> : null}
             </View>
             {
               <AppText
-                variant="body2"
+                variant="muted"
                 style={styles.textCollectibleDescription}>
                 {description}
               </AppText>

@@ -21,7 +21,7 @@ export const CreateCollectionConfirmation = ({
   collection,
 }) => {
   const theme: AppTheme = useTheme();
-  const { common } = useContext(LocalizationContext).translations;
+  const { common, assets } = useContext(LocalizationContext).translations;
 
   const totalFee = useMemo(() => {
     return isVerification ? baseFee + verificationFee : baseFee;
@@ -64,9 +64,9 @@ export const CreateCollectionConfirmation = ({
         loop={false}
       />
       <Buttons
-        primaryTitle={'Issue UDA'}
+        primaryTitle={assets.issueUDA}
         primaryOnPress={() => closeModal('done')}
-        secondaryTitle={'View Collection'}
+        secondaryTitle={assets.viewCollection}
         secondaryOnPress={() => closeModal('add')}
         width={windowWidth / 2.7}
         secondaryCTAWidth={windowWidth / 2.7}

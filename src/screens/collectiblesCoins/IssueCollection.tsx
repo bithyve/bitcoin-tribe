@@ -58,8 +58,8 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
 
-const MOCK_BANNER = require('src/assets/images/mockBanner.png');
-const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');
+export const MOCK_BANNER = require('src/assets/images/mockBanner.png');
+export const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');
 const MOCK_COLLECTION = require('src/assets/images/mockCollection.png');
 const MOCK_COLLECTION_LIGHT = require('src/assets/images/mockCollectionLight.png');
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
@@ -446,7 +446,7 @@ function IssueCollection() {
           {isFixedSupply && (
             <View>
               <AppText variant="body2" style={styles.textInputTitle}>
-                {assets.numberOfItems}
+                {home.totalSupplyAmount}
               </AppText>
               <TextField
                 ref={totalSupplyInputRef}
