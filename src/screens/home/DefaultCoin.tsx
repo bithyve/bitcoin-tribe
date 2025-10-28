@@ -41,13 +41,13 @@ import useRgbWallets from 'src/hooks/useRgbWallets';
 import useBalance from 'src/hooks/useBalance';
 import { useQuery } from '@realm/react';
 import GradientBorderAnimated from './GradientBorderAnimated';
-import RefreshControlView from 'src/components/RefreshControlView';
 import Fonts from 'src/constants/Fonts';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LinearGradient from 'react-native-linear-gradient';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
+const CARD_HEIGHT = 245
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
@@ -62,23 +62,23 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
       padding: hp(20),
-      marginBottom: hp(10),
       alignItems: 'center',
+      height:CARD_HEIGHT,
     },
     largeHeaderContainer1: {
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
-      marginBottom: hp(10),
       alignItems: 'center',
+      height:CARD_HEIGHT
     },
     row: {
       flexDirection: 'row',
       marginBottom: hp(20),
     },
     list: {
-      height: 245,
+      height: CARD_HEIGHT,
     },
     coinNameContainer: {
       flex: 1,
@@ -129,8 +129,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     imageBackground: {
       width: '100%',
-      height: 245,
-      borderRadius: hp(15),
+      height: CARD_HEIGHT,
+      borderRadius: hp(20),
     },
     textCollectibleNameContainer: {
       flex: 1,
@@ -151,6 +151,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       flexDirection: 'row',
       paddingBottom: hp(10),
       paddingTop: hp(15),
+      borderBottomRightRadius: hp(20),
+      borderBottomLeftRadius:hp(20)
     },
     textCollectibleName: {
       marginLeft: wp(10),
@@ -340,6 +342,7 @@ const CoinItem = ({
         styles.largeHeaderContainer,
         {
           marginTop: asset?.campaign?.isActive === 'true' ? -hp(50) : 0,
+          justifyContent: 'space-between',
         },
       ]}>
       <View style={styles.row}>
@@ -467,14 +470,7 @@ const DefaultCoin = ({
 
   return (
     <View
-      style={styles.container}
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControlView
-          refreshing={refreshingStatus}
-          onRefresh={onRefresh}
-        />
-      }>
+      style={styles.container}>
       <View style={styles.row}>
         <FlatList
           data={presetAssets}
@@ -483,9 +479,10 @@ const DefaultCoin = ({
           showsVerticalScrollIndicator={false}
           onScroll={event => {
             const { contentOffset } = event.nativeEvent;
-            const index = Math.round(contentOffset.y / 245);
+            const index = Math.round(contentOffset.y / CARD_HEIGHT);
             setCurrentIndex(index);
           }}
+          scrollEventThrottle={16}
           renderItem={({ item: asset }) => (
             <View>
               {asset?.campaign?.isActive === 'true' && (
@@ -495,7 +492,8 @@ const DefaultCoin = ({
                     navigation.navigate(NavigationRoutes.COINDETAILS, {
                       assetId: asset.assetId,
                     })
-                  }>
+                  }
+                  >
                   <GradientBorderAnimated
                     height={hp(95)}
                     radius={hp(20)}
@@ -585,7 +583,7 @@ const DefaultCoin = ({
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
-        transactions={currentAsset.transactions}
+        transactions={currentAsset?.transactions}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
