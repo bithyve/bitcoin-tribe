@@ -612,6 +612,8 @@
     "attachmentsCaption": "サポート画像やファイルを添付してください（最大16MB）",
     "issueNewCoin": "コインを発行する",
     "issueNewCoinSubtitle": "取引やコミュニティでの使用のためにコインを発行します。a",
+    "mintUDA": "UDAを鋳造する",
+    "issueUDA": "UDAを発行する",
     "swipeToPay": "スワイプして支払う",
     "payInprocess": "支払い中",
     "listYourAssetInRegTitle": "アセットをレジストリに登録する",
@@ -770,6 +772,7 @@
     "otherAssets": "その他のアセット",
     "udaDetails": "UDA の詳細",
     "issueCollection": "コレクションを作成",
+    "createNewTribeUdasCollection": "新しい Tribe UDA コレクションを作成",
     "collectionName": "コレクション名",
     "collectionNamePlaceholder": "コレクションの名前を入力してください",
     "enterCollectionName": "コレクション名を入力してください",
@@ -796,7 +799,8 @@
     "collectionVerificationSubTitle": "Xまたはドメインで認証してアセットにあなたのアイデンティティをリンクし、公式にするために共有してください。",
     "verified": "認証済み",
     "viaX": "X経由",
-    "unverified": "未認証"
+    "unverified": "未認証",
+    "viewCollection": "コレクションを表示"
   },
   "community": {
     "fnfTitle": "コミュニティ",

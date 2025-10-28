@@ -305,7 +305,7 @@ function IssueCollectibleScreen() {
   return (
     <ScreenContainer style={{paddingHorizontal:0}}>
       <AppHeader
-        title={'Issue UDA'}
+        title={assets.issueUDA}
         style={styles.gutter}
       />
       <View>
@@ -421,7 +421,7 @@ function IssueCollectibleScreen() {
         )}
         <View style={[styles.buttonWrapper, styles.gutter]}>
            <PrimaryCTA
-        title={"Mint UDA"}
+        title={assets.mintUDA}
         onPress={onPressIssue}
         width={'100%'}
         disabled={isButtonDisabled || createUtxos.isLoading || loading}

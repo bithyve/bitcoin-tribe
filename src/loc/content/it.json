@@ -612,6 +612,8 @@
     "attachmentsCaption": "Allega qualsiasi immagine o file di supporto (max 16MB)",
     "issueNewCoin": "Emetti Moneta",
     "issueNewCoinSubtitle": "Emettere una moneta per il commercio e l'uso della comunità.",
+    "mintUDA": "Conia UDA",
+    "issueUDA": "Emetti UDA",
     "swipeToPay": "corri per Pagare",
     "payInprocess": "Pagamento in corso",
     "listYourAssetInRegTitle": "Elenca il tuo asset nel registro",
@@ -770,6 +772,7 @@
     "otherAssets": "Altri Asset",
     "udaDetails": "Dettagli UDA",
     "issueCollection": "Crea collezione",
+    "createNewTribeUdasCollection": "Crea una nuova collezione Tribe UDAs",
     "collectionName": "Nome della collezione",
     "collectionNamePlaceholder": "Inserisci un nome per la tua collezione",
     "enterCollectionName": "Per favore inserisci il nome della collezione",
@@ -796,7 +799,8 @@
     "collectionVerificationSubTitle": "Collega la tua identità all'asset verificando tramite X o dominio, e condividilo per renderlo ufficiale.",
     "verified": "Verificato",
     "viaX": "via X",
-    "unverified": "Non verificato"
+    "unverified": "Non verificato",
+    "viewCollection": "Visualizza Collezione"
   },
   "community": {
     "fnfTitle": "Comunità",

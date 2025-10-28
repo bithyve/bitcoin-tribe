@@ -446,7 +446,7 @@ function IssueCollection() {
           {isFixedSupply && (
             <View>
               <AppText variant="body2" style={styles.textInputTitle}>
-                {assets.numberOfItems}
+                {home.totalSupplyAmount}
               </AppText>
               <TextField
                 ref={totalSupplyInputRef}
