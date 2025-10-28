@@ -1,9 +1,6 @@
 import {
-  Animated,
   AppState,
   Dimensions,
-  FlatList,
-  Image,
   ImageBackground,
   Platform,
   ScrollView,
@@ -17,7 +14,6 @@ import {
   StackActions,
   useFocusEffect,
   useNavigation,
-  useRoute,
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useObject } from '@realm/react';
@@ -106,14 +102,19 @@ export const Item = ({ title, value, style }: itemProps) => {
   );
 };
 
-const UDADetailsScreen = () => {
+export const UDADetailsScreen = ({ route, data }) => {
   const insets = useSafeAreaInsets();
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
   const hasShownPostModal = useRef(false);
   const appState = useRef(AppState.currentState);
-  const { assetId, askReview, askVerify } = useRoute().params;
+  const {
+    assetId,
+    askReview,
+    askVerify,
+    showHeader = true,
+  } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
     appType,
@@ -144,10 +145,6 @@ const UDADetailsScreen = () => {
   const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
   const [imageView, setImageView] = useState(true);
-  const animatedHeight = useRef(new Animated.Value(screenHeight * 0.1)).current;
-  const animatedHeightBottom = useRef(
-    new Animated.Value(screenHeight * 0.5),
-  ).current;
   const touchY = useRef(0);
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
@@ -274,7 +271,7 @@ const UDADetailsScreen = () => {
   }, [uda?.transactions, uda?.issuer?.verifiedBy, refreshToggle]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation?.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.UniqueDigitalAsset });
       if (
@@ -316,19 +313,6 @@ const UDADetailsScreen = () => {
     }
   };
 
-  const toggleHeight = (expand = false) => {
-    Animated.timing(animatedHeight, {
-      toValue: expand ? screenHeight * 0.1 : 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-    Animated.timing(animatedHeightBottom, {
-      toValue: expand ? screenHeight * 0.5 : 0,
-      duration: 500,
-      useNativeDriver: false,
-    }).start();
-  };
-
   const onCopyAssetId = async () => {
     await Clipboard.setString(assetId);
     Toast(common.assetIDCopySuccessfully);
@@ -349,31 +333,21 @@ const UDADetailsScreen = () => {
   const handleTouchEnd = e => {
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 100) {
-      if (!imageView) {
-        toggleHeight(true);
-        setTimeout(() => {
-          setImageView(true);
-        }, 500);
-      }
+      if (!imageView) setImageView(true);
     }
   };
   const onResponderEnd = e => {
     if (Platform.OS !== 'android') return;
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 10) {
-      if (!imageView) {
-        toggleHeight(true);
-        setTimeout(() => {
-          setImageView(true);
-        }, 500);
-      }
+      if (!imageView) setImageView(true);
     }
   };
 
   const mediaPath = useMemo(() => {
     const media = uda?.media?.filePath || uda?.token?.media?.filePath;
-    if(media) {
-      if(isWebUrl(media)){
+    if (media) {
+      if (isWebUrl(media)) {
         return media;
       }
       return Platform.select({
@@ -383,7 +357,6 @@ const UDADetailsScreen = () => {
     }
     return null;
   }, [uda?.media?.filePath, uda?.token?.media?.filePath]);
-
 
   return (
     <>
@@ -421,7 +394,6 @@ const UDADetailsScreen = () => {
               hitSlop={10}
               onPress={() => {
                 setImageView(!imageView);
-                toggleHeight();
               }}>
               {theme.dark ? (
                 <InfoIcon height={22} width={22} />
@@ -460,14 +432,16 @@ const UDADetailsScreen = () => {
         bounces={false}
         scrollEnabled={!imageView}
         showsVerticalScrollIndicator={!imageView}
+        contentContainerStyle={{ flex: imageView ? 1 : 0 }}
         overScrollMode="never">
-        <AppHeader
-          title={imageView ? '' : assets.udaDetails}
-          style={styles.gutter}
-        />
-        {/* Image */}
-        <Animated.View style={{ height: animatedHeight }} />
+        {showHeader && (
+          <AppHeader
+            title={imageView ? '' : assets.udaDetails}
+            style={styles.headerStyle}
+          />
+        )}
         <View
+          style={!imageView && { maxHeight: hp(375) }}
           onStartShouldSetResponder={() => true}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -479,10 +453,8 @@ const UDADetailsScreen = () => {
                 ios: uda?.token?.media.filePath,
               }),
             }}
-            resizeMode="cover"
-            style={styles.imageStyle}>
-          </ImageBackground>
-          <Animated.View style={{ height: animatedHeightBottom }} />
+            resizeMode={imageView ? 'contain' : 'cover'}
+            style={styles.imageStyle}></ImageBackground>
         </View>
         {imageView ? (
           <></>
@@ -553,7 +525,7 @@ const UDADetailsScreen = () => {
                             transactions: uda?.transactions,
                             assetName: uda?.name,
                             schema: RealmSchema.UniqueDigitalAsset,
-                            hidePrecision:true
+                            hidePrecision: true,
                           },
                         );
                       }}
@@ -572,7 +544,9 @@ const UDADetailsScreen = () => {
                       showVerifyIssuer={showVerifyIssuer}
                       showDomainVerifyIssuer={showDomainVerifyIssuer}
                       asset={uda}
-                      collectionId={uda?.details.split(`${DeepLinking.scheme}://`)[1]}
+                      collectionId={
+                        uda?.details.split(`${DeepLinking.scheme}://`)[1]
+                      }
                       onPressShare={() => {
                         if (!uda?.isIssuedPosted) {
                           setVisibleIssuedPostOnTwitter(true);
@@ -733,8 +707,14 @@ const UDADetailsScreen = () => {
 const getStyles = (theme: AppTheme, insets) =>
   StyleSheet.create({
     imageStyle: {
-      height: hp(375),
-      justifyContent: 'flex-end',
+      width: '100%',
+      height: '100%',
+    },
+    headerStyle: {
+      position: 'absolute',
+      left: wp(16),
+      right: wp(16),
+      zIndex: 100,
     },
     dataContainer: {
       flex: 1,
@@ -759,10 +739,12 @@ const getStyles = (theme: AppTheme, insets) =>
     // Bottom Container
     bottomContainer: {
       position: 'absolute',
-      bottom: insets.bottom + Platform.select({
-        ios: hp(5),
-        android: hp(10),
-      }),
+      bottom:
+        insets.bottom +
+        Platform.select({
+          ios: hp(5),
+          android: hp(10),
+        }),
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',

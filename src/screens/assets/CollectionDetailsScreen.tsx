@@ -1,6 +1,7 @@
 import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo } from 'react';
 import {
+  CommonActions,
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
@@ -184,7 +185,6 @@ const CollectionDetailsScreen = () => {
     );
   };
 
-
   return (
     <View style={styles.parentContainer}>
       <FlatList
@@ -202,9 +202,10 @@ const CollectionDetailsScreen = () => {
                 asset={item}
                 tag={'COLLECTIBLE'}
                 onPress={() =>
-                  navigation.navigate(NavigationRoutes.UDADETAILS, {
-                    assetId: item.assetId,
-                  })
+                  navigation.dispatch(CommonActions.navigate(NavigationRoutes.COLLECTIONUDASWIPER, {
+                    index:index,
+                    assets: collection.items                    
+                  }))
                 }
               />
             </View>

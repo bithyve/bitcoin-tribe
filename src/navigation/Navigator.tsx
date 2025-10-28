@@ -100,6 +100,7 @@ import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
 import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
+import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -401,6 +402,7 @@ function AppStack() {
         />
         <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
         <Stack.Screen name={NavigationRoutes.COLLECTIONVERIFICATIONSCREEN} component={CollectionVerificationScreen} />
+        <Stack.Screen name={NavigationRoutes.COLLECTIONUDASWIPER} component={CollectionUdaSwiper} />
       </Stack.Navigator>
     </RealmProvider>
   );
