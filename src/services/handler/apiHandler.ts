@@ -1509,10 +1509,10 @@ export class ApiHandler {
                   if(collectionResponse.status) {
                     const collection = collectionResponse.collection;
                     const params = urlParamsToObject(collection.slug);
-                    collection.description = params.description as string;
+                    collection.description = collection.details;
                     collection.details = collection.details + ' ' + collection.slug;
-                    collection.itemsCount = parseInt(params.itemsCount as string, 10);
-                    collection.isFixedSupply = params.isFixedSupply === 'true';
+                    collection.itemsCount = parseInt(params.no as string, 10);
+                    collection.isFixedSupply = params.fxd === 'true' ? true : false;
                     collection.issuedSupply = String(uda.issuedSupply);
                     collection.slug = collection.slug;
                     collection.addedAt = Date.now();

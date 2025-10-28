@@ -17,6 +17,7 @@ import {
   Asset,
   Coin,
   Collectible,
+  Collection,
   RgbUnspent,
   RGBWallet,
   UniqueDigitalAsset,
@@ -53,9 +54,10 @@ const ColoredUTXO = () => {
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const udas = useQuery<UniqueDigitalAsset[]>(RealmSchema.UniqueDigitalAsset);
+  const collections = useQuery<Collection[]>(RealmSchema.Collection); 
   const combined: Asset[] = useMemo(
-    () => [...coins, ...collectibles, ...udas],
-    [coins, collectibles, udas],
+    () => [...coins, ...collectibles, ...udas, ...collections],
+    [coins, collectibles, udas, collections],
   );
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
