@@ -350,21 +350,7 @@ function HomeScreen() {
           contentContainerStyle={{
             paddingBottom: hp(100),
           }}
-          refreshControl={
-            Platform.OS === 'ios' ? (
-              <RefreshControlView
-                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
-                onRefresh={handleRefresh}
-              />
-            ) : (
-              <RefreshControl
-                refreshing={refreshing && !isBackupInProgress && !isBackupDone}
-                onRefresh={handleRefresh}
-                colors={[theme.colors.accent1]}
-                progressBackgroundColor={theme.colors.inputBackground}
-              />
-            )
-          }>
+          >
             <DefaultCoin presetAssets={presetAssets}/>
         </ScrollView>
       ) : (
@@ -394,6 +380,7 @@ const getStyles = (theme: AppTheme) =>
     container: {
       paddingHorizontal: 0,
       paddingTop: 0,
+      flex:0
     },
     headerWrapper: {
       margin: hp(16),
