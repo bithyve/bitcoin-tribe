@@ -109,7 +109,12 @@ export const UDADetailsScreen = ({ route, data }) => {
   const popAction = StackActions.pop(2);
   const hasShownPostModal = useRef(false);
   const appState = useRef(AppState.currentState);
-  const { assetId, askReview, askVerify } = route?.params || data;
+  const {
+    assetId,
+    askReview,
+    askVerify,
+    showHeader = true,
+  } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
     appType,
@@ -429,10 +434,12 @@ export const UDADetailsScreen = ({ route, data }) => {
         showsVerticalScrollIndicator={!imageView}
         contentContainerStyle={{ flex: imageView ? 1 : 0 }}
         overScrollMode="never">
-        <AppHeader
-          title={imageView ? '' : assets.udaDetails}
-          style={styles.headerStyle}
-        />
+        {showHeader && (
+          <AppHeader
+            title={imageView ? '' : assets.udaDetails}
+            style={styles.headerStyle}
+          />
+        )}
         <View
           style={!imageView && { maxHeight: hp(375) }}
           onStartShouldSetResponder={() => true}
