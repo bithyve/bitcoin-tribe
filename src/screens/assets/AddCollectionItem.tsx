@@ -16,6 +16,7 @@ import {
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
   Image,
+  ImageBackground,
   Keyboard,
   Platform,
   StyleSheet,
@@ -57,6 +58,11 @@ import UDACollectiblesInfoModal from 'src/screens/collectiblesCoins/components/U
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import { MOCK_BANNER, MOCK_BANNER_LIGHT } from '../collectiblesCoins/IssueCollection';
+import PencilRound from 'src/assets/images/pencil_round.svg';
+import PencilRoundLight from 'src/assets/images/pencil_round_light.svg';
+import { SizedBox } from 'src/components/SizedBox';
+import PrimaryCTA from 'src/components/PrimaryCTA';
 
 function IssueCollectibleScreen() {
   const { collectionId } = useRoute().params;
@@ -297,11 +303,10 @@ function IssueCollectibleScreen() {
   };
 
   return (
-    <ScreenContainer>
+    <ScreenContainer style={{paddingHorizontal:0}}>
       <AppHeader
         title={'Issue UDA'}
-        rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
-        onSettingsPress={() => setVisibleUDACollectiblesInfo(true)}
+        style={styles.gutter}
       />
       <View>
         <ResponsePopupContainer
@@ -323,6 +328,28 @@ function IssueCollectibleScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
+          <ImageBackground
+          source={
+            !image?.trim()
+              ? isThemeDark
+                ? MOCK_BANNER
+                : MOCK_BANNER_LIGHT
+              : {
+                  uri:
+                    Platform.OS === 'ios'
+                      ? image.replace('file://', '')
+                      : image,
+                }
+          }
+          resizeMode="cover"
+          style={styles.bannerImage}>
+          <AppTouchable onPress={handlePickImage} style={styles.pencilIcon}>
+            {isThemeDark ? <PencilRound /> : <PencilRoundLight />}
+          </AppTouchable>
+        </ImageBackground>
+        </View>
+          <SizedBox height={hp(10)}/>
+        <View style={styles.gutter}>
           <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetName}
           </AppText>
@@ -378,85 +405,6 @@ function IssueCollectibleScreen() {
             blurOnSubmit={false}
             error={assetDescValidationError}
           />
-
-          <AppText
-            variant="body2"
-            style={[styles.textInputTitle, { marginTop: 10 }]}>
-            {assets.mediaFile}
-          </AppText>
-
-          {image ? (
-            <View style={styles.imageWrapper}>
-              <Image
-                source={{
-                  uri:
-                    Platform.OS === 'ios'
-                      ? image.replace('file://', '')
-                      : image,
-                }}
-                style={styles.imageStyle}
-              />
-              <AppTouchable
-                style={styles.closeIconWrapper}
-                onPress={() => setImage('')}>
-                {isThemeDark ? <IconClose /> : <IconCloseLight />}
-              </AppTouchable>
-            </View>
-          ) : (
-            <AppTouchable
-              onPress={handlePickImage}
-              style={styles.addMediafileIconWrapper}>
-              {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
-            </AppTouchable>
-          )}
-
-          <AppText variant="caption" style={[styles.textInputTitle]}>
-            {assets.assetImageCaption}
-          </AppText>
-
-          {/* <AppText
-            variant="body2"
-            style={[styles.textInputTitle, { marginTop: 10 }]}>
-            {assets.attachments}
-          </AppText>
-
-          <FlatList
-            data={attachments}
-            extraData={[attachments]}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <View style={styles.imageWrapper}>
-                <Image
-                  source={{
-                    uri:
-                      Platform.OS === 'ios'
-                        ? item.replace('file://', '')
-                        : item,
-                  }}
-                  style={styles.imageStyle}
-                />
-                <AppTouchable
-                  style={styles.closeIconWrapper}
-                  onPress={() => {
-                    setAttachments(attachments.filter((_, i) => i !== index));
-                  }}>
-                  {isThemeDark ? <IconClose /> : <IconCloseLight />}
-                </AppTouchable>
-              </View>
-            )}
-            ListFooterComponent={() => (
-              <AppTouchable
-                onPress={selectAttchments}
-                style={[styles.selectAttatchmentIconWrapper]}>
-                {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
-              </AppTouchable>
-            )}
-          /> */}
-
-          <AppText variant="caption" style={[styles.textInputTitle]}>
-            {assets.attachmentsCaption}
-          </AppText>
         </View>
 
         {colorable.length === 0 && (
@@ -471,17 +419,14 @@ function IssueCollectibleScreen() {
             </View>
           </View>
         )}
-        <View style={styles.buttonWrapper}>
-          <Buttons
-            primaryTitle={common.proceed}
-            primaryOnPress={onPressIssue}
-            secondaryTitle={common.cancel}
-            secondaryOnPress={() => navigation.goBack()}
-            disabled={isButtonDisabled || createUtxos.isLoading || loading}
-            width={windowWidth / 2.3}
-            secondaryCTAWidth={windowWidth / 2.3}
-            primaryLoading={createUtxos.isLoading || loading}
-          />
+        <View style={[styles.buttonWrapper, styles.gutter]}>
+           <PrimaryCTA
+        title={"Mint UDA"}
+        onPress={onPressIssue}
+        width={'100%'}
+        disabled={isButtonDisabled || createUtxos.isLoading || loading}
+        height={hp(20)}
+      />
         </View>
       </KeyboardAvoidView>
 
@@ -590,5 +535,14 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       color: theme.colors.accent1,
       marginLeft: hp(10),
     },
+    bannerImage: {
+      height: hp(280),
+    },
+    pencilIcon: {
+      position: 'absolute',
+      right: hp(16),
+      bottom: hp(16),
+    },
+    gutter:{paddingHorizontal: hp(16)}
   });
 export default IssueCollectibleScreen;
