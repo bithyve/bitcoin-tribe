@@ -133,7 +133,7 @@ const CollectionDetailsScreen = () => {
           <View />
           <SizedBox height={hp(20)} />
           <View style={styles.verifiedCtr}>
-            <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: Colors.AmberBlaze }} variant="heading3">
+            <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: theme.colors.mutedTab }} variant="heading3">
               {isVerified ? assets.verified : assets.unverified}
             </AppText>
             <SizedBox height={hp(4)} />

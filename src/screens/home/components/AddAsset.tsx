@@ -177,8 +177,8 @@ function AddAsset() {
           }}
         />
          <RibbonCard
-          title={"Create Collection"}
-          subTitle={"Create a new Tribe UDAs Collection"}
+          title={assets.issueCollection}
+          subTitle={assets.createNewTribeUdasCollection}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {

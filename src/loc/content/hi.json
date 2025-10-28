@@ -612,6 +612,8 @@
     "attachmentsCaption": "कोई भी सहायक छवियाँ या फ़ाइलें संलग्न करें (अधिकतम 16MB)",
     "issueNewCoin": "सिक्का जारी करें",
     "issueNewCoinSubtitle": "व्यापार और सामुदायिक उपयोग के लिए सिक्का जारी करें।",
+    "mintUDA": "UDA ढालें",
+    "issueUDA": "UDA जारी करें",
     "swipeToPay": "भुगतान करने के लिए स्वाइप करें",
     "payInprocess": "भुगतान हो रहा है",
     "listYourAssetInRegTitle": "अपनी संपत्ति को रजिस्टर में सूचीबद्ध करें",
@@ -770,6 +772,7 @@
     "otherAssets": "अन्य संपत्तियां",
     "udaDetails": "UDA विवरण",
     "issueCollection": "कलेक्शन बनाएं",
+    "createNewTribeUdasCollection": "नया Tribe UDAs कलेक्शन बनाएं",
     "collectionName": "कलेक्शन का नाम",
     "collectionNamePlaceholder": "अपनी कलेक्शन का नाम दर्ज करें",
     "enterCollectionName": "कृपया कलेक्शन का नाम दर्ज करें",
@@ -796,7 +799,8 @@
     "collectionVerificationSubTitle": "X या डोमेन के माध्यम से सत्यापन करके अपनी पहचान को एसेट से लिंक करें, और इसे आधिकारिक बनाने के लिए साझा करें।",
     "verified": "सत्यापित",
     "viaX": "X के माध्यम से",
-    "unverified": "असत्यापित"
+    "unverified": "असत्यापित",
+    "viewCollection": "संग्रह देखें"
   },
   "community": {
     "fnfTitle": "समुदाय",
