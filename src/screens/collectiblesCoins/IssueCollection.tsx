@@ -1,4 +1,11 @@
-import React, { useContext, useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import React, {
+  useContext,
+  useState,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -104,6 +111,7 @@ function IssueCollection() {
       utxo.rgbAllocations?.length === 0 &&
       utxo.pendingBlinded === 0,
   );
+  const [paying, setPaying] = useState(false);
 
   useEffect(() => {
     viewUtxos.mutate();
@@ -141,7 +149,7 @@ function IssueCollection() {
   const handlePickCollectionImage = async () => {
     Keyboard.dismiss();
     try {
-      const result =  await ImagePicker.openPicker({
+      const result = await ImagePicker.openPicker({
         width: 200,
         height: 200,
         cropping: true,
@@ -204,6 +212,7 @@ function IssueCollection() {
   };
 
   const payFees = async () => {
+    setPaying(true);
     try {
       const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
       const totalFee = isVerification
@@ -240,6 +249,7 @@ function IssueCollection() {
       setShowPayment(false);
       Toast(error.message, true);
       console.log(error);
+      setPaying(false);
     }
   };
 
@@ -291,17 +301,26 @@ function IssueCollection() {
       console.log(error);
       Toast(error.message, true);
     }
-  }, [collectionName, description, totalSupplyAmt, isFixedSupply, isVerification, colorable, image, collectionImage, appType]);
+  }, [
+    collectionName,
+    description,
+    totalSupplyAmt,
+    isFixedSupply,
+    isVerification,
+    colorable,
+    image,
+    collectionImage,
+    appType,
+  ]);
 
   const onPressProceed = useCallback(() => {
-    if(fees.collectionFee.fee > 0) {
+    if (fees.collectionFee.fee > 0) {
       setShowPayment(true);
     } else {
       setLoading(true);
       issueCollection();
     }
   }, [fees.collectionFee.fee, issueCollection]);
-
 
   return (
     <View style={styles.parentContainer}>
@@ -497,9 +516,7 @@ function IssueCollection() {
         }
         visible={showPayment}
         enableCloseIcon={false}
-        onDismiss={() => {
-          setShowPayment(false);
-        }}>
+        onDismiss={() => !paying && setShowPayment(false)}>
         <CreateCollectionConfirmation
           showSuccess={showSuccess}
           onSwiped={payFees}
