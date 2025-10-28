@@ -143,8 +143,6 @@ const UDADetailsScreen = () => {
   const [refresh, setRefresh] = useState(false);
   const [isVerifyingIssuer, setIsVerifyingIssuer] = useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
-  const imagesList = [uda?.token?.media, ...uda?.token?.attachments];
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [imageView, setImageView] = useState(true);
   const animatedHeight = useRef(new Animated.Value(screenHeight * 0.1)).current;
   const animatedHeightBottom = useRef(
@@ -443,8 +441,8 @@ const UDADetailsScreen = () => {
             style={styles.roundCtaCtr}
             onPress={() => {
               const filePath = Platform.select({
-                android: `file://${imagesList[activeImageIndex].filePath}`,
-                ios: `${imagesList[activeImageIndex].filePath}`,
+                android: `file://${uda?.token?.media.filePath}`,
+                ios: `${uda?.token?.media.filePath}`,
               });
               onShare(filePath);
             }}>
@@ -476,36 +474,13 @@ const UDADetailsScreen = () => {
           onResponderEnd={onResponderEnd}>
           <ImageBackground
             source={{
-              uri: mediaPath,
+              uri: Platform.select({
+                android: `file://${uda?.token?.media.filePath}`,
+                ios: uda?.token?.media.filePath,
+              }),
             }}
             resizeMode="cover"
             style={styles.imageStyle}>
-            <View style={styles.attachmentsCtr}>
-              {!imageView && (
-                <FlatList
-                  data={imagesList}
-                  horizontal
-                  contentContainerStyle={{ gap: hp(7), width: '100%' }}
-                  renderItem={({ item, index }) => (
-                    <>
-                      <AppTouchable
-                        style={styles.smallImageWrapper}
-                        onPress={() => setActiveImageIndex(index)}>
-                        <Image
-                          source={{
-                            uri: Platform.select({
-                              android: `file://${item.filePath}`,
-                              ios: item.filePath,
-                            }),
-                          }}
-                          style={styles.smallImagesStyle}
-                        />
-                      </AppTouchable>
-                    </>
-                  )}
-                />
-              )}
-            </View>
           </ImageBackground>
           <Animated.View style={{ height: animatedHeightBottom }} />
         </View>
@@ -771,24 +746,6 @@ const getStyles = (theme: AppTheme, insets) =>
     wrapper: {
       paddingHorizontal: wp(16),
       paddingVertical: wp(15),
-    },
-    attachmentsCtr: {
-      paddingBottom: hp(12),
-    },
-    smallImagesStyle: {
-      height: '100%',
-      width: '100%',
-      borderRadius: hp(6),
-      marginLeft: hp(12),
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: theme.colors.inputBackground,
-      borderWidth: 1,
-      borderColor: Colors.White,
-    },
-    smallImageWrapper: {
-      height: hp(30),
-      width: hp(30),
     },
     seperatorView: {
       height: 1,
