@@ -14,7 +14,6 @@ import {
   StackActions,
   useFocusEffect,
   useNavigation,
-  useRoute,
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useObject } from '@realm/react';
@@ -103,14 +102,14 @@ export const Item = ({ title, value, style }: itemProps) => {
   );
 };
 
-const UDADetailsScreen = () => {
+export const UDADetailsScreen = ({ route, data }) => {
   const insets = useSafeAreaInsets();
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
   const hasShownPostModal = useRef(false);
   const appState = useRef(AppState.currentState);
-  const { assetId, askReview, askVerify } = useRoute().params;
+  const { assetId, askReview, askVerify } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
     appType,
@@ -267,7 +266,7 @@ const UDADetailsScreen = () => {
   }, [uda?.transactions, uda?.issuer?.verifiedBy, refreshToggle]);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
+    const unsubscribe = navigation?.addListener('focus', () => {
       refreshRgbWallet.mutate();
       mutate({ assetId, schema: RealmSchema.UniqueDigitalAsset });
       if (
