@@ -38,7 +38,7 @@ function SecondaryCTA(props: secondaryCTAProps) {
         uppercase={false}
         disabled={props.disabled}
         textColor={theme.colors.secondaryCtaTitleColor}
-        labelStyle={[styles.primaryCTATitle, styles.labelStyle]}
+        labelStyle={[styles.primaryCTATitle, styles.labelStyle, secondaryCTAIcon &&{marginLeft:wp(10)}]}
         style={styles.ctaContainerStyle}
         onPress={onPress}
         maxFontSizeMultiplier={1}

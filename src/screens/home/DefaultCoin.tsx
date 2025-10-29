@@ -87,7 +87,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     totalBalance: {
       marginTop: hp(10),
       color: theme.colors.headingColor,
-      fontSize: 40,
+      fontSize: 26,
     },
     totalBalanceDecimal: {
       color: theme.colors.headingColor,
@@ -100,7 +100,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       fontSize: 16,
       color: theme.colors.secondaryHeadingColor,
       alignSelf: 'flex-end',
-      marginBottom: Platform.OS === 'ios' ? hp(6) : hp(2),
+      marginBottom: hp(2),
       marginTop: hp(10),
     },
     totalBalanceLabel: {
