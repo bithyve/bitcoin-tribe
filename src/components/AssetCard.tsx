@@ -154,7 +154,6 @@ const getStyles = (theme: AppTheme) =>
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       marginTop: 15,
-      marginBottom: hp(20),
     },
     imageStyle: {
       width: '100%',
