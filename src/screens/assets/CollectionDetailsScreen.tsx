@@ -333,5 +333,6 @@ const supportNetworkImage = (headerImage)=>{
       const newHeaderImage = headerImage.replace('file://', '')
       return newHeaderImage
     }
+    else return headerImage;
   else return headerImage;
 }
