@@ -88,6 +88,7 @@ const RGBWalletStatus = () => {
         setWalletWentOnline(false);
       }, 1500);
     }
+    setVisible(false);
   }, [isWalletOnline]);
 
   const getRetryMessage = useMemo(() => {
@@ -116,9 +117,6 @@ const RGBWalletStatus = () => {
   const tapView = useMemo(() => {
     return (
       <AppTouchable onPress={() => setVisible(true)} style={styles.tapViewWrapper}>
-        <AppText variant="body2" style={styles.text}>
-          {common.tapToInfo}
-        </AppText>
         <TapInfoIcon />
       </AppTouchable>
     );
@@ -204,10 +202,9 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       flex: 1,
     },
     tapViewWrapper: {
-      width: '26%',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
     },
     tooltipContainer: {
       position: 'absolute',
