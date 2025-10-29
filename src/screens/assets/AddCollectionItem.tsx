@@ -464,7 +464,7 @@ function IssueCollectibleScreen() {
         <View style={[styles.buttonWrapper, styles.gutter]}>
           <PrimaryCTA
             title={assets.mintUDA}
-            onPress={onPressIssue}
+            onPress={()=>setShowPayment(true)}
             width={'100%'}
             disabled={isButtonDisabled || createUtxos.isLoading || loading}
             height={hp(20)}
@@ -519,6 +519,7 @@ function IssueCollectibleScreen() {
             setShowPayment(false);
             setShowSuccess(false);
           }}
+          singleFee={'Issue Fee'}
         />
       </ModalContainer>
     </ScreenContainer>
