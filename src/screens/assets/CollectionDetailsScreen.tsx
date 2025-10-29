@@ -106,7 +106,7 @@ const CollectionDetailsScreen = () => {
         </View>
         <Image
           source={{
-            uri: headerImage,
+            uri: supportNetworkImage(headerImage),
           }}
           resizeMode="cover"
           style={styles.bannerImage}
@@ -324,3 +324,14 @@ const getStyles = (theme: AppTheme, insets) =>
     },
   });
 export default CollectionDetailsScreen;
+
+
+const supportNetworkImage = (headerImage)=>{
+  if(headerImage.includes('https://'))
+    if(headerImage.startsWith('file://'))
+    {
+      const newHeaderImage = headerImage.replace('file://', '')
+      return newHeaderImage
+    }
+  else return headerImage;
+}
