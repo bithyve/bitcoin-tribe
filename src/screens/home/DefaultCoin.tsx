@@ -584,13 +584,13 @@ const DefaultCoin = ({
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
-        transactions={currentAsset?.transactions}
+        transactions={currentAsset?.transactions || []}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
         wallet={wallet}
-        coin={currentAsset?.name || ''}
-        assetId={currentAsset?.assetId || ''}
+        coin={currentAsset?.name || presetAssets[currentIndex].name}
+        assetId={currentAsset?.assetId || presetAssets[currentIndex].assetId}
         precision={currentAsset?.precision || 0}
         scrollY={0}
         schema={currentAssetSchema}

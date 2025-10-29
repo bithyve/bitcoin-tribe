@@ -69,16 +69,16 @@ const CollectionDetailsScreen = () => {
   );
 
   const mediaPath = useMemo(() => {
-    if(collection?.token?.media?.filePath) {
+    if(collection?.token?.attachments[0]?.filePath) {
       return Platform.select({
-        android: `file://${collection?.token?.media?.filePath}`,
-        ios: collection?.token?.media?.filePath,
+        android: `file://${collection?.token?.attachments[0]?.filePath}`,
+        ios: collection?.token?.attachments[0]?.filePath,
       });
     } else if(collection?.attachments[0]?.filePath) {
       return collection?.attachments[0]?.filePath
     }
     return null;
-  }, [collection?.token?.media?.filePath, collection?.token?.attachments[0]?.filePath]);
+  }, [collection?.token?.attachments[0]?.filePath, collection?.attachments[0]?.filePath]);
 
   const headerImage = useMemo(() => {
     if(collection?.token?.media?.filePath) {
