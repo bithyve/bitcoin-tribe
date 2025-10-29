@@ -18,7 +18,6 @@ export const CreateCollectionConfirmation = ({
   baseFee,
   isVerification,
   verificationFee,
-  collection,
 }) => {
   const theme: AppTheme = useTheme();
   const { common, assets } = useContext(LocalizationContext).translations;

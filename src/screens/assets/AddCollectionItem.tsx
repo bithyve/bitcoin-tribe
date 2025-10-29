@@ -15,7 +15,6 @@ import {
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
-  Image,
   ImageBackground,
   Keyboard,
   Platform,
@@ -27,8 +26,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, windowWidth } from 'src/constants/responsive';
-import Buttons from 'src/components/Buttons';
+import { hp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import {
@@ -37,13 +35,11 @@ import {
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
-import IconClose from 'src/assets/images/image_icon_close.svg';
-import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import AppTouchable from 'src/components/AppTouchable';
-import { Keys } from 'src/storage';
+import { Keys, Storage } from 'src/storage';
 import AppText from 'src/components/AppText';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import FailedToCreatePopupContainer from 'src/screens/collectiblesCoins/components/FailedToCreatePopupContainer';
@@ -52,17 +48,21 @@ import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import AddMediaFile from 'src/assets/images/addMediaFile.svg';
-import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from 'src/screens/collectiblesCoins/components/UDACollectiblesInfoModal';
-import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
-import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
-import { MOCK_BANNER, MOCK_BANNER_LIGHT } from '../collectiblesCoins/IssueCollection';
+import {
+  MOCK_BANNER,
+  MOCK_BANNER_LIGHT,
+} from '../collectiblesCoins/IssueCollection';
 import PencilRound from 'src/assets/images/pencil_round.svg';
 import PencilRoundLight from 'src/assets/images/pencil_round_light.svg';
 import { SizedBox } from 'src/components/SizedBox';
 import PrimaryCTA from 'src/components/PrimaryCTA';
+import ModalContainer from 'src/components/ModalContainer';
+import { CreateCollectionConfirmation } from 'src/components/CollectionConfirmationModal';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 function IssueCollectibleScreen() {
   const { collectionId } = useRoute().params;
@@ -88,8 +88,12 @@ function IssueCollectibleScreen() {
     useState(false);
   const [visibleUDACollectiblesInfo, setVisibleUDACollectiblesInfo] =
     useState(false);
-
+  const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
+  const [showPayment, setShowPayment] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [image, setImage] = useState('');
+  const wallet: Wallet = useWallets({}).wallets[0];
   const [attachments, setAttachments] = useState([]);
   const {
     mutate: createUtxos,
@@ -154,10 +158,13 @@ function IssueCollectibleScreen() {
         '_id',
         collectionId,
       );
-      const deepLinking = DeepLinking.buildUrl(DeepLinkFeature.COLLECTION_ITEM, {
-        collectionId: collectionId,
-        assetId: collection.assetId,
-      });
+      const deepLinking = DeepLinking.buildUrl(
+        DeepLinkFeature.COLLECTION_ITEM,
+        {
+          collectionId: collectionId,
+          assetId: collection.assetId,
+        },
+      );
       const response = await ApiHandler.mintCollectionItem({
         collectionId: collectionId,
         name: assetName.trim(),
@@ -186,12 +193,15 @@ function IssueCollectibleScreen() {
           }),
         ),
       });
+      setPaying(false);
+      setShowPayment(false);
       if (response?.assetId) {
         setLoading(false);
         Toast('Collection UDA created successfully');
+
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
-        navigation.goBack()
+        navigation.goBack();
         // navigation.dispatch(popAction);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -205,6 +215,8 @@ function IssueCollectibleScreen() {
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
+      setPaying(false);
+      setShowPayment(false);
       setLoading(false);
       Toast(`Unexpected error: ${error.message}`, true);
     }
@@ -259,6 +271,39 @@ function IssueCollectibleScreen() {
     issueUda();
   };
 
+  const payFees = async () => {
+    setPaying(true);
+    try {
+      const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
+      const totalFee = fees.collectionItemFee.fee;
+      if (
+        wallet.specs.balances.confirmed + wallet.specs.balances.unconfirmed <
+        totalFee
+      ) {
+        setShowPayment(false);
+        Toast(assets.insufficientBalance, true);
+        return;
+      }
+      const feeDetails = {
+        address: fees.collectionFee.address,
+        fee: totalFee,
+      };
+      const response = await ApiHandler.payServiceFee({
+        feeDetails,
+        feeType: ServiceFeeType.MINT_COLLECTION_ITEM_FEE,
+        collectionId: collectionId,
+      });
+      if (response.txid) {
+        issueUda();
+      }
+    } catch (error) {
+      setShowPayment(false);
+      Toast(error.message, true);
+      console.log(error);
+      setPaying(false);
+    }
+  };
+
   const handleUniqueAssetNameChange = text => {
     if (!text.trim()) {
       setAssetName('');
@@ -303,11 +348,8 @@ function IssueCollectibleScreen() {
   };
 
   return (
-    <ScreenContainer style={{paddingHorizontal:0}}>
-      <AppHeader
-        title={assets.issueUDA}
-        style={styles.gutter}
-      />
+    <ScreenContainer style={{ paddingHorizontal: 0 }}>
+      <AppHeader title={assets.issueUDA} style={styles.gutter} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
@@ -329,26 +371,26 @@ function IssueCollectibleScreen() {
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
           <ImageBackground
-          source={
-            !image?.trim()
-              ? isThemeDark
-                ? MOCK_BANNER
-                : MOCK_BANNER_LIGHT
-              : {
-                  uri:
-                    Platform.OS === 'ios'
-                      ? image.replace('file://', '')
-                      : image,
-                }
-          }
-          resizeMode="cover"
-          style={styles.bannerImage}>
-          <AppTouchable onPress={handlePickImage} style={styles.pencilIcon}>
-            {isThemeDark ? <PencilRound /> : <PencilRoundLight />}
-          </AppTouchable>
-        </ImageBackground>
+            source={
+              !image?.trim()
+                ? isThemeDark
+                  ? MOCK_BANNER
+                  : MOCK_BANNER_LIGHT
+                : {
+                    uri:
+                      Platform.OS === 'ios'
+                        ? image.replace('file://', '')
+                        : image,
+                  }
+            }
+            resizeMode="cover"
+            style={styles.bannerImage}>
+            <AppTouchable onPress={handlePickImage} style={styles.pencilIcon}>
+              {isThemeDark ? <PencilRound /> : <PencilRoundLight />}
+            </AppTouchable>
+          </ImageBackground>
         </View>
-          <SizedBox height={hp(10)}/>
+        <SizedBox height={hp(10)} />
         <View style={styles.gutter}>
           <AppText variant="body2" style={styles.textInputTitle}>
             {home.assetName}
@@ -420,13 +462,13 @@ function IssueCollectibleScreen() {
           </View>
         )}
         <View style={[styles.buttonWrapper, styles.gutter]}>
-           <PrimaryCTA
-        title={assets.mintUDA}
-        onPress={onPressIssue}
-        width={'100%'}
-        disabled={isButtonDisabled || createUtxos.isLoading || loading}
-        height={hp(20)}
-      />
+          <PrimaryCTA
+            title={assets.mintUDA}
+            onPress={onPressIssue}
+            width={'100%'}
+            disabled={isButtonDisabled || createUtxos.isLoading || loading}
+            height={hp(20)}
+          />
         </View>
       </KeyboardAvoidView>
 
@@ -452,6 +494,33 @@ function IssueCollectibleScreen() {
           primaryOnPress={() => setVisibleUDACollectiblesInfo(false)}
         />
       </View>
+
+      <ModalContainer
+        title={
+          showSuccess
+            ? assets.collectionPaymentConfirm
+            : assets.collectionPayment
+        }
+        subTitle={
+          showSuccess
+            ? assets.collectionPaymentConfirmSubtitle
+            : assets.collectionPaymentSubtitle
+        }
+        visible={showPayment}
+        enableCloseIcon={false}
+        onDismiss={() => !paying && setShowPayment(false)}>
+        <CreateCollectionConfirmation
+          showSuccess={showSuccess}
+          onSwiped={payFees}
+          baseFee={fees.collectionItemFee.fee}
+          verificationFee={0}
+          isVerification={false}
+          closeModal={mode => {
+            setShowPayment(false);
+            setShowSuccess(false);
+          }}
+        />
+      </ModalContainer>
     </ScreenContainer>
   );
 }
@@ -543,6 +612,6 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       right: hp(16),
       bottom: hp(16),
     },
-    gutter:{paddingHorizontal: hp(16)}
+    gutter: { paddingHorizontal: hp(16) },
   });
 export default IssueCollectibleScreen;
