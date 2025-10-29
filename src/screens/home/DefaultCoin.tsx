@@ -448,8 +448,8 @@ const DefaultCoin = ({
   ]);
 
   const totalAssets = useMemo(() => {
-    return collectibles.length + udas.length + collections.length;
-  }, [collectibles, udas, collections]);
+    return collectibles.length + udas.length + collections.length + coins.length;
+  }, [collectibles, udas, collections, coins]);
   
   const currentAsset = useMemo(() => {
     const asset = presetAssets[currentIndex];
