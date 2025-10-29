@@ -34,7 +34,7 @@ function CoinAllTransaction() {
 
   return (
     <ScreenContainer>
-      <AppHeader title={`${asset?.name} - Transactions`} />
+      <AppHeader title={`Recent Transactions`} />
       <FlatList
         style={styles.container}
         data={asset?.transactions}
