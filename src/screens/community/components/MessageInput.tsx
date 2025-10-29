@@ -131,6 +131,7 @@ const MessageInput = ({
           multiline={true}
           numberOfLines={3}
           style={[styles.input, message && styles.descInput]}
+          inputStyle={{maxWidth:'90%'}}
           blurOnSubmit={false}
         />
 
@@ -141,7 +142,7 @@ const MessageInput = ({
           {theme.dark ? <IconSend /> : <IconSendLight />}
         </AppTouchable>
       </View>
-      {showOptions && (
+      {/* {showOptions && (
         <View style={styles.optionsContainer}>
           {[
             {
@@ -152,14 +153,14 @@ const MessageInput = ({
                 onPressImage();
               },
             },
-            // {
-            //   icon: theme.dark ? <IconChatSend /> : <IconChatSendLight />,
-            //   label: 'Send',
-            //   onPress: () => {
-            //     setShowOptions(false);
-            //     _onPressSend();
-            //   },
-            // },
+            {
+              icon: theme.dark ? <IconChatSend /> : <IconChatSendLight />,
+              label: 'Send',
+              onPress: () => {
+                setShowOptions(false);
+                _onPressSend();
+              },
+            },
             {
               icon: theme.dark ? <IconRequest /> : <IconRequestLight />,
               label: 'Request',
@@ -180,7 +181,7 @@ const MessageInput = ({
             </AppTouchable>
           ))}
         </View>
-      )}
+      )} */}
     </View>
   );
 };
