@@ -22,10 +22,9 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import Toast from 'src/components/Toast';
 import ViewShot from 'react-native-view-shot';
 import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
-import { objectToUrlParams } from 'src/utils/urlUtils';
+import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 
 const qrSize = (windowWidth * 65) / 100;
-export const DEEPLINK_PREFIX = 'tribecommunity://';
 
 export const GroupQr = () => {
   const route = useRoute<RouteProp<{ params: { room: HolepunchRoom } }>>();
@@ -35,12 +34,12 @@ export const GroupQr = () => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles();
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const share = DEEPLINK_PREFIX + objectToUrlParams({
+  const deepLinking = Deeplinking.buildUrl(DeepLinkFeature.COMMUNITY, {
     roomKey: room.roomKey,
     roomName: room.roomName,
     roomType: room.roomType,
     roomDescription: room.roomDescription,
-  })
+  });
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
 
@@ -49,7 +48,7 @@ export const GroupQr = () => {
       if (!viewShotRef.current) return;
       const uri = await viewShotRef.current.capture();
       await Share.share({
-        message: share,
+        message: deepLinking,
         url: `file://${uri}`,
       });
     } catch (error) {
@@ -60,7 +59,7 @@ export const GroupQr = () => {
 
   const handleCopy = () => {
     try {
-      Clipboard.setString(share);
+      Clipboard.setString(deepLinking);
       Toast(common.copiedToClipboard, false);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
@@ -112,7 +111,7 @@ export const GroupQr = () => {
           }}>
           <View style={styles.qrWrapper}>
             <QRCode
-              value={share}
+              value={deepLinking}
               size={qrSize}
               logo={room.roomImage ? { uri: room.roomImage } : undefined}
               logoSize={qrSize * 0.35}
