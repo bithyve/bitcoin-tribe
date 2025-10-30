@@ -25,12 +25,13 @@ type AssetCardProps = {
   tag?: string;
   onPress?: (event: GestureResponderEvent) => void;
   precision?: number;
+  isCollectionUda?: boolean; // uda inside a collection
 };
 
 const CARD_WIDTH = 160;
 const CARD_HEIGHT = 210;
 const AssetCard = (props: AssetCardProps) => {
-  const { tag, onPress, asset, precision } = props;
+  const { tag, onPress, asset, precision, isCollectionUda = false } = props;
   const theme: AppTheme = useTheme();
   const isCollection = asset.slug ? true : false;
 
@@ -90,7 +91,11 @@ const AssetCard = (props: AssetCardProps) => {
       {isCollection && <DummyCards styles={styles} />}
       <AppTouchable activeOpacity={1} onPress={onPress}>
         <GradientView
-          style={styles.container}
+          style={[
+            styles.container,
+            isCollectionUda &&
+              balance == 'Owned' && { borderColor: Colors.ElectricViolet },
+          ]}
           colors={[
             theme.colors.cardGradient1,
             theme.colors.cardGradient2,
@@ -124,12 +129,14 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              <AppText
-                variant="body2"
-                numberOfLines={1}
-                style={styles.amountText}>
-                {balance}
-              </AppText>
+              {!isCollectionUda && (
+                <AppText
+                  variant="body2"
+                  numberOfLines={1}
+                  style={styles.amountText}>
+                  {balance}
+                </AppText>
+              )}
             </View>
             <AppText
               variant="body2"

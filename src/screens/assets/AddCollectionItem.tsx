@@ -15,7 +15,6 @@ import {
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
-  Image,
   ImageBackground,
   Keyboard,
   Platform,
@@ -27,8 +26,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp, windowWidth } from 'src/constants/responsive';
-import Buttons from 'src/components/Buttons';
+import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import {
@@ -37,8 +35,6 @@ import {
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
-import IconClose from 'src/assets/images/image_icon_close.svg';
-import IconCloseLight from 'src/assets/images/image_icon_close_light.svg';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
@@ -52,11 +48,7 @@ import { RealmSchema } from 'src/storage/enum';
 import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
-import AddMediaFile from 'src/assets/images/addMediaFile.svg';
-import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from 'src/screens/collectiblesCoins/components/UDACollectiblesInfoModal';
-import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
-import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 import { MOCK_BANNER, MOCK_BANNER_LIGHT } from '../collectiblesCoins/IssueCollection';
 import PencilRound from 'src/assets/images/pencil_round.svg';
@@ -499,6 +491,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '100%',
       alignItems: 'center',
       marginVertical: hp(20),
+      marginHorizontal:wp(16)
     },
     checkIconWrapper: {
       width: '10%',

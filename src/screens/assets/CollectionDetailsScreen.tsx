@@ -132,7 +132,7 @@ const CollectionDetailsScreen = () => {
           </View>
           <View />
           <SizedBox height={hp(20)} />
-          <View style={styles.verifiedCtr}>
+          <View style={[styles.verifiedCtr, {borderColor: isVerified? Colors.UFOGreen1: theme.colors.mutedTab,}]}>
             <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: theme.colors.mutedTab }} variant="heading3">
               {isVerified ? assets.verified : assets.unverified}
             </AppText>
@@ -207,6 +207,7 @@ const CollectionDetailsScreen = () => {
                     assets: collection.items                    
                   }))
                 }
+                isCollectionUda = {true}
               />
             </View>
           );
@@ -309,7 +310,6 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     verifiedCtr: {
       borderWidth: 1,
-      borderColor: Colors.UFOGreen1,
       borderRadius: 12,
       padding: wp(14),
     },
@@ -332,6 +332,6 @@ const supportNetworkImage = (headerImage)=>{
     {
       const newHeaderImage = headerImage.replace('file://', '')
       return newHeaderImage
-    }
+    }else return headerImage
   else return headerImage;
 }

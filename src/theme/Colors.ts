@@ -61,7 +61,7 @@ const Colors = {
   DarkGunmetal: 'rgba(19, 29, 45,1)',
   ChineseBlack1: 'rgba(18, 18, 18, 0.2)',
   Cultured: 'rgba(245, 245, 245,1)',
-  ElectricViolet: 'rgba(137, 4, 249,1)',
+  ElectricViolet: 'rgba(137, 4, 249, 1)',
   imageOverlay: 'rgba(0,0,0,0.6)',
   SpanishGray: 'rgba(153, 153, 153,1)',
   // Options card gradient
