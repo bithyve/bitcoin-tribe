@@ -448,10 +448,7 @@ export const UDADetailsScreen = ({ route, data }) => {
           onResponderEnd={onResponderEnd}>
           <ImageBackground
             source={{
-              uri: Platform.select({
-                android: `file://${uda?.token?.media.filePath}`,
-                ios: uda?.token?.media.filePath,
-              }),
+              uri: mediaPath
             }}
             resizeMode={imageView ? 'contain' : 'cover'}
             style={styles.imageStyle}></ImageBackground>
