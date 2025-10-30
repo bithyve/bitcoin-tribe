@@ -471,7 +471,7 @@ export class ApiHandler {
       if (restore.error) {
         throw new Error(restore.error);
       } else {
-        ApiHandler.setupNewApp({
+        await ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
@@ -1620,7 +1620,8 @@ export class ApiHandler {
             collections,
             Realm.UpdateMode.Modified,
           );
-        } else if (udas.length > 0) {
+        }
+        if (udas.length > 0) {
           dbManager.createObjectBulk(
             RealmSchema.UniqueDigitalAsset,
             udas,

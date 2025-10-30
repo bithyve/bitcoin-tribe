@@ -4,6 +4,7 @@ import {
   TransactionType,
   TxPriorityDefault,
 } from '../enums';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 
 export interface InputUTXOs {
   txId: string;
@@ -118,7 +119,12 @@ export interface Transaction {
   inputs: Input[];
   outputs: Output[];
   note?: string,
-  metadata?: {}
+  metadata?: {
+    feeType: ServiceFeeType;
+    assetId: string;
+    note: string;
+    collectionId: string;
+  }
 }
 
 interface Input {

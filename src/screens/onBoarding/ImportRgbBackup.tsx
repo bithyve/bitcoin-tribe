@@ -70,7 +70,6 @@ const ImportRgbBackup = () => {
   }, [status]);
 
   const pickFile = async () => {
-    setVisibleLoader(true);
     pickSingle({
       transitionStyle: 'flipHorizontal',
       copyTo: 'documentDirectory',
@@ -82,6 +81,7 @@ const ImportRgbBackup = () => {
         res.fileCopyUri.substring(res.fileCopyUri.lastIndexOf('.')) ===
           '.rgb_backup'
       ) {
+        setVisibleLoader(true);
         mutateAsync({
           mnemonic: route.params.mnemonic,
           filePath: res.fileCopyUri.replace('file://', ''),

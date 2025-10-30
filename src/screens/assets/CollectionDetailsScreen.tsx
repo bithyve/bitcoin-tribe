@@ -36,6 +36,7 @@ import DeepLinking from 'src/utils/DeepLinking';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import Infinity from 'src/assets/images/infinity.svg';
 import InfinityLight from 'src/assets/images/infinityLight.svg';
+import SelectOption from 'src/components/SelectOption';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -181,18 +182,21 @@ const CollectionDetailsScreen = () => {
             </View>
           </View>
           <SizedBox height={hp(10)} />
-          {/* <SelectOption
+          {hasIssuanceTransaction && <SelectOption
             title={'Verification'}
             subTitle={''}
             onPress={() =>
               navigation.dispatch(
                 CommonActions.navigate(
                   NavigationRoutes.COLLECTIONVERIFICATIONSCREEN,
+                  {
+                    collectionId: collection._id,
+                  },
                 ),
               )
             }
             testID={'collection_verification'}
-          /> */}
+          />}
         </View>
       </>
     );
