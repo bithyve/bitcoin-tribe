@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   StyleSheet,
   View,
   Image,
   GestureResponderEvent,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { wp, hp } from 'src/constants/responsive';
@@ -34,6 +35,7 @@ const AssetCard = (props: AssetCardProps) => {
   const { tag, onPress, asset, precision, isCollectionUda = false } = props;
   const theme: AppTheme = useTheme();
   const isCollection = asset.slug ? true : false;
+  const [imageLoading, setImageLoading] = useState(false);
 
   const balance = useMemo(() => {
     if (asset.assetSchema === AssetSchema.UDA) {
@@ -110,12 +112,20 @@ const AssetCard = (props: AssetCardProps) => {
                 verified={asset?.issuer?.verified}
               />
             ) : (
-              <Image
-                source={{
-                  uri: uri,
-                }}
-                style={styles.imageStyle}
-              />
+              <>
+                <Image
+                  source={{uri: uri}}
+                  style={styles.imageStyle}
+                  onLoadStart={() => setImageLoading(true)}
+                  onLoadEnd={() => setImageLoading(false)}
+                  onError={() => setImageLoading(false)}
+                />
+                {imageLoading && (
+                  <View style={styles.loaderOverlay}>
+                    <ActivityIndicator />
+                  </View>
+                )}
+              </>
             )}
           </View>
           <View style={styles.contentWrapper}>
@@ -217,6 +227,15 @@ const getStyles = (theme: AppTheme) =>
     innerCard: {
       flex: 1,
       borderRadius: 15,
+    },
+    loaderOverlay: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 export default AssetCard;

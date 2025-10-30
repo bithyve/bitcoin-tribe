@@ -119,12 +119,7 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
           style={styles.assetBackImageContainer}
           imageStyle={styles.assetBackImageRadius}
           resizeMode="cover"
-          source={{
-            uri: Platform.select({
-              android: `file://${assetImage}`,
-              ios: assetImage,
-            }),
-          }}>
+          source={{ uri: assetImage }}>
           <StatusBar
             translucent
             backgroundColor="transparent"

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   AppState,
   Dimensions,
   ImageBackground,
@@ -146,6 +147,7 @@ export const UDADetailsScreen = ({ route, data }) => {
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
   const [imageView, setImageView] = useState(true);
   const touchY = useRef(0);
+  const [loadingImage, setLoadingImage] = useState(false);
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
     v =>
@@ -451,7 +453,13 @@ export const UDADetailsScreen = ({ route, data }) => {
               uri: mediaPath
             }}
             resizeMode={imageView ? 'contain' : 'cover'}
-            style={styles.imageStyle}></ImageBackground>
+            style={[styles.imageStyle,{alignItems:"center",justifyContent:"center"}]}
+            onLoadStart={()=>setLoadingImage(true)}
+            onLoadEnd={()=>setLoadingImage(false)}
+            onError={()=>setLoadingImage(false)}
+            >
+              {loadingImage&& <ActivityIndicator/>}
+            </ImageBackground>
         </View>
         {imageView ? (
           <></>
