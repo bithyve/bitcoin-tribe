@@ -1,5 +1,5 @@
-import React, { useContext} from 'react';
-import { CommonActions } from '@react-navigation/native';
+import React, { useContext } from 'react';
+import { CommonActions, useRoute } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -10,26 +10,29 @@ import { StyleSheet, View } from 'react-native';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import config from 'src/utils/config';
+import { RealmSchema } from 'src/storage/enum';
+import { Collection } from 'src/models/interfaces/RGBWallet';
+import { useObject } from '@realm/react';
 
-export const CollectionVerificationScreen = ({navigation}) => {
+export const CollectionVerificationScreen = ({ navigation }) => {
+  const { collectionId } = useRoute().params;
+  const collection = useObject<Collection>(RealmSchema.Collection, collectionId);
   const { assets } = useContext(LocalizationContext).translations;
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
 
   const verifyXNavigation = () => {
-    navigation.navigate(
-      CommonActions.navigate(NavigationRoutes.VERIFYX, {
-        assetId: 'assetId',
-        schema: 'schema',
-        savedTwitterHandle: '',
-      }),
-    );
+    navigation.navigate(NavigationRoutes.VERIFYX, {
+      assetId: collection.assetId,
+      schema: RealmSchema.Collection,
+      savedTwitterHandle: '',
+    });
   };
 
     const handleVerifyWithDomain = () => {
       navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-        assetId: "assetId",
-        schema: "schema",
+        assetId: collection.assetId,
+        schema: RealmSchema.Collection,
         savedDomainName: '',
       });
     };
