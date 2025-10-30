@@ -26,7 +26,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import {
@@ -569,6 +569,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       width: '100%',
       alignItems: 'center',
       marginVertical: hp(20),
+      marginHorizontal:wp(16)
     },
     checkIconWrapper: {
       width: '10%',
