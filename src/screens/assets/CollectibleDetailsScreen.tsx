@@ -41,6 +41,7 @@ import {
 } from 'src/utils/postStatusUtils';
 import TransactionInfoCard from './components/TransactionInfoCard';
 import Toast from 'src/components/Toast';
+import { isWebUrl } from 'src/utils/url';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -205,6 +206,20 @@ const CollectibleDetailsScreen = () => {
   //   outputRange: [0, 1],
   //   extrapolate: 'clamp',
   // });
+        const mediaPath = useMemo(() => {
+          const media = collectible?.media?.filePath;
+          if (media) {
+            if (isWebUrl(media)) {
+              return media;
+            }
+            return Platform.select({
+              android: `file://${media}`,
+              ios: media,
+            });
+          }
+          return null;
+        }, [collectible?.media?.filePath]);
+
   return (
     // <ScreenContainer style={styles.container}>
     <>
@@ -212,7 +227,7 @@ const CollectibleDetailsScreen = () => {
         asset={collectible}
         assetName={collectible.name}
         assetTicker={collectible.details}
-        assetImage={collectible?.media?.filePath}
+        assetImage={mediaPath}
         assetId={collectible.assetId}
         // smallHeaderOpacity={smallHeaderOpacity}
         // largeHeaderHeight={largeHeaderHeight}

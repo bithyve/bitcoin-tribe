@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   ImageBackground,
   Platform,
@@ -185,6 +186,16 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       backgroundColor: isThemeDark ? 'white' : 'black',
       marginVertical: wp(2),
     },
+    loaderOverlay: {
+      position: 'absolute',
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 10000,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
   });
 
 const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
@@ -243,6 +254,7 @@ const CollectionItem = ({
   const collectible = useQuery<Collectible>(RealmSchema.Collectible, collection =>
     collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
+  const [imageLoading, setImageLoading] = useState(false);
   
   const description = useMemo(() => {
     if (isCollectible) {
@@ -285,8 +297,16 @@ const CollectionItem = ({
         }}
         resizeMode="cover"
         style={styles.imageBackground}
-        imageStyle={styles.imageBackground}>
+        imageStyle={styles.imageBackground}
+        onLoadStart={() => setImageLoading(true)}
+        onLoadEnd={() => setImageLoading(false)}
+        onError={() => setImageLoading(false)}>
         <View style={styles.textCollectibleNameContainer}>
+          {imageLoading && (
+            <View style={styles.loaderOverlay}>
+              <ActivityIndicator />
+            </View>
+          )}
           <LinearGradient
             colors={[
               'rgba(0, 0, 0, 0)',

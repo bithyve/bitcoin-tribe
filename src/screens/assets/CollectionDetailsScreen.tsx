@@ -1,4 +1,4 @@
-import { FlatList, Image, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, Image, Platform, StyleSheet, Text, View } from 'react-native';
 import React, { useContext, useEffect, useMemo } from 'react';
 import {
   CommonActions,
@@ -33,6 +33,9 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
+import CommonStyles from 'src/common/styles/CommonStyles';
+import Infinity from 'src/assets/images/infinity.svg';
+import InfinityLight from 'src/assets/images/infinityLight.svg';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -92,18 +95,28 @@ const CollectionDetailsScreen = () => {
     return null;
   }, [collection?.token?.media?.filePath, collection?.media?.filePath]);
 
+  const MintedCtr = () => {
+    return (
+      <View style={styles.mintedCtr}>
+        <Text style={[styles.textColor, CommonStyles.muted]}>
+          Issued: {collection.items.length}
+          {' / '}
+          {collection.itemsCount !== 0 ? (
+            collection.itemsCount.toString()
+          ) : isThemeDark ? (
+            <Infinity height={wp(5)} width={wp(10)} />
+          ) : (
+            <InfinityLight height={wp(5)} width={wp(10)} />
+          )}
+        </Text>
+      </View>
+    );
+  };
+
   const ListHeader = () => {
     return (
       <>
-        <View style={styles.mintedCtr}>
-          <AppText variant="muted">
-            {`Issued: ${collection.items.length}${
-              collection.itemsCount !== 0
-                ? `/${collection.itemsCount.toString()}`
-                : '/∞'
-            }`}
-          </AppText>
-        </View>
+        <MintedCtr />
         <Image
           source={{
             uri: supportNetworkImage(headerImage),
@@ -132,7 +145,7 @@ const CollectionDetailsScreen = () => {
           </View>
           <View />
           <SizedBox height={hp(20)} />
-          <View style={styles.verifiedCtr}>
+          <View style={[styles.verifiedCtr, {borderColor: isVerified? Colors.UFOGreen1: theme.colors.mutedTab,}]}>
             <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: theme.colors.mutedTab }} variant="heading3">
               {isVerified ? assets.verified : assets.unverified}
             </AppText>
@@ -207,6 +220,7 @@ const CollectionDetailsScreen = () => {
                     assets: collection.items                    
                   }))
                 }
+                isCollectionUda = {true}
               />
             </View>
           );
@@ -309,7 +323,6 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     verifiedCtr: {
       borderWidth: 1,
-      borderColor: Colors.UFOGreen1,
       borderRadius: 12,
       padding: wp(14),
     },
@@ -322,6 +335,7 @@ const getStyles = (theme: AppTheme, insets) =>
       flexDirection: 'row',
       alignItems: 'center',
     },
+    textColor: { color: theme.colors.text },
   });
 export default CollectionDetailsScreen;
 
@@ -332,6 +346,6 @@ const supportNetworkImage = (headerImage)=>{
     {
       const newHeaderImage = headerImage.replace('file://', '')
       return newHeaderImage
-    }
+    }else return headerImage
   else return headerImage;
 }
