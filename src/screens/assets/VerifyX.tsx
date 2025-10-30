@@ -3,7 +3,6 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVString } from 'react-native-mmkv';
-
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
@@ -118,8 +117,12 @@ function VerifyX() {
         }
       }
     } catch (error) {
-      Toast(`${error}`, true);
       setIsLoading(false);
+      if(error.message.includes('The operation couldn’t be completed')) {
+        Toast(`Failed to verify X handle, please try again later.`, true);
+      } else {
+        Toast(`${error}`, true);
+      }
       console.log(error);
     }
   }, [assetId, schema]);
