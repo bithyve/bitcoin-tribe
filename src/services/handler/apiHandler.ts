@@ -1620,7 +1620,8 @@ export class ApiHandler {
             collections,
             Realm.UpdateMode.Modified,
           );
-        } else if (udas.length > 0) {
+        }
+        if (udas.length > 0) {
           dbManager.createObjectBulk(
             RealmSchema.UniqueDigitalAsset,
             udas,
