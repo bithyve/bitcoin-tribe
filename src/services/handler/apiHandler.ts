@@ -471,7 +471,7 @@ export class ApiHandler {
       if (restore.error) {
         throw new Error(restore.error);
       } else {
-        ApiHandler.setupNewApp({
+        await ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
