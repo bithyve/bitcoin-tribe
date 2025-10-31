@@ -26,6 +26,7 @@ export const CollectionUdaSwiper = ({ route }) => {
         horizontal
         pagingEnabled
         initialScrollIndex={index}
+        showsHorizontalScrollIndicator={false}
         getItemLayout={(_, index) => ({
           length: width,
           offset: width * index,

@@ -347,9 +347,7 @@ function HomeScreen() {
       {presetAssets.length > 0 ? (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: hp(100),
-          }}
+          bounces={false}
           >
             <DefaultCoin presetAssets={presetAssets}/>
         </ScrollView>

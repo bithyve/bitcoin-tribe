@@ -78,6 +78,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { SizedBox } from 'src/components/SizedBox';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
+import BackTranslucent from 'src/assets/images/backTranslucent.svg';
+import BackTranslucentLight from 'src/assets/images/backTranslucentLight.svg';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -440,6 +442,7 @@ export const UDADetailsScreen = ({ route, data }) => {
           <AppHeader
             title={imageView ? '' : assets.udaDetails}
             style={styles.headerStyle}
+            backIcon={ isThemeDark? <BackTranslucent />: <BackTranslucentLight/>}
           />
         )}
         <View
