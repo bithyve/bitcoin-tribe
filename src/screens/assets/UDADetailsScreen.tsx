@@ -345,14 +345,14 @@ export const UDADetailsScreen = ({ route, data }) => {
   const handleTouchEnd = e => {
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 100) {
-      if (!imageView) setImageView(true);
+      if (!imageView && showFooter) setImageView(true);
     }
   };
   const onResponderEnd = e => {
     if (Platform.OS !== 'android') return;
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 10) {
-      if (!imageView) setImageView(true);
+      if (!imageView && showFooter) setImageView(true);
     }
   };
 

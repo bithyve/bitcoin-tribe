@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ViewToken,
   Platform,
+  Image,
 } from 'react-native';
 import UDADetailsScreen from './UDADetailsScreen';
 import AppHeader from 'src/components/AppHeader';
@@ -30,6 +31,8 @@ import AppTouchable from 'src/components/AppTouchable';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { isWebUrl } from 'src/utils/url';
+import Colors from 'src/theme/Colors';
 
 const { width, height } = Dimensions.get('window');
 
@@ -141,63 +144,97 @@ const FooterActionItems = ({ assets, activeIndex, showInfo, setShowInfo }) => {
     }
   };
 
+  const getMediaPath = uda => {
+    const media = uda?.media?.filePath || uda?.token?.media?.filePath;
+    if (media) {
+      if (isWebUrl(media)) {
+        return media;
+      }
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
+  };
+
   return (
     <View style={styles.bottomContainer}>
-      <AppTouchable
-        disabled={uda?.balance?.spendable < 1}
-        style={[
-          styles.roundCtaCtr,
-          uda?.balance?.spendable < 1 && { opacity: 0 },
-        ]}
-        onPress={() =>
-          navigation.dispatch(
-            CommonActions.navigate(NavigationRoutes.SCANASSET, {
-              assetId: uda?.assetId,
-              rgbInvoice: '',
-              isUDA: true,
-            }),
-          )
-        }>
-        {theme.dark ? (
-          <SendIcon height={22} width={22} />
-        ) : (
-          <SendIconLight height={22} width={22} />
-        )}
-      </AppTouchable>
-      <View style={styles.bottomCenterCta}>
-        <AppTouchable hitSlop={10} onPress={onShareAssetId}>
-          {theme.dark ? (
-            <ShareIcon height={22} width={22} />
-          ) : (
-            <ShareIconLight height={22} width={22} />
-          )}
-        </AppTouchable>
+      {!showInfo && (
+        <FlatList
+          style={styles.imagesFlatList}
+          contentContainerStyle={{ gap: 5 }}
+          data={assets}
+          horizontal
+          renderItem={({ item }) => {
+            return (
+              <View>
+                <Image
+                  source={{ uri: getMediaPath(item) }}
+                  style={styles.bottomImages}
+                />
+              </View>
+            );
+          }}
+        />
+      )}
+      <View style={styles.actionContainer}>
         <AppTouchable
-          hitSlop={10}
-          onPress={() => {
-            setShowInfo(!showInfo);
-          }}>
+          disabled={uda?.balance?.spendable < 1}
+          style={[
+            styles.roundCtaCtr,
+            uda?.balance?.spendable < 1 && { opacity: 0 },
+          ]}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.navigate(NavigationRoutes.SCANASSET, {
+                assetId: uda?.assetId,
+                rgbInvoice: '',
+                isUDA: true,
+              }),
+            )
+          }>
           {theme.dark ? (
-            <InfoIcon height={22} width={22} />
+            <SendIcon height={22} width={22} />
           ) : (
-            <InfoIconLight height={22} width={22} />
+            <SendIconLight height={22} width={22} />
           )}
         </AppTouchable>
-        <AppTouchable hitSlop={10} onPress={onCopyAssetId}>
+        <View style={styles.bottomCenterCta}>
+          <AppTouchable hitSlop={10} onPress={onShareAssetId}>
+            {theme.dark ? (
+              <ShareIcon height={22} width={22} />
+            ) : (
+              <ShareIconLight height={22} width={22} />
+            )}
+          </AppTouchable>
+          <AppTouchable
+            hitSlop={10}
+            onPress={() => {
+              setShowInfo(!showInfo);
+            }}>
+            {theme.dark ? (
+              <InfoIcon height={22} width={22} />
+            ) : (
+              <InfoIconLight height={22} width={22} />
+            )}
+          </AppTouchable>
+          <AppTouchable hitSlop={10} onPress={onCopyAssetId}>
+            {theme.dark ? (
+              <CopyIcon height={22} width={22} />
+            ) : (
+              <CopyIconLight height={22} width={22} />
+            )}
+          </AppTouchable>
+        </View>
+        <AppTouchable style={styles.roundCtaCtr} onPress={onShareImage}>
           {theme.dark ? (
-            <CopyIcon height={22} width={22} />
+            <DownloadIcon height={22} width={22} />
           ) : (
-            <CopyIconLight height={22} width={22} />
+            <DownloadIconLight height={22} width={22} />
           )}
         </AppTouchable>
       </View>
-      <AppTouchable style={styles.roundCtaCtr} onPress={onShareImage}>
-        {theme.dark ? (
-          <DownloadIcon height={22} width={22} />
-        ) : (
-          <DownloadIconLight height={22} width={22} />
-        )}
-      </AppTouchable>
     </View>
   );
 };
@@ -213,18 +250,20 @@ const getStyles = (theme: AppTheme, insets) =>
           ios: hp(5),
           android: hp(10),
         }),
-      flexDirection: 'row',
       width: '100%',
-      justifyContent: 'space-between',
       paddingHorizontal: wp(20),
       zIndex: 1000,
+    },
+    actionContainer: {
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      width: '100%',
     },
     roundCtaCtr: {
       backgroundColor: theme.colors.roundedCtaBg,
       borderRadius: 100,
       padding: wp(13),
     },
-
     bottomCenterCta: {
       flexDirection: 'row',
       backgroundColor: theme.colors.roundedCtaBg,
@@ -233,5 +272,17 @@ const getStyles = (theme: AppTheme, insets) =>
       justifyContent: 'space-between',
       gap: wp(23),
       paddingHorizontal: wp(23),
+    },
+
+    bottomImages: {
+      height: wp(40),
+      width: wp(40),
+      borderRadius: 6,
+      borderWidth: 1,
+      borderColor: theme.dark ? Colors.White : Colors.Black,
+    },
+    imagesFlatList: {
+      marginBottom: hp(10),
+      alignSelf: 'center',
     },
   });
