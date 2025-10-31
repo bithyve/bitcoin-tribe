@@ -232,7 +232,7 @@ const EnterInvoiceDetails = () => {
       setVisible(true);
       return;
     }
-    navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+    navigation.replace(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
       amount:

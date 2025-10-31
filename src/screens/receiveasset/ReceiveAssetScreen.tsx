@@ -237,6 +237,7 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
         onBackNavigation={() =>
+          navigation.canGoBack? navigation.goBack() :
           navigation.dispatch(
             CommonActions.reset({
               index: 1,

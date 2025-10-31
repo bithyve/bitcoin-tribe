@@ -196,7 +196,7 @@ function AddAsset() {
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() =>
-            navigation.replace(NavigationRoutes.ENTERINVOICEDETAILS, {
+            navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
               refresh: true,
             })
           }
