@@ -117,6 +117,8 @@ export const UDADetailsScreen = ({ route, data }) => {
     askReview,
     askVerify,
     showHeader = true,
+    showFooter= true,
+    showInfo = false
   } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
@@ -184,6 +186,12 @@ export const UDADetailsScreen = ({ route, data }) => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useFocusEffect(()=>{
+    !showFooter &&
+    setImageView(!showInfo)
+  }
+  );
 
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
@@ -364,7 +372,7 @@ export const UDADetailsScreen = ({ route, data }) => {
 
   return (
     <>
-      {imageView && (
+      {imageView && showFooter && (
         <View style={styles.bottomContainer}>
           <AppTouchable
             disabled={uda?.balance?.spendable < 1}
