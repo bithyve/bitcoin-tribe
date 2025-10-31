@@ -47,7 +47,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import LinearGradient from 'react-native-linear-gradient';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
-import Carousel from 'react-native-reanimated-carousel';
+import Carousel, { Pagination } from 'react-native-reanimated-carousel';
+import { useSharedValue } from 'react-native-reanimated';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -72,7 +73,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
       alignItems: 'center',
-      height:CARD_HEIGHT
+      height: CARD_HEIGHT,
     },
     row: {
       flexDirection: 'row',
@@ -153,7 +154,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingBottom: hp(10),
       paddingTop: hp(15),
       borderBottomRightRadius: hp(20),
-      borderBottomLeftRadius:hp(20)
+      borderBottomLeftRadius: hp(20),
     },
     textCollectibleName: {
       marginLeft: wp(10),
@@ -180,11 +181,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       marginVertical: wp(2),
     },
     scrollIndicatorItemCurrent: {
-      width: 6,
-      height: 6,
-      borderRadius: 5,
       backgroundColor: isThemeDark ? 'white' : 'black',
-      marginVertical: wp(2),
     },
     loaderOverlay: {
       position: 'absolute',
@@ -451,6 +448,7 @@ const DefaultCoin = ({
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const carouselRef = useRef(null);
+  const progress = useSharedValue<number>(0);
 
   const btcBalance = useMemo(() => {
     if (
@@ -490,6 +488,13 @@ const DefaultCoin = ({
     return null;
   }, [currentIndex, presetAssets]);
 
+  const onPressPagination = (index: number) => {
+    carouselRef.current?.scrollTo({
+      count: index - progress.value,
+      animated: true,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -500,6 +505,7 @@ const DefaultCoin = ({
           height={CARD_HEIGHT}
           data={presetAssets}
           onSnapToItem={setCurrentIndex}
+          onProgressChange={progress}
           vertical
           renderItem={({ item: asset }) => (
             <View>
@@ -549,16 +555,14 @@ const DefaultCoin = ({
           )}
         />
         <View style={styles.containerScrollIndicator}>
-          {presetAssets.map((asset, index) => (
-            <View
-              key={index}
-              style={
-                currentIndex === index
-                  ? styles.scrollIndicatorItemCurrent
-                  : styles.scrollIndicatorItem
-              }
-            />
-          ))}
+          <Pagination.Basic
+            progress={progress}
+            data={presetAssets}
+            dotStyle={styles.scrollIndicatorItem}
+            activeDotStyle={styles.scrollIndicatorItemCurrent}
+            onPress={onPressPagination}
+            horizontal={false}
+          />
         </View>
       </View>
 
