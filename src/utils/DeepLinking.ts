@@ -10,14 +10,14 @@ export enum DeepLinkFeature {
 
 export default class Deeplinking {
   public static scheme: string =
-    config.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'tribedev' : 'tribe';
+      `https://bitcointribe.app/app/${config.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'dev' : 'prod'}`        
 
   public static buildUrl(
     feature: DeepLinkFeature,
     params?: Record<string, any>,
   ): string {
     const query = params ? objectToUrlParams(params) : '';
-    return `${Deeplinking.scheme}://${feature}${query ? `?${query}` : ''}`;
+    return `${Deeplinking.scheme}/${feature}${query ? `?${query}` : ''}`;
   }
 
   public static processDeepLink(url: string): {

@@ -16,7 +16,11 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import { hp, windowHeight } from 'src/constants/responsive';
 import AppHeader from 'src/components/AppHeader';
-import { CommonActions, useNavigation } from '@react-navigation/native';
+import {
+  CommonActions,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -43,12 +47,17 @@ export const CreateGroup = () => {
   const { translations } = useContext(LocalizationContext);
   const { community, common } = translations;
   const navigation = useNavigation();
+  const params = useRoute().params;
   const [index, setIndex] = useState(0);
   const routes = useMemo(() => {
     return [
       { key: 'create', title: common.create },
       { key: 'join', title: common.join },
     ];
+  }, []);
+
+  useEffect(() => {
+    if (params) joinRoomWithParams(params);
   }, []);
 
   // Initialize P2P chat
@@ -77,6 +86,27 @@ export const CreateGroup = () => {
       Toast(error, true);
     }
   }, [error]);
+
+  const joinRoomWithParams = async params => {
+    try {
+      const { roomKey, roomName, roomType, roomDescription } = params as any;
+      navigation.setParams(null);
+      setIndex(1);
+      if (!roomKey || !roomType || !roomDescription || !roomName ) {
+        Toast('Invalid group link', true);
+        return;
+      }
+      if(isInitializing){
+        Toast('Please wait while server is initializing', true);
+        return;
+      }
+      setTimeout(() => {
+         createRoom(roomName, roomType, roomDescription, '', roomKey);
+      }, 400);
+    } catch (error) {
+      console.log('🚀 ~ CreateGroup ~ error:', error);
+    }
+  };
 
   return (
     <ScreenContainer>
