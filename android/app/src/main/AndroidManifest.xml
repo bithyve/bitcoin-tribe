@@ -49,6 +49,17 @@
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="tribe" />
         </intent-filter>
+
+        <intent-filter android:autoVerify="true">
+          <action android:name="android.intent.action.VIEW" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+            <data android:host="@string/deeplink_host" />
+            <data android:pathPrefix="@string/deeplink_path_prefix" /> 
+        </intent-filter>
+
+
       </activity>
       <service android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingService">
         <intent-filter>
