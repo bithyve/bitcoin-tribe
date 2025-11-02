@@ -28,11 +28,10 @@ export default class Deeplinking {
     if (!url.startsWith(Deeplinking.scheme)) {
       return { isValid: false, feature: undefined, params: undefined };
     }    
-    const urlWithoutScheme = url.replace(`${Deeplinking.scheme}://`, '');
+    const urlWithoutScheme = url.substring(Deeplinking.scheme.length);
     const [pathAndQuery] = urlWithoutScheme.split('#');
     const [path, queryString] = pathAndQuery.split('?');
-    
-    const feature = path as DeepLinkFeature | undefined;
+    const feature = path.replace(/^\//, '') as DeepLinkFeature | undefined;
     const params = queryString ? urlParamsToObject(queryString) : {};
     
     if (!feature) {

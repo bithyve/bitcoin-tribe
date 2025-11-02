@@ -524,7 +524,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                 </View>
                 <Item
                   value={home.assetDescription}
-                  title={uda.details.split(`${DeepLinking.scheme}://`)[0] || ''}
+                  title={uda.details.split(DeepLinking.scheme)[0] || ''}
                 />
 
                 <View style={styles.gutter}>
@@ -561,7 +561,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                       showDomainVerifyIssuer={showDomainVerifyIssuer}
                       asset={uda}
                       collectionId={
-                        uda?.details.split(`${DeepLinking.scheme}://`)[1]
+                        uda?.details.split(DeepLinking.scheme)[1]
                       }
                       onPressShare={() => {
                         if (!uda?.isIssuedPosted) {

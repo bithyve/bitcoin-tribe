@@ -439,7 +439,7 @@ function IssueCollectibleScreen() {
             }}
             keyboardType={'default'}
             returnKeyType="done"
-            maxLength={200}
+            maxLength={100}
             multiline={true}
             numberOfLines={2}
             style={[styles.input, description && styles.descInput]}

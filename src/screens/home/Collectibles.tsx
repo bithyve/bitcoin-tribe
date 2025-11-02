@@ -61,7 +61,7 @@ function Collectibles() {
   const udas = useQuery<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset, 
     collection =>
-      collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.scheme}://'`, AssetVisibility.HIDDEN),
+      collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.scheme}'`, AssetVisibility.HIDDEN),
   );
   const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),

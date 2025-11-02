@@ -78,12 +78,8 @@ const AssetCard = (props: AssetCardProps) => {
   );
 
   const detailsText = useMemo(() => {
-    if (asset?.details?.includes(`${DeepLinking.scheme}://`)) {
-      return asset?.details?.split(`${DeepLinking.scheme}://`)[0];
-    } else if (
-      asset?.details?.includes(`${DeepLinking.scheme}://collectionitem`)
-    ) {
-      return asset?.details?.split(`${DeepLinking.scheme}://collectionitem`)[0];
+    if (asset?.details?.includes(`${DeepLinking.scheme}`)) {
+      return asset?.details?.split(`${DeepLinking.scheme}`)[0];
     }
     return asset?.details;
   }, [asset?.details]);
