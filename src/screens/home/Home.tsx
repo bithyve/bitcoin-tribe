@@ -55,6 +55,7 @@ import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import DefaultCoin from './DefaultCoin';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys, Storage } from 'src/storage';
+import Deeplinking from 'src/utils/DeepLinking';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -303,36 +304,26 @@ function HomeScreen() {
     setTimeout(() => setRefreshing(false), 2000);
   };
 
-  useEffect(() => {
-    Linking.addEventListener('url', handleDeepLink);
+    useEffect(() => {
+    Linking.getInitialURL().then(url => { // cold start 
+      if (url) handleDeepLink({ url });
+    });
+    const subscription = Linking.addEventListener('url', handleDeepLink);
     return () => {
-      Linking.removeAllListeners('url');
+      subscription.remove();
     };
   }, []);
 
   const handleDeepLink = event => {
     try {
       const url = event.url;
-      if (url.startsWith('tribe://')) {
-        const urlParts = url.split('/');
-        const path = urlParts[2];
-        if (path === deeplinkType.Contact) {
-          const publicKey = urlParts[3];
-          if (publicKey) {
-            navigation.navigate(NavigationRoutes.COMMUNITY, {
-              publicKey,
-              type: CommunityType.Peer,
-            });
-          }
-        } else if (path === deeplinkType.Group) {
-          const groupKey = urlParts[3];
-          if (groupKey) {
-            navigation.navigate(NavigationRoutes.COMMUNITY, {
-              groupKey,
-              type: CommunityType.Group,
-            });
-          }
-        }
+      const parsedUrl = new URL(url);
+      const category = url.split('?')[0].replace(Deeplinking.scheme + '/', '');
+      const params = Object.fromEntries(parsedUrl.searchParams.entries());
+      if (category === 'community') {
+        navigation.dispatch(
+          CommonActions.navigate(NavigationRoutes.CREATEGROUP, params),
+        );
       }
     } catch (error) {
       console.log('Error parsing deep link:', error);
