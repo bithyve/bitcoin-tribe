@@ -78,6 +78,8 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { SizedBox } from 'src/components/SizedBox';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
+import BackTranslucent from 'src/assets/images/backTranslucent.svg';
+import BackTranslucentLight from 'src/assets/images/backTranslucentLight.svg';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -115,6 +117,8 @@ export const UDADetailsScreen = ({ route, data }) => {
     askReview,
     askVerify,
     showHeader = true,
+    showFooter= true,
+    showInfo = false
   } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
@@ -182,6 +186,12 @@ export const UDADetailsScreen = ({ route, data }) => {
       }, 1000);
     }
   }, [hasIssuedAsset]);
+
+  useFocusEffect(()=>{
+    !showFooter &&
+    setImageView(!showInfo)
+  }
+  );
 
   useEffect(() => {
     if (!showVerifyModal && openTwitterAfterVerifyClose) {
@@ -335,14 +345,14 @@ export const UDADetailsScreen = ({ route, data }) => {
   const handleTouchEnd = e => {
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 100) {
-      if (!imageView) setImageView(true);
+      if (!imageView && showFooter) setImageView(true);
     }
   };
   const onResponderEnd = e => {
     if (Platform.OS !== 'android') return;
     const deltaY = e.nativeEvent.pageY - touchY.current;
     if (deltaY > 10) {
-      if (!imageView) setImageView(true);
+      if (!imageView && showFooter) setImageView(true);
     }
   };
 
@@ -362,7 +372,7 @@ export const UDADetailsScreen = ({ route, data }) => {
 
   return (
     <>
-      {imageView && (
+      {imageView && showFooter && (
         <View style={styles.bottomContainer}>
           <AppTouchable
             disabled={uda?.balance?.spendable < 1}
@@ -440,6 +450,7 @@ export const UDADetailsScreen = ({ route, data }) => {
           <AppHeader
             title={imageView ? '' : assets.udaDetails}
             style={styles.headerStyle}
+            backIcon={ isThemeDark? <BackTranslucent />: <BackTranslucentLight/>}
           />
         )}
         <View
