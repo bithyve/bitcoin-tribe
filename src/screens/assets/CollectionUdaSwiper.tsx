@@ -7,6 +7,7 @@ import {
   ViewToken,
   Platform,
   Image,
+  Pressable,
 } from 'react-native';
 import UDADetailsScreen from './UDADetailsScreen';
 import AppHeader from 'src/components/AppHeader';
@@ -38,6 +39,7 @@ const { width, height } = Dimensions.get('window');
 
 export const CollectionUdaSwiper = ({ route }) => {
   const { assets, index } = route.params;
+  const sliderRef = useRef(null);
   const insets = useSafeAreaInsets();
   const [activeIndex, setActiveIndex] = useState(0);
   const [showInfo, setShowInfo] = useState(false);
@@ -52,6 +54,16 @@ export const CollectionUdaSwiper = ({ route }) => {
       }
     },
   ).current;
+
+  const scrollToIndex = index => {
+    setTimeout(() => {
+      sliderRef.current?.scrollToIndex({
+        index: index,
+        animated: false,
+      });
+    }, 100);
+  };
+
   return (
     <>
       <AppHeader
@@ -75,6 +87,7 @@ export const CollectionUdaSwiper = ({ route }) => {
           offset: width * index,
           index,
         })}
+        ref={sliderRef}
         onViewableItemsChanged={onViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
         renderItem={({ item }) => {
@@ -101,13 +114,20 @@ export const CollectionUdaSwiper = ({ route }) => {
           activeIndex={activeIndex}
           showInfo={showInfo}
           setShowInfo={setShowInfo}
+          scrollToIndex={scrollToIndex}
         />
       </View>
     </>
   );
 };
 
-const FooterActionItems = ({ assets, activeIndex, showInfo, setShowInfo }) => {
+const FooterActionItems = ({
+  assets,
+  activeIndex,
+  showInfo,
+  setShowInfo,
+  scrollToIndex,
+}) => {
   const uda = assets[activeIndex];
   const theme: AppTheme = useTheme();
   const insets = useSafeAreaInsets();
@@ -166,14 +186,17 @@ const FooterActionItems = ({ assets, activeIndex, showInfo, setShowInfo }) => {
           contentContainerStyle={{ gap: 5 }}
           data={assets}
           horizontal
-          renderItem={({ item }) => {
+          renderItem={({ item, index }) => {
             return (
-              <View>
+              <Pressable onPress={() => scrollToIndex(index)}>
                 <Image
                   source={{ uri: getMediaPath(item) }}
-                  style={styles.bottomImages}
+                  style={[
+                    styles.bottomImages,
+                    index == activeIndex && styles.activeBottomImage,
+                  ]}
                 />
-              </View>
+              </Pressable>
             );
           }}
         />
@@ -276,13 +299,17 @@ const getStyles = (theme: AppTheme, insets) =>
 
     bottomImages: {
       height: wp(40),
-      width: wp(40),
+      width: wp(20),
       borderRadius: 6,
-      borderWidth: 1,
-      borderColor: theme.dark ? Colors.White : Colors.Black,
     },
     imagesFlatList: {
       marginBottom: hp(10),
       alignSelf: 'center',
+    },
+    activeBottomImage: {
+      borderWidth: wp(2),
+      marginHorizontal: wp(2),
+      width: wp(40),
+      borderColor: theme.dark ? Colors.White : Colors.Black,
     },
   });
