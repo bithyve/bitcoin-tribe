@@ -167,6 +167,7 @@ function SettingsScreen({ navigation }) {
     } else if (pinMethod === PinMethod.BIOMETRIC) {
       // resetPinMethod will be used in future - need ux or something else
       // ApiHandler.resetPinMethod(key);
+      setIsEnableBiometrics(false);
       Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
       setBiometrics(false);
     }
