@@ -49,6 +49,7 @@ import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
+import Colors from 'src/theme/Colors';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -63,9 +64,9 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderWidth: 1,
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
-      padding: hp(20),
       alignItems: 'center',
       height: CARD_HEIGHT,
+      justifyContent: 'space-between',
     },
     largeHeaderContainer1: {
       borderColor: theme.colors.borderColor,
@@ -108,12 +109,6 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     totalBalanceLabel: {
       color: theme.colors.secondaryHeadingColor,
       marginBottom: hp(-10),
-    },
-    campaignContainer: {
-      backgroundColor: isThemeDark ? '#24262B' : '#E9EEEF',
-      borderTopLeftRadius: hp(20),
-      borderTopRightRadius: hp(20),
-      zIndex: -1000,
     },
     transactionContainer: {
       height: windowHeight > 820 ? '55%' : '50%',
@@ -193,6 +188,32 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       alignItems: 'center',
       justifyContent: 'center',
     },
+    rgbBorderCtr: {
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
+      zIndex: -1000,
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+    },
+    activeCampaignBorder: {
+      position: 'relative',
+      top: hp(1),
+      paddingTop: 0,
+    },
+    activeCampaignDetailsCtr: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+    },
+    campaignTxt: {
+      textAlign: 'center',
+      color: Colors.White,
+      marginBottom: hp(10),
+      marginTop: hp(5),
+    },
   });
 
 const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
@@ -233,6 +254,14 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
   );
 };
 
+const RgbBorder = ({ styles }) => (
+  <GradientBorderAnimated
+    height={CARD_HEIGHT / 4}
+    radius={hp(20)}
+    strokeWidth={2}
+    style={styles.rgbBorderCtr}/>
+);
+
 const CollectionItem = ({
   item: asset,
   isCollectible,
@@ -248,14 +277,17 @@ const CollectionItem = ({
   const styles = getStyles(theme, isThemeDark);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
-  const collectible = useQuery<Collectible>(RealmSchema.Collectible, collection =>
-    collection.filtered(`assetId = $0`, asset.assetId),
+  const collectible = useQuery<Collectible>(
+    RealmSchema.Collectible,
+    collection => collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
   const [imageLoading, setImageLoading] = useState(false);
-  
+
   const description = useMemo(() => {
     if (isCollectible) {
-      return `${assets.totalBalance}: ${formatLargeNumber(Number(collectible?.balance.spendable) / 10 ** collectible?.precision)}`;
+      return `${assets.totalBalance}: ${formatLargeNumber(
+        Number(collectible?.balance.spendable) / 10 ** collectible?.precision,
+      )}`;
     } else if (isCollection) {
       return `${assets.minted}: ${asset.items.length}/${
         asset.itemsCount === 0 ? '∞' : asset.itemsCount
@@ -264,70 +296,95 @@ const CollectionItem = ({
     return '';
   }, [isCollectible, asset.details, asset.description]);
 
+  const isCampaignActive = asset?.campaign?.isActive;
+
   return (
-    <AppTouchable
-      activeOpacity={0.95}
-      onPress={() => {
-        if(isCollectible) {
-          navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
-            assetId: asset.assetId,
-          });
-        } else if(isCollection) {
-          navigation.navigate(NavigationRoutes.COLLECTIONDETAILS, {
-            collectionId: asset.collectionId,
-          });
-        } else{
-          navigation.navigate(NavigationRoutes.UDADETAILS, {
-            assetId: asset.assetId,
-          });
-        }
-      }}
-      style={[
-        styles.largeHeaderContainer1,
-        {
-          marginTop: asset?.campaign?.isActive === 'true' ? -hp(50) : 0,
-        },
-      ]}>
-      <ImageBackground
-        source={{
-          uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
+    <>
+      {isCampaignActive && <RgbBorder styles={styles} />}
+      <AppTouchable
+        activeOpacity={0.95}
+        onPress={() => {
+          if (isCollectible) {
+            navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else if (isCollection) {
+            navigation.navigate(NavigationRoutes.COLLECTIONDETAILS, {
+              collectionId: asset.collectionId,
+            });
+          } else {
+            navigation.navigate(NavigationRoutes.UDADETAILS, {
+              assetId: asset.assetId,
+            });
+          }
         }}
-        resizeMode="cover"
-        style={styles.imageBackground}
-        imageStyle={styles.imageBackground}
-        onLoadStart={() => setImageLoading(true)}
-        onLoadEnd={() => setImageLoading(false)}
-        onError={() => setImageLoading(false)}>
-        <View style={styles.textCollectibleNameContainer}>
-          {imageLoading && (
-            <View style={styles.loaderOverlay}>
-              <ActivityIndicator />
-            </View>
-          )}
-          <LinearGradient
-            colors={[
-              'rgba(0, 0, 0, 0)',
-              'rgba(0, 0, 0, 0.4)',
-              'rgba(0, 0, 0, 0.9)',
-            ]}
-            style={styles.textCollectibleNameContainer1}>
-            <View style={styles.textCollectibleNameContainer2}>
-              <AppText variant="body1Bold" style={styles.textCollectibleName}>
-                {asset.name}
-              </AppText>
-              {asset.issuer?.verified ? <IconVerified width={24} height={24} /> : null}
-            </View>
-            {
-              <AppText
-                variant="muted"
-                style={styles.textCollectibleDescription}>
-                {description}
-              </AppText>
-            }
-          </LinearGradient>
-        </View>
-      </ImageBackground>
-    </AppTouchable>
+        style={[
+          styles.largeHeaderContainer1,
+          isCampaignActive && styles.activeCampaignBorder,
+        ]}>
+        <ImageBackground
+          source={{
+            uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
+          }}
+          resizeMode="cover"
+          style={styles.imageBackground}
+          imageStyle={styles.imageBackground}
+          onLoadStart={() => setImageLoading(true)}
+          onLoadEnd={() => setImageLoading(false)}
+          onError={() => setImageLoading(false)}>
+          <View style={styles.textCollectibleNameContainer}>
+            {imageLoading && (
+              <View style={styles.loaderOverlay}>
+                <ActivityIndicator />
+              </View>
+            )}
+
+            {isCampaignActive && (
+              <View style={styles.activeCampaignDetailsCtr}>
+                <LinearGradient
+                  colors={[
+                    'rgba(0, 0, 0, 1)',
+                    'rgba(0, 0, 0, 0.7)',
+                    'rgba(17, 17, 17, 0)',
+                  ]}
+                  style={{
+                    borderTopLeftRadius: hp(20),
+                    borderTopRightRadius: hp(20),
+                  }}>
+                  <AppText variant="subtitle2" style={styles.campaignTxt}>
+                    {asset?.campaign?.name}
+                  </AppText>
+                </LinearGradient>
+              </View>
+            )}
+
+            <LinearGradient
+              colors={[
+                'rgba(0, 0, 0, 0)',
+                'rgba(0, 0, 0, 0.4)',
+                'rgba(0, 0, 0, 0.9)',
+              ]}
+              style={styles.textCollectibleNameContainer1}>
+              <View style={styles.textCollectibleNameContainer2}>
+                <AppText variant="body1Bold" style={styles.textCollectibleName}>
+                  {asset.name}
+                </AppText>
+                {asset.issuer?.verified ? (
+                  <IconVerified width={24} height={24} />
+                ) : null}
+              </View>
+              {
+                <AppText
+                  variant="muted"
+                  style={styles.textCollectibleDescription}>
+                  {description}
+                </AppText>
+              }
+            </LinearGradient>
+          </View>
+        </ImageBackground>
+      </AppTouchable>
+    </>
   );
 };
 
@@ -344,65 +401,86 @@ const CoinItem = ({
   const styles = getStyles(theme, isThemeDark);
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
-  const coin : Coin = useQuery(RealmSchema.Coin, collection =>
+  const coin: Coin = useQuery(RealmSchema.Coin, collection =>
     collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
+  const isCampaignActive = asset?.campaign?.isActive;
 
   return (
-    <AppTouchable
-      activeOpacity={0.95}
-      onPress={() =>
-        navigation.navigate(NavigationRoutes.COINDETAILS, {
-          assetId: asset.assetId,
-        })
-      }
-      style={[
-        styles.largeHeaderContainer,
-        {
-          marginTop: asset?.campaign?.isActive === 'true' ? -hp(50) : 0,
-          justifyContent: 'space-between',
-        },
-      ]}>
-      <View style={styles.row}>
-        <View style={styles.coinNameContainer}>
-          <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
-          <AppText style={styles.totalBalanceLabel} variant="body2">
-            {assets.totalBalance}
-          </AppText>
-          <DecimalText
-            value={Number(coin?.balance?.spendable) / 10 ** coin?.precision}
-            unit={formatTUsdt(asset.ticker)}
+    <>
+      {isCampaignActive && <RgbBorder styles={styles} />}
+      <AppTouchable
+        activeOpacity={0.95}
+        onPress={() =>
+          navigation.navigate(NavigationRoutes.COINDETAILS, {
+            assetId: asset.assetId,
+          })
+        }
+        style={[
+          styles.largeHeaderContainer,
+          isCampaignActive && styles.activeCampaignBorder,
+        ]}>
+        {isCampaignActive && (
+          <LinearGradient
+            colors={[
+              'rgba(0, 0, 0, 1)',
+              'rgba(0, 0, 0, 0.7)',
+              'rgba(17, 17, 17, 0)',
+            ]}
+            style={{
+              borderTopLeftRadius: hp(20),
+              borderTopRightRadius: hp(20),
+              width: '100%',
+            }}>
+            <AppText variant="subtitle2" style={styles.campaignTxt}>
+              {asset?.campaign?.name}
+            </AppText>
+          </LinearGradient>
+        )}
+
+        <View style={{ padding: hp(20) }}>
+          <View style={styles.row}>
+            <View style={styles.coinNameContainer}>
+              <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
+              <AppText style={styles.totalBalanceLabel} variant="body2">
+                {assets.totalBalance}
+              </AppText>
+              <DecimalText
+                value={Number(coin?.balance?.spendable) / 10 ** coin?.precision}
+                unit={formatTUsdt(asset.ticker)}
+              />
+            </View>
+            <AssetIcon
+              iconUrl={asset.iconUrl}
+              assetID={asset.assetId}
+              size={80}
+              verified={asset?.issuer?.verified}
+            />
+          </View>
+
+          <TransactionButtons
+            onPressSend={() => {
+              navigation.navigate(NavigationRoutes.SCANASSET, {
+                assetId: asset.assetId,
+                rgbInvoice: '',
+              });
+            }}
+            onPressReceive={() => {
+              navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+                invoiceAssetId: asset.assetId,
+                chosenAsset: asset,
+              });
+            }}
+            sendCtaWidth={wp(150)}
+            receiveCtaWidth={wp(150)}
+            disabled={
+              isWalletOnline === WalletOnlineStatus.Error ||
+              isWalletOnline === WalletOnlineStatus.InProgress
+            }
           />
         </View>
-        <AssetIcon
-          iconUrl={asset.iconUrl}
-          assetID={asset.assetId}
-          size={80}
-          verified={asset?.issuer?.verified}
-        />
-      </View>
-
-      <TransactionButtons
-        onPressSend={() => {
-          navigation.navigate(NavigationRoutes.SCANASSET, {
-            assetId: asset.assetId,
-            rgbInvoice: '',
-          });
-        }}
-        onPressReceive={() => {
-          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-            invoiceAssetId: asset.assetId,
-            chosenAsset: asset,
-          });
-        }}
-        sendCtaWidth={wp(150)}
-        receiveCtaWidth={wp(150)}
-        disabled={
-          isWalletOnline === WalletOnlineStatus.Error ||
-          isWalletOnline === WalletOnlineStatus.InProgress
-        }
-      />
-    </AppTouchable>
+      </AppTouchable>
+    </>
   );
 };
 
@@ -502,42 +580,13 @@ const DefaultCoin = ({
           ref={carouselRef}
           style={styles.list}
           width={windowWidth * 0.94}
-          height={CARD_HEIGHT}
+          height={CARD_HEIGHT + hp(7)}
           data={presetAssets}
           onSnapToItem={setCurrentIndex}
           onProgressChange={progress}
           vertical
           renderItem={({ item: asset }) => (
             <View>
-              {asset?.campaign?.isActive === 'true' && (
-                <AppTouchable
-                  activeOpacity={0.95}
-                  onPress={() =>
-                    navigation.navigate(NavigationRoutes.COINDETAILS, {
-                      assetId: asset.assetId,
-                    })
-                  }>
-                  <GradientBorderAnimated
-                    height={hp(95)}
-                    radius={hp(20)}
-                    strokeWidth={2}
-                    style={styles.campaignContainer}>
-                    <AppText
-                      style={{
-                        color: theme.colors.headingColor,
-                        textAlign: 'center',
-                        marginTop: hp(15),
-                        fontSize: 16,
-                        fontWeight: '400',
-                        fontFamily: Fonts.LufgaMedium,
-                        lineHeight: 16 * 1.6,
-                      }}>
-                      {asset?.campaign?.name}
-                    </AppText>
-                  </GradientBorderAnimated>
-                </AppTouchable>
-              )}
-
               {asset.collectionSchema ? (
                 <CollectionItem
                   item={asset}
@@ -545,9 +594,17 @@ const DefaultCoin = ({
                   isCollection={true}
                 />
               ) : asset.metaData.assetSchema === AssetSchema.Collectible ? (
-                <CollectionItem item={asset} isCollectible={true} isCollection={false} />
+                <CollectionItem
+                  item={asset}
+                  isCollectible={true}
+                  isCollection={false}
+                />
               ) : asset.metaData.assetSchema === AssetSchema.UDA ? (
-                <CollectionItem item={asset} isCollectible={false} isCollection={false} />
+                <CollectionItem
+                  item={asset}
+                  isCollectible={false}
+                  isCollection={false}
+                />
               ) : asset.metaData.assetSchema === AssetSchema.Coin ? (
                 <CoinItem item={asset} isWalletOnline={isWalletOnline} />
               ) : null}
