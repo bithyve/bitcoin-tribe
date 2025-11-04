@@ -142,7 +142,7 @@ const CollectionDetailsScreen = () => {
               {isVerified && <IconVerified width={20} height={20} />}
             </View>
             <SizedBox height={hp(10)} />
-            <AppText variant="caption">{collection.description.split(`${DeepLinking.scheme}://`)[0] || ''}</AppText>
+            <AppText variant="caption">{collection.description.split(`${DeepLinking.scheme}`)[0] || ''}</AppText>
           </View>
           <View />
           <SizedBox height={hp(20)} />

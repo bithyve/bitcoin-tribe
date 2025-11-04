@@ -1421,17 +1421,26 @@ export class ApiHandler {
               }
             }
             if (uda.details.includes(DeepLinking.scheme)) {
-              const deepLinking = DeepLinking.processDeepLink(DeepLinking.scheme + uda.details.split(DeepLinking.scheme )[1]);
-              if(deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION && deepLinking.params.id) {
-                const slug = uda.details.split(DeepLinking.scheme + '://')[1];
+              const deepLinking = DeepLinking.processDeepLink(
+                DeepLinking.scheme + uda.details.split(DeepLinking.scheme)[1],
+              );
+              if (
+                deepLinking.isValid &&
+                deepLinking.feature === DeepLinkFeature.COLLECTION &&
+                deepLinking.params.id
+              ) {
+                const slug = uda.details.split(DeepLinking.scheme)[1];
                 const collection = urlParamsToObject(slug);
                 const parsedItemsCount = parseInt(collection.no as string, 10);
                 collections.push({
                   _id: collection.id,
-                  description: uda.details.split(DeepLinking.scheme + '://')[0],
+                  description: uda.details.split(DeepLinking.scheme)[0],
                   ...collection,
                   ...uda,
-                  itemsCount: isNaN(parsedItemsCount) || !isFinite(parsedItemsCount) ? 0 : parsedItemsCount,
+                  itemsCount:
+                    isNaN(parsedItemsCount) || !isFinite(parsedItemsCount)
+                      ? 0
+                      : parsedItemsCount,
                   isFixedSupply: collection.fxd === 'true',
                   issuedSupply: String(uda.issuedSupply),
                   slug: slug,
@@ -1447,14 +1456,18 @@ export class ApiHandler {
                       : undefined,
                   },
                 });
-              } else if (deepLinking.isValid && deepLinking.feature === DeepLinkFeature.COLLECTION_ITEM && deepLinking.params.collectionId) {
+              } else if (
+                deepLinking.isValid &&
+                deepLinking.feature === DeepLinkFeature.COLLECTION_ITEM &&
+                deepLinking.params.collectionId
+              ) {
                 const collectionId = deepLinking.params.collectionId;
                 const collection = dbManager.getObjectByPrimaryId(
                   RealmSchema.Collection,
                   '_id',
                   collectionId,
                 );
-                if(collection) {
+                if (collection) {
                   // First, create/update the UDA object in the database
                   const udaData = {
                     ...uda,
@@ -1471,27 +1484,27 @@ export class ApiHandler {
                         : undefined,
                     },
                   };
-                  
+
                   // Create or update the UDA
                   dbManager.createObject(
                     RealmSchema.UniqueDigitalAsset,
                     udaData,
                     Realm.UpdateMode.Modified,
                   );
-                  
+
                   // Get the actual Realm UDA object
                   const udaObject = dbManager.getObjectByPrimaryId(
                     RealmSchema.UniqueDigitalAsset,
                     'assetId',
                     uda.assetId,
                   );
-                  
+
                   if (udaObject) {
                     // Check if the item is already in the collection
                     const existingItem = collection.items.find(
                       (item: any) => item.assetId === uda.assetId,
                     );
-                    
+
                     if (!existingItem) {
                       // Add the Realm object to the collection's items
                       dbManager.updateObjectByPrimaryId(
@@ -1505,14 +1518,18 @@ export class ApiHandler {
                     }
                   }
                 } else {
-                  const collectionResponse = await Relay.getCollectionDetails(collectionId);
-                  if(collectionResponse.status) {
+                  const collectionResponse = await Relay.getCollectionDetails(
+                    collectionId,
+                  );
+                  if (collectionResponse.status) {
                     const collection = collectionResponse.collection;
                     const params = urlParamsToObject(collection.slug);
                     collection.description = collection.details;
-                    collection.details = collection.details + ' ' + collection.slug;
+                    collection.details =
+                      collection.details + ' ' + collection.slug;
                     collection.itemsCount = parseInt(params.no as string, 10);
-                    collection.isFixedSupply = params.fxd === 'true' ? true : false;
+                    collection.isFixedSupply =
+                      params.fxd === 'true' ? true : false;
                     collection.issuedSupply = String(uda.issuedSupply);
                     collection.slug = collection.slug;
                     collection.addedAt = Date.now();
@@ -1522,12 +1539,14 @@ export class ApiHandler {
                       base64Image: '',
                       digest: '',
                     };
-                    collection.attachments = collection.attachments.map(attachment => ({
-                      filePath: attachment.file,
-                      mime: attachment.mime,
-                      base64Image: '',
-                      digest: '',
-                    }));
+                    collection.attachments = collection.attachments.map(
+                      attachment => ({
+                        filePath: attachment.file,
+                        mime: attachment.mime,
+                        base64Image: '',
+                        digest: '',
+                      }),
+                    );
                     collection.token = {
                       attachments: collection.attachments,
                       embeddedMedia: false,
@@ -1552,64 +1571,49 @@ export class ApiHandler {
                       collection,
                       Realm.UpdateMode.Modified,
                     );
-  
-                  dbManager.createObject(
-                    RealmSchema.UniqueDigitalAsset,
-                    {
-                      ...uda,
-                      balance: {
-                        settled: String(uda.balance.settled),
-                        spendable: String(uda.balance.spendable),
-                        future: String(uda.balance.future),
-                      },
-                    },
-                    Realm.UpdateMode.Modified,
-                  );
-                  
-                  // Get the actual Realm UDA object
-                  const udaObject = dbManager.getObjectByPrimaryId(
-                    RealmSchema.UniqueDigitalAsset,
-                    'assetId',
-                    uda.assetId,
-                  );
-                  if (udaObject) {
-                    // Check if the item is already in the collection
-                    const existingItem = collection.items.find(
-                      (item: any) => item.assetId === uda.assetId,
-                    );
-                    
-                    if (!existingItem) {
-                      // Add the Realm object to the collection's items
-                      dbManager.updateObjectByPrimaryId(
-                        RealmSchema.Collection,
-                        '_id',
-                        collectionId,
-                        {
-                          items: [...collection.items, udaObject],
+
+                    dbManager.createObject(
+                      RealmSchema.UniqueDigitalAsset,
+                      {
+                        ...uda,
+                        balance: {
+                          settled: String(uda.balance.settled),
+                          spendable: String(uda.balance.spendable),
+                          future: String(uda.balance.future),
                         },
+                      },
+                      Realm.UpdateMode.Modified,
+                    );
+
+                    // Get the actual Realm UDA object
+                    const udaObject = dbManager.getObjectByPrimaryId(
+                      RealmSchema.UniqueDigitalAsset,
+                      'assetId',
+                      uda.assetId,
+                    );
+                    if (udaObject) {
+                      // Check if the item is already in the collection
+                      const existingItem = collection.items.find(
+                        (item: any) => item.assetId === uda.assetId,
                       );
+
+                      if (!existingItem) {
+                        // Add the Realm object to the collection's items
+                        dbManager.updateObjectByPrimaryId(
+                          RealmSchema.Collection,
+                          '_id',
+                          collectionId,
+                          {
+                            items: [...collection.items, udaObject],
+                          },
+                        );
+                      }
                     }
                   }
-                  }
-
-            } 
-                // Collection doesn't exist yet, add to udas to be processed
-                // udas.push({
-                //   ...uda,
-                //   balance: {
-                //     settled: String(uda.balance.settled),
-                //     spendable: String(uda.balance.spendable),
-                //     future: String(uda.balance.future),
-                //     offchainOutbound: uda.balance.offchainOutbound
-                //       ? String(uda.balance.offchainOutbound)
-                //       : undefined,
-                //     offchainInbound: uda.balance.offchainInbound
-                //       ? String(uda.balance.offchainInbound)
-                //       : undefined,
-                //   },
-                // });
+                }
               }
             } else {
+              console.log('uda', uda);
               udas.push(uda);
             }
           }
@@ -1629,7 +1633,7 @@ export class ApiHandler {
           );
         }
       }
-      await ApiHandler.updateAssetVerificationStatus();
+      ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
     }
@@ -1897,7 +1901,7 @@ export class ApiHandler {
           app.id,
           app.authToken,
         );
-        return response
+        return response;
       }
     } catch (error) {
       console.log('mintCollectionItem', error);
@@ -1905,7 +1909,11 @@ export class ApiHandler {
     }
   }
 
-  static generateCollectionSlug(collectionId: string, itemsCount: number, isFixedSupply: boolean) {
+  static generateCollectionSlug(
+    collectionId: string,
+    itemsCount: number,
+    isFixedSupply: boolean,
+  ) {
     return `${collectionId},${itemsCount},${isFixedSupply ? 'true' : 'false'}`;
   }
 
@@ -1942,12 +1950,11 @@ export class ApiHandler {
         await ApiHandler.createUtxos();
       }
       const collectionId = uuidv4().split('-')[0];
-      const slug =
-        DeepLinking.buildUrl(DeepLinkFeature.COLLECTION, {
-          id: collectionId,
-          no: totalSupplyAmt,
-          fxd: isFixedSupply,
-        });
+      const slug = DeepLinking.buildUrl(DeepLinkFeature.COLLECTION, {
+        id: collectionId,
+        no: totalSupplyAmt,
+        fxd: isFixedSupply,
+      });
       const response = await RGBServices.issueAssetUda(
         name,
         ticker,
@@ -2013,13 +2020,18 @@ export class ApiHandler {
       if (isCollection) {
         const collection = dbManager.getObjectByPrimaryId(
           RealmSchema.Collection,
-            '_id',
-            collectionId,
-          ).toJSON as unknown as Collection;
-          collection.transactions = response;
-          dbManager.updateObjectByPrimaryId(RealmSchema.Collection, '_id', collectionId, {
-          transactions: response,
-        });
+          '_id',
+          collectionId,
+        ).toJSON as unknown as Collection;
+        collection.transactions = response;
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.Collection,
+          '_id',
+          collectionId,
+          {
+            transactions: response,
+          },
+        );
       }
       if (
         ApiHandler.appType === AppType.NODE_CONNECT ||
@@ -3028,7 +3040,7 @@ export class ApiHandler {
       if (status && results) {
         Storage.set(Keys.PRESET_ASSETS, JSON.stringify(results));
         results.forEach(result => {
-          if(result.metaData.assetSchema === AssetSchema.Coin) {
+          if (result.metaData.assetSchema === AssetSchema.Coin) {
             dbManager.createObject(RealmSchema.Coin, {
               ...result,
               addedAt: Date.now(),
@@ -3041,7 +3053,7 @@ export class ApiHandler {
                 offchainInbound: '0',
               },
             });
-          } else if(result.metaData.assetSchema === AssetSchema.Collectible) {
+          } else if (result.metaData.assetSchema === AssetSchema.Collectible) {
             dbManager.createObject(RealmSchema.Collectible, {
               ...result,
               addedAt: Date.now(),
@@ -3054,7 +3066,7 @@ export class ApiHandler {
                 offchainInbound: '0',
               },
             });
-          } else if(result.collectionSchema) {
+          } else if (result.collectionSchema) {
             dbManager.createObject(RealmSchema.Collection, {
               ...result,
               addedAt: Date.now(),
@@ -3067,7 +3079,7 @@ export class ApiHandler {
                 offchainInbound: '0',
               },
             });
-          } else if(result.metaData.assetSchema === AssetSchema.UDA) {
+          } else if (result.metaData.assetSchema === AssetSchema.UDA) {
             dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
               ...result,
               addedAt: Date.now(),
