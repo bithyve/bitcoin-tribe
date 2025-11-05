@@ -371,15 +371,17 @@ const EnterInvoiceDetails = () => {
           ) : (
             <View style={styles.reservedSatsWrapper} />
           )}
-          <Buttons
-            primaryTitle={assets.generateInvoice}
-            primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-            width={'100%'}
-            disabled={
-              isWalletOnline === WalletOnlineStatus.Error ||
-              isWalletOnline === WalletOnlineStatus.InProgress
-            }
-          />
+          <View style={{ alignSelf: 'center' }}>
+            <Buttons
+              primaryTitle={assets.generateInvoice}
+              primaryOnPress={() => validateAndNavigateToReceiveAsset()}
+              width={'100%'}
+              disabled={
+                isWalletOnline === WalletOnlineStatus.Error ||
+                isWalletOnline === WalletOnlineStatus.InProgress
+              }
+            />
+          </View>
         </View>
         {assetsDropdown && (
           <RGBAssetList
