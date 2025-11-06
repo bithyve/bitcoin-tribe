@@ -202,6 +202,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       position: 'relative',
       top: hp(1),
       paddingTop: 0,
+      height: CARD_HEIGHT - hp(1),
     },
     activeCampaignDetailsCtr: {
       position: 'absolute',
@@ -214,6 +215,22 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       color: Colors.White,
       marginBottom: hp(10),
       marginTop: hp(5),
+    },
+    coinCampaignTxtCtr: {
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
+      width: '100%',
+      position: 'absolute',
+    },
+    collectionCampaignTxtCtr: {
+      borderTopLeftRadius: hp(20),
+      borderTopRightRadius: hp(20),
+    },
+    coinDataCtr: {
+      padding: hp(20),
+      paddingTop: hp(40),
+      justifyContent: 'space-between',
+      flex: 1,
     },
   });
 
@@ -350,10 +367,7 @@ const CollectionItem = ({
                       'rgba(0, 0, 0, 0.7)',
                       'rgba(17, 17, 17, 0)',
                     ]}
-                    style={{
-                      borderTopLeftRadius: hp(20),
-                      borderTopRightRadius: hp(20),
-                    }}>
+                    style={styles.collectionCampaignTxtCtr}>
                     <AppText variant="subtitle2" style={styles.campaignTxt}>
                       {asset?.campaign?.name}
                     </AppText>
@@ -435,18 +449,14 @@ const CoinItem = ({
                 'rgba(0, 0, 0, 0.7)',
                 'rgba(17, 17, 17, 0)',
               ]}
-              style={{
-                borderTopLeftRadius: hp(20),
-                borderTopRightRadius: hp(20),
-                width: '100%',
-              }}>
+              style={styles.coinCampaignTxtCtr}>
               <AppText variant="subtitle2" style={styles.campaignTxt}>
                 {asset?.campaign?.name}
               </AppText>
             </LinearGradient>
           )}
 
-          <View style={{ padding: hp(20) }}>
+          <View style={styles.coinDataCtr}>
             <View style={styles.row}>
               <View style={styles.coinNameContainer}>
                 <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
