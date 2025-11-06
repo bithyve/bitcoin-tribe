@@ -50,6 +50,7 @@ import DeepLinking from 'src/utils/DeepLinking';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
 import Colors from 'src/theme/Colors';
+import { TapGestureHandler } from 'react-native-gesture-handler';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -301,9 +302,10 @@ const CollectionItem = ({
   return (
     <>
       {isCampaignActive && <RgbBorder styles={styles} />}
-      <AppTouchable
-        activeOpacity={0.95}
-        onPress={() => {
+      <TapGestureHandler
+        maxDeltaX={10}
+        maxDeltaY={10}
+        onActivated={() => {
           if (isCollectible) {
             navigation.navigate(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
@@ -317,73 +319,77 @@ const CollectionItem = ({
               assetId: asset.assetId,
             });
           }
-        }}
-        style={[
-          styles.largeHeaderContainer1,
-          isCampaignActive && styles.activeCampaignBorder,
-        ]}>
-        <ImageBackground
-          source={{
-            uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
-          }}
-          resizeMode="cover"
-          style={styles.imageBackground}
-          imageStyle={styles.imageBackground}
-          onLoadStart={() => setImageLoading(true)}
-          onLoadEnd={() => setImageLoading(false)}
-          onError={() => setImageLoading(false)}>
-          <View style={styles.textCollectibleNameContainer}>
-            {imageLoading && (
-              <View style={styles.loaderOverlay}>
-                <ActivityIndicator />
-              </View>
-            )}
+        }}>
+        <View
+          style={[
+            styles.largeHeaderContainer1,
+            isCampaignActive && styles.activeCampaignBorder,
+          ]}>
+          <ImageBackground
+            source={{
+              uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
+            }}
+            resizeMode="cover"
+            style={styles.imageBackground}
+            imageStyle={styles.imageBackground}
+            onLoadStart={() => setImageLoading(true)}
+            onLoadEnd={() => setImageLoading(false)}
+            onError={() => setImageLoading(false)}>
+            <View style={styles.textCollectibleNameContainer}>
+              {imageLoading && (
+                <View style={styles.loaderOverlay}>
+                  <ActivityIndicator />
+                </View>
+              )}
 
-            {isCampaignActive && (
-              <View style={styles.activeCampaignDetailsCtr}>
-                <LinearGradient
-                  colors={[
-                    'rgba(0, 0, 0, 1)',
-                    'rgba(0, 0, 0, 0.7)',
-                    'rgba(17, 17, 17, 0)',
-                  ]}
-                  style={{
-                    borderTopLeftRadius: hp(20),
-                    borderTopRightRadius: hp(20),
-                  }}>
-                  <AppText variant="subtitle2" style={styles.campaignTxt}>
-                    {asset?.campaign?.name}
+              {isCampaignActive && (
+                <View style={styles.activeCampaignDetailsCtr}>
+                  <LinearGradient
+                    colors={[
+                      'rgba(0, 0, 0, 1)',
+                      'rgba(0, 0, 0, 0.7)',
+                      'rgba(17, 17, 17, 0)',
+                    ]}
+                    style={{
+                      borderTopLeftRadius: hp(20),
+                      borderTopRightRadius: hp(20),
+                    }}>
+                    <AppText variant="subtitle2" style={styles.campaignTxt}>
+                      {asset?.campaign?.name}
+                    </AppText>
+                  </LinearGradient>
+                </View>
+              )}
+
+              <LinearGradient
+                colors={[
+                  'rgba(0, 0, 0, 0)',
+                  'rgba(0, 0, 0, 0.4)',
+                  'rgba(0, 0, 0, 0.9)',
+                ]}
+                style={styles.textCollectibleNameContainer1}>
+                <View style={styles.textCollectibleNameContainer2}>
+                  <AppText
+                    variant="body1Bold"
+                    style={styles.textCollectibleName}>
+                    {asset.name}
                   </AppText>
-                </LinearGradient>
-              </View>
-            )}
-
-            <LinearGradient
-              colors={[
-                'rgba(0, 0, 0, 0)',
-                'rgba(0, 0, 0, 0.4)',
-                'rgba(0, 0, 0, 0.9)',
-              ]}
-              style={styles.textCollectibleNameContainer1}>
-              <View style={styles.textCollectibleNameContainer2}>
-                <AppText variant="body1Bold" style={styles.textCollectibleName}>
-                  {asset.name}
-                </AppText>
-                {asset.issuer?.verified ? (
-                  <IconVerified width={24} height={24} />
-                ) : null}
-              </View>
-              {
-                <AppText
-                  variant="muted"
-                  style={styles.textCollectibleDescription}>
-                  {description}
-                </AppText>
-              }
-            </LinearGradient>
-          </View>
-        </ImageBackground>
-      </AppTouchable>
+                  {asset.issuer?.verified ? (
+                    <IconVerified width={24} height={24} />
+                  ) : null}
+                </View>
+                {
+                  <AppText
+                    variant="muted"
+                    style={styles.textCollectibleDescription}>
+                    {description}
+                  </AppText>
+                }
+              </LinearGradient>
+            </View>
+          </ImageBackground>
+        </View>
+      </TapGestureHandler>
     </>
   );
 };
@@ -409,77 +415,82 @@ const CoinItem = ({
   return (
     <>
       {isCampaignActive && <RgbBorder styles={styles} />}
-      <AppTouchable
-        activeOpacity={0.95}
-        onPress={() =>
+      <TapGestureHandler
+        maxDeltaX={10} // 👈 prevent tap if user moves more than 10px horizontally
+        maxDeltaY={10}
+        onActivated={() =>
           navigation.navigate(NavigationRoutes.COINDETAILS, {
             assetId: asset.assetId,
           })
-        }
-        style={[
-          styles.largeHeaderContainer,
-          isCampaignActive && styles.activeCampaignBorder,
-        ]}>
-        {isCampaignActive && (
-          <LinearGradient
-            colors={[
-              'rgba(0, 0, 0, 1)',
-              'rgba(0, 0, 0, 0.7)',
-              'rgba(17, 17, 17, 0)',
-            ]}
-            style={{
-              borderTopLeftRadius: hp(20),
-              borderTopRightRadius: hp(20),
-              width: '100%',
-            }}>
-            <AppText variant="subtitle2" style={styles.campaignTxt}>
-              {asset?.campaign?.name}
-            </AppText>
-          </LinearGradient>
-        )}
-
-        <View style={{ padding: hp(20) }}>
-          <View style={styles.row}>
-            <View style={styles.coinNameContainer}>
-              <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
-              <AppText style={styles.totalBalanceLabel} variant="body2">
-                {assets.totalBalance}
+        }>
+        <View
+          style={[
+            styles.largeHeaderContainer,
+            isCampaignActive && styles.activeCampaignBorder,
+          ]}>
+          {isCampaignActive && (
+            <LinearGradient
+              colors={[
+                'rgba(0, 0, 0, 1)',
+                'rgba(0, 0, 0, 0.7)',
+                'rgba(17, 17, 17, 0)',
+              ]}
+              style={{
+                borderTopLeftRadius: hp(20),
+                borderTopRightRadius: hp(20),
+                width: '100%',
+              }}>
+              <AppText variant="subtitle2" style={styles.campaignTxt}>
+                {asset?.campaign?.name}
               </AppText>
-              <DecimalText
-                value={Number(coin?.balance?.spendable) / 10 ** coin?.precision}
-                unit={formatTUsdt(asset.ticker)}
+            </LinearGradient>
+          )}
+
+          <View style={{ padding: hp(20) }}>
+            <View style={styles.row}>
+              <View style={styles.coinNameContainer}>
+                <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
+                <AppText style={styles.totalBalanceLabel} variant="body2">
+                  {assets.totalBalance}
+                </AppText>
+                <DecimalText
+                  value={
+                    Number(coin?.balance?.spendable) / 10 ** coin?.precision
+                  }
+                  unit={formatTUsdt(asset.ticker)}
+                />
+              </View>
+              <AssetIcon
+                iconUrl={asset.iconUrl}
+                assetID={asset.assetId}
+                size={80}
+                verified={asset?.issuer?.verified}
               />
             </View>
-            <AssetIcon
-              iconUrl={asset.iconUrl}
-              assetID={asset.assetId}
-              size={80}
-              verified={asset?.issuer?.verified}
+
+            <TransactionButtons
+              onPressSend={() => {
+                navigation.navigate(NavigationRoutes.SCANASSET, {
+                  assetId: asset.assetId,
+                  rgbInvoice: '',
+                });
+              }}
+              onPressReceive={() => {
+                navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+                  invoiceAssetId: asset.assetId,
+                  chosenAsset: asset,
+                });
+              }}
+              sendCtaWidth={wp(150)}
+              receiveCtaWidth={wp(150)}
+              disabled={
+                isWalletOnline === WalletOnlineStatus.Error ||
+                isWalletOnline === WalletOnlineStatus.InProgress
+              }
             />
           </View>
-
-          <TransactionButtons
-            onPressSend={() => {
-              navigation.navigate(NavigationRoutes.SCANASSET, {
-                assetId: asset.assetId,
-                rgbInvoice: '',
-              });
-            }}
-            onPressReceive={() => {
-              navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-                invoiceAssetId: asset.assetId,
-                chosenAsset: asset,
-              });
-            }}
-            sendCtaWidth={wp(150)}
-            receiveCtaWidth={wp(150)}
-            disabled={
-              isWalletOnline === WalletOnlineStatus.Error ||
-              isWalletOnline === WalletOnlineStatus.InProgress
-            }
-          />
         </View>
-      </AppTouchable>
+      </TapGestureHandler>
     </>
   );
 };
