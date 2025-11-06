@@ -2,7 +2,6 @@ import {
   ActivityIndicator,
   AppState,
   Dimensions,
-  ImageBackground,
   Platform,
   ScrollView,
   StyleProp,
@@ -80,6 +79,8 @@ import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
 import BackTranslucentLight from 'src/assets/images/backTranslucentLight.svg';
+import { ZoomableImage } from 'src/components/ZoomableImage';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -117,8 +118,8 @@ export const UDADetailsScreen = ({ route, data }) => {
     askReview,
     askVerify,
     showHeader = true,
-    showFooter= true,
-    showInfo = false
+    showFooter = true,
+    showInfo = false,
   } = route?.params || data;
   const styles = React.useMemo(() => getStyles(theme, insets), [theme, insets]);
   const {
@@ -338,23 +339,6 @@ export const UDADetailsScreen = ({ route, data }) => {
       console.log('Error sharing asset ID:', error);
     }
   };
-  const handleTouchStart = e => {
-    touchY.current = e.nativeEvent.pageY;
-  };
-
-  const handleTouchEnd = e => {
-    const deltaY = e.nativeEvent.pageY - touchY.current;
-    if (deltaY > 100) {
-      if (!imageView && showFooter) setImageView(true);
-    }
-  };
-  const onResponderEnd = e => {
-    if (Platform.OS !== 'android') return;
-    const deltaY = e.nativeEvent.pageY - touchY.current;
-    if (deltaY > 10) {
-      if (!imageView && showFooter) setImageView(true);
-    }
-  };
 
   const mediaPath = useMemo(() => {
     const media = uda?.media?.filePath || uda?.token?.media?.filePath;
@@ -372,6 +356,7 @@ export const UDADetailsScreen = ({ route, data }) => {
 
   return (
     <>
+    <GestureHandlerRootView>
       {imageView && showFooter && (
         <View style={styles.bottomContainer}>
           <AppTouchable
@@ -453,24 +438,10 @@ export const UDADetailsScreen = ({ route, data }) => {
             backIcon={ isThemeDark? <BackTranslucent />: <BackTranslucentLight/>}
           />
         )}
-        <View
-          style={!imageView && { maxHeight: hp(375) }}
-          onStartShouldSetResponder={() => true}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          onResponderEnd={onResponderEnd}>
-          <ImageBackground
-            source={{
-              uri: mediaPath
-            }}
-            resizeMode={imageView ? 'contain' : 'cover'}
-            style={[styles.imageStyle,{alignItems:"center",justifyContent:"center"}]}
-            onLoadStart={()=>setLoadingImage(true)}
-            onLoadEnd={()=>setLoadingImage(false)}
-            onError={()=>setLoadingImage(false)}
-            >
-              {loadingImage&& <ActivityIndicator/>}
-            </ImageBackground>
+        <View style={[!imageView && { maxHeight: hp(375) }]}>
+          <ZoomableImage uri={mediaPath} imageView={imageView} setLoadingImage={setLoadingImage} min={1} max={3}
+          />
+          {loadingImage && <View style={styles.loaderAbsoluteFill}><ActivityIndicator/></View> }
         </View>
         {imageView ? (
           <></>
@@ -717,6 +688,7 @@ export const UDADetailsScreen = ({ route, data }) => {
           />
         </>
       </ScrollView>
+      </GestureHandlerRootView>
     </>
   );
 };
@@ -801,6 +773,15 @@ const getStyles = (theme: AppTheme, insets) =>
       height: 1,
       backgroundColor: theme.colors.separator,
       marginTop: hp(15),
+    },
+    loaderAbsoluteFill: {
+      position: 'absolute',
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });
 export default UDADetailsScreen;

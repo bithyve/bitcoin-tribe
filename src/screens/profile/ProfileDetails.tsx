@@ -99,15 +99,17 @@ function ProfileDetails(props: ProfileDetailsProps) {
           </View>
           <View style={{ gap: hp(20) }}>
             <TncCta />
-            <Buttons
-              primaryTitle={primaryCTATitle}
-              secondaryTitle={secondaryCTATitle}
-              primaryOnPress={primaryOnPress}
-              secondaryOnPress={secondaryOnPress}
-              width={windowWidth / 1.1}
-              secondaryCTAWidth={windowWidth / 2.3}
-              disabled={disabled}
-            />
+            <View style={{ alignSelf: 'center' }}>
+              <Buttons
+                primaryTitle={primaryCTATitle}
+                secondaryTitle={secondaryCTATitle}
+                primaryOnPress={primaryOnPress}
+                secondaryOnPress={secondaryOnPress}
+                width={windowWidth / 1.1}
+                secondaryCTAWidth={windowWidth / 2.3}
+                disabled={disabled}
+              />
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
