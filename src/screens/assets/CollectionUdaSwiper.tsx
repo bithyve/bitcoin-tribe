@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   View,
   FlatList,
@@ -34,6 +34,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { isWebUrl } from 'src/utils/url';
 import Colors from 'src/theme/Colors';
+import { SizedBox } from 'src/components/SizedBox';
 
 const { width, height } = Dimensions.get('window');
 
@@ -134,6 +135,24 @@ const FooterActionItems = ({
   const { common } = useContext(LocalizationContext).translations;
   const navigation = useNavigation();
   const styles = getStyles(theme, insets);
+  const bottomSliderRef = useRef(null);
+  const extraPadding =  (width/2) - wp(40) - 5 
+
+  useEffect(() => {
+  if (!bottomSliderRef.current || activeIndex == null) return;
+  requestAnimationFrame(() => {
+    try {
+      bottomSliderRef.current.scrollToIndex({
+        index: activeIndex,
+        animated: true,
+        viewPosition: 0.5, // keep it centered
+      });
+    } catch (error) {
+      console.warn('scrollToIndex failed:', error);
+    }
+  });
+}, [activeIndex]);
+  
 
   const onShareAssetId = async () => {
     try {
@@ -182,10 +201,14 @@ const FooterActionItems = ({
     <View style={styles.bottomContainer}>
       {!showInfo && (
         <FlatList
+          ref={bottomSliderRef}
           style={styles.imagesFlatList}
           contentContainerStyle={{ gap: 5 }}
           data={assets}
           horizontal
+          showsHorizontalScrollIndicator={false}
+          ListHeaderComponent={()=><SizedBox width={extraPadding}/>}
+          ListFooterComponent={()=><SizedBox width={extraPadding}/>}
           renderItem={({ item, index }) => {
             return (
               <Pressable onPress={() => scrollToIndex(index)}>
