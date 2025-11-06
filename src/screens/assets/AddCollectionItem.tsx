@@ -464,7 +464,10 @@ function IssueCollectibleScreen() {
         <View style={[styles.buttonWrapper, styles.gutter]}>
           <PrimaryCTA
             title={assets.issueUDA}
-            onPress={()=>setShowPayment(true)}
+            onPress={() => {
+              Keyboard.dismiss();
+              setShowPayment(true);
+            }}
             width={'100%'}
             disabled={isButtonDisabled || createUtxos.isLoading || loading}
             height={hp(20)}
