@@ -539,7 +539,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                           {
                             assetId: assetId,
                             transactions: uda?.transactions,
-                            assetName: uda?.name,
+                            name: uda?.name,
                             schema: RealmSchema.UniqueDigitalAsset,
                             hidePrecision: true,
                           },
