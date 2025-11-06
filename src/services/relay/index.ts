@@ -1029,4 +1029,26 @@ export default class Relay {
       throw new Error(error);
     }
   };
+
+  public static getRampUrl = async (
+    userAddress: string,
+    appID: string,
+    publicKey: string,
+  ): Promise<{
+    url: string;
+    signature: string;
+    timestamp: number;
+    queryString: string;
+    error: string;
+    status: boolean;
+  }> => {
+    try {
+      const res = await RestClient.get(
+        `${RELAY}/ramp/getRampUrl?appID=${appID}&publicKey=${publicKey}&userAddress=${userAddress}`,
+      );
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }
