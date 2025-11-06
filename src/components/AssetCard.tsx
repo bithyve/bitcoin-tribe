@@ -91,7 +91,8 @@ const AssetCard = (props: AssetCardProps) => {
         <GradientView
           style={[
             styles.container,
-            isCollectionUda &&
+            asset.assetSchema === AssetSchema.UDA &&
+              !isCollection &&
               balance == 'Owned' && { borderColor: Colors.ElectricViolet },
           ]}
           colors={[
@@ -135,7 +136,7 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {!isCollectionUda && (
+              {(isCollection || asset.assetSchema !== AssetSchema.UDA)   && (
                 <AppText
                   variant="body2"
                   numberOfLines={1}
