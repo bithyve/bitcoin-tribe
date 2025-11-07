@@ -1613,7 +1613,6 @@ export class ApiHandler {
                 }
               }
             } else {
-              console.log('uda', uda);
               udas.push(uda);
             }
           }
