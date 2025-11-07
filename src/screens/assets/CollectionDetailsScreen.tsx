@@ -31,12 +31,14 @@ import { useTheme } from 'react-native-paper';
 import Colors from 'src/theme/Colors';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
+import RegistryTranslucent from 'src/assets/images/registryTranslucent.svg';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
 import CommonStyles from 'src/common/styles/CommonStyles';
 import Infinity from 'src/assets/images/infinity.svg';
 import InfinityLight from 'src/assets/images/infinityLight.svg';
 import SelectOption from 'src/components/SelectOption';
+import config from 'src/utils/config';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -133,7 +135,18 @@ const CollectionDetailsScreen = () => {
           style={styles.image}
         />
         <View style={styles.headerCtr}>
-          <AppHeader backIcon={<BackTranslucent />} />
+          <AppHeader
+            backIcon={<BackTranslucent />}
+            rightIcon={<RegistryTranslucent />}
+            onSettingsPress={() =>
+              navigation.dispatch(
+                CommonActions.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                  url: `${config.COLLECTION_URL}/${collectionId}`,
+                  title: 'Registry',
+                }),
+              )
+            }
+          />
         </View>
         <View style={styles.contentCtr}>
           <View style={styles.nameCtr}>
@@ -181,7 +194,14 @@ const CollectionDetailsScreen = () => {
               </AppText>
             </View>
           </View>
-          <SizedBox height={hp(10)} />
+        </View>
+      </>
+    );
+  };
+
+  const ListFooter = ()=>{
+    return <View style={styles.footerCtr}>
+        <SizedBox height={hp(10)} />
           {hasIssuanceTransaction && <SelectOption
             title={'Verification'}
             subTitle={''}
@@ -197,15 +217,14 @@ const CollectionDetailsScreen = () => {
             }
             testID={'collection_verification'}
           />}
-        </View>
-      </>
-    );
-  };
+    </View>
+  }
 
   return (
     <View style={styles.parentContainer}>
       <FlatList
         ListHeaderComponent={ListHeader}
+        ListFooterComponent={ListFooter}
         stickyHeaderHiddenOnScroll={true}
         showsVerticalScrollIndicator={false}
         numColumns={2}
@@ -340,6 +359,10 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
     },
     textColor: { color: theme.colors.text },
+    footerCtr:{
+      marginTop:hp(10),
+      paddingHorizontal: wp(16),
+    }
   });
 export default CollectionDetailsScreen;
 
