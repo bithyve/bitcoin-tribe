@@ -356,4 +356,5 @@ export interface Collection {
   transactions: Transfer[];
   metaData: MetaData;
   items: UniqueDigitalAsset[];
+  isIssuedPosted:boolean
 }
