@@ -48,6 +48,7 @@ class Configuration {
     dark: 'https://bitcointribe.app/terms/dark.html',
   };
   public REGISTRY_URL: string;
+  public COLLECTION_URL: string;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
@@ -57,6 +58,7 @@ class Configuration {
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
     this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
+    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/collection' : 'https://registry.bitcointribe.app/collection';
   }
 
   getBitcoinNetwork = (networkType: NetworkType) => {

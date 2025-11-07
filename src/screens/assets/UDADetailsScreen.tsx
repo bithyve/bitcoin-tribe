@@ -153,6 +153,7 @@ export const UDADetailsScreen = ({ route, data }) => {
   const [imageView, setImageView] = useState(true);
   const touchY = useRef(0);
   const [loadingImage, setLoadingImage] = useState(false);
+  const isCollectionUda = uda?.details.includes(DeepLinking.scheme)
 
   const twitterVerification = uda?.issuer?.verifiedBy?.find(
     v =>
@@ -521,7 +522,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                     />
                   )}
                 </View>
-                {hasIssuanceTransaction && (
+                {hasIssuanceTransaction && !isCollectionUda && (
                   <>
                     <VerifyIssuer
                       assetId={assetId}
