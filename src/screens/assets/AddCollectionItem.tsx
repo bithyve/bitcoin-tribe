@@ -49,7 +49,7 @@ import AppType from 'src/models/enums/AppType';
 import { AppContext } from 'src/contexts/AppContext';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import UDACollectiblesInfoModal from 'src/screens/collectiblesCoins/components/UDACollectiblesInfoModal';
-import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import {
   MOCK_BANNER,
   MOCK_BANNER_LIGHT,
@@ -164,6 +164,7 @@ function IssueCollectibleScreen() {
           collectionId: collectionId,
           assetId: collection.assetId,
         },
+        DeepLinkType.APP_LINK
       );
       const response = await ApiHandler.mintCollectionItem({
         collectionId: collectionId,
