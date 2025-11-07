@@ -92,7 +92,6 @@ const AssetCard = (props: AssetCardProps) => {
           style={[
             styles.container,
             asset.assetSchema === AssetSchema.UDA &&
-              !isCollection &&
               balance == 'Owned' && { borderColor: Colors.ElectricViolet },
           ]}
           colors={[
@@ -136,7 +135,7 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {(isCollection || asset.assetSchema !== AssetSchema.UDA)   && (
+              {(asset.assetSchema !== AssetSchema.UDA)   && (
                 <AppText
                   variant="body2"
                   numberOfLines={1}
@@ -296,7 +295,7 @@ const DummyCards = ({ styles }) => {
         style={[
           styles.backgroundCard,
           {
-            width: CARD_WIDTH * 0.88,
+            width: wp(CARD_WIDTH) * 0.88,
             top: 5,
           },
         ]}>
@@ -309,7 +308,7 @@ const DummyCards = ({ styles }) => {
         style={[
           styles.backgroundCard,
           {
-            width: CARD_WIDTH * 0.96,
+            width: wp(CARD_WIDTH) * 0.96,
             top: 10,
           },
         ]}>
