@@ -314,6 +314,7 @@ function IssueCollection() {
   ]);
 
   const onPressProceed = useCallback(() => {
+    Keyboard.dismiss();
     if (fees.collectionFee.fee > 0) {
       setShowPayment(true);
     } else {

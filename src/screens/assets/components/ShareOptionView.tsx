@@ -21,7 +21,7 @@ type ShareOptionProps = {
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
 };
-
+const ICON_SIZE = 15
 function ShareOptionView(props: ShareOptionProps) {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -52,7 +52,7 @@ function ShareOptionView(props: ShareOptionProps) {
           </View>
         </View>
         <View style={styles.rightIconWrapper}>
-          {isThemeDark ? <IconShare /> : <IconShareLight />}
+          {isThemeDark ? <IconShare height={ICON_SIZE} width={ICON_SIZE} /> : <IconShareLight height={ICON_SIZE} width={ICON_SIZE} />}
         </View>
       </GradientView>
     </AppTouchable>
