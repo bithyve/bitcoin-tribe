@@ -570,10 +570,9 @@ const getStyles = (theme: AppTheme, inputHeight) =>
     },
     reservedSatsWrapper: {
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
       marginVertical: hp(20),
-      marginHorizontal:wp(16)
+      marginHorizontal:wp(16),
     },
     checkIconWrapper: {
       width: '10%',

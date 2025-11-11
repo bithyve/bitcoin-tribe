@@ -589,7 +589,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                   title={assets.hideAsset}
                   onPress={() => hideAsset()}
                 />
-                <View style={{ height: screenHeight * 0.1 }} />
+                <SizedBox height={screenHeight*0.2}/>
               </>
             )}
           </>
