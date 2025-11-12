@@ -240,9 +240,9 @@ function AppBackupMenu({ navigation }) {
       </View>
       <View>
         <AppText style={styles.textStepTime} variant="body2">
-          {`${settings.relayBackupTime} ${moment(lastRelayBackup).format(
+          {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
             'DD MMM YY  •  hh:mm A',
-          )}`}
+          ) : 'Never'}`}
         </AppText>
       </View>
       <ModalLoading visible={isLoading} />

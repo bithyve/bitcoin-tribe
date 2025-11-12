@@ -496,7 +496,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                 </View>
                 <Item
                   value={home.assetDescription}
-                  title={uda.details.split(DeepLinking.scheme)[0] || ''}
+                  title={uda.details.split(DeepLinking.appLinkScheme)[0] || ''}
                 />
 
                 <View style={styles.gutter}>
