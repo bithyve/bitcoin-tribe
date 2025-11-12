@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useNavigation } from '@react-navigation/native';
@@ -22,6 +22,7 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
+import { ApiHandler } from 'src/services/handler/apiHandler';
 
 function LanguageAndCurrency() {
   const navigation = useNavigation();
@@ -37,6 +38,17 @@ function LanguageAndCurrency() {
   const [currentCurrencyMode, setCurrencyMode] = useMMKVString(
     Keys.CURRENCY_MODE,
   );
+  const updated = useRef(false);
+
+   useEffect(() => {
+    updated.current = true;
+  }, [language, currency, currentCurrencyMode]);
+
+  useEffect(() => {
+   return ()=>{
+    updated.current && ApiHandler.backupAppImage({settings:true});
+   }
+  }, [navigation]);
 
   const selectedLanguage = availableLanguages.find(
     lang => lang.iso === language,

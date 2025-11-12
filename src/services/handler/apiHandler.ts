@@ -3225,11 +3225,11 @@ export class ApiHandler {
 
   static async backupAppImage({
     settings = false,
-    rooms = false,
+    room = null,
     all = false,
   }: {
     settings?: boolean;
-    rooms?: boolean;
+    room?: null | any;
     all?: boolean;
   }) {
     try {
@@ -3253,15 +3253,17 @@ export class ApiHandler {
         settingsObject = encrypt(encryptionKey, JSON.stringify(settingsObject));
       }
 
-      if (all || rooms) {
+      if (all) {
         const rooms = dbManager.getCollection(RealmSchema.HolepunchRoom);
         for (const index in rooms) {
           const room = rooms[index];
           const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
           roomsObject[room.roomId] = encryptedRoom;
         }
+      } else if (room){
+        const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
+          roomsObject[room.roomId] = encryptedRoom;
       }
-
       const appImageBackup = await Relay.createAppImageBackup(
         app.id,
         app.publicId,
