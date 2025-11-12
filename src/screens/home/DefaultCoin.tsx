@@ -539,7 +539,7 @@ const DefaultCoin = ({
     RealmSchema.UniqueDigitalAsset,
     collection =>
       collection.filtered(
-        `visibility != $0 && NOT details CONTAINS '${DeepLinking.scheme}'`,
+        `visibility != $0 && NOT details CONTAINS '${DeepLinking.appLinkScheme}'`,
         AssetVisibility.HIDDEN,
       ),
   );

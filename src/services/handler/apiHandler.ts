@@ -82,7 +82,7 @@ import { Asset as ImageAsset } from 'react-native-image-picker';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
-import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import  RealmDatabase  from 'src/storage/realm/realm';
 import { AppImageBackupStatusType } from 'src/components/AppImageBackupBanner';
 
@@ -1449,21 +1449,21 @@ export class ApiHandler {
                 };
               }
             }
-            if (uda.details.includes(DeepLinking.scheme)) {
+            if (uda.details.includes(DeepLinking.appLinkScheme)) {
               const deepLinking = DeepLinking.processDeepLink(
-                DeepLinking.scheme + uda.details.split(DeepLinking.scheme)[1],
+                DeepLinking.appLinkScheme + uda.details.split(DeepLinking.appLinkScheme)[1],
               );
               if (
                 deepLinking.isValid &&
                 deepLinking.feature === DeepLinkFeature.COLLECTION &&
                 deepLinking.params.id
               ) {
-                const slug = uda.details.split(DeepLinking.scheme)[1];
+                const slug = uda.details.split(DeepLinking.appLinkScheme)[1];
                 const collection = urlParamsToObject(slug);
                 const parsedItemsCount = parseInt(collection.no as string, 10);
                 collections.push({
                   _id: collection.id,
-                  description: uda.details.split(DeepLinking.scheme)[0],
+                  description: uda.details.split(DeepLinking.appLinkScheme)[0],
                   ...collection,
                   ...uda,
                   itemsCount:
@@ -1642,7 +1642,6 @@ export class ApiHandler {
                 }
               }
             } else {
-              console.log('uda', uda);
               udas.push(uda);
             }
           }
@@ -1983,7 +1982,7 @@ export class ApiHandler {
         id: collectionId,
         no: totalSupplyAmt,
         fxd: isFixedSupply,
-      });
+      }, DeepLinkType.APP_LINK);
       const response = await RGBServices.issueAssetUda(
         name,
         ticker,
@@ -2901,6 +2900,7 @@ export class ApiHandler {
         { schema: RealmSchema.Coin, type: 'coin' },
         { schema: RealmSchema.Collectible, type: 'collectible' },
         { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' },
+        { schema: RealmSchema.Collection, type: 'collection' },
       ];
 
       const assetIds = schemas.flatMap(({ schema }) =>

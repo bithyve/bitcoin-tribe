@@ -20,6 +20,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import Relay from 'src/services/relay';
 import { useQuery } from '@realm/react';
+import Toast from 'src/components/Toast';
 
 function GetBTCWithRamp() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -34,7 +35,8 @@ function GetBTCWithRamp() {
   const [loading, setLoading] = useState(false);
 
   const redirectBuyBtc = async () => {
-    setLoading(false);
+    if(loading) return 
+    setLoading(true);
     try {
       const response = await Relay.getRampUrl(
         receivingAddress,
@@ -42,11 +44,13 @@ function GetBTCWithRamp() {
         app.publicId,
       );
       if (typeof response?.url === 'string') {
-        Linking.openURL(response.url);
+        await Linking.openURL(response.url);
       } else {
+        Toast('Something went wrong.', true);
         console.error('Ramp URL generation failed:', response?.error);
       }
     } catch (error) {
+      Toast('Something went wrong.', true);
       console.log('🚀 ~ redirectBuyBtc ~ error:', error);
     } finally {
       setLoading(false);
