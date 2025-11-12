@@ -36,25 +36,29 @@ export const AppImageBackupBanner = () => {
           setAppImageBackupStatus(AppImageBackupStatusType.idle);
         }, 1000);
         return {
-          message: 'App image backed up successfully',
-          type: 'success',
+          message: common.appImageBackupSuccess,
+          type: AppImageBackupStatusType.success,
+          color: Colors.GOGreen
         };
       }
       case AppImageBackupStatusType.error:
         return {
-          message: 'App image backup failed',
-          type: 'error',
+          message: common.appImageBackupFailure,
+          type: AppImageBackupStatusType.error,
+          color:Colors.FireOpal,
         };
       case AppImageBackupStatusType.loading: {
         return {
-          message: 'Initiating app image backup',
-          type: 'success',
+          message: common.appImageBackupInProgress,
+          type: AppImageBackupStatusType.success,
+          color:Colors.SelectiveYellow
         };
       }
       default:
         return {
           message: '',
-          type: 'success',
+          type: AppImageBackupStatusType.success,
+          color: Colors.GOGreen
         };
     }
   }, [appImageBackupStatus, common]);
@@ -82,6 +86,7 @@ export const AppImageBackupBanner = () => {
           status.type == AppImageBackupStatusType.error
             ? styles.errorContainer
             : styles.successContainer,
+            {backgroundColor:status.color}
         ]}
         onPress={onPress}>
         <AppText style={styles.text}>{status.message}</AppText>
@@ -94,7 +99,7 @@ export const AppImageBackupBanner = () => {
           onDismiss={() => setVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
-            {'App image backup has failed, tap on the banner to try again'}
+            {common.appImageBackupFailureTooltip}
           </AppText>
         </Modal>
       </Portal>
@@ -111,14 +116,13 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : Platform.OS === 'ios' && windowHeight > 820
         ? 50
         : Platform.OS === 'android'
-        ? 40
+        ? 35
         : 16,
       left: 0,
       right: 0,
       zIndex: 1000,
       alignItems: 'flex-start',
       paddingHorizontal: wp(16),
-      backgroundColor: Colors.GOGreen,
     },
     errorContainer: {
       position: Platform.OS === 'ios' ? 'absolute' : 'relative',
@@ -131,7 +135,6 @@ const getStyles = (theme: AppTheme, hasNotch) =>
         : 16,
       left: 0,
       right: 0,
-      backgroundColor: Colors.FireOpal,
       zIndex: 1000,
       flexDirection: 'row',
       justifyContent: 'space-between',
