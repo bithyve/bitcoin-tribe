@@ -1,5 +1,3 @@
-
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import { RealmSchema } from 'src/storage/enum';
 import RealmDatabase from 'src/storage/realm/realm';
 
@@ -28,7 +26,6 @@ export class RoomStorage {
   static async saveRoom(room: HolepunchRoom): Promise<void> {
     try {
       RealmDatabase.create(RealmSchema.HolepunchRoom, room, 'modified');
-      ApiHandler.backupAppImage({room});
       console.log('[RoomStorage] Room saved:', room.roomId);
     } catch (error) {
       console.error('[RoomStorage] Failed to save room:', error);

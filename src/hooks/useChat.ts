@@ -3,7 +3,7 @@
  * React hook for using Holepunch P2P chat.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { ChatService } from '../services/messaging/ChatService';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';
@@ -12,6 +12,7 @@ import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepun
 import { HolepunchMessage, HolepunchMessageType } from 'src/services/messaging/holepunch/storage/MessageStorage';
 import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
 import { PeerStorage } from 'src/services/messaging/holepunch/storage/PeerStorage';
+import { AppContext } from 'src/contexts/AppContext';
 
 interface UseChatResult {
   // State
@@ -62,6 +63,7 @@ export function useChat(): UseChatResult {
   const chatService = ChatService.getInstance();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
   const seed = app.primarySeed.toString();
+  const { setAppImageBackupStatus } = useContext(AppContext);
 
   // Initialize service (starts worklet, waits for root peer)
   useEffect(() => {
@@ -165,7 +167,7 @@ export function useChat(): UseChatResult {
     setError(null);
     try {
       const adapter = chatService.getAdapter();
-      await adapter.createRoom(roomName, roomType, roomDescription, roomImage, roomKeyToJoin);
+      await adapter.createRoom(roomName, roomType, roomDescription, roomImage, roomKeyToJoin, setAppImageBackupStatus);
     } catch (err: any) {
       setError(err.message);
       throw err;

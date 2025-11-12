@@ -84,6 +84,7 @@ import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 import  RealmDatabase  from 'src/storage/realm/realm';
+import { AppImageBackupStatusType } from 'src/components/AppImageBackupBanner';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -3223,7 +3224,7 @@ export class ApiHandler {
     return { claimed: false, error: receiveData.error };
   }
 
-  static async backupAppImage({
+  static async backupAppImage(setAppImageBackupStatus,{
     settings = false,
     room = null,
     all = false,
@@ -3232,6 +3233,7 @@ export class ApiHandler {
     room?: null | any;
     all?: boolean;
   }) {
+    setAppImageBackupStatus(AppImageBackupStatusType.loading)
     try {
       const app: any = dbManager.getCollection(RealmSchema.TribeApp)[0];
       const encryptionKey = generateEncryptionKey(app.primaryMnemonic);
@@ -3264,17 +3266,19 @@ export class ApiHandler {
         const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
           roomsObject[room.roomId] = encryptedRoom;
       }
-      const appImageBackup = await Relay.createAppImageBackup(
+       await Relay.createAppImageBackup(
         app.id,
         app.publicId,
         roomsObject,
         settingsObject,
       );
+      setAppImageBackupStatus(AppImageBackupStatusType.success)
       return {
         status: true,
         message: 'App image backup created successfully',
       };
     } catch (err) {
+      setAppImageBackupStatus(AppImageBackupStatusType.error)
       console.log('🚀 ~ ApiHandler ~ backupAppImage ~ err:', err);
       return {
         status: false,
