@@ -554,7 +554,6 @@ export class ApiHandler {
             const decryptedData = JSON.parse(decrypted);
             Object.entries(decryptedData).forEach(
               ([key, value]: [Keys, any]) => {
-                console.log(key, value);
                 Storage.set(key, value);
               },
             );
@@ -572,6 +571,9 @@ export class ApiHandler {
         } catch (error) {
           console.log('🚀 AppRestoreFailed: ', error);
         }
+        // disabled first app image backup, since already restored from backup 
+        if(backup.app.settingsObject || backup.app.roomsObject)
+          Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
         // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
