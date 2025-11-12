@@ -83,6 +83,7 @@ import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import  RealmDatabase  from 'src/storage/realm/realm';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -544,7 +545,32 @@ export class ApiHandler {
           {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
-        );
+        );    
+        const encryptionKey = generateEncryptionKey(mnemonic);
+        try {
+          if (backup.app.settingsObject) {
+            const decrypted = decrypt(encryptionKey, backup.app.settingsObject);
+            const decryptedData = JSON.parse(decrypted);
+            Object.entries(decryptedData).forEach(
+              ([key, value]: [Keys, any]) => {
+                console.log(key, value);
+                Storage.set(key, value);
+              },
+            );
+          }
+          if (backup.app.roomsObject) {
+            let rooms = [];
+            Object.entries(backup.app.roomsObject).forEach(
+              ([key, value]: [string, string]) => {
+                const decryptedData = JSON.parse(decrypt(encryptionKey, value));
+                rooms.push(decryptedData);
+              },
+            );
+            RealmDatabase.createBulk(RealmSchema.HolepunchRoom, rooms, 'modified')
+          }
+        } catch (error) {
+          console.log('🚀 AppRestoreFailed: ', error);
+        }
         // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
@@ -3195,5 +3221,63 @@ export class ApiHandler {
       return response;
     }
     return { claimed: false, error: receiveData.error };
+  }
+
+  static async backupAppImage({
+    settings = false,
+    rooms = false,
+    all = false,
+  }: {
+    settings?: boolean;
+    rooms?: boolean;
+    all?: boolean;
+  }) {
+    try {
+      const app: any = dbManager.getCollection(RealmSchema.TribeApp)[0];
+      const encryptionKey = generateEncryptionKey(app.primaryMnemonic);
+      let settingsObject = '';
+      let roomsObject = {};
+
+      if (all || settings) {
+        const keys = [
+          Keys.APP_CURRENCY,
+          Keys.APP_LANGUAGE,
+          Keys.CURRENCY_MODE,
+        ];
+
+        settingsObject = Object.fromEntries(
+          keys
+            .map(key => [key, Storage.get(key)])
+            .filter(([, value]) => value !== undefined && value !== null),
+        );
+        settingsObject = encrypt(encryptionKey, JSON.stringify(settingsObject));
+      }
+
+      if (all || rooms) {
+        const rooms = dbManager.getCollection(RealmSchema.HolepunchRoom);
+        for (const index in rooms) {
+          const room = rooms[index];
+          const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
+          roomsObject[room.roomId] = encryptedRoom;
+        }
+      }
+
+      const appImageBackup = await Relay.createAppImageBackup(
+        app.id,
+        app.publicId,
+        roomsObject,
+        settingsObject,
+      );
+      return {
+        status: true,
+        message: 'App image backup created successfully',
+      };
+    } catch (err) {
+      console.log('🚀 ~ ApiHandler ~ backupAppImage ~ err:', err);
+      return {
+        status: false,
+        message: 'App image backup failed',
+      };
+    }
   }
 }
