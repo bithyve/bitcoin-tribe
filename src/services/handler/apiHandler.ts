@@ -3262,7 +3262,8 @@ export class ApiHandler {
         for (const index in rooms) {
           const room = rooms[index];
           const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
-          roomsObject[room.roomId] = encryptedRoom;
+          const encryptedRoomId = encrypt(encryptionKey, room.roomId);
+          roomsObject[encryptedRoomId] = encryptedRoom;
         }
       } else if (room){
         const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
