@@ -98,7 +98,7 @@ export class ChatAdapter extends EventEmitter {
    * Create a new chat room
    * Generates room key, derives topic, saves metadata
    */
-  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string, setAppImageBackupStatus?:(status:string)=>void): Promise<HolepunchRoom> {
+  async createRoom(roomName: string, roomType: HolepunchRoomType, roomDescription: string, roomImage?: string, roomKeyToJoin?: string): Promise<HolepunchRoom> {
 
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
@@ -139,9 +139,7 @@ export class ChatAdapter extends EventEmitter {
 
     // Save to storage
     await RoomStorage.saveRoom(this.currentRoom);
-    ApiHandler.backupAppImage(setAppImageBackupStatus, {
-      room: this.currentRoom,
-    });
+    ApiHandler.backupAppImage({room: this.currentRoom});
     console.log('[ChatAdapter] ✅ Room created:', this.currentRoom.roomName);
     this.emit('chat:room-created', this.currentRoom);
     return this.currentRoom;

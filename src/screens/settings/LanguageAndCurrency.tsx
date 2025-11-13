@@ -23,7 +23,6 @@ import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { AppContext } from 'src/contexts/AppContext';
 
 function LanguageAndCurrency() {
   const navigation = useNavigation();
@@ -40,7 +39,6 @@ function LanguageAndCurrency() {
     Keys.CURRENCY_MODE,
   );
   const updated = useRef(false);
-  const { setAppImageBackupStatus } = useContext(AppContext);
 
    useEffect(() => {
     updated.current = true;
@@ -49,7 +47,7 @@ function LanguageAndCurrency() {
   useEffect(() => {
    return ()=>{
     updated.current &&
-      ApiHandler.backupAppImage(setAppImageBackupStatus, { settings: true });
+      ApiHandler.backupAppImage({ settings: true });
    }
   }, [navigation]);
 

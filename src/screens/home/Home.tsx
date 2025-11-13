@@ -84,7 +84,6 @@ function HomeScreen() {
     setNodeConnected,
     setIsWalletOnline,
     isWalletOnline,
-    setAppImageBackupStatus
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
   const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
@@ -337,9 +336,7 @@ function HomeScreen() {
   useEffect(() => {
     const checkFirstAppImageBackup = async () => {
       if (!isFirstAppImageBackupCompleted) {
-        const res = await ApiHandler.backupAppImage(setAppImageBackupStatus, {
-          all: true,
-        });
+        const res = await ApiHandler.backupAppImage({all: true});
         setIsFirstAppImageBackupCompleted(res.status);
       }
     };

@@ -3226,7 +3226,7 @@ export class ApiHandler {
     return { claimed: false, error: receiveData.error };
   }
 
-  static async backupAppImage(setAppImageBackupStatus,{
+  static async backupAppImage({
     settings = false,
     room = null,
     all = false,
@@ -3235,7 +3235,7 @@ export class ApiHandler {
     room?: null | any;
     all?: boolean;
   }) {
-    setAppImageBackupStatus(AppImageBackupStatusType.loading)
+    Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, false);
     try {
       const app: any = dbManager.getCollection(RealmSchema.TribeApp)[0];
       const encryptionKey = generateEncryptionKey(app.primaryMnemonic);
@@ -3274,13 +3274,12 @@ export class ApiHandler {
         roomsObject,
         settingsObject,
       );
-      setAppImageBackupStatus(AppImageBackupStatusType.success)
       return {
         status: true,
         message: 'App image backup created successfully',
       };
     } catch (err) {
-      setAppImageBackupStatus(AppImageBackupStatusType.error)
+      Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, true);
       console.log('🚀 ~ ApiHandler ~ backupAppImage ~ err:', err);
       return {
         status: false,

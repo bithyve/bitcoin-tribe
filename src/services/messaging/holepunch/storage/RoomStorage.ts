@@ -1,3 +1,4 @@
+
 import { RealmSchema } from 'src/storage/enum';
 import RealmDatabase from 'src/storage/realm/realm';
 

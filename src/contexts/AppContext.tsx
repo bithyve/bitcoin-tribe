@@ -38,8 +38,6 @@ reSyncingWallet: false,
   setIsVerifyDomainInfoVisible: status => {},
   communityStatus:null,
   setCommunityStatus:status=>{},
-  appImageBackupStatus:null,
-  setAppImageBackupStatus: status => {}
 });
 
 export function AppProvider({ children }) {
@@ -69,7 +67,6 @@ export function AppProvider({ children }) {
     useMMKVBoolean(Keys.VERIFY_DOMAIN_INFO);
   const isVerifyDomainInfoVisible = isVerifyDomainInfoVisibleMMKV ?? true;
   const [communityStatus, setCommunityStatus] = useState(null);
-  const [appImageBackupStatus, setAppImageBackupStatus] = useState(AppImageBackupStatusType.idle);
   return (
     <AppContext.Provider
       value={{
@@ -105,8 +102,6 @@ export function AppProvider({ children }) {
         setIsVerifyDomainInfoVisible: setIsVerifyDomainInfoVisibleMMKV,
         communityStatus,
         setCommunityStatus:setCommunityStatus,
-        appImageBackupStatus,
-        setAppImageBackupStatus:setAppImageBackupStatus
       }}>
       {children}
     </AppContext.Provider>
