@@ -67,7 +67,7 @@ function SettingMenuItem({
 
       <SettingSectionList
         data={AdvancedMenu}
-        sectionTitle={'Advanced Options'}
+        sectionTitle={settings.advancedOptionsTitle}
         isDanger
       />
 

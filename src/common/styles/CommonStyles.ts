@@ -13,10 +13,20 @@ export default StyleSheet.create({
     fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
   },
+  heading2Bold: {
+    fontSize: 20,
+    fontWeight: '400',
+    fontFamily: Fonts.LufgaMedium,
+  },
   heading3: {
     fontSize: 18,
     fontWeight: '400',
     fontFamily: Fonts.LufgaMedium,
+  },
+  heading3SemiBold: {
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: Fonts.LufgaSemiBold,
   },
   pageTitle1: {
     fontSize: 48,
@@ -41,6 +51,12 @@ export default StyleSheet.create({
     fontFamily: Fonts.LufgaRegular,
     lineHeight: 16 * 1.6,
   },
+  body1Bold: {
+    fontSize: 16,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaMedium,
+    lineHeight: 16*1.4,
+  },
   body2: {
     fontSize: 14,
     fontWeight: '400',
@@ -51,6 +67,11 @@ export default StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     fontFamily: Fonts.LufgaRegular,
+  },
+  captionBold: {
+    fontSize: 12,
+    fontWeight: '500',
+    fontFamily: Fonts.LufgaMedium,
   },
   // Should be removed - body 3, 4, 5, 6 and 7
   body3: {
@@ -98,5 +119,10 @@ export default StyleSheet.create({
   walletBalance: {
     fontSize: 39,
     fontFamily: Fonts.LufgaSemiBold,
+  },
+  muted: {
+    fontSize: 10,
+    fontFamily: Fonts.LufgaRegular,
+    fontWeight: '400',
   },
 });

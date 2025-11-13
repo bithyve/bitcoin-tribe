@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, Linking, StyleSheet, View } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
@@ -16,7 +16,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import WalletOperations from 'src/services/wallets/operations';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import useWallets from 'src/hooks/useWallets';
-import { fetchRampReservation } from 'src/services/thirdparty/ramp';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { RealmSchema } from 'src/storage/enum';
+import Relay from 'src/services/relay';
+import { useQuery } from '@realm/react';
+import Toast from 'src/components/Toast';
 
 function GetBTCWithRamp() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -27,13 +31,29 @@ function GetBTCWithRamp() {
   const wallet: Wallet = useWallets({}).wallets[0];
   const { receivingAddress } =
     WalletOperations.getNextFreeExternalAddress(wallet);
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const [loading, setLoading] = useState(false);
 
-  const redirectBuyBtc = () => {
-    const rampUrl = fetchRampReservation({ receiveAddress: receivingAddress });
-    if (typeof rampUrl === 'string') {
-      Linking.openURL(rampUrl);
-    } else {
-      console.error('Ramp URL generation failed:', rampUrl.error);
+  const redirectBuyBtc = async () => {
+    if(loading) return 
+    setLoading(true);
+    try {
+      const response = await Relay.getRampUrl(
+        receivingAddress,
+        app.id,
+        app.publicId,
+      );
+      if (typeof response?.url === 'string') {
+        await Linking.openURL(response.url);
+      } else {
+        Toast('Something went wrong.', true);
+        console.error('Ramp URL generation failed:', response?.error);
+      }
+    } catch (error) {
+      Toast('Something went wrong.', true);
+      console.log('🚀 ~ redirectBuyBtc ~ error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,6 +118,7 @@ function GetBTCWithRamp() {
           primaryTitle={common.proceed}
           primaryOnPress={redirectBuyBtc}
           width={'100%'}
+          primaryLoading={loading}
         />
       </View>
     </ScreenContainer>

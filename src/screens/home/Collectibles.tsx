@@ -18,6 +18,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  Collection,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -26,6 +27,7 @@ import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp } from 'src/constants/responsive';
+import DeepLinking from 'src/utils/DeepLinking';
 
 function Collectibles() {
   const theme: AppTheme = useTheme();
@@ -36,32 +38,15 @@ function Collectibles() {
 
   const navigation = useNavigation();
   const {
-    setBackupProcess,
-    setBackupDone,
-    setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
     isNodeInitInProgress,
   } = useContext(AppContext);
 
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
-    onSuccess: () => {
-      setBackupDone(true);
-      setTimeout(() => {
-        setBackupDone(false);
-        setManualAssetBackupStatus(true);
-      }, 1500);
-    },
-  });
-  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
-    ApiHandler.isBackupRequired,
-  );
-
   const refreshRgbWallet = useMutation({
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app.appType === AppType.ON_CHAIN) {
-        checkBackupRequired();
       }
     },
   });
@@ -74,9 +59,12 @@ function Collectibles() {
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
-    RealmSchema.UniqueDigitalAsset,
+    RealmSchema.UniqueDigitalAsset, 
     collection =>
-      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+      collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.appLinkScheme}'`, AssetVisibility.HIDDEN),
+  );
+  const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
@@ -94,20 +82,10 @@ function Collectibles() {
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
-    return [...coins, ...collectibles, ...udas]
+    return [...coins, ...collectibles, ...udas, ...collections]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles, udas, coins]);
-
-  useEffect(() => {
-    setBackupProcess(isLoading);
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (isBackupRequired) {
-      backupMutate();
-    }
-  }, [isBackupRequired]);
+  }, [collectibles, udas, coins, collections]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -126,7 +104,6 @@ function Collectibles() {
     }
     setRefreshing(true);
     refreshRgbWallet.mutate();
-    checkBackupRequired();
     refreshWallet.mutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };
@@ -157,6 +134,10 @@ function Collectibles() {
           ) {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
+            });
+          } else if(asset.slug) {
+            handleNavigation(NavigationRoutes.COLLECTIONDETAILS, {
+              collectionId: asset._id,
             });
           } else {
             handleNavigation(NavigationRoutes.UDADETAILS, {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -27,6 +27,8 @@ import LightningPendingIcon from 'src/assets/images/lightningPendingTxnIcon.svg'
 import ServiceFeeIcon from 'src/assets/images/serviceFeeIcon.svg';
 import ServiceFeeIconLight from 'src/assets/images/serviceFeeIcon_light.svg';
 import { TransactionKind, TransactionType } from 'src/services/wallets/enums';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { SizedBox } from 'src/components/SizedBox';
 
 type WalletTransactionsProps = {
   transId: string;
@@ -58,6 +60,8 @@ function WalletTransactions(props: WalletTransactionsProps) {
   const [currentCurrencyMode] = useMMKVString(Keys.CURRENCY_MODE);
   const initialCurrencyMode = currentCurrencyMode || CurrencyKind.SATS;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
 
   const getStatusIcon = (status, type, isThemeDark, confirmations) => {
     const icons = {
@@ -152,13 +156,13 @@ function WalletTransactions(props: WalletTransactionsProps) {
             )}
           </View>
           <View style={styles.contentWrapper}>
-            <AppText
+          <AppText
               variant="body1"
               numberOfLines={1}
               ellipsizeMode="middle"
               style={styles.transIdText}>
               {transKind === TransactionKind.SERVICE_FEE
-                ? 'Platform Fee'
+                ? assets.platformFeeTitle
                 : transId}
             </AppText>
             <AppText variant="caption" style={styles.transDateText}>
@@ -166,6 +170,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
             </AppText>
           </View>
         </View>
+        <SizedBox width={10}/>
         <View style={styles.amountWrapper}>
           <View style={styles.amtIconWrapper}>
             {initialCurrencyMode !== CurrencyKind.SATS &&
@@ -206,7 +211,6 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     container: {
       flexDirection: 'row',
-      width: '100%',
       alignItems: 'center',
       backgroundColor: backColor,
       paddingVertical: backColor ? hp(20) : 0,
@@ -217,11 +221,12 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     transDetailsWrapper: {
       flexDirection: 'row',
-      width: '50%',
+      flex:1,
       alignItems: 'center',
     },
     contentWrapper: {
       marginLeft: 10,
+      flex:1
     },
     transIdText: {
       lineHeight: 25,
@@ -232,12 +237,9 @@ const getStyles = (theme: AppTheme, backColor) =>
     },
     amountWrapper: {
       flexDirection: 'row',
-      width: '50%',
-      alignItems: 'center',
       justifyContent: 'space-between',
     },
     amtIconWrapper: {
-      flex: 1,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-end',

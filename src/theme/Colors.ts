@@ -61,8 +61,14 @@ const Colors = {
   DarkGunmetal: 'rgba(19, 29, 45,1)',
   ChineseBlack1: 'rgba(18, 18, 18, 0.2)',
   Cultured: 'rgba(245, 245, 245,1)',
-  ElectricViolet: 'rgba(137, 4, 249,1)',
+  ElectricViolet: 'rgba(137, 4, 249, 1)',
   imageOverlay: 'rgba(0,0,0,0.6)',
   SpanishGray: 'rgba(153, 153, 153,1)',
+  // Options card gradient
+  CharcoalGray: 'rgba(36, 38, 43, 1)',
+  CloudGray:'rgba(229, 229, 229, 1)',
+  mediumGray: 'rgba(120, 120, 120, 1)',
+  Gray48: 'rgba(120, 120, 120, 1)',
+  AmberBlaze:"rgba(255, 149, 0, 1)"
 };
 export default Colors;

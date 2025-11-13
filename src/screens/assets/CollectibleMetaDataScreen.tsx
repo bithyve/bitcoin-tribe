@@ -22,7 +22,7 @@ import moment from 'moment';
 import { useTheme } from 'react-native-paper';
 
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
 import {
@@ -64,6 +64,7 @@ import DownloadIcon from 'src/assets/images/downloadIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import RegistryIconLight from 'src/assets/images/registryIcon_light.svg';
 import RegistryIcon from 'src/assets/images/registryIcon.svg';
+import ImageViewing from 'react-native-image-viewing';
 
 type itemProps = {
   title: string;
@@ -130,6 +131,8 @@ const CollectibleMetaDataScreen = () => {
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
     useState(false);
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
+  const [imageSize, setImageSize] = useState(null);
+  const [visible, setVisible] = useState(false);
 
   const twitterVerification = collectible?.issuer?.verifiedBy?.find(
     v =>
@@ -223,6 +226,24 @@ const CollectibleMetaDataScreen = () => {
     refreshToggle,
   ]);
 
+  useEffect(() => {
+    Image.getSize(
+      Platform.select({
+        android: `file://${collectible.media?.filePath}`,
+        ios: `${collectible.media?.filePath}`,
+      }),
+      (width, height) => {
+        const ratio = height / width;
+        const maxWidth = windowWidth - wp(30);
+        const scaledHeight = maxWidth * ratio;
+        setImageSize({ width: maxWidth, height: scaledHeight });
+      },
+      error => {
+        console.error('Failed to get image size', error);
+      },
+    );
+  }, [collectible?.media?.filePath]);
+
   return (
     <ScreenContainer style={styles.container}>
       <AppHeader
@@ -259,16 +280,26 @@ const CollectibleMetaDataScreen = () => {
                 }}>
                 <DownloadIcon />
               </AppTouchable>
-              <Image
-                source={{
-                  uri: Platform.select({
-                    android: `file://${collectible.media?.filePath}`,
-                    ios: collectible.media?.filePath,
-                  }),
-                }}
-                resizeMode="cover"
-                style={styles.imageStyle}
-              />
+              {imageSize && (
+                <AppTouchable onPress={() => setVisible(true)}>
+                  <Image
+                    source={{
+                      uri: Platform.select({
+                        android: `file://${collectible.media?.filePath}`,
+                        ios: collectible.media?.filePath,
+                      }),
+                    }}
+                    resizeMode="cover"
+                    style={[
+                      styles.imageStyle,
+                      {
+                        width: imageSize.width,
+                        height: Math.min(imageSize.height, windowHeight / 2),
+                      },
+                    ]}
+                  />
+                </AppTouchable>
+              )}
             </View>
             <View style={styles.wrapper}>
               <IssuerVerified
@@ -470,6 +501,19 @@ const CollectibleMetaDataScreen = () => {
           </ScrollView>
         </>
       )}
+      <ImageViewing
+        images={[
+          {
+            uri: Platform.select({
+              android: `file://${collectible.media?.filePath}`,
+              ios: collectible.media?.filePath,
+            }),
+          },
+        ]}
+        imageIndex={0}
+        visible={visible}
+        onRequestClose={() => setVisible(false)}
+      />
     </ScreenContainer>
   );
 };
@@ -524,7 +568,7 @@ const getStyles = (theme: AppTheme) =>
     },
     imageStyle: {
       width: '100%',
-      height: hp(280),
+      height: '100%',
       borderRadius: 10,
       alignSelf: 'center',
       marginBottom: hp(25),

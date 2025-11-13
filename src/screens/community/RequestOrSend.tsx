@@ -172,7 +172,7 @@ const RequestOrSend = () => {
           txid: '',
           type: RequestType.RequestSats,
           status: RequestStatus.Pending,
-          createdBy: app.contactsKey.publicKey,
+          createdBy: app.publicId,
           createdAt: Date.now(),
           updatedAt: Date.now(),
           notes: '',

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bitcoin Tribe</string>
+    <string name="deeplink_host">bitcointribe.app</string>
+    <string name="deeplink_path_prefix">/app/prod</string>
 </resources>

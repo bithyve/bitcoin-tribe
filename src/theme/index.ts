@@ -109,6 +109,11 @@ type CustomColors = {
   unlockCtaBackColor: string;
   removeProfileTitle: string;
   onboardingBackColor: string;
+  optionsCardGradient1:string;
+  optionsCardGradient2:string;
+  roundedCtaBg:string;
+  separator:string;
+  mutedTab:string;
 };
 
 type PaperColors = MD2Theme['colors'];
@@ -226,6 +231,11 @@ const CombinedDefaultTheme: AppTheme = {
     unlockCtaBackColor: Colors.GOGreen,
     removeProfileTitle: Colors.FireOpal,
     onboardingBackColor: Colors.BrightGray,
+    optionsCardGradient1: Colors.GhostWhite,
+    optionsCardGradient2: Colors.CloudGray,
+    roundedCtaBg:Colors.White,
+    separator:Colors.Platinum,
+    mutedTab:Colors.ChineseSilver
   },
   fonts: {
     regular: {
@@ -351,6 +361,11 @@ const CombinedDarkTheme: AppTheme = {
     unlockCtaBackColor: Colors.UFOGreen1,
     removeProfileTitle: Colors.FireOpal,
     onboardingBackColor: Colors.ChineseBlack,
+    optionsCardGradient1: Colors.Black,
+    optionsCardGradient2: Colors.CharcoalGray,
+    roundedCtaBg:Colors.CharcoalGray,
+    separator:Colors.CharcoalGray,
+    mutedTab:Colors.Gray48
   },
   fonts: {
     regular: {

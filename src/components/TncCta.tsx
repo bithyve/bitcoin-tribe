@@ -35,7 +35,7 @@ const TncCta = () => {
           onPress={() => setShowTerms(true)}
           style={[
             CommonStyles.body2,
-            { color: theme.colors.secondaryHeadingColor },
+            { color: theme.colors.secondaryHeadingColor, maxWidth:'95%' },
           ]}
           maxFontSizeMultiplier={1}>
           {onBoarding.termsText}

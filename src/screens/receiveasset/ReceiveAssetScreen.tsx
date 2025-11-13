@@ -16,7 +16,11 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import { ApiHandler } from 'src/services/handler/apiHandler';
-import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
+import {
+  InvoiceMode,
+  RgbUnspent,
+  RGBWallet,
+} from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import Toast from 'src/components/Toast';
 import { Keys } from 'src/storage';
@@ -44,6 +48,7 @@ function ReceiveAssetScreen() {
   const amount = route.params.amount || 0;
   const selectedType = route.params.selectedType || 'bitcoin';
   const invoiceExpiry = route.params.invoiceExpiry || 86400;
+  const invoiceType = route.params.invoiceType || InvoiceMode.Blinded;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -70,13 +75,14 @@ function ReceiveAssetScreen() {
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
       if (assetId === '') {
-        if (colorable.length > 0) {
+        if (invoiceType === InvoiceMode.Witness || colorable.length > 0) {
           mutate({
             assetId,
             amount,
             linkedAsset: '',
             linkedAmount: 0,
             expiry: invoiceExpiry,
+            blinded: invoiceType === InvoiceMode.Blinded,
           });
         } else {
           createUtxos();
@@ -89,13 +95,14 @@ function ReceiveAssetScreen() {
         });
       }
     } else {
-      if (colorable.length > 0) {
+      if (invoiceType === InvoiceMode.Witness || colorable.length > 0) {
         mutate({
           assetId,
           amount,
           linkedAsset: assetId,
           linkedAmount: amount,
           expiry: invoiceExpiry,
+          blinded: invoiceType === InvoiceMode.Blinded,
         });
       } else {
         createUtxos();
@@ -120,6 +127,7 @@ function ReceiveAssetScreen() {
               linkedAsset: assetId,
               linkedAmount: amount,
               expiry: invoiceExpiry,
+              blinded: invoiceType === InvoiceMode.Blinded,
             });
           }, 100);
           return true;
@@ -160,13 +168,18 @@ function ReceiveAssetScreen() {
         linkedAsset: '',
         linkedAmount: 0,
         expiry: invoiceExpiry,
+        blinded: invoiceType === InvoiceMode.Blinded,
       });
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
       refreshRgbWallet.mutate();
       navigation.goBack();
-      Toast(assets.assetProcessErrorMsg, true);
+      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+        Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      } else {
+        Toast(assets.assetProcessErrorMsg, true);
+      }
       // Toast(`${createUtxoError}`, true);
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
@@ -191,6 +204,7 @@ function ReceiveAssetScreen() {
           linkedAsset: '',
           linkedAmount: 0,
           expiry: invoiceExpiry,
+          blinded: invoiceType === InvoiceMode.Blinded,
         });
       }
     }
@@ -223,6 +237,7 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
         onBackNavigation={() =>
+          navigation.canGoBack? navigation.goBack() :
           navigation.dispatch(
             CommonActions.reset({
               index: 1,
@@ -231,27 +246,25 @@ function ReceiveAssetScreen() {
           )
         }
       />
-      {loading ? (
-        <View>
-          <ResponsePopupContainer
-            visible={loading}
-            enableClose={true}
-            backColor={theme.colors.modalBackColor}
-            borderColor={theme.colors.modalBackColor}>
-            <InProgessPopupContainer
-              title={assets.requestInvoiceProcessTitle}
-              subTitle={assets.requestInvoiceProcessSubTitle}
-              illustrationPath={
-                isThemeDark
-                  ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
-                  : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
-              }
-            />
-          </ResponsePopupContainer>
-        </View>
-      ) : error ? (
-        <View />
-      ) : (
+
+      <View>
+        <ResponsePopupContainer
+          visible={loading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}>
+          <InProgessPopupContainer
+            title={assets.requestInvoiceProcessTitle}
+            subTitle={assets.requestInvoiceProcessSubTitle}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
+                : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
+            }
+          />
+        </ResponsePopupContainer>
+      </View>
+      {!loading && !error && (
         <View>
           <View style={styles.detailsContainer}>
             <ShowQRCode
@@ -276,6 +289,7 @@ function ReceiveAssetScreen() {
             title={common.note}
             subTitle={formatString(receciveScreen.noteSubTitle, {
               time: invoiceExpiry / 3600,
+              type: invoiceType === InvoiceMode.Witness ? 'witness' : 'blinded',
             })}
             customStyle={styles.advanceOptionStyle}
           />

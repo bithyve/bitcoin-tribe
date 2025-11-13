@@ -1109,7 +1109,7 @@ public func FfiConverterTypeTransportEndpoint_lower(_ value: TransportEndpoint) 
 
 public protocol WalletProtocol: AnyObject, Sendable {
     
-    func backup(backupPath: String, password: String) throws 
+    func backup(backupPath: String, password: String) throws
     
     func backupInfo() throws  -> Bool
     
@@ -1183,7 +1183,7 @@ public protocol WalletProtocol: AnyObject, Sendable {
     
     func signPsbt(unsignedPsbt: String) throws  -> String
     
-    func sync(online: Online) throws 
+    func sync(online: Online) throws
     
     func witnessReceive(assetId: String?, assignment: Assignment, durationSeconds: UInt32?, transportEndpoints: [String], minConfirmations: UInt8) throws  -> ReceiveData
     
@@ -1773,14 +1773,14 @@ public struct FfiConverterTypeAssetCFA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetCfa {
         return
             try AssetCfa(
-                assetId: FfiConverterString.read(from: &buf), 
-                name: FfiConverterString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                precision: FfiConverterUInt8.read(from: &buf), 
-                issuedSupply: FfiConverterUInt64.read(from: &buf), 
-                timestamp: FfiConverterInt64.read(from: &buf), 
-                addedAt: FfiConverterInt64.read(from: &buf), 
-                balance: FfiConverterTypeBalance.read(from: &buf), 
+                assetId: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                precision: FfiConverterUInt8.read(from: &buf),
+                issuedSupply: FfiConverterUInt64.read(from: &buf),
+                timestamp: FfiConverterInt64.read(from: &buf),
+                addedAt: FfiConverterInt64.read(from: &buf),
+                balance: FfiConverterTypeBalance.read(from: &buf),
                 media: FfiConverterOptionTypeMedia.read(from: &buf)
         )
     }
@@ -1905,15 +1905,15 @@ public struct FfiConverterTypeAssetIFA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetIfa {
         return
             try AssetIfa(
-                assetId: FfiConverterString.read(from: &buf), 
-                ticker: FfiConverterString.read(from: &buf), 
-                name: FfiConverterString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                precision: FfiConverterUInt8.read(from: &buf), 
-                issuedSupply: FfiConverterUInt64.read(from: &buf), 
-                timestamp: FfiConverterInt64.read(from: &buf), 
-                addedAt: FfiConverterInt64.read(from: &buf), 
-                balance: FfiConverterTypeBalance.read(from: &buf), 
+                assetId: FfiConverterString.read(from: &buf),
+                ticker: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                precision: FfiConverterUInt8.read(from: &buf),
+                issuedSupply: FfiConverterUInt64.read(from: &buf),
+                timestamp: FfiConverterInt64.read(from: &buf),
+                addedAt: FfiConverterInt64.read(from: &buf),
+                balance: FfiConverterTypeBalance.read(from: &buf),
                 media: FfiConverterOptionTypeMedia.read(from: &buf)
         )
     }
@@ -2039,15 +2039,15 @@ public struct FfiConverterTypeAssetNIA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetNia {
         return
             try AssetNia(
-                assetId: FfiConverterString.read(from: &buf), 
-                ticker: FfiConverterString.read(from: &buf), 
-                name: FfiConverterString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                precision: FfiConverterUInt8.read(from: &buf), 
-                issuedSupply: FfiConverterUInt64.read(from: &buf), 
-                timestamp: FfiConverterInt64.read(from: &buf), 
-                addedAt: FfiConverterInt64.read(from: &buf), 
-                balance: FfiConverterTypeBalance.read(from: &buf), 
+                assetId: FfiConverterString.read(from: &buf),
+                ticker: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                precision: FfiConverterUInt8.read(from: &buf),
+                issuedSupply: FfiConverterUInt64.read(from: &buf),
+                timestamp: FfiConverterInt64.read(from: &buf),
+                addedAt: FfiConverterInt64.read(from: &buf),
+                balance: FfiConverterTypeBalance.read(from: &buf),
                 media: FfiConverterOptionTypeMedia.read(from: &buf)
         )
     }
@@ -2173,15 +2173,15 @@ public struct FfiConverterTypeAssetUDA: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssetUda {
         return
             try AssetUda(
-                assetId: FfiConverterString.read(from: &buf), 
-                ticker: FfiConverterString.read(from: &buf), 
-                name: FfiConverterString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                precision: FfiConverterUInt8.read(from: &buf), 
-                issuedSupply: FfiConverterUInt64.read(from: &buf), 
-                timestamp: FfiConverterInt64.read(from: &buf), 
-                addedAt: FfiConverterInt64.read(from: &buf), 
-                balance: FfiConverterTypeBalance.read(from: &buf), 
+                assetId: FfiConverterString.read(from: &buf),
+                ticker: FfiConverterString.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                precision: FfiConverterUInt8.read(from: &buf),
+                issuedSupply: FfiConverterUInt64.read(from: &buf),
+                timestamp: FfiConverterInt64.read(from: &buf),
+                addedAt: FfiConverterInt64.read(from: &buf),
+                balance: FfiConverterTypeBalance.read(from: &buf),
                 token: FfiConverterOptionTypeTokenLight.read(from: &buf)
         )
     }
@@ -2271,9 +2271,9 @@ public struct FfiConverterTypeAssets: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Assets {
         return
             try Assets(
-                nia: FfiConverterOptionSequenceTypeAssetNIA.read(from: &buf), 
-                uda: FfiConverterOptionSequenceTypeAssetUDA.read(from: &buf), 
-                cfa: FfiConverterOptionSequenceTypeAssetCFA.read(from: &buf), 
+                nia: FfiConverterOptionSequenceTypeAssetNIA.read(from: &buf),
+                uda: FfiConverterOptionSequenceTypeAssetUDA.read(from: &buf),
+                cfa: FfiConverterOptionSequenceTypeAssetCFA.read(from: &buf),
                 ifa: FfiConverterOptionSequenceTypeAssetIFA.read(from: &buf)
         )
     }
@@ -2357,9 +2357,9 @@ public struct FfiConverterTypeAssignmentsCollection: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> AssignmentsCollection {
         return
             try AssignmentsCollection(
-                fungible: FfiConverterUInt64.read(from: &buf), 
-                nonFungible: FfiConverterBool.read(from: &buf), 
-                inflation: FfiConverterUInt64.read(from: &buf), 
+                fungible: FfiConverterUInt64.read(from: &buf),
+                nonFungible: FfiConverterBool.read(from: &buf),
+                inflation: FfiConverterUInt64.read(from: &buf),
                 replace: FfiConverterUInt8.read(from: &buf)
         )
     }
@@ -2437,8 +2437,8 @@ public struct FfiConverterTypeBalance: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Balance {
         return
             try Balance(
-                settled: FfiConverterUInt64.read(from: &buf), 
-                future: FfiConverterUInt64.read(from: &buf), 
+                settled: FfiConverterUInt64.read(from: &buf),
+                future: FfiConverterUInt64.read(from: &buf),
                 spendable: FfiConverterUInt64.read(from: &buf)
         )
     }
@@ -2509,7 +2509,7 @@ public struct FfiConverterTypeBlockTime: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BlockTime {
         return
             try BlockTime(
-                height: FfiConverterUInt32.read(from: &buf), 
+                height: FfiConverterUInt32.read(from: &buf),
                 timestamp: FfiConverterUInt64.read(from: &buf)
         )
     }
@@ -2579,7 +2579,7 @@ public struct FfiConverterTypeBtcBalance: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> BtcBalance {
         return
             try BtcBalance(
-                vanilla: FfiConverterTypeBalance.read(from: &buf), 
+                vanilla: FfiConverterTypeBalance.read(from: &buf),
                 colored: FfiConverterTypeBalance.read(from: &buf)
         )
     }
@@ -2649,7 +2649,7 @@ public struct FfiConverterTypeEmbeddedMedia: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> EmbeddedMedia {
         return
             try EmbeddedMedia(
-                mime: FfiConverterString.read(from: &buf), 
+                mime: FfiConverterString.read(from: &buf),
                 data: FfiConverterSequenceUInt8.read(from: &buf)
         )
     }
@@ -2755,13 +2755,13 @@ public struct FfiConverterTypeInvoiceData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> InvoiceData {
         return
             try InvoiceData(
-                recipientId: FfiConverterString.read(from: &buf), 
-                assetSchema: FfiConverterOptionTypeAssetSchema.read(from: &buf), 
-                assetId: FfiConverterOptionString.read(from: &buf), 
-                assignment: FfiConverterTypeAssignment.read(from: &buf), 
-                assignmentName: FfiConverterOptionString.read(from: &buf), 
-                network: FfiConverterTypeBitcoinNetwork.read(from: &buf), 
-                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf), 
+                recipientId: FfiConverterString.read(from: &buf),
+                assetSchema: FfiConverterOptionTypeAssetSchema.read(from: &buf),
+                assetId: FfiConverterOptionString.read(from: &buf),
+                assignment: FfiConverterTypeAssignment.read(from: &buf),
+                assignmentName: FfiConverterOptionString.read(from: &buf),
+                network: FfiConverterTypeBitcoinNetwork.read(from: &buf),
+                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf),
                 transportEndpoints: FfiConverterSequenceString.read(from: &buf)
         )
     }
@@ -2855,10 +2855,10 @@ public struct FfiConverterTypeKeys: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Keys {
         return
             try Keys(
-                mnemonic: FfiConverterString.read(from: &buf), 
-                xpub: FfiConverterString.read(from: &buf), 
-                accountXpubVanilla: FfiConverterString.read(from: &buf), 
-                accountXpubColored: FfiConverterString.read(from: &buf), 
+                mnemonic: FfiConverterString.read(from: &buf),
+                xpub: FfiConverterString.read(from: &buf),
+                accountXpubVanilla: FfiConverterString.read(from: &buf),
+                accountXpubColored: FfiConverterString.read(from: &buf),
                 masterFingerprint: FfiConverterString.read(from: &buf)
         )
     }
@@ -2937,8 +2937,8 @@ public struct FfiConverterTypeMedia: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Media {
         return
             try Media(
-                filePath: FfiConverterString.read(from: &buf), 
-                digest: FfiConverterString.read(from: &buf), 
+                filePath: FfiConverterString.read(from: &buf),
+                digest: FfiConverterString.read(from: &buf),
                 mime: FfiConverterString.read(from: &buf)
         )
     }
@@ -3045,13 +3045,13 @@ public struct FfiConverterTypeMetadata: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Metadata {
         return
             try Metadata(
-                assetSchema: FfiConverterTypeAssetSchema.read(from: &buf), 
-                issuedSupply: FfiConverterUInt64.read(from: &buf), 
-                timestamp: FfiConverterInt64.read(from: &buf), 
-                name: FfiConverterString.read(from: &buf), 
-                precision: FfiConverterUInt8.read(from: &buf), 
-                ticker: FfiConverterOptionString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
+                assetSchema: FfiConverterTypeAssetSchema.read(from: &buf),
+                issuedSupply: FfiConverterUInt64.read(from: &buf),
+                timestamp: FfiConverterInt64.read(from: &buf),
+                name: FfiConverterString.read(from: &buf),
+                precision: FfiConverterUInt8.read(from: &buf),
+                ticker: FfiConverterOptionString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
                 token: FfiConverterOptionTypeToken.read(from: &buf)
         )
     }
@@ -3127,7 +3127,7 @@ public struct FfiConverterTypeOnline: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Online {
         return
             try Online(
-                id: FfiConverterUInt64.read(from: &buf), 
+                id: FfiConverterUInt64.read(from: &buf),
                 indexerUrl: FfiConverterString.read(from: &buf)
         )
     }
@@ -3197,7 +3197,7 @@ public struct FfiConverterTypeOutpoint: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Outpoint {
         return
             try Outpoint(
-                txid: FfiConverterString.read(from: &buf), 
+                txid: FfiConverterString.read(from: &buf),
                 vout: FfiConverterUInt32.read(from: &buf)
         )
     }
@@ -3267,7 +3267,7 @@ public struct FfiConverterTypeProofOfReserves: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ProofOfReserves {
         return
             try ProofOfReserves(
-                utxo: FfiConverterTypeOutpoint.read(from: &buf), 
+                utxo: FfiConverterTypeOutpoint.read(from: &buf),
                 proof: FfiConverterSequenceUInt8.read(from: &buf)
         )
     }
@@ -3349,9 +3349,9 @@ public struct FfiConverterTypeReceiveData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> ReceiveData {
         return
             try ReceiveData(
-                invoice: FfiConverterString.read(from: &buf), 
-                recipientId: FfiConverterString.read(from: &buf), 
-                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf), 
+                invoice: FfiConverterString.read(from: &buf),
+                recipientId: FfiConverterString.read(from: &buf),
+                expirationTimestamp: FfiConverterOptionInt64.read(from: &buf),
                 batchTransferIdx: FfiConverterInt32.read(from: &buf)
         )
     }
@@ -3435,9 +3435,9 @@ public struct FfiConverterTypeRecipient: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Recipient {
         return
             try Recipient(
-                recipientId: FfiConverterString.read(from: &buf), 
-                witnessData: FfiConverterOptionTypeWitnessData.read(from: &buf), 
-                assignment: FfiConverterTypeAssignment.read(from: &buf), 
+                recipientId: FfiConverterString.read(from: &buf),
+                witnessData: FfiConverterOptionTypeWitnessData.read(from: &buf),
+                assignment: FfiConverterTypeAssignment.read(from: &buf),
                 transportEndpoints: FfiConverterSequenceString.read(from: &buf)
         )
     }
@@ -3509,7 +3509,7 @@ public struct FfiConverterTypeRefreshFilter: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RefreshFilter {
         return
             try RefreshFilter(
-                status: FfiConverterTypeRefreshTransferStatus.read(from: &buf), 
+                status: FfiConverterTypeRefreshTransferStatus.read(from: &buf),
                 incoming: FfiConverterBool.read(from: &buf)
         )
     }
@@ -3579,7 +3579,7 @@ public struct FfiConverterTypeRefreshedTransfer: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RefreshedTransfer {
         return
             try RefreshedTransfer(
-                updatedStatus: FfiConverterOptionTypeTransferStatus.read(from: &buf), 
+                updatedStatus: FfiConverterOptionTypeTransferStatus.read(from: &buf),
                 failure: FfiConverterOptionTypeRgbLibError.read(from: &buf)
         )
     }
@@ -3655,8 +3655,8 @@ public struct FfiConverterTypeRgbAllocation: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> RgbAllocation {
         return
             try RgbAllocation(
-                assetId: FfiConverterOptionString.read(from: &buf), 
-                assignment: FfiConverterTypeAssignment.read(from: &buf), 
+                assetId: FfiConverterOptionString.read(from: &buf),
+                assignment: FfiConverterTypeAssignment.read(from: &buf),
                 settled: FfiConverterBool.read(from: &buf)
         )
     }
@@ -3727,7 +3727,7 @@ public struct FfiConverterTypeSendResult: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> SendResult {
         return
             try SendResult(
-                txid: FfiConverterString.read(from: &buf), 
+                txid: FfiConverterString.read(from: &buf),
                 batchTransferIdx: FfiConverterInt32.read(from: &buf)
         )
     }
@@ -3833,13 +3833,13 @@ public struct FfiConverterTypeToken: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Token {
         return
             try Token(
-                index: FfiConverterUInt32.read(from: &buf), 
-                ticker: FfiConverterOptionString.read(from: &buf), 
-                name: FfiConverterOptionString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                embeddedMedia: FfiConverterOptionTypeEmbeddedMedia.read(from: &buf), 
-                media: FfiConverterOptionTypeMedia.read(from: &buf), 
-                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf), 
+                index: FfiConverterUInt32.read(from: &buf),
+                ticker: FfiConverterOptionString.read(from: &buf),
+                name: FfiConverterOptionString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                embeddedMedia: FfiConverterOptionTypeEmbeddedMedia.read(from: &buf),
+                media: FfiConverterOptionTypeMedia.read(from: &buf),
+                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf),
                 reserves: FfiConverterOptionTypeProofOfReserves.read(from: &buf)
         )
     }
@@ -3951,13 +3951,13 @@ public struct FfiConverterTypeTokenLight: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TokenLight {
         return
             try TokenLight(
-                index: FfiConverterUInt32.read(from: &buf), 
-                ticker: FfiConverterOptionString.read(from: &buf), 
-                name: FfiConverterOptionString.read(from: &buf), 
-                details: FfiConverterOptionString.read(from: &buf), 
-                embeddedMedia: FfiConverterBool.read(from: &buf), 
-                media: FfiConverterOptionTypeMedia.read(from: &buf), 
-                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf), 
+                index: FfiConverterUInt32.read(from: &buf),
+                ticker: FfiConverterOptionString.read(from: &buf),
+                name: FfiConverterOptionString.read(from: &buf),
+                details: FfiConverterOptionString.read(from: &buf),
+                embeddedMedia: FfiConverterBool.read(from: &buf),
+                media: FfiConverterOptionTypeMedia.read(from: &buf),
+                attachments: FfiConverterDictionaryUInt8TypeMedia.read(from: &buf),
                 reserves: FfiConverterBool.read(from: &buf)
         )
     }
@@ -4057,11 +4057,11 @@ public struct FfiConverterTypeTransaction: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Transaction {
         return
             try Transaction(
-                transactionType: FfiConverterTypeTransactionType.read(from: &buf), 
-                txid: FfiConverterString.read(from: &buf), 
-                received: FfiConverterUInt64.read(from: &buf), 
-                sent: FfiConverterUInt64.read(from: &buf), 
-                fee: FfiConverterUInt64.read(from: &buf), 
+                transactionType: FfiConverterTypeTransactionType.read(from: &buf),
+                txid: FfiConverterString.read(from: &buf),
+                received: FfiConverterUInt64.read(from: &buf),
+                sent: FfiConverterUInt64.read(from: &buf),
+                fee: FfiConverterUInt64.read(from: &buf),
                 confirmationTime: FfiConverterOptionTypeBlockTime.read(from: &buf)
         )
     }
@@ -4108,10 +4108,11 @@ public struct Transfer {
     public var expiration: Int64?
     public var transportEndpoints: [TransferTransportEndpoint]
     public var invoiceString: String?
+    public var consignmentPath: String?
 
     // Default memberwise initializers are never public by default, so we
     // declare one manually.
-    public init(idx: Int32, batchTransferIdx: Int32, createdAt: Int64, updatedAt: Int64, status: TransferStatus, requestedAssignment: Assignment?, assignments: [Assignment], kind: TransferKind, txid: String?, recipientId: String?, receiveUtxo: Outpoint?, changeUtxo: Outpoint?, expiration: Int64?, transportEndpoints: [TransferTransportEndpoint], invoiceString: String?) {
+    public init(idx: Int32, batchTransferIdx: Int32, createdAt: Int64, updatedAt: Int64, status: TransferStatus, requestedAssignment: Assignment?, assignments: [Assignment], kind: TransferKind, txid: String?, recipientId: String?, receiveUtxo: Outpoint?, changeUtxo: Outpoint?, expiration: Int64?, transportEndpoints: [TransferTransportEndpoint], invoiceString: String?, consignmentPath: String?) {
         self.idx = idx
         self.batchTransferIdx = batchTransferIdx
         self.createdAt = createdAt
@@ -4127,6 +4128,7 @@ public struct Transfer {
         self.expiration = expiration
         self.transportEndpoints = transportEndpoints
         self.invoiceString = invoiceString
+        self.consignmentPath = consignmentPath
     }
 }
 
@@ -4182,6 +4184,9 @@ extension Transfer: Equatable, Hashable {
         if lhs.invoiceString != rhs.invoiceString {
             return false
         }
+        if lhs.consignmentPath != rhs.consignmentPath {
+            return false
+        }
         return true
     }
 
@@ -4201,6 +4206,7 @@ extension Transfer: Equatable, Hashable {
         hasher.combine(expiration)
         hasher.combine(transportEndpoints)
         hasher.combine(invoiceString)
+        hasher.combine(consignmentPath)
     }
 }
 
@@ -4213,21 +4219,22 @@ public struct FfiConverterTypeTransfer: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Transfer {
         return
             try Transfer(
-                idx: FfiConverterInt32.read(from: &buf), 
-                batchTransferIdx: FfiConverterInt32.read(from: &buf), 
-                createdAt: FfiConverterInt64.read(from: &buf), 
-                updatedAt: FfiConverterInt64.read(from: &buf), 
-                status: FfiConverterTypeTransferStatus.read(from: &buf), 
-                requestedAssignment: FfiConverterOptionTypeAssignment.read(from: &buf), 
-                assignments: FfiConverterSequenceTypeAssignment.read(from: &buf), 
-                kind: FfiConverterTypeTransferKind.read(from: &buf), 
-                txid: FfiConverterOptionString.read(from: &buf), 
-                recipientId: FfiConverterOptionString.read(from: &buf), 
-                receiveUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf), 
-                changeUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf), 
-                expiration: FfiConverterOptionInt64.read(from: &buf), 
-                transportEndpoints: FfiConverterSequenceTypeTransferTransportEndpoint.read(from: &buf), 
-                invoiceString: FfiConverterOptionString.read(from: &buf)
+                idx: FfiConverterInt32.read(from: &buf),
+                batchTransferIdx: FfiConverterInt32.read(from: &buf),
+                createdAt: FfiConverterInt64.read(from: &buf),
+                updatedAt: FfiConverterInt64.read(from: &buf),
+                status: FfiConverterTypeTransferStatus.read(from: &buf),
+                requestedAssignment: FfiConverterOptionTypeAssignment.read(from: &buf),
+                assignments: FfiConverterSequenceTypeAssignment.read(from: &buf),
+                kind: FfiConverterTypeTransferKind.read(from: &buf),
+                txid: FfiConverterOptionString.read(from: &buf),
+                recipientId: FfiConverterOptionString.read(from: &buf),
+                receiveUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf),
+                changeUtxo: FfiConverterOptionTypeOutpoint.read(from: &buf),
+                expiration: FfiConverterOptionInt64.read(from: &buf),
+                transportEndpoints: FfiConverterSequenceTypeTransferTransportEndpoint.read(from: &buf),
+                invoiceString: FfiConverterOptionString.read(from: &buf),
+                consignmentPath: FfiConverterOptionString.read(from: &buf)
         )
     }
 
@@ -4247,6 +4254,7 @@ public struct FfiConverterTypeTransfer: FfiConverterRustBuffer {
         FfiConverterOptionInt64.write(value.expiration, into: &buf)
         FfiConverterSequenceTypeTransferTransportEndpoint.write(value.transportEndpoints, into: &buf)
         FfiConverterOptionString.write(value.invoiceString, into: &buf)
+        FfiConverterOptionString.write(value.consignmentPath, into: &buf)
     }
 }
 
@@ -4315,8 +4323,8 @@ public struct FfiConverterTypeTransferTransportEndpoint: FfiConverterRustBuffer 
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> TransferTransportEndpoint {
         return
             try TransferTransportEndpoint(
-                endpoint: FfiConverterString.read(from: &buf), 
-                transportType: FfiConverterTypeTransportType.read(from: &buf), 
+                endpoint: FfiConverterString.read(from: &buf),
+                transportType: FfiConverterTypeTransportType.read(from: &buf),
                 used: FfiConverterBool.read(from: &buf)
         )
     }
@@ -4393,8 +4401,8 @@ public struct FfiConverterTypeUnspent: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Unspent {
         return
             try Unspent(
-                utxo: FfiConverterTypeUtxo.read(from: &buf), 
-                rgbAllocations: FfiConverterSequenceTypeRgbAllocation.read(from: &buf), 
+                utxo: FfiConverterTypeUtxo.read(from: &buf),
+                rgbAllocations: FfiConverterSequenceTypeRgbAllocation.read(from: &buf),
                 pendingBlinded: FfiConverterUInt32.read(from: &buf)
         )
     }
@@ -4477,9 +4485,9 @@ public struct FfiConverterTypeUtxo: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> Utxo {
         return
             try Utxo(
-                outpoint: FfiConverterTypeOutpoint.read(from: &buf), 
-                btcAmount: FfiConverterUInt64.read(from: &buf), 
-                colorable: FfiConverterBool.read(from: &buf), 
+                outpoint: FfiConverterTypeOutpoint.read(from: &buf),
+                btcAmount: FfiConverterUInt64.read(from: &buf),
+                colorable: FfiConverterBool.read(from: &buf),
                 exists: FfiConverterBool.read(from: &buf)
         )
     }
@@ -4599,15 +4607,15 @@ public struct FfiConverterTypeWalletData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WalletData {
         return
             try WalletData(
-                dataDir: FfiConverterString.read(from: &buf), 
-                bitcoinNetwork: FfiConverterTypeBitcoinNetwork.read(from: &buf), 
-                databaseType: FfiConverterTypeDatabaseType.read(from: &buf), 
-                maxAllocationsPerUtxo: FfiConverterUInt32.read(from: &buf), 
-                accountXpubVanilla: FfiConverterString.read(from: &buf), 
-                accountXpubColored: FfiConverterString.read(from: &buf), 
-                mnemonic: FfiConverterOptionString.read(from: &buf), 
-                masterFingerprint: FfiConverterString.read(from: &buf), 
-                vanillaKeychain: FfiConverterOptionUInt8.read(from: &buf), 
+                dataDir: FfiConverterString.read(from: &buf),
+                bitcoinNetwork: FfiConverterTypeBitcoinNetwork.read(from: &buf),
+                databaseType: FfiConverterTypeDatabaseType.read(from: &buf),
+                maxAllocationsPerUtxo: FfiConverterUInt32.read(from: &buf),
+                accountXpubVanilla: FfiConverterString.read(from: &buf),
+                accountXpubColored: FfiConverterString.read(from: &buf),
+                mnemonic: FfiConverterOptionString.read(from: &buf),
+                masterFingerprint: FfiConverterString.read(from: &buf),
+                vanillaKeychain: FfiConverterOptionUInt8.read(from: &buf),
                 supportedSchemas: FfiConverterSequenceTypeAssetSchema.read(from: &buf)
         )
     }
@@ -4685,7 +4693,7 @@ public struct FfiConverterTypeWitnessData: FfiConverterRustBuffer {
     public static func read(from buf: inout (data: Data, offset: Data.Index)) throws -> WitnessData {
         return
             try WitnessData(
-                amountSat: FfiConverterUInt64.read(from: &buf), 
+                amountSat: FfiConverterUInt64.read(from: &buf),
                 blinding: FfiConverterOptionUInt64.read(from: &buf)
         )
     }
@@ -5294,6 +5302,8 @@ public enum RgbLibError: Swift.Error {
     case TooHighIssuanceAmounts
     case UnknownRgbSchema(schemaId: String
     )
+    case UnknownTransfer(txid: String
+    )
     case UnsupportedBackupVersion(version: String
     )
     case UnsupportedLayer1(layer1: String
@@ -5363,11 +5373,11 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
         case 20: return .InexistentDataDir
         case 21: return .InsufficientAllocationSlots
         case 22: return .InsufficientAssignments(
-            assetId: try FfiConverterString.read(from: &buf), 
+            assetId: try FfiConverterString.read(from: &buf),
             available: try FfiConverterTypeAssignmentsCollection.read(from: &buf)
             )
         case 23: return .InsufficientBitcoins(
-            needed: try FfiConverterUInt64.read(from: &buf), 
+            needed: try FfiConverterUInt64.read(from: &buf),
             available: try FfiConverterUInt64.read(from: &buf)
             )
         case 24: return .Internal(
@@ -5472,21 +5482,24 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
         case 71: return .UnknownRgbSchema(
             schemaId: try FfiConverterString.read(from: &buf)
             )
-        case 72: return .UnsupportedBackupVersion(
+        case 72: return .UnknownTransfer(
+            txid: try FfiConverterString.read(from: &buf)
+            )
+        case 73: return .UnsupportedBackupVersion(
             version: try FfiConverterString.read(from: &buf)
             )
-        case 73: return .UnsupportedLayer1(
+        case 74: return .UnsupportedLayer1(
             layer1: try FfiConverterString.read(from: &buf)
             )
-        case 74: return .UnsupportedSchema(
+        case 75: return .UnsupportedSchema(
             assetSchema: try FfiConverterTypeAssetSchema.read(from: &buf)
             )
-        case 75: return .UnsupportedTransportType
-        case 76: return .WalletDirAlreadyExists(
+        case 76: return .UnsupportedTransportType
+        case 77: return .WalletDirAlreadyExists(
             path: try FfiConverterString.read(from: &buf)
             )
-        case 77: return .WatchOnly
-        case 78: return .WrongPassword
+        case 78: return .WatchOnly
+        case 79: return .WrongPassword
 
          default: throw UniffiInternalError.unexpectedEnumCase
         }
@@ -5824,36 +5837,41 @@ public struct FfiConverterTypeRgbLibError: FfiConverterRustBuffer {
             FfiConverterString.write(schemaId, into: &buf)
             
         
-        case let .UnsupportedBackupVersion(version):
+        case let .UnknownTransfer(txid):
             writeInt(&buf, Int32(72))
+            FfiConverterString.write(txid, into: &buf)
+            
+        
+        case let .UnsupportedBackupVersion(version):
+            writeInt(&buf, Int32(73))
             FfiConverterString.write(version, into: &buf)
             
         
         case let .UnsupportedLayer1(layer1):
-            writeInt(&buf, Int32(73))
+            writeInt(&buf, Int32(74))
             FfiConverterString.write(layer1, into: &buf)
             
         
         case let .UnsupportedSchema(assetSchema):
-            writeInt(&buf, Int32(74))
+            writeInt(&buf, Int32(75))
             FfiConverterTypeAssetSchema.write(assetSchema, into: &buf)
             
         
         case .UnsupportedTransportType:
-            writeInt(&buf, Int32(75))
+            writeInt(&buf, Int32(76))
         
         
         case let .WalletDirAlreadyExists(path):
-            writeInt(&buf, Int32(76))
+            writeInt(&buf, Int32(77))
             FfiConverterString.write(path, into: &buf)
             
         
         case .WatchOnly:
-            writeInt(&buf, Int32(77))
+            writeInt(&buf, Int32(78))
         
         
         case .WrongPassword:
-            writeInt(&buf, Int32(78))
+            writeInt(&buf, Int32(79))
         
         }
     }

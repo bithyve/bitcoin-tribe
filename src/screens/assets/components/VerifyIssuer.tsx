@@ -35,6 +35,7 @@ import VerificationSection from './VerificationSection';
 import AppText from 'src/components/AppText';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 
 const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
@@ -97,6 +98,7 @@ interface VerifyIssuerProps {
   showDomainVerifyIssuer?: boolean;
   onPressShare?: () => void;
   onRegisterComplete?: () => void;
+  collectionId?: string;
 }
 
 export const verifyIssuerOnTwitter = async (
@@ -112,6 +114,7 @@ export const verifyIssuerOnTwitter = async (
         id: result.id,
         name: result.name,
         username: result.username,
+        link: result.username,
       });
       if (response.status) {
         const existingAsset = await dbManager.getObjectByPrimaryId(
@@ -161,6 +164,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     showDomainVerifyIssuer,
     onPressShare,
     onRegisterComplete,
+    collectionId,
   } = props;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -400,7 +404,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                   onPay={async () => {
                     setDisabledCTA(true);
                     await ApiHandler.refreshWallets({ wallets: [wallet] });
-                    payServiceFeeFeeMutation.mutate({ feeDetails });
+                    payServiceFeeFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
                   }}
                   feeDetails={feeDetails}
                   status={payServiceFeeFeeMutation.status}

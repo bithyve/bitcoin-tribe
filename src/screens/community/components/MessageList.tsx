@@ -16,16 +16,19 @@ const MessageList = ({
   messages,
   sending,
   flatListRef,
-  appId,
+  currentPeerPubKey,
+  peersMap,
   onImagePress,
   onPressReject,
   onPressApprove,
   viewTransaction,
 }) => {
+  const reversedMessages = React.useMemo(() => [...messages].reverse(), [messages]);
+
   return (
     <FlatList
       ref={flatListRef}
-      data={messages}
+      data={reversedMessages}
       style={{ flex: 1, paddingBottom: 10 }}
       extraData={[messages, sending]}
       contentContainerStyle={styles.list}
@@ -35,17 +38,20 @@ const MessageList = ({
       //   <Text style={styles.textEmpty}>No messages</Text>
       // )}
       ItemSeparatorComponent={() => <View style={styles.divider} />}
-      renderItem={({ item, index }) => (
-        <MessageItem
+      renderItem={({ item, index }) => {
+        const peer = peersMap.get(item.senderId);
+
+        return (<MessageItem
           message={item}
-          previousMessage={messages[index + 1]}
-          appId={appId}
+          previousMessage={reversedMessages[index + 1]}
+          currentPeerPubKey={currentPeerPubKey}
+          peer={peer}
           onImagePress={onImagePress}
           onPressReject={onPressReject}
           onPressApprove={onPressApprove}
           viewTransaction={viewTransaction}
-        />
-      )}
+        />);
+      }}
     />
   );
 };

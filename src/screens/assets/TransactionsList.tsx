@@ -73,6 +73,7 @@ function TransactionsList({
             navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
               assetId: assetId,
               schema: schema,
+              name: coin,
             });
           }}>
           <AppText variant="body1" style={styles.viewAllText}>

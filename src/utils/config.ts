@@ -36,7 +36,7 @@ class Configuration {
   public TWITTER_CLIENT_ID: string = 'ZjA1RnRiSEFfNm1ESGFuY21hM1I6MTpjaQ';
   public TRIBE_FCM_BROADCAST_CHANNEL: string =
     config.TRIBE_FCM_BROADCAST_CHANNEL;
-  public CHAT_PEER_PUB_KEY: string = config.CHAT_PEER_PUB_KEY;
+  public HOLEPUNCH_ROOT_PEER_DISCOVERY: string = config.HOLEPUNCH_ROOT_PEER_DISCOVERY;
   public RAMP_BASE_URL: string = 'https://app.rampnetwork.com/';
   public RAMP_REFERRAL_CODE: string =
     'ku67r7oh5juc27bmb3h5pek8y5heyb5bdtfa66pr';
@@ -48,6 +48,7 @@ class Configuration {
     dark: 'https://bitcointribe.app/terms/dark.html',
   };
   public REGISTRY_URL: string;
+  public COLLECTION_URL: string;
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
@@ -57,6 +58,7 @@ class Configuration {
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
     this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
+    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/collection' : 'https://registry.bitcointribe.app/collection';
   }
 
   getBitcoinNetwork = (networkType: NetworkType) => {
