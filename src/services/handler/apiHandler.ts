@@ -47,8 +47,10 @@ import Relay from '../relay';
 import RGBServices from '../rgb/RGBServices';
 import {
   Asset,
+  AssetSchema,
   Coin,
   Collectible,
+  Collection,
   InvoiceType,
   IssuerVerificationMethod,
   NodeInfo,
@@ -76,8 +78,12 @@ import { SHA256 } from 'crypto-js';
 import ECPairFactory from 'ecpair';
 import { fetchAndVerifyTweet } from '../twitter';
 import Toast from 'src/components/Toast';
-import ChatPeerManager from '../p2p/ChatPeerManager';
 import { Asset as ImageAsset } from 'react-native-image-picker';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
+import { v4 as uuidv4 } from 'uuid';
+import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
+
 const ECPair = ECPairFactory(ecc);
 
 export class ApiHandler {
@@ -239,9 +245,6 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ChatPeerManager.getInstance();
-          await cm.init(primarySeed.toString('hex'));
-          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             appName,
             appID,
@@ -252,7 +255,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -264,7 +266,9 @@ export class ApiHandler {
             id: appID,
             publicId,
             appName,
-            walletImage: !isRestore ? registerApp?.app?.imageUrl : walletImage || '',
+            walletImage: !isRestore
+              ? registerApp?.app?.imageUrl
+              : walletImage || '',
             primaryMnemonic,
             primarySeed: primarySeed.toString('hex'),
             imageEncryptionKey,
@@ -273,10 +277,6 @@ export class ApiHandler {
             enableAnalytics: true,
             appType,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -385,12 +385,9 @@ export class ApiHandler {
           const signature = keyPair
             .sign(Buffer.from(messageHash.toString('hex'), 'hex'))
             .toString('hex');
-          const cm = ChatPeerManager.getInstance();
           if (!rgbNodeConnectParams.nodeId) {
             throw new Error('Missing nodeId');
           }
-          await cm.init(rgbNodeConnectParams.nodeId);
-          const keys = await cm.getKeys();
           const registerApp = await Relay.createNewApp(
             'Tribe-Node-Connect',
             rgbNodeInfo.pubkey,
@@ -401,7 +398,6 @@ export class ApiHandler {
             '',
             signature,
             walletImage,
-            keys.publicKey,
           );
           if (!registerApp?.app?.authToken) {
             throw new Error('Failed to generate auth token');
@@ -422,10 +418,6 @@ export class ApiHandler {
             nodeUrl: rgbNodeConnectParams.nodeUrl,
             nodeAuthentication: rgbNodeConnectParams.authentication,
             authToken: registerApp?.app?.authToken,
-            contactsKey: {
-              publicKey: keys.publicKey,
-              secretKey: keys.secretKey,
-            },
           };
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
@@ -479,7 +471,7 @@ export class ApiHandler {
       if (restore.error) {
         throw new Error(restore.error);
       } else {
-        ApiHandler.setupNewApp({
+        await ApiHandler.setupNewApp({
           appName: '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
@@ -539,11 +531,12 @@ export class ApiHandler {
           passcode: '',
           walletImage: backup?.app?.imageUrl || '',
           mnemonic: mnemonic,
-          isRestore: true
+          isRestore: true,
         });
         await ApiHandler.makeWalletOnline();
         await ApiHandler.refreshRgbWallet();
         await ApiHandler.fetchPresetAssets();
+        await ApiHandler.viewUtxos();
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
           'version',
@@ -588,8 +581,6 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    // const cm = ChatPeerManager.getInstance();
-    // await cm.init(app.primarySeed);
     // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     // const isWalletOnline = await RGBServices.initiate(
     //   rgbWallet.mnemonic,
@@ -675,8 +666,6 @@ export class ApiHandler {
         rgbWallet.accountXpubColored,
         rgbWallet.masterFingerprint,
       );
-      // const cm = ChatPeerManager.getInstance();
-      // await cm.init(app.primarySeed);
       return { key, isWalletOnline };
     }
   }
@@ -714,8 +703,6 @@ export class ApiHandler {
           rgbWallet.masterFingerprint,
           timeout,
         );
-        // const cm = ChatPeerManager.getInstance();
-        // await cm.init(app.primarySeed);
         return isWalletOnline;
       }
     } catch (error) {
@@ -910,10 +897,15 @@ export class ApiHandler {
     }
   }
 
-  static async payServiceFee({ feeDetails }): Promise<{ txid: string }> {
+  static async payServiceFee({
+    feeDetails,
+    feeType = ServiceFeeType.REGISTER_ASSET_FEE,
+    collectionId,
+  }): Promise<{ txid: string }> {
     const wallet: Wallet = dbManager
       .getObjectByIndex(RealmSchema.Wallet)
       .toJSON();
+    await ApiHandler.refreshWallets({ wallets: [wallet] });
     const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
     if (!averageTxFeeJSON) {
       throw new Error(
@@ -957,6 +949,8 @@ export class ApiHandler {
           metadata: {
             assetId: '',
             note: '',
+            feeType: feeType,
+            collectionId,
           },
         },
       });
@@ -1379,6 +1373,7 @@ export class ApiHandler {
 
       if (assets.uda) {
         const udas = [];
+        const collections = [];
         if (
           ApiHandler.appType === AppType.NODE_CONNECT ||
           ApiHandler.appType === AppType.SUPPORTED_RLN
@@ -1425,16 +1420,219 @@ export class ApiHandler {
                 };
               }
             }
-            udas.push(uda);
+            if (uda.details.includes(DeepLinking.appLinkScheme)) {
+              const deepLinking = DeepLinking.processDeepLink(
+                DeepLinking.appLinkScheme + uda.details.split(DeepLinking.appLinkScheme)[1],
+              );
+              if (
+                deepLinking.isValid &&
+                deepLinking.feature === DeepLinkFeature.COLLECTION &&
+                deepLinking.params.id
+              ) {
+                const slug = uda.details.split(DeepLinking.appLinkScheme)[1];
+                const collection = urlParamsToObject(slug);
+                const parsedItemsCount = parseInt(collection.no as string, 10);
+                collections.push({
+                  _id: collection.id,
+                  description: uda.details.split(DeepLinking.appLinkScheme)[0],
+                  ...collection,
+                  ...uda,
+                  itemsCount:
+                    isNaN(parsedItemsCount) || !isFinite(parsedItemsCount)
+                      ? 0
+                      : parsedItemsCount,
+                  isFixedSupply: collection.fxd === 'true',
+                  issuedSupply: String(uda.issuedSupply),
+                  slug: slug,
+                  balance: {
+                    settled: String(uda.balance.settled),
+                    spendable: String(uda.balance.spendable),
+                    future: String(uda.balance.future),
+                    offchainOutbound: uda.balance.offchainOutbound
+                      ? String(uda.balance.offchainOutbound)
+                      : undefined,
+                    offchainInbound: uda.balance.offchainInbound
+                      ? String(uda.balance.offchainInbound)
+                      : undefined,
+                  },
+                });
+              } else if (
+                deepLinking.isValid &&
+                deepLinking.feature === DeepLinkFeature.COLLECTION_ITEM &&
+                deepLinking.params.collectionId
+              ) {
+                const collectionId = deepLinking.params.collectionId;
+                const collection = dbManager.getObjectByPrimaryId(
+                  RealmSchema.Collection,
+                  '_id',
+                  collectionId,
+                );
+                if (collection) {
+                  // First, create/update the UDA object in the database
+                  const udaData = {
+                    ...uda,
+                    issuedSupply: String(uda.issuedSupply),
+                    balance: {
+                      settled: String(uda.balance.settled),
+                      spendable: String(uda.balance.spendable),
+                      future: String(uda.balance.future),
+                      offchainOutbound: uda.balance.offchainOutbound
+                        ? String(uda.balance.offchainOutbound)
+                        : undefined,
+                      offchainInbound: uda.balance.offchainInbound
+                        ? String(uda.balance.offchainInbound)
+                        : undefined,
+                    },
+                  };
+
+                  // Create or update the UDA
+                  dbManager.createObject(
+                    RealmSchema.UniqueDigitalAsset,
+                    udaData,
+                    Realm.UpdateMode.Modified,
+                  );
+
+                  // Get the actual Realm UDA object
+                  const udaObject = dbManager.getObjectByPrimaryId(
+                    RealmSchema.UniqueDigitalAsset,
+                    'assetId',
+                    uda.assetId,
+                  );
+
+                  if (udaObject) {
+                    // Check if the item is already in the collection
+                    const existingItem = collection.items.find(
+                      (item: any) => item.assetId === uda.assetId,
+                    );
+
+                    if (!existingItem) {
+                      // Add the Realm object to the collection's items
+                      dbManager.updateObjectByPrimaryId(
+                        RealmSchema.Collection,
+                        '_id',
+                        collectionId,
+                        {
+                          items: [...collection.items, udaObject],
+                        },
+                      );
+                    }
+                  }
+                } else {
+                  const collectionResponse = await Relay.getCollectionDetails(
+                    collectionId,
+                  );
+                  if (collectionResponse.status) {
+                    const collection = collectionResponse.collection;
+                    const params = urlParamsToObject(collection.slug);
+                    collection.description = collection.details;
+                    collection.details =
+                      collection.details + ' ' + collection.slug;
+                    collection.itemsCount = parseInt(params.no as string, 10);
+                    collection.isFixedSupply =
+                      params.fxd === 'true' ? true : false;
+                    collection.issuedSupply = String(uda.issuedSupply);
+                    collection.slug = collection.slug;
+                    collection.addedAt = Date.now();
+                    collection.media = {
+                      filePath: collection.media.file,
+                      mime: collection.media.mime,
+                      base64Image: '',
+                      digest: '',
+                    };
+                    collection.attachments = collection.attachments.map(
+                      attachment => ({
+                        filePath: attachment.file,
+                        mime: attachment.mime,
+                        base64Image: '',
+                        digest: '',
+                      }),
+                    );
+                    collection.token = {
+                      attachments: collection.attachments,
+                      embeddedMedia: false,
+                      index: 0,
+                      media: collection.media,
+                      reserves: false,
+                    };
+                    collection.balance = {
+                      settled: String(uda.balance.settled),
+                      spendable: String(uda.balance.spendable),
+                      future: String(uda.balance.future),
+                      offchainOutbound: uda.balance.offchainOutbound
+                        ? String(uda.balance.offchainOutbound)
+                        : undefined,
+                      offchainInbound: uda.balance.offchainInbound
+                        ? String(uda.balance.offchainInbound)
+                        : undefined,
+                    };
+                    collection.items = [];
+                    dbManager.createObject(
+                      RealmSchema.Collection,
+                      collection,
+                      Realm.UpdateMode.Modified,
+                    );
+
+                    dbManager.createObject(
+                      RealmSchema.UniqueDigitalAsset,
+                      {
+                        ...uda,
+                        balance: {
+                          settled: String(uda.balance.settled),
+                          spendable: String(uda.balance.spendable),
+                          future: String(uda.balance.future),
+                        },
+                      },
+                      Realm.UpdateMode.Modified,
+                    );
+
+                    // Get the actual Realm UDA object
+                    const udaObject = dbManager.getObjectByPrimaryId(
+                      RealmSchema.UniqueDigitalAsset,
+                      'assetId',
+                      uda.assetId,
+                    );
+                    if (udaObject) {
+                      // Check if the item is already in the collection
+                      const existingItem = collection.items.find(
+                        (item: any) => item.assetId === uda.assetId,
+                      );
+
+                      if (!existingItem) {
+                        // Add the Realm object to the collection's items
+                        dbManager.updateObjectByPrimaryId(
+                          RealmSchema.Collection,
+                          '_id',
+                          collectionId,
+                          {
+                            items: [...collection.items, udaObject],
+                          },
+                        );
+                      }
+                    }
+                  }
+                }
+              }
+            } else {
+              udas.push(uda);
+            }
           }
         }
-        dbManager.createObjectBulk(
-          RealmSchema.UniqueDigitalAsset,
-          udas,
-          Realm.UpdateMode.Modified,
-        );
+        if (collections.length > 0) {
+          dbManager.createObjectBulk(
+            RealmSchema.Collection,
+            collections,
+            Realm.UpdateMode.Modified,
+          );
+        }
+        if (udas.length > 0) {
+          dbManager.createObjectBulk(
+            RealmSchema.UniqueDigitalAsset,
+            udas,
+            Realm.UpdateMode.Modified,
+          );
+        }
       }
-      await ApiHandler.updateAssetVerificationStatus();
+      ApiHandler.updateAssetVerificationStatus();
     } catch (error) {
       console.log('error', error);
     }
@@ -1519,6 +1717,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1582,6 +1781,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.CREATE_COLLECTION_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1643,6 +1843,7 @@ export class ApiHandler {
             txid: tx.txid,
             updateProps: {
               metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
                 assetId: response.assetId,
                 note: `Issued ${response.name} on ${moment().format(
                   'DD MMM YY  •  hh:mm A',
@@ -1658,12 +1859,151 @@ export class ApiHandler {
     }
   }
 
+  static async mintCollectionItem({
+    name,
+    ticker,
+    details,
+    mediaFilePath,
+    attachmentsFilePaths,
+    collectionId,
+  }: {
+    name: string;
+    ticker: string;
+    details: string;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+    collectionId: string;
+  }) {
+    try {
+      const assetResponse = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details,
+        mediaFilePath,
+        attachmentsFilePaths,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
+      console.log('response', response);
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const asset = dbManager.getObjectByPrimaryId(
+          RealmSchema.UniqueDigitalAsset,
+          'assetId',
+          response?.assetId,
+        ) as unknown as UniqueDigitalAsset;
+        const mintCollectionItemResponse = await Relay.mintCollectionItem(
+          collectionId,
+          asset,
+          app.id,
+          app.authToken,
+        );
+        return response;
+      }
+    } catch (error) {
+      console.log('mintCollectionItem', error);
+      throw error;
+    }
+  }
+
+  static generateCollectionSlug(
+    collectionId: string,
+    itemsCount: number,
+    isFixedSupply: boolean,
+  ) {
+    return `${collectionId},${itemsCount},${isFixedSupply ? 'true' : 'false'}`;
+  }
+
+  static parseCollectionSlug(slug: string) {
+    const [collectionId, itemsCount, isFixedSupply] = slug.split(',');
+    return {
+      collectionId: collectionId,
+      itemsCount: parseInt(itemsCount, 10),
+      isFixedSupply: isFixedSupply === 'true',
+    };
+  }
+
+  static async issueNewCollection({
+    name,
+    ticker = 'TCOLP',
+    details,
+    totalSupplyAmt,
+    isFixedSupply,
+    mediaFilePath,
+    attachmentsFilePaths,
+    createUtxos,
+  }: {
+    name: string;
+    ticker?: string;
+    details: string;
+    totalSupplyAmt: number;
+    isFixedSupply: boolean;
+    mediaFilePath: string;
+    attachmentsFilePaths: string[];
+    createUtxos: boolean;
+  }): Promise<Collection | null> {
+    try {
+      if (createUtxos) {
+        await ApiHandler.createUtxos();
+      }
+      const collectionId = uuidv4().split('-')[0];
+      const slug = DeepLinking.buildUrl(DeepLinkFeature.COLLECTION, {
+        id: collectionId,
+        no: totalSupplyAmt,
+        fxd: isFixedSupply,
+      }, DeepLinkType.APP_LINK);
+      const response = await RGBServices.issueAssetUda(
+        name,
+        ticker,
+        details.trim() + ' ' + slug,
+        mediaFilePath,
+        attachmentsFilePaths,
+        ApiHandler.appType,
+        ApiHandler.api,
+      );
+      if (response?.assetId) {
+        await ApiHandler.refreshRgbWallet();
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const collection = dbManager.getObjectByPrimaryId(
+          RealmSchema.Collection,
+          '_id',
+          collectionId,
+        ) as unknown as Collection;
+        const registerCollectionResponse = await Relay.registerCollection(
+          app.id,
+          { ...collection },
+          app.authToken,
+        );
+        await ApiHandler.getAssetTransactions({
+          assetId: collection.assetId,
+          schema: RealmSchema.Collection,
+          isCollection: true,
+          collectionId: collectionId,
+        });
+        if (registerCollectionResponse.created) {
+          return collection;
+        }
+        throw new Error('Failed to register collection');
+      }
+      throw new Error('Failed to issue collection');
+    } catch (error) {
+      console.log('issueNewCollection', error);
+      throw error;
+    }
+  }
+
   static async getAssetTransactions({
     assetId,
     schema,
+    isCollection = false,
+    collectionId,
   }: {
     assetId: string;
     schema: RealmSchema;
+    isCollection: boolean;
+    collectionId: string;
   }) {
     try {
       const response = await RGBServices.getRgbAssetTransactions(
@@ -1671,10 +2011,26 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
-      if (response.length > 0) {
+      if (response.length > 0 && !isCollection) {
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           transactions: response,
         });
+      }
+      if (isCollection) {
+        const collection = dbManager.getObjectByPrimaryId(
+          RealmSchema.Collection,
+          '_id',
+          collectionId,
+        ).toJSON as unknown as Collection;
+        collection.transactions = response;
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.Collection,
+          '_id',
+          collectionId,
+          {
+            transactions: response,
+          },
+        );
       }
       if (
         ApiHandler.appType === AppType.NODE_CONNECT ||
@@ -1703,6 +2059,8 @@ export class ApiHandler {
     consignmentEndpoints,
     feeRate,
     isDonation,
+    schema,
+    witnessSats,
   }: {
     assetId: string;
     blindedUTXO: string;
@@ -1710,6 +2068,8 @@ export class ApiHandler {
     consignmentEndpoints: string;
     feeRate: number;
     isDonation: boolean;
+    schema: string;
+    witnessSats: number;
   }) {
     try {
       const response = await RGBServices.sendAsset(
@@ -1719,6 +2079,8 @@ export class ApiHandler {
         consignmentEndpoints,
         feeRate,
         isDonation,
+        schema,
+        witnessSats,
         ApiHandler.appType,
         ApiHandler.api,
       );
@@ -1938,20 +2300,23 @@ export class ApiHandler {
           )}`,
         );
       }
-      const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-        RealmSchema.RgbWallet,
-      );
-      const utxosData = response.map(utxo => JSON.stringify(utxo));
-      dbManager.updateObjectByPrimaryId(
-        RealmSchema.RgbWallet,
-        'mnemonic',
-        rgbWallet.mnemonic,
-        {
-          utxos: utxosData,
-        },
-      );
-
-      return response;
+      if (response.length > 0) {
+        const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        );
+        const utxosData = response.map(utxo => JSON.stringify(utxo));
+        dbManager.updateObjectByPrimaryId(
+          RealmSchema.RgbWallet,
+          'mnemonic',
+          rgbWallet.mnemonic,
+          {
+            utxos: utxosData,
+          },
+        );
+        return utxosData;
+      } else {
+        return [];
+      }
     } catch (error) {
       console.log('utxos', error);
       throw error;
@@ -2506,6 +2871,7 @@ export class ApiHandler {
         { schema: RealmSchema.Coin, type: 'coin' },
         { schema: RealmSchema.Collectible, type: 'collectible' },
         { schema: RealmSchema.UniqueDigitalAsset, type: 'uda' },
+        { schema: RealmSchema.Collection, type: 'collection' },
       ];
 
       const assetIds = schemas.flatMap(({ schema }) =>
@@ -2670,38 +3036,70 @@ export class ApiHandler {
 
   static fetchPresetAssets = async () => {
     try {
-      const { coins = [] } = (await Relay.getPresetAssets()) || {};
-      coins.forEach((coin: Coin) => {
-        const exists = dbManager.getObjectByPrimaryId(
-          RealmSchema.Coin,
-          'assetId',
-          coin.assetId,
-        );
-        if (exists) {
-          dbManager.updateObjectByPrimaryId(
-            RealmSchema.Coin,
-            'assetId',
-            coin.assetId,
-            {
-              isDefault: coin.isDefault,
-              disclaimer: coin.disclaimer,
-              iconUrl: coin.iconUrl,
-              issuer: coin.issuer,
-              assetSource: coin.assetSource,
-              campaign: coin.campaign,
-              metaData: coin.metaData,
-            },
-          );
-        } else {
-          dbManager.createObjectBulk(
-            RealmSchema.Coin,
-            [coin],
-            Realm.UpdateMode.Modified,
-          );
-        }
-      });
+      const { status, results } = (await Relay.getPresetAssets()) || {};
+      if (status && results) {
+        Storage.set(Keys.PRESET_ASSETS, JSON.stringify(results));
+        results.forEach(result => {
+          if (result.metaData.assetSchema === AssetSchema.Coin) {
+            dbManager.createObject(RealmSchema.Coin, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if (result.metaData.assetSchema === AssetSchema.Collectible) {
+            dbManager.createObject(RealmSchema.Collectible, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if (result.collectionSchema) {
+            dbManager.createObject(RealmSchema.Collection, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          } else if (result.metaData.assetSchema === AssetSchema.UDA) {
+            dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
+              ...result,
+              addedAt: Date.now(),
+              issuedSupply: result.issuedSupply.toString(),
+              balance: {
+                spendable: '0',
+                future: '0',
+                settled: '0',
+                offchainOutbound: '0',
+                offchainInbound: '0',
+              },
+            });
+          }
+        });
+        return true;
+      }
+      return false;
     } catch (error) {
-      return error;
+      console.error('Error fetching preset assets:', error);
+      return false;
     }
   };
 

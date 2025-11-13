@@ -7,6 +7,7 @@ import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import AppText from 'src/components/AppText';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type labelContentProps = {
   label: string;
@@ -29,7 +30,7 @@ function TransferLabelContent(props: labelContentProps) {
         variant="body2"
         selectable={selectable}
         style={[styles.textStyle, contentUnderline && { textDecorationLine: 'underline' }]}>
-        {content}
+        {formatTUsdt(content)}
       </AppText>
     </View>
   );

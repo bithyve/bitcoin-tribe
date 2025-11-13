@@ -37,6 +37,8 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  InvoiceMode,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { TxPriority } from 'src/services/wallets/enums';
 import { Keys } from 'src/storage';
@@ -61,6 +63,10 @@ import DonationTransferInfoModal from './components/DonationTransferInfoModal';
 import AssetIcon from 'src/components/AssetIcon';
 import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
+import { AppContext } from 'src/contexts/AppContext';
+
+const DUST_LIMIT = 330;
 
 type ItemProps = {
   name: string;
@@ -166,7 +172,7 @@ const SendAssetScreen = () => {
   const { assetId, rgbInvoice, amount, isUDA } = useRoute().params;
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const {
     sendScreen,
     common,
@@ -212,12 +218,26 @@ const SendAssetScreen = () => {
   const [successStatus, setSuccessStatus] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [selectedPriority, setSelectedPriority] = useState(TxPriority.LOW);
+  const [invoiceType, setInvoiceType] = useState<InvoiceMode | null>(
+    rgbInvoice !== ''
+      ? rgbInvoice.includes(':wvout')
+        ? InvoiceMode.Witness
+        : InvoiceMode.Blinded
+      : null,
+  );
   const [isDonation, setIsDonation] = useState(false);
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const styles = getStyles(theme, inputHeight, tooltipPos);
+  const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
+    if (
+      isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress
+    ) {
+      return true;
+    }
     return (
       !invoice ||
       assetAmount === '' ||
@@ -235,8 +255,12 @@ const SendAssetScreen = () => {
     } else if (createUtxos.data === false) {
       setLoading(false);
       Toast(walletTranslation.failedToCreateUTXO, true);
+    } else if (createUtxos.error) {
+      setLoading(false);
+      Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      createUtxos.reset();
     }
-  }, [createUtxos.data]);
+  }, [createUtxos.data, createUtxos.error]);
 
   const handleAmountInputChange = text => {
     let regex;
@@ -289,6 +313,8 @@ const SendAssetScreen = () => {
         consignmentEndpoints: decodedInvoice.transportEndpoints[0],
         feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
         isDonation,
+        schema: assetData?.assetSchema.toUpperCase(),
+        witnessSats: Number(invoiceType === InvoiceMode.Witness ? 330 : 0),
       });
       setLoading(false);
       if (response?.txid) {
@@ -342,6 +368,11 @@ const SendAssetScreen = () => {
         Toast('This invoice is not valid for the current network', true);
         return;
       }
+      setInvoiceType(
+        res.recipientId.includes(':wvout')
+          ? InvoiceMode.Witness
+          : InvoiceMode.Blinded,
+      );
       if (res.assetId) {
         const assetData = allAssets.find(item => item.assetId === res.assetId);
         if (!assetData || res.assetId !== assetId) {
@@ -368,6 +399,8 @@ const SendAssetScreen = () => {
       fromPaste && setValidatingInvoiceLoader(false);
     }
   };
+
+  const getInvoiceType = (invoice: string) => {};
 
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
@@ -416,6 +449,11 @@ const SendAssetScreen = () => {
     });
   };
 
+  const clearInvoice = () => {
+    setInvoice('');
+    setInvoiceType(null);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.sendAssetTitle} subTitle={''} />
@@ -441,12 +479,12 @@ const SendAssetScreen = () => {
       </View>
       <KeyboardAvoidView style={styles.container}>
         <AssetItem
-          name={assetData?.name}
-          ticker={assetData?.ticker}
+          name={formatTUsdt(assetData?.name)}
+          ticker={formatTUsdt(assetData?.ticker)}
           details={
             assetData?.assetSchema.toUpperCase() === AssetSchema.Collectible
-              ? assetData?.details
-              : assetData?.ticker
+              ? formatTUsdt(assetData?.details)
+              : formatTUsdt(assetData?.ticker)
           }
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
@@ -495,7 +533,7 @@ const SendAssetScreen = () => {
             invoice && isThemeDark ? <ClearIcon /> : <ClearIconLight />
           }
           onRightTextPress={() =>
-            invoice ? setInvoice('') : handlePasteAddress()
+            invoice ? clearInvoice() : handlePasteAddress()
           }
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
@@ -534,6 +572,26 @@ const SendAssetScreen = () => {
             </AppText>
           </View>
         </View>
+        {/* {invoiceType === InvoiceMode.Witness && (
+          <View style={styles.inputWrapper}>
+            <AppText variant="body2" style={styles.labelstyle}>
+              Sats Amount
+            </AppText>
+            <TextField
+              value={witnessSats}
+              onChangeText={text => setWitnessSats(text)}
+              placeholder={assets.amount}
+              keyboardType="numeric"
+              style={styles.input}
+              inputStyle={styles.inputStyle}
+              rightCTAStyle={styles.rightCTAStyle}
+              rightCTATextColor={theme.colors.accent1}
+              onPressErrorInfo={() => {}}
+              errInfoIconRef={iconRef}
+            />
+          </View>
+        )} */}
+
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.fee}
         </AppText>
@@ -668,7 +726,7 @@ const SendAssetScreen = () => {
           }}>
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
-            assetName={assetData?.name}
+            assetName={formatTUsdt(assetData?.name)}
             amount={assetAmount && assetAmount.replace(/,/g, '')}
             feeRate={
               selectedPriority === TxPriority.CUSTOM
@@ -729,6 +787,11 @@ const SendAssetScreen = () => {
               );
               return;
             }
+            // if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
+            //   Keyboard.dismiss();
+            //   Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
+            //   return;
+            // }
             Keyboard.dismiss();
             setVisible(true);
           }}

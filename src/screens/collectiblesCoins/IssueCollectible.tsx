@@ -35,6 +35,7 @@ import {
   AssetType,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import pickImage from 'src/utils/imagePicker';
 import IconClose from 'src/assets/images/image_icon_close.svg';
@@ -65,12 +66,12 @@ const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as Bi
 
 function IssueCollectibleScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
-  const { appType } = useContext(AppContext);
+  const { appType, isWalletOnline } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -116,7 +117,10 @@ function IssueCollectibleScreen() {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
   );
 
   useEffect(() => {
@@ -129,10 +133,11 @@ function IssueCollectibleScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      Toast(
-        'An issue occurred while processing your request. Please try again.',
-        true,
-      );
+      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+        Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      } else {
+        Toast(assets.assetProcessErrorMsg, true);
+      }
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
       navigation.goBack();
@@ -155,7 +160,7 @@ function IssueCollectibleScreen() {
     try {
       const response = await ApiHandler.issueNewCollectible({
         name: assetName.trim(),
-        description: description,
+        description: description.trim(),
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
         filePath: Platform.select({
@@ -221,7 +226,7 @@ function IssueCollectibleScreen() {
     try {
       const response = await ApiHandler.issueAssetUda({
         name: assetName.trim(),
-        details: description,
+        details: description.trim(),
         ticker: assetTicker,
         mediaFilePath: Platform.select({
           android:
@@ -294,6 +299,12 @@ function IssueCollectibleScreen() {
   ]);
 
   const isButtonDisabled = useMemo(() => {
+    if (
+      isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress
+    ) {
+      return true;
+    }
     if (assetType === AssetType.Collectible) {
       return !assetName || !image || !totalSupplyAmt || !description;
     }
@@ -301,7 +312,7 @@ function IssueCollectibleScreen() {
       !assetName ||
       !assetTicker ||
       !description ||
-      !attachments?.length ||
+      // !attachments?.length ||
       !image
     );
   }, [
@@ -691,7 +702,7 @@ function IssueCollectibleScreen() {
               {assets.assetImageCaption}
             </AppText>
 
-            <AppText
+            {/* <AppText
               variant="body2"
               style={[styles.textInputTitle, { marginTop: 10 }]}>
               {assets.attachments}
@@ -729,7 +740,7 @@ function IssueCollectibleScreen() {
                   {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
                 </AppTouchable>
               )}
-            />
+            /> */}
 
             <AppText variant="caption" style={[styles.textInputTitle]}>
               {assets.attachmentsCaption}

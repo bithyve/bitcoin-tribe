@@ -24,6 +24,7 @@ import {
   AssetType,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import CheckIconLight from 'src/assets/images/checkIcon_light.svg';
@@ -38,15 +39,17 @@ import { RealmSchema } from 'src/storage/enum';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
+import { AppContext } from 'src/contexts/AppContext';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueScreen() {
   const { issueAssetType, addToRegistry } = useRoute().params;
+  const { isWalletOnline } = useContext(AppContext);
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { translations } = useContext(LocalizationContext);
+  const { translations, formatString } = useContext(LocalizationContext);
   const { home, common, assets, wallet: walletTranslation } = translations;
   const [inputHeight, setInputHeight] = useState(100);
   const styles = getStyles(theme, inputHeight);
@@ -82,7 +85,10 @@ function IssueScreen() {
     JSON.parse(utxoStr),
   );
   const colorable = unspent.filter(
-    utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0 && utxo.pendingBlinded === 0,
+    utxo =>
+      utxo.utxo.colorable === true &&
+      utxo.rgbAllocations?.length === 0 &&
+      utxo.pendingBlinded === 0,
   );
 
   useEffect(() => {
@@ -95,10 +101,11 @@ function IssueScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      Toast(
-        'An issue occurred while processing your request. Please try again.',
-        true,
-      );
+      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+        Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
+      } else {
+        Toast(assets.assetProcessErrorMsg, true);
+      }
     } else if (createUtxoData === false) {
       Toast(walletTranslation.failedToCreateUTXO, true);
       navigation.goBack();
@@ -163,6 +170,12 @@ function IssueScreen() {
   }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
 
   const isButtonDisabled = useMemo(() => {
+    if (
+      isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress
+    ) {
+      return true;
+    }
     return !assetName || !assetTicker || !totalSupplyAmt;
   }, [assetName, assetTicker, totalSupplyAmt]);
 

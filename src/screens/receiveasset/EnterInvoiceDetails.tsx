@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Keyboard, Platform, StyleSheet, View } from 'react-native';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { Keyboard, StyleSheet, View } from 'react-native';
+import { RadioButton, useTheme, SegmentedButtons } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
@@ -9,7 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -24,8 +24,10 @@ import {
   Asset,
   Coin,
   Collectible,
+  InvoiceMode,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
@@ -33,6 +35,12 @@ import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { AppContext } from 'src/contexts/AppContext';
+import Fonts from 'src/constants/Fonts';
+import InsufficiantBalancePopupContainer from '../collectiblesCoins/components/InsufficiantBalancePopupContainer';
+import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import useWallets from 'src/hooks/useWallets';
+import { Wallet } from 'src/services/wallets/interfaces/wallet';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -46,7 +54,7 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     footerWrapper: {
       height: '25%',
       paddingBottom: hp(20),
-      marginTop: 40
+      marginTop: 40,
     },
     contentStyle: {
       borderRadius: 0,
@@ -108,10 +116,23 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       position: 'absolute',
       borderRadius: 20,
     },
+    segmentedButtons: {
+      marginVertical: hp(5),
+      borderWidth: 0.4,
+      borderColor: theme.colors.secondaryHeadingColor,
+      borderRadius: 10,
+    },
+    segmentedButtonsTitle: {
+      marginVertical: hp(10),
+      fontSize: 15,
+      color: theme.colors.secondaryHeadingColor,
+      fontFamily: Fonts.LufgaRegular,
+    },
   });
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
+  const { appType, isWalletOnline } = useContext(AppContext);
   const { invoiceAssetId, chosenAsset } = useRoute().params;
   const { receciveScreen, common, assets, home } = translations;
   const navigation = useNavigation();
@@ -138,7 +159,8 @@ const EnterInvoiceDetails = () => {
   const collectibles = useQuery<Collectible[]>(
     RealmSchema.Collectible,
   ).filtered("visibility != 'HIDDEN'");
-
+  const [invoiceType, setInvoiceType] = useState(InvoiceMode.Blinded);
+  const [visible, setVisible] = useState(false);
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined.sort((a, b) => a.timestamp - b.timestamp);
@@ -147,7 +169,7 @@ const EnterInvoiceDetails = () => {
   const { mutateAsync, isLoading, data, reset } = useMutation(
     ({ query }: { query: string }) => ApiHandler.searchAssetFromRegistry(query),
   );
-
+  const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
@@ -183,8 +205,34 @@ const EnterInvoiceDetails = () => {
     searchAsset();
   }, [searchAssetInput]);
 
+  const canProceed = useMemo(() => {
+    if (
+      app.appType === AppType.NODE_CONNECT ||
+      app.appType === AppType.SUPPORTED_RLN
+    ) {
+      return (
+        rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
+          rgbWallet?.nodeBtcBalance?.vanilla?.future >
+        0
+      );
+    }
+    return (
+      wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
+        0 || colorable.length > 0
+    );
+  }, [
+    colorable.length,
+    wallet?.specs.balances.confirmed,
+    wallet?.specs.balances.unconfirmed,
+    rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
+  ]);
+
   function validateAndNavigateToReceiveAsset() {
-    navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+    if (!canProceed && invoiceType === InvoiceMode.Blinded) {
+      setVisible(true);
+      return;
+    }
+    navigation.replace(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
       amount:
@@ -195,6 +243,7 @@ const EnterInvoiceDetails = () => {
           : '',
       selectedType,
       invoiceExpiry,
+      invoiceType,
     });
   }
 
@@ -217,7 +266,7 @@ const EnterInvoiceDetails = () => {
       <AppHeader
         title={home.addAssets}
         subTitle={
-          'Tap ‘Generate Invoice’ to create a blind invoice, or select and add asset and amount for a specific invoice.'
+          `Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`
         }
         enableBack={true}
       />
@@ -284,9 +333,31 @@ const EnterInvoiceDetails = () => {
             value={invoiceExpiry}
             onValueChange={setInvoiceExpiry}
           />
+
+          <AppText variant="caption" style={styles.segmentedButtonsTitle}>
+            Invoice Type
+          </AppText>
+          <SegmentedButtons
+            value={invoiceType}
+            onValueChange={(value: InvoiceMode) => setInvoiceType(value)}
+            theme={{ colors: { primary: theme.colors.accent1 } }}
+            style={styles.segmentedButtons}
+            buttons={[
+              {
+                value: InvoiceMode.Blinded,
+                label: 'Blinded',
+                style: { borderRadius: 10 },
+              },
+              {
+                value: InvoiceMode.Witness,
+                label: 'Witness',
+                style: { borderRadius: 10 },
+              },
+            ]}
+          />
         </View>
         <View style={styles.footerWrapper}>
-          {colorable.length === 0 ? (
+          {colorable.length === 0 && invoiceType === InvoiceMode.Blinded ? (
             <View style={styles.reservedSatsWrapper}>
               <View style={styles.checkIconWrapper}>
                 {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
@@ -297,12 +368,20 @@ const EnterInvoiceDetails = () => {
                 </AppText>
               </View>
             </View>
-          ) : null}
-          <Buttons
-            primaryTitle={common.proceed}
-            primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-            width={'100%'}
-          />
+          ) : (
+            <View style={styles.reservedSatsWrapper} />
+          )}
+          <View style={{ alignSelf: 'center' }}>
+            <Buttons
+              primaryTitle={assets.generateInvoice}
+              primaryOnPress={() => validateAndNavigateToReceiveAsset()}
+              width={'100%'}
+              disabled={
+                isWalletOnline === WalletOnlineStatus.Error ||
+                isWalletOnline === WalletOnlineStatus.InProgress
+              }
+            />
+          </View>
         </View>
         {assetsDropdown && (
           <RGBAssetList
@@ -324,6 +403,23 @@ const EnterInvoiceDetails = () => {
             isLoading={isLoading}
           />
         )}
+
+        <ResponsePopupContainer
+          visible={visible}
+          enableClose={true}
+          onDismiss={() => setVisible(false)}
+          backColor={theme.colors.cardGradient1}
+          borderColor={theme.colors.borderColor}>
+          <InsufficiantBalancePopupContainer
+            primaryOnPress={() => {
+              setVisible(false);
+              setTimeout(() => {
+                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+              }, 500);
+            }}
+            secondaryOnPress={() => setVisible(false)}
+          />
+        </ResponsePopupContainer>
       </KeyboardAwareScrollView>
     </ScreenContainer>
   );

@@ -1,21 +1,22 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { useMutation } from 'react-query';
-import { useTheme } from 'react-native-paper';
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
-import { windowHeight } from 'src/constants/responsive';
+import { windowHeight, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import Toast from './Toast';
+import { Modal, Portal, useTheme } from 'react-native-paper';
+import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
 const RGBWalletStatus = () => {
   const {
@@ -34,6 +35,7 @@ const RGBWalletStatus = () => {
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
   const [walletWentOnline, setWalletWentOnline] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
@@ -86,6 +88,7 @@ const RGBWalletStatus = () => {
         setWalletWentOnline(false);
       }, 1500);
     }
+    setVisible(false);
   }, [isWalletOnline]);
 
   const getRetryMessage = useMemo(() => {
@@ -111,52 +114,71 @@ const RGBWalletStatus = () => {
       : common.rgbWalletOffline;
   }, [appType]);
 
-  return isWalletOnline === WalletOnlineStatus.Error ? (
-    <AppTouchable style={styles.errorContainer} onPress={onPress}>
-      <AppText style={styles.text}>{msg}</AppText>
-    </AppTouchable>
-  ) : isWalletOnline === WalletOnlineStatus.InProgress ? (
-    <AppTouchable style={styles.container} disabled>
-      <AppText style={styles.text}>{getRetryMessage}</AppText>
-    </AppTouchable>
-  ) : walletWentOnline ? (
-    <AppTouchable style={styles.onlineContainer} disabled>
-      <AppText style={styles.text}>{common.walletWentOnline}</AppText>
-    </AppTouchable>
-  ) : null;
+  const tapView = useMemo(() => {
+    return (
+      <AppTouchable onPress={() => setVisible(true)} style={styles.tapViewWrapper}>
+        <TapInfoIcon />
+      </AppTouchable>
+    );
+  }, [common.tapToInfo]);
+
+  return (
+    <View style={styles.container}>
+      {isWalletOnline === WalletOnlineStatus.Error ? (
+        <AppTouchable style={styles.errorContainer} onPress={onPress}>
+          <AppText style={styles.text}>{msg}</AppText>
+          {tapView}
+        </AppTouchable>
+      ) : isWalletOnline === WalletOnlineStatus.InProgress ? (
+        <AppTouchable style={styles.inProgressContainer} disabled>
+          <AppText style={styles.text}>{getRetryMessage}</AppText>
+          {tapView}
+        </AppTouchable>
+      ) : walletWentOnline ? (
+        <AppTouchable style={styles.onlineContainer} disabled>
+          <AppText style={styles.text}>{common.walletWentOnline}</AppText>
+        </AppTouchable>
+      ) : null}
+
+      <Portal>
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
+          contentContainerStyle={[styles.tooltipContainer]}>
+          <AppText variant="caption" style={styles.tooltipText}>
+          {isWalletOnline === WalletOnlineStatus.InProgress ? common.gettingRGBWalletOnlineMessage : formatString(common.gettingRGBWalletOnlineAttempt, { attempt: retryAttempt })}
+          </AppText>
+        </Modal>
+      </Portal>
+    </View>
+  );
 };
 
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     onlineContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 40
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.GOGreen,
       zIndex: 1000,
+      flexDirection: 'row',
       alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: wp(16),
     },
     errorContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 40
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.FireOpal,
       zIndex: 1000, // Ensures the banner is above everything
       alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: wp(16),
+      flexDirection: 'row',
+    },
+    inProgressContainer: {
+      backgroundColor: Colors.SelectiveYellow,
+      zIndex: 1000, // Ensures the banner is above everything
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      paddingHorizontal: wp(16),
+      flexDirection: 'row',
     },
     container: {
       position: Platform.OS === 'ios' ? 'absolute' : 'relative',
@@ -177,6 +199,33 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       color: 'white',
       fontSize: 14,
       fontWeight: 'bold',
+      flex: 1,
+    },
+    tapViewWrapper: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    tooltipContainer: {
+      position: 'absolute',
+      backgroundColor: theme.colors.modalBackColor,
+      padding: 12,
+      borderRadius: 8,
+      width: 270,
+      alignItems: 'center',
+      alignSelf: 'flex-end',
+      right: 15,
+      top: hasNotch
+        ? 50
+        : Platform.OS === 'ios' && windowHeight > 820
+        ? 28
+        : Platform.OS === 'android'
+        ? 68
+        : 25,
+    },
+    tooltipText: {
+      color: theme.colors.headingColor,
+      fontSize: 14,
     },
   });
 

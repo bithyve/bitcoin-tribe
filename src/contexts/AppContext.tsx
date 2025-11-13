@@ -35,6 +35,8 @@ reSyncingWallet: false,
   setIsVerifyXInfoVisible: status => {},
   isVerifyDomainInfoVisible: null,
   setIsVerifyDomainInfoVisible: status => {},
+  communityStatus:null,
+  setCommunityStatus:status=>{},
 });
 
 export function AppProvider({ children }) {
@@ -63,6 +65,7 @@ export function AppProvider({ children }) {
   const [isVerifyDomainInfoVisibleMMKV, setIsVerifyDomainInfoVisibleMMKV] =
     useMMKVBoolean(Keys.VERIFY_DOMAIN_INFO);
   const isVerifyDomainInfoVisible = isVerifyDomainInfoVisibleMMKV ?? true;
+  const [communityStatus, setCommunityStatus] = useState(null);
   return (
     <AppContext.Provider
       value={{
@@ -96,6 +99,8 @@ export function AppProvider({ children }) {
         setIsVerifyXInfoVisible: setIsVerifyXInfoVisibleMMKV,
         isVerifyDomainInfoVisible,
         setIsVerifyDomainInfoVisible: setIsVerifyDomainInfoVisibleMMKV,
+        communityStatus,
+        setCommunityStatus:setCommunityStatus
       }}>
       {children}
     </AppContext.Provider>

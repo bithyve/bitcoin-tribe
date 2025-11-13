@@ -16,18 +16,13 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import UTXOTabBar from './UTXOTabBar';
 import Invoices from 'src/screens/collectiblesCoins/InvoicesScreen';
+import { useMemo } from 'react';
 
 const renderScene = SceneMap({
   colored: ColoredUTXO,
   colorable: ColorableUTXO,
   invoices: Invoices,
 });
-
-const routes = [
-  { key: 'colored', title: 'Colored' },
-  { key: 'colorable', title: 'Colorable' },
-  { key: 'invoices', title: 'Invoices' },
-];
 
 export default function UTXOTabs() {
   const layout = useWindowDimensions();
@@ -38,6 +33,14 @@ export default function UTXOTabs() {
   const [visibleUTXOInfo, setVisibleUTXOInfo] = React.useState(false);
   const { translations } = React.useContext(LocalizationContext);
   const { wallet } = translations;
+
+  const routes = useMemo(() => {
+    return [
+      { key: 'colored', title: wallet.colored },
+      { key: 'colorable', title: wallet.colorable },
+      { key: 'invoices', title: wallet.invoices },
+    ];
+  }, []);
 
   return (
     <SafeAreaView style={{ ...styles.container }}>

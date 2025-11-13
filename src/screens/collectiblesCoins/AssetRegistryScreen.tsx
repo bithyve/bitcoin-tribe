@@ -28,6 +28,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { AppContext } from 'src/contexts/AppContext';
 import Fonts from 'src/constants/Fonts';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
@@ -228,7 +229,7 @@ function AssetRegistryScreen() {
               onSwipeComplete={async () => {
                 setDisabledCTA(true);
                 await ApiHandler.refreshWallets({ wallets: [wallet] });
-                payServiceFeeFeeMutation.mutate({ feeDetails });
+                payServiceFeeFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
               }}
               backColor={theme.colors.swipeToActionThumbColor}
               resetCounter={swipeResetCounter}
@@ -237,14 +238,14 @@ function AssetRegistryScreen() {
           )}
           {!!feeDetails && (
             <View style={styles.skipWrapper}>
-              <SkipButton
+             {!disabledCTA && <SkipButton
                 disabled={disabledCTA}
                 onPress={() => {
                   setHasIssuedAsset(true);
                   setTimeout(() => routeMap(false), 500);
                 }}
                 title={assets.skipForNow}
-              />
+              />}
             </View>
           )}
         </View>

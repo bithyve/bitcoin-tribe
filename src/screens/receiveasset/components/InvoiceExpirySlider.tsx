@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Fonts from 'src/constants/Fonts';
@@ -6,8 +6,8 @@ import AppText from 'src/components/AppText';
 import { hp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
-const LABELS = ['1 Hr', '6 Hrs', '12 Hrs', '1 Day', '2 Days'];
 const STEPS = [3600, 21600, 43200, 86400, 172800];
 
 type Props = {
@@ -17,13 +17,22 @@ type Props = {
 
 const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
   const theme: AppTheme = useTheme();
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const styles = getStyles(theme);
   const getLabelIndex = () => STEPS.findIndex(v => v === value);
+  const LABELS = [
+    `${assets.oneHour}`,
+    `${assets.sixHours}`,
+    `${assets.twelveHours}`,
+    `${assets.oneDay}`,
+    `${assets.twoDays}`,
+  ];
 
   return (
     <View style={styles.container}>
       <AppText variant="caption" style={styles.title}>
-        Invoice Expiry
+        {assets.invoiceExpiryTitle}
       </AppText>
 
       <Slider

@@ -105,12 +105,14 @@ function EditProfileDetails(props: ProfileDetailsProps) {
             maxLength={15}
           />
         </View>
-        <Buttons
-          primaryTitle={primaryCTATitle}
-          primaryOnPress={primaryOnPress}
-          width={'100%'}
-          disabled={disabled}
-        />
+        <View style={{ alignSelf: 'center' }}>
+          <Buttons
+            primaryTitle={primaryCTATitle}
+            primaryOnPress={primaryOnPress}
+            width={'100%'}
+            disabled={disabled}
+          />
+        </View>
       </KeyboardAwareScrollView>
       <ModalContainer
         title={'Edit profile picture'}

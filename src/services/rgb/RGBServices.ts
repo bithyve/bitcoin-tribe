@@ -334,6 +334,8 @@ export default class RGBServices {
     consignmentEndpoints: string,
     feePerByte,
     isDonation: boolean,
+    schema: string,
+    witnessSats:number = 0,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
@@ -357,6 +359,8 @@ export default class RGBServices {
         consignmentEndpoints,
         feePerByte,
         isDonation,
+        schema,
+        witnessSats,
       );
       return JSON.parse(data);
     }

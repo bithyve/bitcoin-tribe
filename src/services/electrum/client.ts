@@ -48,10 +48,10 @@ export let ELECTRUM_CLIENT: {
 } = ELECTRUM_CLIENT_DEFAULTS;
 
 export const ELECTRUM_NOT_CONNECTED_ERR =
-  'Network Error: The current electrum node is not reachable, please try again with a different node';
+  'Network Error: The current electrum server is not reachable, please try again';
 
 export const ELECTRUM_NOT_CONNECTED_ERR_TOR =
-  'Network Error: Connection currently failing over Tor, please disable Tor or try again using a different node';
+  'Network Error: Connection currently failing over Tor, please disable Tor or try again';
 
 export default class ElectrumClient {
   public static connectOverTor = false;

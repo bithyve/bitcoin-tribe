@@ -17,6 +17,10 @@ import LabelledItem from './LabelledItem';
 import TransactionInfoSection from './TransactionInfoSection';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import dbManager from 'src/storage/realm/dbManager';
+import { RealmSchema } from 'src/storage/enum';
+import { Collection } from 'src/models/interfaces/RGBWallet';
 
 type WalletTransactionsProps = {
   transAmount: string;
@@ -85,6 +89,22 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
     ));
   }, [transaction?.inputs]);
 
+  const note = useMemo(() => {
+    if(transaction.metadata.feeType === ServiceFeeType.CREATE_COLLECTION_FEE) {
+      return 'Created a new collection';
+    } else if(transaction.metadata.feeType === ServiceFeeType.MINT_COLLECTION_ITEM_FEE) {
+      const collections = dbManager.getCollection(RealmSchema.Collection);
+      const collection: Collection = collections.find(collection => collection._id === transaction.metadata.collectionId);
+      return `Issued a new collection item in ${collection?.name} collection`;
+    } else  {
+      if(transaction.metadata.note) {
+        return transaction.metadata.note;
+      } else {
+        return 'Availibe to issue a new asset';
+      }
+    }
+  }, [transaction.metadata]);
+
   return (
     <ScrollView
       overScrollMode="never"
@@ -144,11 +164,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
       {transaction.transactionKind === TransactionKind.SERVICE_FEE && (
         <LabeledContent
           label={'Note'}
-          content={
-            transaction.metadata?.note
-              ? transaction.metadata?.note
-              : 'Availibe to issue a new asset'
-          }
+          content={note}
         />
       )}
     </ScrollView>

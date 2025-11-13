@@ -89,6 +89,18 @@ import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
+import IssueCollection from 'src/screens/collectiblesCoins/IssueCollection';
+import CollectionDetailsScreen from 'src/screens/assets/CollectionDetailsScreen';
+import { CreateGroup } from 'src/screens/community/CreateGroup';
+import { GroupInfo } from 'src/screens/community/GroupInfo';
+import GroupQr from 'src/screens/community/GroupQr';
+import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
+import { EditGroup } from 'src/screens/community/EditGroup';
+import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
+import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
+import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
+import { useKeepAwake } from '@sayem314/react-native-keep-awake';
+import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -149,6 +161,7 @@ function LoginStack() {
 }
 
 function AppStack() {
+  useKeepAwake();
   const Stack = createNativeStackNavigator<AppStackParams>();
   return (
     <RealmProvider>
@@ -209,6 +222,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUECOLLECTIBLESCREEN}
           component={IssueCollectible}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUECOLLECTION}
+          component={IssueCollection}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}
@@ -353,7 +370,8 @@ function AppStack() {
           name={NavigationRoutes.GETBTCWITHRAMP}
           component={GetBTCWithRamp}
         />
-        <Stack.Screen name={NavigationRoutes.REQUESTORSEND}
+        <Stack.Screen
+          name={NavigationRoutes.REQUESTORSEND}
           component={RequestOrSend}
         />
         <Stack.Screen
@@ -364,6 +382,27 @@ function AppStack() {
           name={NavigationRoutes.WEBVIEWSCREEN}
           component={WebViewScreen}
         />
+        <Stack.Screen
+          name={NavigationRoutes.COLLECTIONDETAILS}
+          component={CollectionDetailsScreen}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ADDCOLLECTIONITEM}
+          component={AddCollectionItem}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.CREATEGROUP}
+          component={CreateGroup}
+        />
+        <Stack.Screen name={NavigationRoutes.GROUPINFO} component={GroupInfo} />
+        <Stack.Screen name={NavigationRoutes.GROUPQR} component={GroupQr} />
+        <Stack.Screen
+          name={NavigationRoutes.SCANQRSCREEN}
+          component={ScanQrScreen}
+        />
+        <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
+        <Stack.Screen name={NavigationRoutes.COLLECTIONVERIFICATIONSCREEN} component={CollectionVerificationScreen} />
+        <Stack.Screen name={NavigationRoutes.COLLECTIONUDASWIPER} component={CollectionUdaSwiper} />
       </Stack.Navigator>
     </RealmProvider>
   );
@@ -399,6 +438,7 @@ function Navigator() {
       <NodeConnectingSetup />
       <NodeConnected />
       <BackupDoneBanner />
+      <CommunityServerBanner/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}

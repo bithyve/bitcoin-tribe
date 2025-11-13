@@ -41,11 +41,12 @@ type AssetTransactionProps = {
   onPress: () => void;
   assetFace?: string;
   precision: number;
+  hidePrecision?:boolean;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace, precision } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision,hidePrecision=false } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -175,7 +176,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             </AppText>
           </View>
         </View>
-        {assetFace?.toUpperCase() !== AssetFace.RGB21 ? (
+        {!hidePrecision &&  assetFace?.toUpperCase() !== AssetFace.RGB21 ? (
           <View style={styles.amountWrapper}>
             <View style={styles.amtIconWrapper}>
               <AppText
@@ -222,6 +223,7 @@ const getStyles = (theme: AppTheme, backColor, assetFace) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
+      justifyContent: 'space-between',
       backgroundColor: backColor,
       padding: backColor ? 15 : 0,
       borderRadius: backColor ? 10 : 0,

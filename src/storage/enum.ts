@@ -20,6 +20,7 @@ export enum RealmSchema {
   RgbWallet = 'RgbWallet',
   ReceiveData = 'ReceiveData',
   Coin = 'Coin',
+  Collection = 'Collection',
   Balance = 'Balance',
   AssetTransaction = 'AssetTransaction',
   MetaData = 'MetaData',
@@ -46,4 +47,7 @@ export enum RealmSchema {
   Disclaimer = 'Disclaimer',
   DisclaimerContent = 'DisclaimerContent',
   ElectrumTransaction = 'ElectrumTransaction',
+  HolepunchRoom = 'HolepunchRoom',
+  HolepunchMessage = 'HolepunchMessage',
+  HolepunchPeer = 'HolepunchPeer',
 }

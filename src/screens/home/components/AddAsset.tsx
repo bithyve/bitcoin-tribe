@@ -1,16 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useCallback, useContext, useMemo, useState } from 'react';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import ScreenContainer from 'src/components/ScreenContainer';
-import SelectOption from 'src/components/SelectOption';
 import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import useWallets from 'src/hooks/useWallets';
@@ -27,6 +21,65 @@ import { AppTheme } from 'src/theme';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import RibbonCard from 'src/components/RibbonCardCard';
+import AppText from 'src/components/AppText';
+import SwipeToAction from 'src/components/SwipeToAction';
+import SkipButton from 'src/components/SkipButton';
+
+export const ServiceFee = ({
+  feeDetails,
+  onPay,
+  status,
+  onSkip,
+  hideModal,
+  disabledCTA,
+}: ServiceFeeProps) => {
+  const theme: AppTheme = useTheme();
+  const styles = getStyles(theme);
+  const { translations } = useContext(LocalizationContext);
+  const { common, assets } = translations;
+
+  if (!feeDetails) {
+    return null;
+  }
+
+  return (
+    <View style={styles.containerFee}>
+      <View style={styles.wrapper}>
+        <View style={styles.amtContainer}>
+          <View style={styles.labelWrapper}>
+            <AppText style={styles.labelText}>{'Platform Fee'}:</AppText>
+          </View>
+          <View style={styles.valueWrapper}>
+            <AppText
+              style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
+          </View>
+        </View>
+      </View>
+      <View>
+        <View style={styles.primaryCtaStyle}>
+          <SwipeToAction
+            title={assets.swipeToPay}
+            loadingTitle={assets.payInprocess}
+            onSwipeComplete={onPay}
+            backColor={theme.colors.swipeToActionThumbColor}
+            loaderTextColor={theme.colors.primaryCTAText}
+          />
+        </View>
+        <SkipButton
+          disabled={disabledCTA}
+          onPress={() => {
+            hideModal();
+            setTimeout(() => {
+              onSkip();
+            }, 400);
+          }}
+          title={assets.skipForNow}
+        />
+      </View>
+    </View>
+  );
+};
 
 function AddAsset() {
   const navigation = useNavigation();
@@ -46,7 +99,6 @@ function AddAsset() {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
-
 
   const canProceed = useMemo(() => {
     if (
@@ -73,7 +125,10 @@ function AddAsset() {
   const navigateToIssue = useCallback(
     (addToRegistry: boolean, issueAssetType) => {
       setTimeout(() => {
-        if (issueAssetType === AssetType.Coin) {
+        if(issueAssetType === AssetType.Collection) {
+          navigation.replace(NavigationRoutes.ISSUECOLLECTION);
+        }
+        else if (issueAssetType === AssetType.Coin) {
           navigation.replace(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry,
@@ -94,8 +149,9 @@ function AddAsset() {
       <AppHeader title={home.createAssets} subTitle={home.addAssetSubTitle} />
 
       <View style={styles.container}>
-        <SelectOption
+        <RibbonCard
           title={assets.issueNewCoin}
+          subTitle={assets.issueNewCoinSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -105,11 +161,11 @@ function AddAsset() {
               navigateToIssue(false, AssetType.Coin);
             }
           }}
-          testID="issue_new"
         />
 
-        <SelectOption
+        <RibbonCard
           title={assets.issueCollectibles}
+          subTitle={assets.issueCollectiblesSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
@@ -119,21 +175,31 @@ function AddAsset() {
               navigateToIssue(false, AssetType.Collectible);
             }
           }}
-          testID="issue_new"
         />
-        <SelectOption
-          title={home.addAssets}
+         <RibbonCard
+          title={assets.issueCollection}
+          subTitle={assets.createNewTribeUdasCollection}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
             if (!canProceed) {
               setVisible(true);
             } else {
-              navigation.replace(NavigationRoutes.ENTERINVOICEDETAILS, {
-                refresh: true,
-              });
+              navigateToIssue(false, AssetType.Collection);
             }
           }}
+          testID="issue_collection"
+        />
+        <RibbonCard
+          title={home.addAssets}
+          subTitle={home.receiveAssetsSubtitle}
+          backColor={theme.colors.inputBackground}
+          style={styles.optionStyle}
+          onPress={() =>
+            navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+              refresh: true,
+            })
+          }
           testID="receive"
         />
       </View>
@@ -164,9 +230,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       paddingTop: hp(20),
+      gap: hp(12),
     },
     optionStyle: {
-      marginVertical: hp(5),
       paddingHorizontal: 20,
     },
     labelWrapper: {
@@ -180,6 +246,35 @@ const getStyles = (theme: AppTheme) =>
     },
     labelText: {
       color: theme.colors.headingColor,
+    },
+    primaryCtaStyle: {
+      marginVertical: hp(15),
+    },
+    amtContainer: {
+      marginVertical: Platform.OS === 'ios' ? hp(20) : hp(45),
+      padding: hp(15),
+      borderRadius: 15,
+      alignItems: 'center',
+      borderColor: theme.colors.serviceFeeBorder,
+      borderWidth: 1,
+      borderStyle: 'dashed',
+      flexDirection: 'row',
+      width: '80%',
+      alignSelf: 'center',
+    },
+    loaderStyle: {
+      alignSelf: 'center',
+      width: hp(150),
+      height: hp(150),
+      marginVertical: hp(20),
+    },
+    containerFee: {
+      borderTopColor: theme.colors.borderColor,
+      borderTopWidth: 2,
+      paddingTop: hp(5),
+    },
+    wrapper: {
+      // height: '50%',
     },
   });
 

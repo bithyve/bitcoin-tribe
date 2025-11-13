@@ -89,16 +89,18 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         source={require('src/assets/images/jsons/nodeConnectSuccess.json')}
         style={styles.loaderStyle}
         autoPlay
-        loop
+        loop={false}
       />
-      <PrimaryCTA
-        title={common.done}
-        onPress={onSuccessPress}
-        width={'100%'}
-        textColor={theme.colors.popupSentCTATitleColor}
-        buttonColor={theme.colors.popupSentCTABackColor}
-        height={hp(18)}
-      />
+      <View style={{ alignItems: 'center' }}>
+        <PrimaryCTA
+          title={common.done}
+          onPress={onSuccessPress}
+          width={'100%'}
+          textColor={theme.colors.popupSentCTATitleColor}
+          buttonColor={theme.colors.popupSentCTABackColor}
+          height={hp(18)}
+        />
+      </View>
     </>
   );
 }

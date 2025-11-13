@@ -71,7 +71,7 @@ import LottieView from 'lottie-react-native';
 import RGBServices from 'src/services/rgb/RGBServices';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import dbManager from 'src/storage/realm/dbManager';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
+import { RGBWallet, WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 const RNBiometrics = new ReactNativeBiometrics();
@@ -88,7 +88,7 @@ function SettingsScreen({ navigation }) {
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
-  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet } =
+  const { manualAssetBackupStatus, hasCompletedManualBackup, reSyncWallet, isWalletOnline } =
     useContext(AppContext);
   const [darkTheme, setDarkTheme] = useMMKVBoolean(Keys.THEME_MODE);
   const [biometrics, setBiometrics] = useState(false);
@@ -167,6 +167,7 @@ function SettingsScreen({ navigation }) {
     } else if (pinMethod === PinMethod.BIOMETRIC) {
       // resetPinMethod will be used in future - need ux or something else
       // ApiHandler.resetPinMethod(key);
+      setIsEnableBiometrics(false);
       Storage.set(Keys.PIN_METHOD, PinMethod.PIN);
       setBiometrics(false);
     }
@@ -293,7 +294,7 @@ function SettingsScreen({ navigation }) {
     },
     {
       id: 2,
-      title: 'Change Passcode',
+      title: settings.changePasscodeTitle,
       icon: isThemeDark ? <SetPasscode /> : <SetPasscodeLight />,
       onPress: () => setVisible(true),
       hideMenu: pinMethod === PinMethod.DEFAULT,
@@ -345,6 +346,7 @@ function SettingsScreen({ navigation }) {
       title: resetWalletMessages.ResyncWalletData,
       icon: isThemeDark ? <SyncWalletIcon /> : <SyncWalletIconLight />,
       onPress: () => setShowFullSyncModal(true),
+      hideMenu: isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress,
     },
     {
       id: 2,
@@ -360,8 +362,8 @@ function SettingsScreen({ navigation }) {
         <HomeHeader showBalance={false} showSearch />
       </View>
       <EnterPasscodeModal
-        title={'Change Passcode'}
-        subTitle={'Enter your current passcode'}
+        title={settings.changePasscodeTitle}
+        subTitle={settings.enterPasscodeSubTitle}
         visible={visible}
         passcode={passcode}
         invalidPin={invalidPin}
@@ -391,7 +393,7 @@ function SettingsScreen({ navigation }) {
       <View>
         <BiometricUnlockModal
           visible={visibleBiometricUnlock}
-          primaryCtaTitle={'Set Passcode'}
+          primaryCtaTitle={settings.setPasscodeTitle}
           primaryOnPress={() => {
             setVisibleBiometricUnlock(false);
             setIsEnableBiometrics(true);
@@ -421,7 +423,7 @@ function SettingsScreen({ navigation }) {
         {isThemeDark ? <WalletSync /> : <WalletSyncLight />}
         <View style={styles.ctaWrapper}>
           <Buttons
-            primaryTitle={'Start Resync'}
+            primaryTitle={resetWalletMessages.startResync}
             primaryOnPress={() => {
               reSyncWallet(true);
               setShowFullSyncModal(false);
