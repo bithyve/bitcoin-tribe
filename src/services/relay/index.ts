@@ -150,25 +150,33 @@ export default class Relay {
   ): Promise<{ status: boolean; error?: string; app: TribeApp }> => {
     let res;
     try {
-      const formData = new FormData();
-      if (walletImage) {
+      const basePayload = {
+        name: name || 'Satoshi’s Palette',
+        appID,
+        publicId,
+        publicKey,
+        appType,
+        network,
+        fcmToken,
+        signature,
+      };
+
+      if (walletImage?.uri && walletImage?.fileName && walletImage?.type) {
+        const formData = new FormData();
         formData.append('file', {
           uri: walletImage.uri,
           name: walletImage.fileName,
           type: walletImage.type,
         });
+        Object.entries(basePayload).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        res = await RestClient.post(`${RELAY}/app/new`, formData, {
+          'Content-Type': 'multipart/form-data',
+        });
+      } else {
+        res = await RestClient.post(`${RELAY}/app/new`, basePayload);
       }
-      formData.append('name', name || 'Satoshi’s Palette');
-      formData.append('appID', appID);
-      formData.append('publicId', publicId);
-      formData.append('publicKey', publicKey);
-      formData.append('appType', appType);
-      formData.append('network', network);
-      formData.append('fcmToken', fcmToken);
-      formData.append('signature', signature);
-      res = await RestClient.post(`${RELAY}/app/new`, formData, {
-        'Content-Type': 'multipart/form-data',
-      });
     } catch (err) {
       console.log(err, err.response.data);
       if (err.response) {
