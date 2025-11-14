@@ -866,6 +866,7 @@ export default class Relay {
       imageUrl: string;
       roomsObject?: string;
       settingsObject?: string;
+      tnxMetaObject?:Object;
     };
   }> => {
     try {

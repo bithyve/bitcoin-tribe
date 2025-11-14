@@ -572,6 +572,17 @@ export class ApiHandler {
               'modified',
             );
           }
+          if (backup.app.tnxMetaObject) {
+            let decryptedData = {};
+            Object.entries(backup.app.tnxMetaObject).forEach(([key, value]) => {
+              const decryptedValue = JSON.parse(decrypt(encryptionKey, value));
+              decryptedData[key] = decryptedValue;
+            });
+            await ApiHandler.refreshWallets({
+              wallets: dbManager.getCollection(RealmSchema.Wallet),
+              metaData: decryptedData,
+            });
+          }
         } catch (error) {
           console.log('🚀 AppRestoreFailed: ', error);
         }
@@ -821,7 +832,7 @@ export class ApiHandler {
     });
   }
 
-  static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
+  static async refreshWallets({ wallets, metaData= null }: { wallets: Wallet[], metaData:Object }) {
     try {
       if (
         ApiHandler.appType === AppType.NODE_CONNECT ||
@@ -866,7 +877,19 @@ export class ApiHandler {
 
         for (const synchedWallet of synchedWallets) {
           // if (!synchedWallet.specs.hasNewUpdates) continue; // no new updates found
-
+          if (metaData) {
+            const md = metaData;
+            synchedWallet.specs.transactions =
+              synchedWallet.specs.transactions.map(tnx =>
+                md[tnx.txid]
+                  ? {
+                      ...tnx,
+                      metadata: { ...md[tnx.txid] },
+                      transactionKind: TransactionKind.SERVICE_FEE,
+                    }
+                  : tnx,
+              );
+          }
           dbManager.updateObjectById(RealmSchema.Wallet, synchedWallet.id, {
             specs: synchedWallet.specs,
           });
