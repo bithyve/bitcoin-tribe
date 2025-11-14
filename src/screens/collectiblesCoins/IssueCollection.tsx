@@ -137,7 +137,7 @@ function IssueCollection() {
     try {
       const result = await await ImagePicker.openPicker({
         width: 500,
-        height: 382,
+        height: 282,
         cropping: true,
       });
       setImage(result.path);
@@ -615,8 +615,7 @@ const getStyles = (theme: AppTheme, inputHeight, insets) =>
     },
     bannerImage: {
       paddingTop: insets.top,
-      height: hp(280),
-      borderWidth: 1,
+      height: hp(210),
       paddingHorizontal: hp(16),
     },
     pencilIcon: {

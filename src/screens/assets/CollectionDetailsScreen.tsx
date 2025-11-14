@@ -277,7 +277,7 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     bannerImage: {
       paddingTop: 20,
-      height: hp(280),
+      height: hp(210),
       width: '100%',
       borderWidth: 1,
       paddingHorizontal: hp(16),
