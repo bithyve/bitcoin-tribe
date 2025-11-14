@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import React, { useCallback, useContext, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -126,18 +126,18 @@ function AddAsset() {
     (addToRegistry: boolean, issueAssetType) => {
       setTimeout(() => {
         if(issueAssetType === AssetType.Collection) {
-          navigation.replace(NavigationRoutes.ISSUECOLLECTION);
+          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUECOLLECTION));
         }
         else if (issueAssetType === AssetType.Coin) {
-          navigation.replace(NavigationRoutes.ISSUESCREEN, {
+          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUESCREEN, {
             issueAssetType,
             addToRegistry,
-          });
+          }));
         } else {
-          navigation.replace(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
+          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
             issueAssetType,
             addToRegistry,
-          });
+          }));
         }
       }, 500);
     },
@@ -196,9 +196,11 @@ function AddAsset() {
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() =>
-            navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            navigation.dispatch(
+              CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
               refresh: true,
             })
+            )
           }
           testID="receive"
         />

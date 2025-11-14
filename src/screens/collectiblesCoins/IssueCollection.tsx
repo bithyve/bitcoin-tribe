@@ -530,10 +530,12 @@ function IssueCollection() {
             setShowSuccess(false);
             setTimeout(() => {
               if (mode === 'add') {
+                navigation.pop(1);
                 navigation.replace(NavigationRoutes.COLLECTIONDETAILS, {
                   collectionId: collection._id,
                 });
               } else {
+                navigation.pop(1);
                 navigation.replace(NavigationRoutes.ADDCOLLECTIONITEM, {
                   collectionId: collection._id,
                 });
