@@ -1060,6 +1060,7 @@ export default class Relay {
     publicId:string,
     roomsObject:Object,
     settingsObject:string,
+    tnxMetaObject:Object
   ) => {
     try {
       const res = await RestClient.post(
@@ -1069,6 +1070,7 @@ export default class Relay {
           publicId,
           roomsObject,
           settingsObject,
+          tnxMetaObject
         }
       );
       return res.data;

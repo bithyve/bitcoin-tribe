@@ -84,7 +84,7 @@ import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import  RealmDatabase  from 'src/storage/realm/realm';
-import { AppImageBackupStatusType } from 'src/components/AppImageBackupBanner';
+import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -546,7 +546,7 @@ export class ApiHandler {
           {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
-        );    
+        );
         const encryptionKey = generateEncryptionKey(mnemonic);
         try {
           if (backup.app.settingsObject) {
@@ -566,13 +566,17 @@ export class ApiHandler {
                 rooms.push(decryptedData);
               },
             );
-            RealmDatabase.createBulk(RealmSchema.HolepunchRoom, rooms, 'modified')
+            RealmDatabase.createBulk(
+              RealmSchema.HolepunchRoom,
+              rooms,
+              'modified',
+            );
           }
         } catch (error) {
           console.log('🚀 AppRestoreFailed: ', error);
         }
-        // disabled first app image backup, since already restored from backup 
-        if(backup.app.settingsObject || backup.app.roomsObject)
+        // disabled first app image backup, since already restored from backup
+        if (backup.app.settingsObject || backup.app.roomsObject)
           Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
         // await ApiHandler.manageFcmVersionTopics();
       } else {
@@ -1008,6 +1012,13 @@ export class ApiHandler {
         specs: {
           transactions: transactions,
           ...wallet.specs,
+        },
+      });
+      ApiHandler.backupAppImage({
+        tnxMeta: {
+          txid,
+          // @ts-ignore
+          metaData: transactions[index].metadata,
         },
       });
       return true;
@@ -3230,10 +3241,12 @@ export class ApiHandler {
     settings = false,
     room = null,
     all = false,
+    tnxMeta = null,
   }: {
     settings?: boolean;
     room?: null | any;
     all?: boolean;
+    tnxMeta?: null | { txid: string; metaData: object };
   }) {
     Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, false);
     try {
@@ -3241,13 +3254,10 @@ export class ApiHandler {
       const encryptionKey = generateEncryptionKey(app.primaryMnemonic);
       let settingsObject = '';
       let roomsObject = {};
+      let tnxMetaObject = {};
 
       if (all || settings) {
-        const keys = [
-          Keys.APP_CURRENCY,
-          Keys.APP_LANGUAGE,
-          Keys.CURRENCY_MODE,
-        ];
+        const keys = [Keys.APP_CURRENCY, Keys.APP_LANGUAGE, Keys.CURRENCY_MODE];
 
         settingsObject = Object.fromEntries(
           keys
@@ -3265,15 +3275,40 @@ export class ApiHandler {
           const encryptedRoomId = encrypt(encryptionKey, room.roomId);
           roomsObject[encryptedRoomId] = encryptedRoom;
         }
-      } else if (room){
-        const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
-          roomsObject[room.roomId] = encryptedRoom;
+
+        const transactions = getJSONFromRealmObject(
+          dbManager.getObjectByIndex(RealmSchema.Wallet),
+        ).specs?.transactions;
+        for (const tnx of transactions) {
+          if (Object.keys(tnx.metadata).length) {
+            const encryptedMeta = encrypt(
+              encryptionKey,
+              JSON.stringify(tnx.metadata),
+            );
+            tnxMetaObject[tnx.txid] = encryptedMeta;
+          }
+        }
+      } else {
+        if (room) {
+          const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
+          const encryptedRoomId = encrypt(encryptionKey, room.roomId);
+          roomsObject[encryptedRoomId] = encryptedRoom;
+        }
+        if (tnxMeta?.txid && tnxMeta?.metaData) {
+          const encryptedMeta = encrypt(
+            encryptionKey,
+            JSON.stringify(tnxMeta.metaData),
+          );
+          tnxMetaObject[tnxMeta.txid] = encryptedMeta;
+        }
       }
-       await Relay.createAppImageBackup(
+
+      await Relay.createAppImageBackup(
         app.id,
         app.publicId,
         roomsObject,
         settingsObject,
+        tnxMetaObject,
       );
       return {
         status: true,
