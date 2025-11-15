@@ -6,6 +6,7 @@ import { HolepunchMessage } from '../storage/MessageStorage';
 export interface ProcessorContext {
   roomId: string;
   currentPeerPubKey: string;
+  currentPeerPrivKey: string; // Private key for decrypting DM invitations
 }
 
 /**
