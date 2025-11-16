@@ -28,11 +28,14 @@ interface UseChatResult {
   sendMessage: (text: string, messageType: HolepunchMessageType) => Promise<void>;
   leaveRoom: () => Promise<void>;
   reconnectRootPeer: () => Promise<void>;
+  sendDMInvitation: (recipientPublicKey: string, recipientName?: string, recipientImage?: string) => Promise<HolepunchRoom>;
+  initializeInbox: () => Promise<void>;
 
   // Fetchers
   getAllRooms: () => Promise<any[]>;
   getCurrentPeerPubKey: () => string | null;
   getPeersForRoom: (roomId: string) => Promise<HolepunchPeer[]>;
+  getInboxRoom: () => Promise<HolepunchRoom | null>;
   // getMessagesForRoom: (roomId: string) => Promise<any[]>;
 
   // Loading states
@@ -275,13 +278,52 @@ export function useChat(): UseChatResult {
 
   // Get the peer public key
   const getCurrentPeerPubKey = useCallback(() => {
+    if (!chatService.isInitialized()) {
+      return null;
+    }
     const adapter = chatService.getAdapter();
-    return adapter.getKeyPair().publicKey;
+    return adapter.getKeyPair()?.publicKey || null;
   }, []);
 
   // Get peers for a specific room
   const getPeersForRoom = useCallback(async (roomId: string) => {
     return await PeerStorage.getPeersForRoom(roomId);
+  }, []);
+
+  // Send DM invitation to another user
+  const sendDMInvitation = useCallback(async (
+    recipientPublicKey: string,
+    recipientName?: string,
+    recipientImage?: string
+  ): Promise<HolepunchRoom> => {
+    setIsCreatingRoom(true);
+    setError(null);
+    try {
+      const adapter = chatService.getAdapter();
+      const dmRoom = await adapter.sendDMInvitation(
+        recipientPublicKey,
+        recipientName,
+        recipientImage
+      );
+      return dmRoom;
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    } finally {
+      setIsCreatingRoom(false);
+    }
+  }, []);
+
+  // Get user's inbox room
+  const getInboxRoom = useCallback(async () => {
+    const adapter = chatService.getAdapter();
+    return await adapter.getInboxRoom();
+  }, []);
+
+  // Initialize inbox (lazy initialization when user navigates to Inbox screen)
+  const initializeInbox = useCallback(async () => {
+    const adapter = chatService.getAdapter();
+    return await adapter.initializeInbox();
   }, []);
 
   // Fetch all messages for a given room using chatAdapter
@@ -302,9 +344,12 @@ export function useChat(): UseChatResult {
     sendMessage,
     leaveRoom,
     reconnectRootPeer,
+    sendDMInvitation,
+    initializeInbox,
     getAllRooms,
     getCurrentPeerPubKey,
     getPeersForRoom,
+    getInboxRoom,
     // getMessagesForRoom,
     isCreatingRoom,
     isJoiningRoom,
