@@ -48,7 +48,7 @@ function Community() {
     initializeInbox,
     getCurrentPeerPubKey,
   } = useChat();
-
+  
   // Only get public key if service is initialized
   const userPublicKey = !isInitializing ? getCurrentPeerPubKey() : null;
 
@@ -136,6 +136,30 @@ function Community() {
     }
   };
 
+  const handleShowQR = () => {
+    setShowQRModal(true);
+  };
+
+  const handleCopyPublicKey = () => {
+    if (userPublicKey) {
+      Clipboard.setString(userPublicKey);
+      Toast('Public key copied to clipboard');
+    }
+  };
+
+  const handleSharePublicKey = async () => {
+    if (userPublicKey) {
+      try {
+        await Share.share({
+          message: `Add me on Tribe!\n\nMy Public Key:\n${userPublicKey}\n\nOr scan my QR code to start a DM.`,
+          title: 'My Tribe Public Key',
+        });
+      } catch (error) {
+        console.error('[Community] Failed to share public key:', error);
+      }
+    }
+  };
+
   useEffect(() => {
   if(!isInitializing && !isRootPeerConnected)
     setCommunityStatus('offline');
@@ -143,23 +167,56 @@ function Community() {
     setCommunityStatus('online');
   }, [isInitializing,isRootPeerConnected]);
 
+  // Get connection status for status bar
+  const getConnectionStatus = () => {
+    if (isInitializing) {
+      return { text: '🔄 Initializing P2P chat...', color: theme.colors.accent };
+    }
+    if (!isRootPeerConnected) {
+      return { text: '🔌 Connecting to root peer...', color: '#FFA500' };
+    }
+    if (isReconnecting) {
+      return { text: '🔄 Reconnecting...', color: theme.colors.accent };
+    }
+    return null;
+  };
 
-  const renderRoomItem = ({ item }: { item }) => {
+  const connectionStatus = getConnectionStatus();
+
+
+  const renderRoomItem = ({ item }: { item: HolepunchRoom }) => {
+    const isDM = item.roomType === HolepunchRoomType.DIRECT_MESSAGE;
+    
     return (
       <AppTouchable
         style={styles.roomCard}
         onPress={() => handleOpenRoom(item)}
         activeOpacity={0.7}>
         <View style={styles.roomCardRow}>
-          {item.roomImage ? (
-            <Image
-              style={styles.roomImage}
-              source={{ uri: item.roomImage ?? '' }}
-            />
-          ) : (
-            <View style={styles.roomImage} />
-          )}
-          <View>
+          <View style={styles.roomImageContainer}>
+            {item.roomImage ? (
+              <Image
+                style={styles.roomImage}
+                source={{ uri: item.roomImage ?? '' }}
+              />
+            ) : (
+              <View style={[styles.roomImage, styles.roomImagePlaceholder]}>
+                <AppText style={styles.roomImagePlaceholderText}>
+                  {item.roomName.charAt(0).toUpperCase()}
+                </AppText>
+              </View>
+            )}
+            {/* Room type indicator badge */}
+            <View style={[
+              styles.roomTypeBadge,
+              isDM ? styles.dmBadge : styles.groupBadge
+            ]}>
+              <AppText style={styles.roomTypeBadgeText}>
+                {isDM ? 'DM' : 'G'}
+              </AppText>
+            </View>
+          </View>
+          <View style={styles.roomInfo}>
             <AppText variant="heading3SemiBold">{item.roomName}</AppText>
             <AppText variant="caption" style={styles.roomDesc}>
               {item.roomDescription}
@@ -182,34 +239,136 @@ function Community() {
         <HomeHeader showBalance={false} showAdd />
       </View>
 
+      {/* Connection Status Bar */}
+      {connectionStatus && (
+        <View style={[styles.statusBar, { backgroundColor: connectionStatus.color }]}>
+          <AppText style={styles.statusBarText}>{connectionStatus.text}</AppText>
+        </View>
+      )}
+
       {isInitializing ? (
         <View style={styles.loadingContainer}>
           <Text>Initializing P2P chat...</Text>
         </View>
       ) : (
-        <FlatList
-          data={rooms}
-          keyExtractor={item => item.roomKey}
-          renderItem={renderRoomItem}
-          onRefresh={handleRefresh}
-          refreshing={refreshing}
-          ListEmptyComponent={
-            <EmptyStateView
-              title={community.noConnectionTitle}
-              subTitle={community.noConnectionSubTitle}
-              IllustartionImage={
-                isThemeDark ? (
-                  <EmptyCommunityIllustration />
-                ) : (
-                  <EmptyCommunityIllustrationLight />
-                )
-              }
-            />
-          }
-          style={styles.flatList}
-          ItemSeparatorComponent={ItemSeparatorComponent}
-        />
+        <>
+          {/* Action buttons for My DM QR and Start DM */}
+          <View style={styles.actionButtonsContainer}>
+            {/* My DM QR Button */}
+            <AppTouchable
+              style={styles.actionButton}
+              onPress={handleShowQR}
+              activeOpacity={0.7}
+            >
+              <View style={styles.actionButtonContent}>
+                <AppText style={styles.actionButtonText}>DM QR</AppText>
+              </View>
+            </AppTouchable>
+
+            {/* Start DM Button */}
+            <AppTouchable
+              style={[styles.actionButton, styles.primaryActionButton]}
+              onPress={() => (navigation as any).navigate(NavigationRoutes.STARTDM)}
+              activeOpacity={0.7}
+            >
+              <AppText style={styles.primaryActionButtonText}>
+                Start DM
+              </AppText>
+            </AppTouchable>
+          </View>
+
+          <FlatList
+            data={rooms}
+            keyExtractor={item => item.roomKey}
+            renderItem={renderRoomItem}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
+            ListEmptyComponent={
+              <EmptyStateView
+                title={community.noConnectionTitle}
+                subTitle={community.noConnectionSubTitle}
+                IllustartionImage={
+                  isThemeDark ? (
+                    <EmptyCommunityIllustration />
+                  ) : (
+                    <EmptyCommunityIllustrationLight />
+                  )
+                }
+              />
+            }
+            style={styles.flatList}
+            ItemSeparatorComponent={ItemSeparatorComponent}
+          />
+        </>
       )}
+
+      {/* QR Code Modal */}
+      <Modal
+        visible={showQRModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowQRModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Header */}
+            <View style={styles.modalHeader}>
+              <AppText variant="heading3" style={styles.modalTitle}>
+                My DM QR Code
+              </AppText>
+              <AppTouchable onPress={() => setShowQRModal(false)}>
+                <AppText style={styles.closeButton}>✕</AppText>
+              </AppTouchable>
+            </View>
+
+            {/* QR Code */}
+            {userPublicKey && (
+              <View style={styles.qrContainer}>
+                <QRCode
+                  value={`tribe://contact/${userPublicKey}`}
+                  size={wp(250)}
+                  backgroundColor="white"
+                  color="black"
+                />
+              </View>
+            )}
+
+            {/* Public Key Display */}
+            <View style={styles.publicKeyContainer}>
+              <AppText variant="body2" style={styles.publicKeyLabel}>
+                Public Key
+              </AppText>
+              <View style={styles.publicKeyBox}>
+                <AppText variant="caption" style={styles.publicKeyText} numberOfLines={2}>
+                  {userPublicKey}
+                </AppText>
+              </View>
+            </View>
+
+            {/* Action Buttons */}
+            <View style={styles.modalActionButtons}>
+              <AppTouchable
+                onPress={handleCopyPublicKey}
+                style={[styles.modalActionButton, styles.copyButton]}
+              >
+                <AppText style={styles.copyButtonText}>Copy Key</AppText>
+              </AppTouchable>
+              
+              <AppTouchable
+                onPress={handleSharePublicKey}
+                style={[styles.modalActionButton, styles.shareButton]}
+              >
+                <AppText style={styles.shareButtonText}>Share</AppText>
+              </AppTouchable>
+            </View>
+
+            {/* Info Text */}
+            <AppText variant="caption" style={styles.infoText}>
+              Share this QR code or public key with others so they can send you DM invitations
+            </AppText>
+          </View>
+        </View>
+      </Modal>
     </ScreenContainer>
   );
 }
@@ -235,11 +394,103 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.mutedTab,
       paddingTop: hp(10),
     },
+    roomImageContainer: {
+      position: 'relative',
+    },
     roomImage: {
       height: wp(50),
       width: wp(50),
       borderRadius: wp(50),
       backgroundColor: theme.colors.mutedTab,
+    },
+    roomImagePlaceholder: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.accent,
+    },
+    roomImagePlaceholderText: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      color: theme.colors.primaryBackground,
+    },
+    roomTypeBadge: {
+      position: 'absolute',
+      bottom: -2,
+      right: -2,
+      width: wp(18),
+      height: wp(18),
+      borderRadius: wp(9),
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderWidth: 2,
+      borderColor: theme.colors.primaryBackground,
+    },
+    dmBadge: {
+      backgroundColor: '#4CAF50', // Green for DMs
+    },
+    groupBadge: {
+      backgroundColor: '#2196F3', // Blue for Groups
+    },
+    roomTypeBadgeText: {
+      fontSize: 9,
+      fontWeight: 'bold',
+      color: '#FFFFFF',
+    },
+    roomInfo: {
+      flex: 1,
+    },
+
+    // Action buttons
+    actionButtonsContainer: {
+      flexDirection: 'row',
+      gap: wp(12),
+      paddingHorizontal: wp(16),
+      marginBottom: hp(16),
+    },
+    actionButton: {
+      flex: 1,
+      backgroundColor: theme.colors.accent,
+      borderRadius: 12,
+      paddingVertical: hp(12),
+      paddingHorizontal: wp(16),
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    actionButtonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: wp(8),
+    },
+    actionButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryText,
+    },
+    primaryActionButton: {
+      backgroundColor: theme.colors.accent,
+      borderColor: theme.colors.accent,
+    },
+    primaryActionButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryBackground,
+    },
+
+    // Status bar
+    statusBar: {
+      paddingVertical: hp(10),
+      paddingHorizontal: wp(16),
+      alignItems: 'center',
+      marginHorizontal: wp(16),
+      marginBottom: hp(12),
+      borderRadius: 8,
+    },
+    statusBarText: {
+      color: '#FFFFFF',
+      fontSize: 14,
+      fontWeight: '600',
     },
 
     //
@@ -294,6 +545,95 @@ const getStyles = (theme: AppTheme) =>
       color: '#666666',
       textAlign: 'center',
       paddingHorizontal: 32,
+    },
+    // Modal styles
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContent: {
+      backgroundColor: theme.colors.primaryBackground,
+      borderRadius: 16,
+      padding: wp(24),
+      width: wp(340),
+      maxWidth: '90%',
+    },
+    modalHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: hp(20),
+    },
+    modalTitle: {
+      color: theme.colors.headingColor,
+    },
+    closeButton: {
+      fontSize: 24,
+      color: theme.colors.placeholder,
+      paddingHorizontal: wp(8),
+    },
+    qrContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: wp(20),
+      backgroundColor: 'white',
+      borderRadius: 12,
+      marginBottom: hp(20),
+    },
+    publicKeyContainer: {
+      marginBottom: hp(20),
+    },
+    publicKeyLabel: {
+      color: theme.colors.placeholder,
+      marginBottom: hp(8),
+    },
+    publicKeyBox: {
+      backgroundColor: theme.colors.cardBackground,
+      borderRadius: 8,
+      padding: wp(12),
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+    },
+    publicKeyText: {
+      color: theme.colors.placeholder,
+      fontFamily: 'Courier',
+      fontSize: 12,
+    },
+    modalActionButtons: {
+      flexDirection: 'row',
+      gap: wp(12),
+    },
+    modalActionButton: {
+      flex: 1,
+      paddingVertical: hp(12),
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    copyButton: {
+      backgroundColor: theme.colors.accent,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+    },
+    copyButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryBackground,
+    },
+    shareButton: {
+      backgroundColor: theme.colors.accent,
+    },
+    shareButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryBackground,
+    },
+    infoText: {
+      color: theme.colors.placeholder,
+      textAlign: 'center',
+      marginTop: hp(16),
     },
   });
 
