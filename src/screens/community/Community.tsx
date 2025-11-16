@@ -5,10 +5,10 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { StyleSheet, View, FlatList, Text, Image } from 'react-native';
+import { StyleSheet, View, FlatList, Text, Image, Modal, Share } from 'react-native';
 import { hp, wp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
-import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
@@ -21,12 +21,15 @@ import { Keys } from 'src/storage';
 import EmptyCommunityIllustration from 'src/assets/images/emptyCommunityIllustration.svg';
 import EmptyCommunityIllustrationLight from 'src/assets/images/emptyCommunityIllustration_light.svg';
 import { AppContext } from 'src/contexts/AppContext';
+import QRCode from 'react-native-qrcode-svg';
+import Clipboard from '@react-native-clipboard/clipboard';
 
 function Community() {
   const theme: AppTheme = useTheme();
   const [rooms, setRooms] = useState<HolepunchRoom[]>([]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [refreshing, setRefreshing] = useState(false);
+  const [showQRModal, setShowQRModal] = useState(false);
   const navigation = useNavigation();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -42,13 +45,24 @@ function Community() {
     error,
     getAllRooms,
     reconnectRootPeer,
+    initializeInbox,
+    getCurrentPeerPubKey,
   } = useChat();
 
-  // Load rooms from storage
+  // Only get public key if service is initialized
+  const userPublicKey = !isInitializing ? getCurrentPeerPubKey() : null;
+
+  // Load rooms from storage and filter by type
   const loadRooms = useCallback(async () => {
     try {
       const savedRooms = await getAllRooms();
-      setRooms(savedRooms || []);
+      
+      // Filter out inbox rooms
+      const filteredRooms = (savedRooms || []).filter(
+        r => r.roomType !== HolepunchRoomType.INBOX
+      );
+      
+      setRooms(filteredRooms);
     } catch (e) {
       setRooms([]);
     }
@@ -58,12 +72,29 @@ function Community() {
     loadRooms();
   }, [loadRooms]);
 
-  // Reload rooms when screen comes into focus (e.g., navigating back from Chat)
+  // Reload rooms and initialize inbox when screen comes into focus
   useFocusEffect(
     useCallback(() => {
-      console.log('[Community] Screen focused, reloading rooms...');
+      console.log('[Community] Screen focused, reloading rooms and initializing inbox...');
       loadRooms();
-    }, [loadRooms]),
+      
+      // Initialize inbox if root peer is connected
+      const initInbox = async () => {
+        if (!isRootPeerConnected) {
+          console.warn('[Community] Root peer not connected yet, skipping inbox initialization');
+          return;
+        }
+        
+        try {
+          await initializeInbox();
+          console.log('[Community] ✅ Inbox initialized successfully');
+        } catch (error) {
+          console.error('[Community] Failed to initialize inbox:', error);
+        }
+      };
+      
+      initInbox();
+    }, [loadRooms, isRootPeerConnected, initializeInbox]),
   );
 
   useEffect(() => {
