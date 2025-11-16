@@ -16,6 +16,7 @@ import { KeyPair, MessagesReceivedEvent } from './holepunch/network/types/networ
 import { MessageProcessorRegistry } from './holepunch/processors/MessageProcessor';
 import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
 import { TextProcessor } from './holepunch/processors/TextProcessor';
+import { DMInviteProcessor } from './holepunch/processors/DMInviteProcessor';
 
 
 
@@ -34,6 +35,7 @@ export class ChatAdapter extends EventEmitter {
     this.processorRegistry = new MessageProcessorRegistry();
     this.processorRegistry.register(new IdentityProcessor());
     this.processorRegistry.register(new TextProcessor());
+    this.processorRegistry.register(new DMInviteProcessor());
 
     this.setupEventForwarding();
   }
@@ -46,6 +48,70 @@ export class ChatAdapter extends EventEmitter {
 
     this.keyPair = await this.manager.getKeys();
     this.userProfile = userProfile;
+    
+    // Note: Inbox is initialized lazily when user navigates to Inbox screen
+    // This avoids timing issues with root peer connection
+  }
+
+  /**
+   * Initialize and join user's personal inbox room
+   * 
+   * IMPORTANT: This should only be called AFTER root peer connection is established.
+   * Call this lazily when user navigates to Inbox screen.
+   * 
+   * Inbox rooms are used to receive DM invitations from other users.
+   * 
+   * @throws Error if key pair not initialized or root peer not connected
+   */
+  async initializeInbox(): Promise<void> {
+    console.log('[ChatAdapter] 📥 Initializing inbox...');
+
+    if (!this.keyPair) {
+      throw new Error('Key pair not initialized');
+    }
+    
+    const { InboxKeyGenerator } = await import('./holepunch/crypto/InboxKeyGenerator');
+    const inboxRoomKey = InboxKeyGenerator.generateInboxRoomKey(this.keyPair.publicKey);
+    const inboxRoomId = InboxKeyGenerator.generateInboxRoomId(this.keyPair.publicKey);
+    
+    // Check if inbox room already exists
+    const existingInbox = await RoomStorage.getRoom(inboxRoomId);
+    
+    if (!existingInbox) {
+      // Create inbox room
+      const inboxRoom: HolepunchRoom = {
+        roomId: inboxRoomId,
+        roomKey: inboxRoomKey,
+        roomType: HolepunchRoomType.INBOX,
+        roomName: 'My Inbox',
+        roomDescription: 'Personal inbox for DM invitations',
+        peers: [this.keyPair.publicKey],
+        creator: this.keyPair.publicKey,
+        createdAt: Date.now(),
+        lastActive: Date.now(),
+        initializedIdentity: true, // No need to send identity in inbox
+        isInboxRoom: true,
+      };
+      
+      await RoomStorage.saveRoom(inboxRoom);
+      console.log('[ChatAdapter] 📥 Inbox room created');
+    }
+    
+    // Join inbox room to receive invitations
+    await this.manager.joinRoom(inboxRoomId, inboxRoomKey);
+    console.log('[ChatAdapter] ✅ Inbox initialized and joined');
+  }
+
+  /**
+   * Get user's inbox room
+   * @returns User's inbox room or null if not initialized
+   */
+  async getInboxRoom(): Promise<HolepunchRoom | null> {
+    if (!this.keyPair) return null;
+    
+    const { InboxKeyGenerator } = await import('./holepunch/crypto/InboxKeyGenerator');
+    const inboxRoomId = InboxKeyGenerator.generateInboxRoomId(this.keyPair.publicKey);
+    return await RoomStorage.getRoom(inboxRoomId);
   }
 
   /**
@@ -76,6 +142,7 @@ export class ChatAdapter extends EventEmitter {
         const result = await this.processorRegistry.process(message, {
           roomId: this.currentRoom?.roomId,
           currentPeerPubKey: this.keyPair?.publicKey,
+          currentPeerPrivKey: this.keyPair?.secretKey, // For decrypting DM invitations
         });
 
         // Note 📢: Incoming messages are pesisted/commited only if they are from the ROOT Peer (maintains total message order across all peers)
@@ -209,6 +276,7 @@ export class ChatAdapter extends EventEmitter {
     const result = await this.processorRegistry.process(message, {
       roomId: this.currentRoom.roomId,
       currentPeerPubKey: this.keyPair.publicKey,
+      currentPeerPrivKey: this.keyPair.secretKey, // For decrypting DM invitations
     });
 
     // Note 📢: Self messages are pesisted upon synching w/ the root peer (maintains total message order across all peers)
