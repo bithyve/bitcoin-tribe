@@ -115,7 +115,7 @@ export class MessageEncryption {
    * 
    * @param data - Data to encrypt (string)
    * @param recipientPublicKey - Recipient's Ed25519 public key (64-char hex string)
-   * @param senderPrivateKey - Sender's Ed25519 private key (64-char hex string)
+   * @param senderPrivateKey - Sender's Ed25519 secret key (128-char hex string, includes private+public)
    * @returns Encrypted string (base64 ciphertext)
    */
   static encryptWithPublicKey(
@@ -128,8 +128,11 @@ export class MessageEncryption {
       const recipientPubKeyBytes = this.hexToBytes(recipientPublicKey);
       const recipientX25519PubKey = edwardsToMontgomeryPub(recipientPubKeyBytes);
       
+      // Ed25519 secretKey from hypercore-crypto is 64 bytes (32-byte private + 32-byte public)
+      // We only need the first 32 bytes for the actual private key
       const senderPrivKeyBytes = this.hexToBytes(senderPrivateKey);
-      const senderX25519PrivKey = edwardsToMontgomeryPriv(senderPrivKeyBytes);
+      const actualPrivateKey = senderPrivKeyBytes.slice(0, 32); // Extract first 32 bytes
+      const senderX25519PrivKey = edwardsToMontgomeryPriv(actualPrivateKey);
       
       // Compute shared secret: senderPrivate * recipientPublic
       const sharedSecret = x25519.getSharedSecret(senderX25519PrivKey, recipientX25519PubKey);
@@ -159,7 +162,7 @@ export class MessageEncryption {
    * - Both get the SAME shared secret (ECDH property)
    * 
    * @param encryptedPayload - Encrypted string (base64 ciphertext)
-   * @param ownPrivateKey - Own Ed25519 private key (64-char hex string)
+   * @param ownPrivateKey - Own Ed25519 secret key (128-char hex string, includes private+public)
    * @param senderPublicKey - Sender's Ed25519 public key (64-char hex string)
    * @returns Decrypted data as string
    */
@@ -170,8 +173,11 @@ export class MessageEncryption {
   ): string {
     try {
       // Convert Ed25519 keys to X25519 (for encryption)
+      // Ed25519 secretKey from hypercore-crypto is 64 bytes (32-byte private + 32-byte public)
+      // We only need the first 32 bytes for the actual private key
       const ownPrivKeyBytes = this.hexToBytes(ownPrivateKey);
-      const ownX25519PrivKey = edwardsToMontgomeryPriv(ownPrivKeyBytes);
+      const actualPrivateKey = ownPrivKeyBytes.slice(0, 32); // Extract first 32 bytes
+      const ownX25519PrivKey = edwardsToMontgomeryPriv(actualPrivateKey);
       
       const senderPubKeyBytes = this.hexToBytes(senderPublicKey);
       const senderX25519PubKey = edwardsToMontgomeryPub(senderPubKeyBytes);
