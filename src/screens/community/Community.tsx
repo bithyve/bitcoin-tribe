@@ -369,6 +369,93 @@ function Community() {
           </View>
         </View>
       </Modal>
+
+      {/* Start DM Modal */}
+      <Modal
+        visible={showStartDMModal}
+        transparent
+        animationType="fade"
+        onRequestClose={handleCloseStartDM}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            {/* Header */}
+            <View style={styles.modalHeader}>
+              <AppText variant="heading3" style={styles.modalTitle}>
+                Start Direct Message
+              </AppText>
+              <AppTouchable onPress={handleCloseStartDM}>
+                <AppText style={styles.closeButton}>✕</AppText>
+              </AppTouchable>
+            </View>
+
+            {isCreatingDM ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color={theme.colors.accent} />
+                <AppText style={styles.loadingText}>Creating DM room...</AppText>
+              </View>
+            ) : (
+              <>
+                {/* QR Scanner */}
+                {scanning ? (
+                  <View style={styles.scannerContainer}>
+                    <QRScanner onCodeScanned={handleQRScan} isScanning={scanning} />
+                    <AppText variant="caption" style={styles.scannerHint}>
+                      Scan contact's QR code
+                    </AppText>
+                  </View>
+                ) : null}
+
+                {/* Manual Input Section */}
+                <View style={styles.manualInputSection}>
+                  <AppText variant="body2" style={styles.inputLabel}>
+                    Or paste contact link
+                  </AppText>
+                  <View style={styles.inputRow}>
+                    <TextInput
+                      style={styles.input}
+                      value={publicKeyInput}
+                      onChangeText={setPublicKeyInput}
+                      placeholder="Paste contact link"
+                      placeholderTextColor={theme.colors.placeholder}
+                      autoCapitalize="none"
+                      autoCorrect={false}
+                      multiline
+                      numberOfLines={2}
+                    />
+                  </View>
+                  <View style={styles.buttonRow}>
+                    <AppTouchable
+                      onPress={handlePasteFromClipboard}
+                      style={[styles.actionButtonSmall, styles.pasteButton]}
+                    >
+                      <AppText style={styles.pasteButtonText}>Paste</AppText>
+                    </AppTouchable>
+                    <AppTouchable
+                      onPress={handleManualSubmit}
+                      style={[
+                        styles.actionButtonSmall,
+                        styles.submitButton,
+                        !publicKeyInput.trim() && styles.submitButtonDisabled,
+                      ]}
+                      disabled={!publicKeyInput.trim()}
+                    >
+                      <AppText
+                        style={[
+                          styles.submitButtonText,
+                          !publicKeyInput.trim() && styles.submitButtonTextDisabled,
+                        ]}
+                      >
+                        Start DM
+                      </AppText>
+                    </AppTouchable>
+                  </View>
+                </View>
+              </>
+            )}
+          </View>
+        </View>
+      </Modal>
     </ScreenContainer>
   );
 }
@@ -634,6 +721,84 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.placeholder,
       textAlign: 'center',
       marginTop: hp(16),
+    },
+
+    // Start DM Modal styles
+    scannerContainer: {
+      height: hp(300),
+      width: '100%',
+      borderRadius: 12,
+      overflow: 'hidden',
+      marginBottom: hp(20),
+      backgroundColor: theme.colors.cardBackground,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    scannerHint: {
+      color: theme.colors.placeholder,
+      textAlign: 'center',
+      marginTop: hp(12),
+    },
+    manualInputSection: {
+      marginTop: hp(12),
+    },
+    inputLabel: {
+      color: theme.colors.placeholder,
+      marginBottom: hp(8),
+    },
+    inputRow: {
+      marginBottom: hp(12),
+    },
+    input: {
+      backgroundColor: theme.colors.cardBackground,
+      borderRadius: 8,
+      padding: wp(12),
+      color: theme.colors.text,
+      fontSize: 14,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      minHeight: hp(60),
+      textAlignVertical: 'top',
+    },
+    buttonRow: {
+      flexDirection: 'row',
+      gap: wp(12),
+    },
+    actionButtonSmall: {
+      flex: 1,
+      paddingVertical: hp(12),
+      borderRadius: 8,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    pasteButton: {
+      backgroundColor: theme.colors.cardBackground,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+    },
+    pasteButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.text,
+    },
+    submitButton: {
+      backgroundColor: theme.colors.accent,
+    },
+    submitButtonDisabled: {
+      backgroundColor: theme.colors.cardBackground,
+      opacity: 0.5,
+    },
+    submitButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryBackground,
+    },
+    submitButtonTextDisabled: {
+      color: theme.colors.placeholder,
+    },
+    loadingText: {
+      marginTop: hp(12),
+      color: theme.colors.text,
     },
   });
 
