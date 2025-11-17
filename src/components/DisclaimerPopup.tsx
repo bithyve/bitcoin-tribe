@@ -62,7 +62,7 @@ const DisclaimerPopup: React.FC<Props> = ({
             {checkIcon}
           </AppTouchable>
           <AppText variant="body2" style={styles.infoText}>
-            {'By continuing, you accept these terms'}
+            {'By continuing, you accept these guidelines'}
           </AppText>
         </View>
 

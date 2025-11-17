@@ -8,16 +8,28 @@ export enum DeepLinkFeature {
   REGISTRY = 'registry',
 }
 
+export enum DeepLinkType {
+  UNIVERSAL = 'universal',
+  APP_LINK = 'applink',
+}
+
 export default class Deeplinking {
   public static scheme: string =
-      `https://bitcointribe.app/app/${config.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'dev' : 'prod'}`        
+      `https://bitcointribe.app/app/${config.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'dev' : 'prod'}`   
+  public static appLinkScheme = config.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'tribedev' : 'tribe';     
 
   public static buildUrl(
     feature: DeepLinkFeature,
     params?: Record<string, any>,
+    type: DeepLinkType = DeepLinkType.UNIVERSAL,
   ): string {
     const query = params ? objectToUrlParams(params) : '';
-    return `${Deeplinking.scheme}/${feature}${query ? `?${query}` : ''}`;
+    if (type === DeepLinkType.UNIVERSAL) {
+      return `${Deeplinking.scheme}/${feature}${query ? `?${query}` : ''}`;
+    } else if (type === DeepLinkType.APP_LINK) {
+      return `${Deeplinking.appLinkScheme}://${feature}${query ? `?${query}` : ''}`;
+    }
+    return '';
   }
 
   public static processDeepLink(url: string): {
@@ -25,10 +37,20 @@ export default class Deeplinking {
     feature?: DeepLinkFeature;
     params?: Record<string, any>;
   } {
-    if (!url.startsWith(Deeplinking.scheme)) {
+    const appLinkPrefix = `${Deeplinking.appLinkScheme}://`;
+
+    let urlWithoutScheme: string | undefined;
+    if (url.startsWith(appLinkPrefix)) {
+      urlWithoutScheme = url.substring(appLinkPrefix.length);
+    } else if (url.startsWith(Deeplinking.scheme)) {
+      urlWithoutScheme = url.substring(Deeplinking.scheme.length);
+    }
+
+    if (!urlWithoutScheme) {
       return { isValid: false, feature: undefined, params: undefined };
-    }    
-    const urlWithoutScheme = url.substring(Deeplinking.scheme.length);
+    }
+
+    urlWithoutScheme = urlWithoutScheme.replace(/^\/+/, '');
     const [pathAndQuery] = urlWithoutScheme.split('#');
     const [path, queryString] = pathAndQuery.split('?');
     const feature = path.replace(/^\//, '') as DeepLinkFeature | undefined;
