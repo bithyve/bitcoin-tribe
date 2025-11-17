@@ -412,7 +412,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             try {
                 val attachments = mutableListOf<String>()
                 for (i in 0 until attachmentsFilePaths.size()) {
-                    attachments.add(attachmentsFilePaths.getString(i))
+                    attachmentsFilePaths.getString(i)?.let { attachments.add(it) }
                 }
                 val response = RGBHelper.issueAssetUda(name, ticker, details, mediaFilePath, attachments)
                 withContext(Dispatchers.Main) {
