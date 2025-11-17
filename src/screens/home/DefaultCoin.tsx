@@ -598,6 +598,7 @@ const DefaultCoin = ({
     <View style={styles.container}>
       <View style={styles.row}>
         <Carousel
+          enabled={presetAssets.length > 1}
           ref={carouselRef}
           style={styles.list}
           width={windowWidth * 0.94}

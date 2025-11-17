@@ -179,7 +179,7 @@ const Chat = () => {
           <MessageInput
             message={message}
             loading={sending}
-            disabled={sending || !isRootPeerConnected || !hasJoinedRoom}
+            disabled={sending || !isRootPeerConnected || !hasJoinedRoom || isJoiningRoom}
             onPressSend={onPressSend}
             setMessage={setMessage}
             onPressImage={noop}

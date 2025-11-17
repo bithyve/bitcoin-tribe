@@ -133,6 +133,7 @@ const MessageInput = ({
           style={[styles.input, message && styles.descInput]}
           inputStyle={{maxWidth:'90%'}}
           blurOnSubmit={false}
+          disabled={disabled}
         />
 
         <AppTouchable
