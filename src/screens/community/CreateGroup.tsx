@@ -55,6 +55,8 @@ export const CreateGroup = () => {
       { key: 'join', title: common.join },
     ];
   }, []);
+  const pendingJoinRef = useRef<any | null>(null);
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (params) joinRoomWithParams(params);
@@ -92,21 +94,46 @@ export const CreateGroup = () => {
       const { roomKey, roomName, roomType, roomDescription } = params as any;
       navigation.setParams(null);
       setIndex(1);
-      if (!roomKey || !roomType || !roomDescription || !roomName ) {
+      if (!roomKey || !roomType || !roomDescription || !roomName) {
         Toast('Invalid group link', true);
         return;
       }
-      if(isInitializing){
-        Toast('Please wait while server is initializing', true);
+
+      // If ready, join immediately
+      if (!isInitializing && isRootPeerConnected) {
+        createRoom(roomName, roomType, roomDescription, '', roomKey);
         return;
       }
-      setTimeout(() => {
-         createRoom(roomName, roomType, roomDescription, '', roomKey);
-      }, 400);
+
+      pendingJoinRef.current = params;
+      Toast('Waiting for initialization...', false);
+
+      if (pendingTimeoutRef.current) clearTimeout(pendingTimeoutRef.current);
+
+      pendingTimeoutRef.current = setTimeout(() => {
+        if (pendingJoinRef.current) {
+          pendingJoinRef.current = null;
+          Toast('Initialization timed out. Try again later.', true);
+        }
+      }, 20000);
     } catch (error) {
       console.log('🚀 ~ CreateGroup ~ error:', error);
     }
   };
+
+  useEffect(() => {
+    if (!pendingJoinRef.current) return;
+    if (!isInitializing && isRootPeerConnected) {
+      const { roomKey, roomName, roomType, roomDescription } =
+        pendingJoinRef.current;
+      pendingJoinRef.current = null;
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+        pendingTimeoutRef.current = null;
+      }
+      createRoom(roomName, roomType, roomDescription, '', roomKey);
+    }
+  }, [isInitializing, isRootPeerConnected]);
 
   return (
     <ScreenContainer>
