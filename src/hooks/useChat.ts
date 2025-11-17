@@ -3,7 +3,7 @@
  * React hook for using Holepunch P2P chat.
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import { ChatService } from '../services/messaging/ChatService';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { useQuery } from '@realm/react';

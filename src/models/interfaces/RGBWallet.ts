@@ -251,6 +251,7 @@ export enum AssetType {
   Coin = 'Coin',
   Collectible = 'Collectible',
   UDA = 'UDA', //Unique Digital Asset
+  Collection = 'Collection',
 }
 
 export enum AssetFace {

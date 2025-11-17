@@ -56,6 +56,7 @@ import DefaultCoin from './DefaultCoin';
 import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -85,6 +86,7 @@ function HomeScreen() {
     isWalletOnline,
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
+  const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -329,6 +331,20 @@ function HomeScreen() {
       console.log('Error parsing deep link:', error);
     }
   };
+
+
+  useEffect(() => {
+    const checkFirstAppImageBackup = async () => {
+      if (!isFirstAppImageBackupCompleted) {
+        const res = await ApiHandler.backupAppImage({all: true});
+        setIsFirstAppImageBackupCompleted(res.status);
+      }
+    };
+    setTimeout(() => {
+      checkFirstAppImageBackup();
+    }, 5000);
+  }, []);
+  
 
   return (
     <ScreenContainer style={styles.container}>

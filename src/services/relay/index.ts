@@ -872,6 +872,9 @@ export default class Relay {
       network: string;
       authToken: string;
       imageUrl: string;
+      roomsObject?: string;
+      settingsObject?: string;
+      tnxMetaObject?:Object;
     };
   }> => {
     try {
@@ -1053,6 +1056,31 @@ export default class Relay {
     try {
       const res = await RestClient.get(
         `${RELAY}/ramp/getRampUrl?appID=${appID}&publicKey=${publicKey}&userAddress=${userAddress}`,
+      );
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+
+  public static createAppImageBackup = async (
+    appID:string,
+    publicId:string,
+    roomsObject:Object,
+    settingsObject:string,
+    tnxMetaObject:Object
+  ) => {
+    try {
+      const res = await RestClient.post(
+        `${RELAY}/backup/appImageBackup`,
+        {
+          appID,
+          publicId,
+          roomsObject,
+          settingsObject,
+          tnxMetaObject
+        }
       );
       return res.data;
     } catch (err) {

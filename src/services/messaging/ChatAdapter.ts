@@ -17,6 +17,7 @@ import { MessageProcessorRegistry } from './holepunch/processors/MessageProcesso
 import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
 import { TextProcessor } from './holepunch/processors/TextProcessor';
 import { DMInviteProcessor } from './holepunch/processors/DMInviteProcessor';
+import { ApiHandler } from '../handler/apiHandler';
 
 
 
@@ -237,6 +238,7 @@ export class ChatAdapter extends EventEmitter {
 
     // Save to storage
     await RoomStorage.saveRoom(this.currentRoom);
+    ApiHandler.backupAppImage({room: this.currentRoom});
     console.log('[ChatAdapter] ✅ Room created:', this.currentRoom.roomName);
     this.emit('chat:room-created', this.currentRoom);
     return this.currentRoom;

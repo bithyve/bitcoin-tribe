@@ -314,7 +314,7 @@ const CollectionItem = ({
     return '';
   }, [isCollectible, asset.details, asset.description]);
 
-  const isCampaignActive = asset?.campaign?.isActive;
+  const isCampaignActive = asset?.campaign?.isActive == 'true';
 
   return (
     <>
@@ -424,7 +424,7 @@ const CoinItem = ({
   const coin: Coin = useQuery(RealmSchema.Coin, collection =>
     collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
-  const isCampaignActive = asset?.campaign?.isActive;
+  const isCampaignActive = asset?.campaign?.isActive == 'true';
 
   return (
     <>
@@ -598,6 +598,7 @@ const DefaultCoin = ({
     <View style={styles.container}>
       <View style={styles.row}>
         <Carousel
+          enabled={presetAssets.length > 1}
           ref={carouselRef}
           style={styles.list}
           width={windowWidth * 0.94}
