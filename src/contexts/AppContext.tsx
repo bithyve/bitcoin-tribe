@@ -3,6 +3,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import AppType from 'src/models/enums/AppType';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
+import { AppImageBackupStatusType } from 'src/components/AppImageBackupBanner';
 
 export const AppContext = React.createContext({
   key: null,
@@ -100,7 +101,7 @@ export function AppProvider({ children }) {
         isVerifyDomainInfoVisible,
         setIsVerifyDomainInfoVisible: setIsVerifyDomainInfoVisibleMMKV,
         communityStatus,
-        setCommunityStatus:setCommunityStatus
+        setCommunityStatus:setCommunityStatus,
       }}>
       {children}
     </AppContext.Provider>
