@@ -5,7 +5,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { StyleSheet, View, FlatList, Text, Image, Modal, Share } from 'react-native';
+import { StyleSheet, View, FlatList, Text, Image, Modal, Share, TextInput, ActivityIndicator } from 'react-native';
 import { hp, wp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
@@ -23,6 +23,11 @@ import EmptyCommunityIllustrationLight from 'src/assets/images/emptyCommunityIll
 import { AppContext } from 'src/contexts/AppContext';
 import QRCode from 'react-native-qrcode-svg';
 import Clipboard from '@react-native-clipboard/clipboard';
+import QRScanner from 'src/components/QRScanner';
+import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import { useQuery } from 'react-query';
+import { RealmSchema } from 'src/storage/enum';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function Community() {
   const theme: AppTheme = useTheme();
@@ -30,12 +35,18 @@ function Community() {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [refreshing, setRefreshing] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
+  const [showStartDMModal, setShowStartDMModal] = useState(false);
+  const [publicKeyInput, setPublicKeyInput] = useState('');
+  const [isCreatingDM, setIsCreatingDM] = useState(false);
+  const [scanning, setScanning] = useState(true);
   const navigation = useNavigation();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { community } = translations;
   const {communityStatus,setCommunityStatus } =
     useContext(AppContext);
+    const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
+
 
   // Initialize P2P chat with useChat hook
   const {
@@ -47,10 +58,18 @@ function Community() {
     reconnectRootPeer,
     initializeInbox,
     getCurrentPeerPubKey,
+    sendDMInvitation,
   } = useChat();
   
   // Only get public key if service is initialized
   const userPublicKey = !isInitializing ? getCurrentPeerPubKey() : null;
+
+  // Generate contact deep link once
+  const contactDeepLink = userPublicKey ? Deeplinking.buildUrl(DeepLinkFeature.COMMUNITY, {
+    publicKey: userPublicKey,
+    contactName: app?.appName || 'Anonymous',
+    roomType: HolepunchRoomType.DIRECT_MESSAGE,
+  }) : null;
 
   // Load rooms from storage and filter by type
   const loadRooms = useCallback(async () => {
@@ -141,23 +160,134 @@ function Community() {
   };
 
   const handleCopyPublicKey = () => {
-    if (userPublicKey) {
-      Clipboard.setString(userPublicKey);
-      Toast('Public key copied to clipboard');
+    if (contactDeepLink) {
+      Clipboard.setString(contactDeepLink);
+      Toast('Contact link copied to clipboard');
     }
   };
 
   const handleSharePublicKey = async () => {
-    if (userPublicKey) {
+    if (contactDeepLink) {
       try {
         await Share.share({
-          message: `Add me on Tribe!\n\nMy Public Key:\n${userPublicKey}\n\nOr scan my QR code to start a DM.`,
-          title: 'My Tribe Public Key',
+          message: `Add me on Tribe!\n\n${contactDeepLink}\n\nScan my QR code or tap the link to start a DM.`,
+          title: 'My Tribe Contact',
         });
       } catch (error) {
         console.error('[Community] Failed to share public key:', error);
       }
     }
+  };
+
+  // Start DM Modal handlers
+  const handleShowStartDM = () => {
+    setShowStartDMModal(true);
+    setScanning(true);
+    setPublicKeyInput('');
+  };
+
+  const handleCloseStartDM = () => {
+    setShowStartDMModal(false);
+    setScanning(true);
+    setPublicKeyInput('');
+    setIsCreatingDM(false);
+  };
+
+  const parseDeepLinkData = (data: string): { publicKey: string; contactName?: string } | null => {
+    try {
+      // Handle deep link format (https://bitcointribe.app/app/.../community?publicKey=...&roomType=direct_message&contactName=...)
+      const deepLinkResult = Deeplinking.processDeepLink(data);
+      if (deepLinkResult.isValid && deepLinkResult.feature === DeepLinkFeature.COMMUNITY) {
+        // Check if it's a contact type (DM invitation)
+        if (deepLinkResult.params?.roomType === HolepunchRoomType.DIRECT_MESSAGE) {
+          const publicKey = deepLinkResult.params?.publicKey;
+          const contactName = deepLinkResult.params?.contactName;
+          if (publicKey && /^[0-9a-f]{64}$/i.test(publicKey)) {
+            return { publicKey, contactName };
+          }
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error('[Community] Failed to parse QR data:', error);
+      return null;
+    }
+  };
+
+  const handleStartDM = async (publicKey: string, contactName?: string) => {
+    try {
+      setIsCreatingDM(true);
+      console.log('[Community] Starting DM with:', publicKey.substring(0, 8), 'Contact:', contactName);
+      
+      const dmRoom = await sendDMInvitation(publicKey, contactName);
+      
+      Toast('DM invitation sent!');
+      handleCloseStartDM();
+      
+      // Navigate to the DM chat
+      (navigation as any).navigate(NavigationRoutes.CHAT, {
+        roomId: dmRoom.roomId,
+      });
+      
+    } catch (error) {
+      console.error('[Community] Failed to start DM:', error);
+      Toast(error.message || 'Failed to start DM', true);
+    } finally {
+      setIsCreatingDM(false);
+    }
+  };
+
+  const handleQRScan = async (codes: any[]) => {
+    if (!codes || codes.length === 0) return;
+    
+    const data = codes[0]?.value;
+    if (!data) return;
+    
+    const result = parseDeepLinkData(data);
+    
+    if (!result) {
+      Toast('Invalid QR code format', true);
+      return;
+    }
+    
+    if (result.publicKey === userPublicKey) {
+      Toast('You cannot DM yourself', true);
+      return;
+    }
+    
+    setScanning(false);
+    await handleStartDM(result.publicKey, result.contactName);
+  };
+
+  const handlePasteFromClipboard = async () => {
+    const clipboardContent = await Clipboard.getString();
+    if (clipboardContent) {
+      setPublicKeyInput(clipboardContent);
+    }
+  };
+
+  const handleManualSubmit = async () => {
+    const trimmedInput = publicKeyInput.trim();
+    
+    if (!trimmedInput) {
+      Toast('Please enter a contact link', true);
+      return;
+    }
+    
+    const result = parseDeepLinkData(trimmedInput);
+    
+    if (!result) {
+      Toast('Invalid contact link format', true);
+      return;
+    }
+    
+    if (result.publicKey === userPublicKey) {
+      Toast('You cannot DM yourself', true);
+      return;
+    }
+    
+    await handleStartDM(result.publicKey, result.contactName);
   };
 
   useEffect(() => {
@@ -268,7 +398,7 @@ function Community() {
             {/* Start DM Button */}
             <AppTouchable
               style={[styles.actionButton, styles.primaryActionButton]}
-              onPress={() => (navigation as any).navigate(NavigationRoutes.STARTDM)}
+              onPress={handleShowStartDM}
               activeOpacity={0.7}
             >
               <AppText style={styles.primaryActionButtonText}>
@@ -322,10 +452,10 @@ function Community() {
             </View>
 
             {/* QR Code */}
-            {userPublicKey && (
+            {contactDeepLink && (
               <View style={styles.qrContainer}>
                 <QRCode
-                  value={`tribe://contact/${userPublicKey}`}
+                  value={contactDeepLink}
                   size={wp(250)}
                   backgroundColor="white"
                   color="black"
@@ -333,17 +463,19 @@ function Community() {
               </View>
             )}
 
-            {/* Public Key Display */}
-            <View style={styles.publicKeyContainer}>
-              <AppText variant="body2" style={styles.publicKeyLabel}>
-                Public Key
-              </AppText>
-              <View style={styles.publicKeyBox}>
-                <AppText variant="caption" style={styles.publicKeyText} numberOfLines={2}>
-                  {userPublicKey}
+            {/* Contact Link Display */}
+            {contactDeepLink && (
+              <View style={styles.publicKeyContainer}>
+                <AppText variant="body2" style={styles.publicKeyLabel}>
+                  Contact Link
                 </AppText>
+                <View style={styles.publicKeyBox}>
+                  <AppText variant="caption" style={styles.publicKeyText} numberOfLines={3}>
+                    {contactDeepLink}
+                  </AppText>
+                </View>
               </View>
-            </View>
+            )}
 
             {/* Action Buttons */}
             <View style={styles.modalActionButtons}>
@@ -351,7 +483,7 @@ function Community() {
                 onPress={handleCopyPublicKey}
                 style={[styles.modalActionButton, styles.copyButton]}
               >
-                <AppText style={styles.copyButtonText}>Copy Key</AppText>
+                <AppText style={styles.copyButtonText}>Copy Link</AppText>
               </AppTouchable>
               
               <AppTouchable
@@ -364,7 +496,7 @@ function Community() {
 
             {/* Info Text */}
             <AppText variant="caption" style={styles.infoText}>
-              Share this QR code or public key with others so they can send you DM invitations
+              Share this QR code or contact link with others so they can send you DM invitations
             </AppText>
           </View>
         </View>
