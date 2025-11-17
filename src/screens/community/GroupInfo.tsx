@@ -14,7 +14,7 @@ import ShowQrLight from 'src/assets/images/showQrLight.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
-import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
 
 export const GroupInfo = () => {
@@ -43,6 +43,12 @@ export const GroupInfo = () => {
 
   const handleScan = () => {
     try {
+
+      if (room.roomType === HolepunchRoomType.DIRECT_MESSAGE) {
+        Toast('Group info is not available for DM', true);
+        return;
+      }
+
       navigation.dispatch(
         CommonActions.navigate(NavigationRoutes.GROUPQR, {
           room,
@@ -103,14 +109,18 @@ export const GroupInfo = () => {
 
   return (
     <ScreenContainer>
-      <CustomHeader
-        title={community.groupInfo}
-        onBackNavigation={() => navigation.goBack()}
-        rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
-        onSettingsPress={handleScan}
-      // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
-      // onTernaryIconPress={onEditGroupInfo}
-      />
+      {
+        room.roomType === HolepunchRoomType.DIRECT_MESSAGE ? null : (
+          <CustomHeader
+            title={community.groupInfo}
+            onBackNavigation={() => navigation.goBack()}
+            rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
+            onSettingsPress={handleScan}
+          // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
+          // onTernaryIconPress={onEditGroupInfo}
+          />
+        )
+      }
 
       <View style={styles.bodyWrapper}>
         <FlatList
