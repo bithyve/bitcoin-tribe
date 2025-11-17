@@ -14,7 +14,7 @@ import ShowQrLight from 'src/assets/images/showQrLight.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
-import { HolepunchRoom } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
 
 export const GroupInfo = () => {
@@ -26,7 +26,8 @@ export const GroupInfo = () => {
   const route = useRoute<RouteProp<{ params: { room: HolepunchRoom, peersMap: Map<string, HolepunchPeer> } }>>();
   const { room, peersMap } = route.params;
   const [members, setMembers] = useState<HolepunchPeer[]>(Array.from(peersMap.values()));
-
+  const isDM = room.roomType === HolepunchRoomType.DIRECT_MESSAGE;
+  
   const renderMemberItem = ({ item }: { item: HolepunchPeer }) => (
     <View style={styles.card}>
       {item.peerImage ? (
@@ -43,6 +44,12 @@ export const GroupInfo = () => {
 
   const handleScan = () => {
     try {
+
+      if (isDM) {
+        Toast('Group info is not available for DM', true);
+        return;
+      }
+
       navigation.dispatch(
         CommonActions.navigate(NavigationRoutes.GROUPQR, {
           room,
@@ -103,14 +110,19 @@ export const GroupInfo = () => {
 
   return (
     <ScreenContainer>
-      <CustomHeader
-        title={community.groupInfo}
-        onBackNavigation={() => navigation.goBack()}
-        rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
-        onSettingsPress={handleScan}
-      // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
-      // onTernaryIconPress={onEditGroupInfo}
-      />
+      {
+        isDM ? null : (
+          <CustomHeader
+            title={community.groupInfo}
+            onBackNavigation={() => navigation.goBack()}
+            rightIcon={theme.dark ? <ShowQr /> : <ShowQrLight />}
+            onSettingsPress={handleScan}
+          // ternaryIcon={theme.dark ? <Edit /> : <EditLight />}
+          // onTernaryIconPress={onEditGroupInfo}
+          />
+        )
+      }
+
 
       <View style={styles.bodyWrapper}>
         <FlatList

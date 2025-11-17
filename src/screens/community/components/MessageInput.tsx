@@ -122,7 +122,7 @@ const MessageInput = ({
           ref={descriptionInputRef}
           value={message}
           onChangeText={setMessage}
-          placeholder={'Type a Message...'}
+          placeholder={disabled ? 'Joining room...' : 'Type a Message...'}
           onContentSizeChange={event =>
             setInputHeight(event.nativeEvent.contentSize.height)
           }

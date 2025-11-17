@@ -5,6 +5,7 @@ export enum HolepunchMessageType {
   TEXT = 'TEXT',
   IDENTITY = 'IDENTITY',  // Peer identity announcement
   SYSTEM = 'SYSTEM',      // System messages (join notifications)
+  DM_INVITE = 'DM_INVITE',  // DM invitation message
 }
 
 export interface HolepunchMessage {
