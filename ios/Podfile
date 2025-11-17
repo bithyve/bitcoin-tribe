@@ -25,10 +25,6 @@ target 'tribe' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  target 'tribeTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   target 'tribe-dev' do
     config = use_native_modules!
