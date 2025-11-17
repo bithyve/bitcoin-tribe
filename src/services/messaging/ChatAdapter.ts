@@ -48,58 +48,90 @@ export class ChatAdapter extends EventEmitter {
 
     this.keyPair = await this.manager.getKeys();
     this.userProfile = userProfile;
-    
+
     // Note: Inbox is initialized lazily when user navigates to Inbox screen
     // This avoids timing issues with root peer connection
   }
 
   /**
-   * Initialize and join user's personal inbox room
+   * Sync inbox: Temporarily join inbox room to fetch DM invitations
    * 
-   * IMPORTANT: This should only be called AFTER root peer connection is established.
-   * Call this lazily when user navigates to Inbox screen.
+   * - Creates inbox room metadata if it doesn't exist
+   * - Joins the inbox room
+   * - Fetches all pending messages from root peer
+   * - Automatically leaves after 5 seconds
    * 
-   * Inbox rooms are used to receive DM invitations from other users.
-   * 
-   * @throws Error if key pair not initialized or root peer not connected
+   * @returns Number of new invitations received
+   * @throws Error if key pair not initialized
    */
-  async initializeInbox(): Promise<void> {
-    console.log('[ChatAdapter] 📥 Initializing inbox...');
-
+  async syncInbox(): Promise<{ synced: boolean }> {
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
     }
-    
+
     const { InboxKeyGenerator } = await import('./holepunch/crypto/InboxKeyGenerator');
     const inboxRoomKey = InboxKeyGenerator.generateInboxRoomKey(this.keyPair.publicKey);
     const inboxRoomId = InboxKeyGenerator.generateInboxRoomId(this.keyPair.publicKey);
-    
-    // Check if inbox room already exists
-    const existingInbox = await RoomStorage.getRoom(inboxRoomId);
-    
-    if (!existingInbox) {
-      // Create inbox room
-      const inboxRoom: HolepunchRoom = {
-        roomId: inboxRoomId,
-        roomKey: inboxRoomKey,
-        roomType: HolepunchRoomType.INBOX,
-        roomName: 'My Inbox',
-        roomDescription: 'Personal inbox for DM invitations',
-        peers: [this.keyPair.publicKey],
-        creator: this.keyPair.publicKey,
-        createdAt: Date.now(),
-        lastActive: Date.now(),
-        initializedIdentity: true, // No need to send identity in inbox
-        isInboxRoom: true,
-      };
-      
-      await RoomStorage.saveRoom(inboxRoom);
-      console.log('[ChatAdapter] 📥 Inbox room created');
+
+    console.log('[ChatAdapter] 📬 Syncing inbox...');
+
+    try {
+      // Check if inbox room exists, create if not
+      const existingInbox = await RoomStorage.getRoom(inboxRoomId);
+
+      if (!existingInbox) {
+        const inboxRoom: HolepunchRoom = {
+          roomId: inboxRoomId,
+          roomKey: inboxRoomKey,
+          roomType: HolepunchRoomType.INBOX,
+          roomName: 'My Inbox',
+          roomDescription: 'Personal inbox for DM invitations',
+          peers: [this.keyPair.publicKey],
+          creator: this.keyPair.publicKey,
+          createdAt: Date.now(),
+          lastActive: Date.now(),
+          initializedIdentity: true, // No need to send identity in inbox
+          isInboxRoom: true,
+        };
+
+        await RoomStorage.saveRoom(inboxRoom);
+        console.log('[ChatAdapter] 📥 Inbox room created');
+      }
+
+      // // Track invitations received during sync
+      // let newInvitationCount = 0;
+
+      // const handleInboxMessage = (message: HolepunchMessage) => {
+      //   if (message.roomId === inboxRoomId && 
+      //       message.messageType === HolepunchMessageType.DM_INVITE) {
+      //     newInvitationCount++;
+      //     console.log('[ChatAdapter] 📨 New DM invitation received during sync');
+      //   }
+      // };
+
+      // // Listen for new invitations
+      // this.on('chat:message-received', handleInboxMessage);
+
+      // Join inbox room (this triggers message sync from root peer)
+      await this.joinRoom(inboxRoomKey, 0);
+      console.log('[ChatAdapter] 📬 Joined inbox room, fetching messages...');
+
+      // Wait 5 seconds for messages to sync
+      await new Promise(resolve => setTimeout(resolve, 5000));
+
+      // Leave inbox room
+      await this.manager.leaveRoom(inboxRoomId);
+      console.log('[ChatAdapter] 📬 Left inbox room after sync');
+
+      // // Stop listening
+      // this.off('chat:message-received', handleInboxMessage);
+
+      // return { newInvitations: 0 };
+      return { synced: true };
+    } catch (error) {
+      console.error('[ChatAdapter] ❌ Failed to sync inbox:', error);
+      throw new Error('Failed to sync inbox');
     }
-    
-    // Join inbox room to receive invitations
-    await this.manager.joinRoom(inboxRoomId, inboxRoomKey);
-    console.log('[ChatAdapter] ✅ Inbox initialized and joined');
   }
 
   /**
@@ -108,7 +140,7 @@ export class ChatAdapter extends EventEmitter {
    */
   async getInboxRoom(): Promise<HolepunchRoom | null> {
     if (!this.keyPair) return null;
-    
+
     const { InboxKeyGenerator } = await import('./holepunch/crypto/InboxKeyGenerator');
     const inboxRoomId = InboxKeyGenerator.generateInboxRoomId(this.keyPair.publicKey);
     return await RoomStorage.getRoom(inboxRoomId);
@@ -237,7 +269,7 @@ export class ChatAdapter extends EventEmitter {
     this.emit('chat:room-joined', this.currentRoom);
 
     const syncResponse = await this.requestSync(this.currentRoom.roomId, lastSyncIndex) // essentially sync the room before sending the identity message(resolves sync conflict)
-    
+
     if (syncResponse.success && !existingRoom.initializedIdentity) {
       console.log('[ChatAdapter] 📢 Sending identity message');
       await this.sendIdentityMessage(this.currentRoom) // Send identity message after joining a room for the first time
@@ -391,23 +423,23 @@ export class ChatAdapter extends EventEmitter {
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
     }
-    
+
     // Generate random room key for the DM
     const dmRoomKey = MessageEncryption.generateRoomKey();
     const dmRoomId = MessageEncryption.deriveRoomId(dmRoomKey);
-    
+
     // Check if DM already exists with this user
     const allRooms = await RoomStorage.getAllRooms();
     const existingDM = allRooms.find(
       r => r.roomType === HolepunchRoomType.DIRECT_MESSAGE &&
-           r.otherParticipantPubKey === recipientPublicKey
+        r.otherParticipantPubKey === recipientPublicKey
     );
-    
+
     if (existingDM) {
       console.log('[ChatAdapter] ℹ️ DM already exists with this user');
       return existingDM;
     }
-    
+
     // Create invitation data (plaintext, will be encrypted entirely)
     const invitationData = {
       invitationType: 'DM_INVITE',
@@ -419,7 +451,7 @@ export class ChatAdapter extends EventEmitter {
       invitationId: uuidv4(),
       timestamp: Date.now(),
     };
-    
+
     // Encrypt ENTIRE invitation payload using ECDH
     // This ensures the root peer cannot read ANY invitation content
     // Uses direct key agreement: senderPrivate * recipientPublic = shared secret
@@ -428,7 +460,7 @@ export class ChatAdapter extends EventEmitter {
       recipientPublicKey,
       this.keyPair.secretKey  // Sender's private key
     );
-    
+
     // Create DM room locally
     const dmRoom: HolepunchRoom = {
       roomId: dmRoomId,
@@ -444,19 +476,19 @@ export class ChatAdapter extends EventEmitter {
       roomImage: recipientImage,
       otherParticipantPubKey: recipientPublicKey,
     };
-    
+
     await RoomStorage.saveRoom(dmRoom);
     console.log('[ChatAdapter] 💬 DM room created locally');
-    
+
     // Calculate recipient's inbox room ID and key
     const { InboxKeyGenerator } = await import('./holepunch/crypto/InboxKeyGenerator');
     const recipientInboxRoomId = InboxKeyGenerator.generateInboxRoomId(recipientPublicKey);
     const recipientInboxRoomKey = InboxKeyGenerator.generateInboxRoomKey(recipientPublicKey);
-    
+
     // Join recipient's inbox temporarily to send invitation
     console.log('[ChatAdapter] 📥 Joining recipient inbox...');
     await this.manager.joinRoom(recipientInboxRoomId, recipientInboxRoomKey);
-    
+
     // Send invitation message to recipient's inbox
     // Content is now the encrypted invitation payload (root peer cannot read it)
     const invitationMessage: HolepunchMessage = {
@@ -467,16 +499,16 @@ export class ChatAdapter extends EventEmitter {
       content: encryptedInvitation, // Encrypted entire invitation
       timestamp: Date.now(),
     };
-    
+
     await this.manager.sendMessage(recipientInboxRoomId, invitationMessage);
     console.log('[ChatAdapter] ✅ DM invitation sent to inbox');
-    
+
     // Leave recipient's inbox
     await this.manager.leaveRoom(recipientInboxRoomId);
     console.log('[ChatAdapter] 👋 Left recipient inbox');
-    
+
     this.emit('chat:dm-invitation-sent', dmRoom);
-    
+
     return dmRoom;
   }
 
