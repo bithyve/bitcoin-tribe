@@ -26,7 +26,8 @@ export const GroupInfo = () => {
   const route = useRoute<RouteProp<{ params: { room: HolepunchRoom, peersMap: Map<string, HolepunchPeer> } }>>();
   const { room, peersMap } = route.params;
   const [members, setMembers] = useState<HolepunchPeer[]>(Array.from(peersMap.values()));
-
+  const isDM = room.roomType === HolepunchRoomType.DIRECT_MESSAGE;
+  
   const renderMemberItem = ({ item }: { item: HolepunchPeer }) => (
     <View style={styles.card}>
       {item.peerImage ? (
@@ -44,7 +45,7 @@ export const GroupInfo = () => {
   const handleScan = () => {
     try {
 
-      if (room.roomType === HolepunchRoomType.DIRECT_MESSAGE) {
+      if (isDM) {
         Toast('Group info is not available for DM', true);
         return;
       }
@@ -110,7 +111,7 @@ export const GroupInfo = () => {
   return (
     <ScreenContainer>
       {
-        room.roomType === HolepunchRoomType.DIRECT_MESSAGE ? null : (
+        isDM ? null : (
           <CustomHeader
             title={community.groupInfo}
             onBackNavigation={() => navigation.goBack()}
@@ -121,6 +122,7 @@ export const GroupInfo = () => {
           />
         )
       }
+
 
       <View style={styles.bodyWrapper}>
         <FlatList
