@@ -25,7 +25,7 @@ import QRCode from 'react-native-qrcode-svg';
 import Clipboard from '@react-native-clipboard/clipboard';
 import QRScanner from 'src/components/QRScanner';
 import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
-import { useQuery } from 'react-query';
+import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 
@@ -39,13 +39,15 @@ function Community() {
   const [publicKeyInput, setPublicKeyInput] = useState('');
   const [isCreatingDM, setIsCreatingDM] = useState(false);
   const [scanning, setScanning] = useState(true);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [hasAutoSynced, setHasAutoSynced] = useState(false);
   const navigation = useNavigation();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { community } = translations;
-  const {communityStatus,setCommunityStatus } =
+  const { communityStatus, setCommunityStatus } =
     useContext(AppContext);
-    const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
 
 
   // Initialize P2P chat with useChat hook
@@ -56,11 +58,11 @@ function Community() {
     error,
     getAllRooms,
     reconnectRootPeer,
-    initializeInbox,
+    syncInbox,
     getCurrentPeerPubKey,
     sendDMInvitation,
   } = useChat();
-  
+
   // Only get public key if service is initialized
   const userPublicKey = !isInitializing ? getCurrentPeerPubKey() : null;
 
@@ -75,12 +77,12 @@ function Community() {
   const loadRooms = useCallback(async () => {
     try {
       const savedRooms = await getAllRooms();
-      
+
       // Filter out inbox rooms
       const filteredRooms = (savedRooms || []).filter(
         r => r.roomType !== HolepunchRoomType.INBOX
       );
-      
+
       setRooms(filteredRooms);
     } catch (e) {
       setRooms([]);
@@ -91,30 +93,49 @@ function Community() {
     loadRooms();
   }, [loadRooms]);
 
-  // Reload rooms and initialize inbox when screen comes into focus
+  // Reload rooms when screen comes into focus
   useFocusEffect(
     useCallback(() => {
-      console.log('[Community] Screen focused, reloading rooms and initializing inbox...');
+      console.log('[Community] Screen focused, reloading rooms...');
       loadRooms();
-      
-      // Initialize inbox if root peer is connected
-      const initInbox = async () => {
-        if (!isRootPeerConnected) {
-          console.warn('[Community] Root peer not connected yet, skipping inbox initialization');
-          return;
-        }
-        
-        try {
-          await initializeInbox();
-          console.log('[Community] ✅ Inbox initialized successfully');
-        } catch (error) {
-          console.error('[Community] Failed to initialize inbox:', error);
-        }
-      };
-      
-      initInbox();
-    }, [loadRooms, isRootPeerConnected, initializeInbox]),
+    }, [loadRooms]),
   );
+
+  // Auto-sync inbox when root peer connects for the first time
+  useEffect(() => {
+    const autoSyncInbox = async () => {
+      // Only auto-sync if:
+      // 1. Root peer is connected
+      // 2. Not currently syncing
+      // 3. Haven't auto-synced yet in this session
+      if (isRootPeerConnected && !isSyncing && !hasAutoSynced) {
+        setHasAutoSynced(true);
+        console.log('[Community] 📬 Auto-syncing inbox on first connection...');
+
+        try {
+          setIsSyncing(true);
+          const { synced } = await syncInbox();
+
+          if (synced) {
+            console.log('[Community] ✅ Auto-sync complete');
+            // Reload rooms to show new DMs
+            setTimeout(() => {
+              loadRooms();
+            }, 0)
+          } else {
+            console.warn('[Community] Auto-sync returned false');
+          }
+        } catch (error) {
+          console.error('[Community] Auto-sync failed:', error);
+          // Don't show error toast for auto-sync failures
+        } finally {
+          setIsSyncing(false);
+        }
+      }
+    };
+
+    autoSyncInbox();
+  }, [isRootPeerConnected, isSyncing, hasAutoSynced, syncInbox, loadRooms]);
 
   useEffect(() => {
     if (error) {
@@ -207,7 +228,7 @@ function Community() {
           }
         }
       }
-      
+
       return null;
     } catch (error) {
       console.error('[Community] Failed to parse QR data:', error);
@@ -219,17 +240,17 @@ function Community() {
     try {
       setIsCreatingDM(true);
       console.log('[Community] Starting DM with:', publicKey.substring(0, 8), 'Contact:', contactName);
-      
+
       const dmRoom = await sendDMInvitation(publicKey, contactName);
-      
+
       Toast('DM invitation sent!');
       handleCloseStartDM();
-      
+
       // Navigate to the DM chat
       (navigation as any).navigate(NavigationRoutes.CHAT, {
         roomId: dmRoom.roomId,
       });
-      
+
     } catch (error) {
       console.error('[Community] Failed to start DM:', error);
       Toast(error.message || 'Failed to start DM', true);
@@ -240,22 +261,22 @@ function Community() {
 
   const handleQRScan = async (codes: any[]) => {
     if (!codes || codes.length === 0) return;
-    
+
     const data = codes[0]?.value;
     if (!data) return;
-    
+
     const result = parseDeepLinkData(data);
-    
+
     if (!result) {
       Toast('Invalid QR code format', true);
       return;
     }
-    
+
     if (result.publicKey === userPublicKey) {
       Toast('You cannot DM yourself', true);
       return;
     }
-    
+
     setScanning(false);
     await handleStartDM(result.publicKey, result.contactName);
   };
@@ -269,33 +290,62 @@ function Community() {
 
   const handleManualSubmit = async () => {
     const trimmedInput = publicKeyInput.trim();
-    
+
     if (!trimmedInput) {
       Toast('Please enter a contact link', true);
       return;
     }
-    
+
     const result = parseDeepLinkData(trimmedInput);
-    
+
     if (!result) {
       Toast('Invalid contact link format', true);
       return;
     }
-    
+
     if (result.publicKey === userPublicKey) {
       Toast('You cannot DM yourself', true);
       return;
     }
-    
+
     await handleStartDM(result.publicKey, result.contactName);
   };
 
+  // Sync inbox handler
+  const handleSyncInbox = async () => {
+    if (isSyncing || !isRootPeerConnected) {
+      if (!isRootPeerConnected) {
+        Toast('Cannot sync - not connected to root peer', true);
+      }
+      return;
+    }
+
+    setIsSyncing(true);
+    try {
+      console.log('[Community] Starting inbox sync...');
+      const { synced } = await syncInbox();
+      if (synced) {
+        Toast('✅ Inbox synced');
+        setTimeout(() => {
+          loadRooms();
+        }, 0)
+      } else {
+        Toast('Failed to sync inbox', true);
+      }
+    } catch (error) {
+      console.error('[Community] Failed to sync inbox:', error);
+      Toast('Failed to sync inbox', true);
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   useEffect(() => {
-  if(!isInitializing && !isRootPeerConnected)
-    setCommunityStatus('offline');
-  else if(communityStatus)
-    setCommunityStatus('online');
-  }, [isInitializing,isRootPeerConnected]);
+    if (!isInitializing && !isRootPeerConnected)
+      setCommunityStatus('offline');
+    else if (communityStatus)
+      setCommunityStatus('online');
+  }, [isInitializing, isRootPeerConnected]);
 
   // Get connection status for status bar
   const getConnectionStatus = () => {
@@ -316,7 +366,7 @@ function Community() {
 
   const renderRoomItem = ({ item }: { item: HolepunchRoom }) => {
     const isDM = item.roomType === HolepunchRoomType.DIRECT_MESSAGE;
-    
+
     return (
       <AppTouchable
         style={styles.roomCard}
@@ -382,7 +432,7 @@ function Community() {
         </View>
       ) : (
         <>
-          {/* Action buttons for My DM QR and Start DM */}
+          {/* Action buttons for My DM QR, Start DM, and Sync Inbox */}
           <View style={styles.actionButtonsContainer}>
             {/* My DM QR Button */}
             <AppTouchable
@@ -404,6 +454,30 @@ function Community() {
               <AppText style={styles.primaryActionButtonText}>
                 Start DM
               </AppText>
+            </AppTouchable>
+          </View>
+
+          {/* Sync Inbox Button */}
+          <View style={styles.syncButtonContainer}>
+            <AppTouchable
+              style={[
+                styles.syncButton,
+                (isSyncing || !isRootPeerConnected) && styles.syncButtonDisabled
+              ]}
+              onPress={handleSyncInbox}
+              activeOpacity={0.7}
+              disabled={isSyncing || !isRootPeerConnected}
+            >
+              {isSyncing ? (
+                <ActivityIndicator size="small" color={theme.colors.primaryBackground} />
+              ) : (
+                <AppText style={[
+                  styles.syncButtonText,
+                  !isRootPeerConnected && styles.syncButtonTextDisabled
+                ]}>
+                  🔄 Sync DM Invitations
+                </AppText>
+              )}
             </AppTouchable>
           </View>
 
@@ -485,7 +559,7 @@ function Community() {
               >
                 <AppText style={styles.copyButtonText}>Copy Link</AppText>
               </AppTouchable>
-              
+
               <AppTouchable
                 onPress={handleSharePublicKey}
                 style={[styles.modalActionButton, styles.shareButton]}
@@ -695,6 +769,31 @@ const getStyles = (theme: AppTheme) =>
       fontSize: 14,
       fontWeight: '600',
       color: theme.colors.primaryBackground,
+    },
+
+    // Sync button
+    syncButtonContainer: {
+      paddingHorizontal: wp(16),
+      marginBottom: hp(16),
+    },
+    syncButton: {
+      backgroundColor: theme.colors.accent,
+      borderRadius: 12,
+      paddingVertical: hp(12),
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: hp(48),
+    },
+    syncButtonDisabled: {
+      opacity: 0.6,
+    },
+    syncButtonText: {
+      fontSize: 14,
+      fontWeight: '600',
+      color: theme.colors.primaryBackground,
+    },
+    syncButtonTextDisabled: {
+      opacity: 0.5,
     },
 
     // Status bar
