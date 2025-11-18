@@ -3327,8 +3327,7 @@ export class ApiHandler {
       }
 
       await Relay.createAppImageBackup(
-        app.id,
-        app.publicId,
+        app.authToken,
         roomsObject,
         settingsObject,
         tnxMetaObject,
