@@ -63,6 +63,8 @@
 			<string>One</string>
 		</dict>
 	</dict>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>LufgaBold.ttf</string>
