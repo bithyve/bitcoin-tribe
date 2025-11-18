@@ -29,7 +29,7 @@ interface UseChatResult {
   leaveRoom: () => Promise<void>;
   reconnectRootPeer: () => Promise<void>;
   sendDMInvitation: (recipientPublicKey: string, recipientName?: string, recipientImage?: string) => Promise<HolepunchRoom>;
-  syncInbox: () => Promise<{ synced: boolean }>;
+  syncInbox: (lastSyncIndex: number) => Promise<{ synced: boolean }>;
 
   // Fetchers
   getAllRooms: () => Promise<any[]>;
@@ -321,9 +321,9 @@ export function useChat(): UseChatResult {
   }, []);
 
   // Sync inbox (creates inbox if needed, then syncs)
-  const syncInbox = useCallback(async () => {
+  const syncInbox = useCallback(async (lastSyncIndex: number) => {
     const adapter = chatService.getAdapter();
-    return await adapter.syncInbox();
+    return await adapter.syncInbox(lastSyncIndex);
   }, []);
 
   // Fetch all messages for a given room using chatAdapter
