@@ -284,21 +284,6 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		13B07F8E1A680F5B00A75B9A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */,
-				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */,
-				2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */,
-				C6D34549A556477FA8A556AF /* LufgaMedium.ttf in Resources */,
-				98522CA5FBAA40AD99C27A30 /* LufgaRegular.ttf in Resources */,
-				C33B24D6C2E3459FB164E874 /* LufgaSemiBold.ttf in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		35E3394A2C22A3AB007E532A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
