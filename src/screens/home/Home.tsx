@@ -57,6 +57,7 @@ import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -322,10 +323,18 @@ function HomeScreen() {
       const parsedUrl = new URL(url);
       const category = url.split('?')[0].replace(Deeplinking.scheme + '/', '');
       const params = Object.fromEntries(parsedUrl.searchParams.entries());
+      
       if (category === 'community') {
-        navigation.dispatch(
-          CommonActions.navigate(NavigationRoutes.CREATEGROUP, params),
-        );
+        if (params.roomType === HolepunchRoomType.GROUP) {
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.CREATEGROUP, params),
+          );
+        } else if (params.roomType === HolepunchRoomType.DIRECT_MESSAGE) {
+          console.log('[Home] DM deep link params:', params);
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.COMMUNITY, params),
+          );
+        }
       }
     } catch (error) {
       console.log('Error parsing deep link:', error);
