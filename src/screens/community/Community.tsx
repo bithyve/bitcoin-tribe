@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react';
+import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
@@ -44,13 +44,17 @@ function Community() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [hasAutoSynced, setHasAutoSynced] = useState(false);
   const navigation = useNavigation();
+  const route = useRoute();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { community } = translations;
   const { communityStatus, setCommunityStatus } =
     useContext(AppContext);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-
+  
+  // Refs for handling deep link params
+  const pendingDMRef = useRef<any>(null);
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize P2P chat with useChat hook
   const {
@@ -103,6 +107,90 @@ function Community() {
       loadRooms();
     }, [loadRooms]),
   );
+
+  // Handle deep link params for DM invitations
+  const startDMWithParams = async (params: any) => {
+    try {
+      const { publicKey, contactName } = params;
+      
+      // Clear navigation params
+      navigation.setParams(null as any);
+      
+      if (!publicKey) {
+        Toast('Invalid contact link', true);
+        return;
+      }
+
+      // Validate public key format
+      if (!/^[0-9a-f]{64}$/i.test(publicKey)) {
+        Toast('Invalid public key format', true);
+        return;
+      }
+
+      // Check if user is trying to DM themselves
+      if (publicKey === userPublicKey) {
+        Toast('You cannot DM yourself', true);
+        return;
+      }
+
+      // If ready, start DM immediately
+      if (!isInitializing && isRootPeerConnected) {
+        await handleStartDM(publicKey, contactName);
+        return;
+      }
+
+      // Otherwise, store params and wait for initialization
+      pendingDMRef.current = params;
+      Toast('Waiting for initialization...', false);
+
+      // Set timeout for initialization
+      if (pendingTimeoutRef.current) clearTimeout(pendingTimeoutRef.current);
+
+      pendingTimeoutRef.current = setTimeout(() => {
+        if (pendingDMRef.current) {
+          pendingDMRef.current = null;
+          Toast('Initialization timed out. Try again later.', true);
+        }
+      }, 20000); // 20 second timeout
+    } catch (error) {
+      console.error('[Community] Error starting DM with params:', error);
+      Toast('Failed to start DM', true);
+    }
+  };
+
+  // Handle deep link params on mount
+  useEffect(() => {
+    const params = route.params;
+    if (params && (params as any).publicKey) {
+      console.log('[Community] Deep link params received:', params);
+      startDMWithParams(params);
+    }
+  }, []);
+
+  // Handle pending DM when initialization completes
+  useEffect(() => {
+    if (!isInitializing && isRootPeerConnected && pendingDMRef.current) {
+      console.log('[Community] Initialization complete, processing pending DM');
+      const params = pendingDMRef.current;
+      pendingDMRef.current = null;
+      
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+        pendingTimeoutRef.current = null;
+      }
+      
+      startDMWithParams(params);
+    }
+  }, [isInitializing, isRootPeerConnected]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Auto-sync inbox when root peer connects for the first time
   useEffect(() => {
