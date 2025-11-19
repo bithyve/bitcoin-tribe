@@ -25,6 +25,6 @@ module.exports = {
     ],
     'optional-require',
     'react-native-paper/babel',
-    'react-native-reanimated/plugin',
+    'react-native-worklets/plugin',
   ],
 };

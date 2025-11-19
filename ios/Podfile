@@ -1,3 +1,4 @@
+ENV['RCT_NEW_ARCH_ENABLED'] = '1'
 # Resolve react_native_pods.rb with node to allow for hoisting
 require Pod::Executable.execute_command('node', ['-p',
   'require.resolve(
@@ -25,10 +26,6 @@ target 'tribe' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
-  target 'tribeTests' do
-    inherit! :complete
-    # Pods for testing
-  end
 
   target 'tribe-dev' do
     config = use_native_modules!

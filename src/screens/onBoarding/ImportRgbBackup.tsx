@@ -7,7 +7,7 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import ImportBackup from 'src/assets/images/import_rgb_backup.svg';
 import { hp } from 'src/constants/responsive';
-import { pickSingle } from 'react-native-document-picker';
+import { pick } from '@react-native-documents/picker';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import UploadAssetFileButton from '../collectiblesCoins/components/UploadAssetFileButton';
 import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
@@ -70,10 +70,11 @@ const ImportRgbBackup = () => {
   }, [status]);
 
   const pickFile = async () => {
-    pickSingle({
+    pick({
       transitionStyle: 'flipHorizontal',
       copyTo: 'documentDirectory',
       mode: 'import',
+      allowMultiSelection:false
     }).then(res => {
       console.log(res);
       if (

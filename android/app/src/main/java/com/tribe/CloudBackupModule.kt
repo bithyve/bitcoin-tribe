@@ -19,22 +19,23 @@ import com.google.api.services.drive.Drive
 import com.google.api.services.drive.DriveScopes
 import com.google.gson.JsonObject
 
-
-class CloudBackupModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext),
+class CloudBackupModule(reactContext: ReactApplicationContext) :
+    ReactContextBaseJavaModule(reactContext),
     ActivityEventListener {
 
     private val SIGN_IN_INTENT_REQ_CODE = 1010
     private val FOLDER_NAME = "Bitcoin-Tribe"
     private var apiClient: GoogleSignInClient? = null
-    private lateinit var tokenPromise: Promise
+
+    // safer: make nullable to avoid lateinit crashes
+    private var tokenPromise: Promise? = null
     private val qrImageSize = 250f
 
     init {
         reactContext.addActivityEventListener(this)
     }
 
-    override
-    fun getName() = "CloudBackup"
+    override fun getName(): String = "CloudBackup"
 
     @ReactMethod
     fun setup(promise: Promise) {
@@ -44,35 +45,38 @@ class CloudBackupModule(reactContext: ReactApplicationContext) : ReactContextBas
                 .requestEmail()
                 .requestScopes(Scope(DriveScopes.DRIVE_FILE))
                 .build()
-        apiClient = GoogleSignIn.getClient(reactApplicationContext, signInOptions);
+        apiClient = GoogleSignIn.getClient(reactApplicationContext, signInOptions)
         promise.resolve(true)
     }
 
     @ReactMethod
     fun login(promise: Promise) {
-        val activity = currentActivity
+        val activity: Activity? = getCurrentActivity() // <-- use getCurrentActivity()
         if (apiClient == null) {
-            rejectWithError(promise,"Call setup method first")
-            return;
+            rejectWithError(promise, "Call setup method first")
+            return
         }
         tokenPromise = promise
         activity?.runOnUiThread {
             val signInIntent = apiClient!!.signInIntent
             activity.startActivityForResult(signInIntent, SIGN_IN_INTENT_REQ_CODE)
+        } ?: run {
+            // if there is no current activity, reject promise instead of crashing
+            rejectWithError(promise, "Activity not available")
+            tokenPromise = null
         }
     }
-
 
     private fun createFolder(drive: Drive): String? {
         val folders = drive.files().list()
             .setQ("mimeType = 'application/vnd.google-apps.folder' and trashed = false and name = '$FOLDER_NAME'")
             .execute()
-        if(folders.files.size > 0) {
+        if (folders.files.size > 0) {
             return folders.files[0].id
         }
         val file: com.google.api.services.drive.model.File = com.google.api.services.drive.model.File()
-        file.name = FOLDER_NAME;
-        file.mimeType = "application/vnd.google-apps.folder";
+        file.name = FOLDER_NAME
+        file.mimeType = "application/vnd.google-apps.folder"
         return try {
             val folder: com.google.api.services.drive.model.File? = drive.files().create(file)
                 .setFields("id")
@@ -90,53 +94,65 @@ class CloudBackupModule(reactContext: ReactApplicationContext) : ReactContextBas
         promise.resolve(jsonObject.toString())
     }
 
+    // Activity is non-null per RN interface
     override fun onActivityResult(
-        activity: Activity?,
+        activity: Activity,
         requestCode: Int,
         resultCode: Int,
         intent: Intent?
     ) {
-        if(requestCode == SIGN_IN_INTENT_REQ_CODE) {
+        if (requestCode == SIGN_IN_INTENT_REQ_CODE) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
             try {
-                val account: GoogleSignInAccount = task.getResult(
-                    ApiException::class.java
-                )
+                val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("status", true)
                 jsonObject.addProperty("error", "")
-                jsonObject.addProperty("data", account.email)
-                tokenPromise.resolve(jsonObject.toString())
+                jsonObject.addProperty("data", account.email ?: "")
+                tokenPromise?.resolve(jsonObject.toString())
             } catch (e: ApiException) {
                 Log.d(name, "onActivityResult@@: ${e.message}")
                 val code = e.statusCode
                 val errorDescription = getDriveErrorMessage(code)
-                rejectWithError(tokenPromise, errorDescription)
+                tokenPromise?.let { rejectWithError(it, errorDescription) }
+            } finally {
+                // clear stored promise to avoid accidental reuse
+                tokenPromise = null
             }
         }
     }
 
     private fun getDriveErrorMessage(statusCode: Int): String {
-        return when(statusCode) {
-            17-> "Failed to connect to your Google Drive. Please try after sometime."
-            14, 20-> "Error connecting with server. Please try again after sometime."
-            10-> "Technical error occurred. This cannot be rectified at your end. Please contact our support."
-            13-> "We encountered a error. Please try again after sometime"
-            8-> "Google Drive is temporarily unavailable. Please try again"
-            5-> "Incorrect account name. Please use the account name you used originally while setting up the wallet."
-            7-> "A network error occurred. Please check your connection and try again."
-            30-> "Please check authentication with your google account in settings and try again."
-            15-> "Request timed out. Please try again."
-            4-> "You are not logged-in into your Google Drive account. Please log in from your Phone Settings."
-            19-> "Unable to connect with Google Drive right now. Please try again after sometime."
-            2-> "The installed version of Google Play services is out of date. Please update it from Play store."
-            22,21-> "Unable to re-connect with Google Drive right now. Please try again after sometime."
-            12501, 12502, 16-> "We recommend signing in as it easily allows you to backup your wallet on your personal cloud."
-            else-> "We encountered a non-standard error. Please try again after sometime or contact us"
+        return when (statusCode) {
+            17 -> "Failed to connect to your Google Drive. Please try after sometime."
+            14, 20 -> "Error connecting with server. Please try after sometime."
+            10 -> "Technical error occurred. This cannot be rectified at your end. Please contact our support."
+            13 -> "We encountered a error. Please try again after sometime"
+            8 -> "Google Drive is temporarily unavailable. Please try again"
+            5 -> "Incorrect account name. Please use the account name you used originally while setting up the wallet."
+            7 -> "A network error occurred. Please check your connection and try again."
+            30 -> "Please check authentication with your google account in settings and try again."
+            15 -> "Request timed out. Please try again."
+            4 -> "You are not logged-in into your Google Drive account. Please log in from your Phone Settings."
+            19 -> "Unable to connect with Google Drive right now. Please try again after sometime."
+            2 -> "The installed version of Google Play services is out of date. Please update it from Play store."
+            22, 21 -> "Unable to re-connect with Google Drive right now. Please try again after sometime."
+            12501, 12502, 16 -> "We recommend signing in as it easily allows you to backup your wallet on your personal cloud."
+            else -> "We encountered a non-standard error. Please try again after sometime or contact us"
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
+        // no-op (keep if you need to handle incoming intents later)
     }
 
+    // Cleanup to avoid leaking the activity event listener
+    override fun onCatalystInstanceDestroy() {
+        try {
+            reactApplicationContext.removeActivityEventListener(this)
+        } catch (e: Exception) {
+            // ignore
+        }
+        super.onCatalystInstanceDestroy()
+    }
 }
