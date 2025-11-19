@@ -1322,7 +1322,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+511383)":
+  - "react-native-bare-kit (0.5.6+c01945)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2750,7 +2750,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 1864935968d15b9b73d8e413d29c780f0ab50038
   React-microtasksnativemodule: 3b784cf40f7c3c9500b9a5f9e4eec5c9bbfbef8f
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 2b2fd313bf9a70e27e79622e41c386f4a4041971
+  react-native-bare-kit: 52d42cf13f54d5f4e37d491d16b404c09f18eef6
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: c4d838e8cd2896379328aec8a600c6ddad589c78
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
