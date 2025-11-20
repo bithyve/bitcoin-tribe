@@ -326,7 +326,7 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
       position: 'absolute',
       right: wp(16),
-      top: hp(290),
+      top: hp(220),
     },
     addNewIconWrapper: {
       position: 'absolute',

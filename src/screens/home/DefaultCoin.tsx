@@ -44,7 +44,6 @@ import GradientBorderAnimated from './GradientBorderAnimated';
 import Fonts from 'src/constants/Fonts';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import LinearGradient from 'react-native-linear-gradient';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import DeepLinking from 'src/utils/DeepLinking';
 import Carousel, { Pagination } from 'react-native-reanimated-carousel';
@@ -151,6 +150,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingTop: hp(15),
       borderBottomRightRadius: hp(20),
       borderBottomLeftRadius: hp(20),
+      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9))'
     },
     textCollectibleName: {
       marginLeft: wp(10),
@@ -221,10 +221,12 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderTopRightRadius: hp(20),
       width: '100%',
       position: 'absolute',
+      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))'
     },
     collectionCampaignTxtCtr: {
       borderTopLeftRadius: hp(20),
       borderTopRightRadius: hp(20),
+      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))'
     },
     coinDataCtr: {
       padding: hp(20),
@@ -361,27 +363,17 @@ const CollectionItem = ({
 
               {isCampaignActive && (
                 <View style={styles.activeCampaignDetailsCtr}>
-                  <LinearGradient
-                    colors={[
-                      'rgba(0, 0, 0, 1)',
-                      'rgba(0, 0, 0, 0.7)',
-                      'rgba(17, 17, 17, 0)',
-                    ]}
-                    style={styles.collectionCampaignTxtCtr}>
+                  <View style={[styles.collectionCampaignTxtCtr]}>
                     <AppText variant="subtitle2" style={styles.campaignTxt}>
                       {asset?.campaign?.name}
                     </AppText>
-                  </LinearGradient>
+                  </View>
                 </View>
               )}
 
-              <LinearGradient
-                colors={[
-                  'rgba(0, 0, 0, 0)',
-                  'rgba(0, 0, 0, 0.4)',
-                  'rgba(0, 0, 0, 0.9)',
-                ]}
-                style={styles.textCollectibleNameContainer1}>
+              <View
+                style={styles.textCollectibleNameContainer1}
+              >
                 <View style={styles.textCollectibleNameContainer2}>
                   <AppText
                     variant="body1Bold"
@@ -399,7 +391,7 @@ const CollectionItem = ({
                     {description}
                   </AppText>
                 }
-              </LinearGradient>
+              </View>
             </View>
           </ImageBackground>
         </View>
@@ -443,17 +435,12 @@ const CoinItem = ({
             isCampaignActive && styles.activeCampaignBorder,
           ]}>
           {isCampaignActive && (
-            <LinearGradient
-              colors={[
-                'rgba(0, 0, 0, 1)',
-                'rgba(0, 0, 0, 0.7)',
-                'rgba(17, 17, 17, 0)',
-              ]}
+            <View
               style={styles.coinCampaignTxtCtr}>
               <AppText variant="subtitle2" style={styles.campaignTxt}>
                 {asset?.campaign?.name}
               </AppText>
-            </LinearGradient>
+            </View>
           )}
 
           <View style={styles.coinDataCtr}>

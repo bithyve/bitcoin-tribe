@@ -10,6 +10,7 @@ import AppInfoContainer from './components/AppInfoContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { ScrollView } from 'react-native';
 
 function AppInfo({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -24,12 +25,14 @@ function AppInfo({ navigation }) {
       <AppHeader
         title={settings.appInfoTitle}
         subTitle={settings.appInfoScreenSubTitle}
-      />
+        />
+        <ScrollView>
       <AppInfoContainer
         navigation={navigation}
         walletId={publicId}
         version={`Tribe App ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`}
-      />
+        />
+        </ScrollView>
     </ScreenContainer>
   );
 }
