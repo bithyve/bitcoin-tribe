@@ -75,6 +75,16 @@ def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
+    packagingOptions {
+        exclude 'lib/armeabi-v7a/**'
+        exclude 'lib/x86/**'
+        exclude 'lib/x86_64/**'
+        // optional targeted excludes:
+        exclude 'lib/armeabi-v7a/libappmodules.so'
+        exclude 'lib/x86_64/libhermes.so'
+        exclude 'lib/x86_64/libhermestooling.so'
+    }
+
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -84,7 +94,7 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 243
+        versionCode 246
         versionName "0.5.11"
         missingDimensionStrategy 'react-native-camera', 'general'
         manifestPlaceholders = [
@@ -133,6 +143,15 @@ android {
             resValue "string", "build_config_package", "com.bithyve.tribe"
         }
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include "arm64-v8a"
+            universalApk false
+        }
+}
 }
 
 afterEvaluate {
@@ -159,8 +178,8 @@ dependencies {
     // For animated GIF support
     //  implementation 'com.facebook.fresco:animated-gif:2.5.0'
     //Fresco - For Animated Gifs in React Native Android
-    implementation 'com.facebook.fresco:fresco:3.1.3' 
-    implementation 'com.facebook.fresco:animated-gif:3.1.3'
+    implementation 'com.facebook.fresco:fresco:3.6.0' 
+    implementation 'com.facebook.fresco:animated-gif:3.6.0'
 
     implementation 'com.google.mlkit:barcode-scanning:17.0.2' 
 

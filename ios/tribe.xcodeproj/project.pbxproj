@@ -7,9 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2701F5329142493BA5A27052 /* LufgaBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0FD6DB9D0A44DE59593034B /* LufgaBold.ttf */; };
-		353FB8492D75503C002131C1 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB8482D75503C002131C1 /* GoogleService-Info.plist */; };
+		315717C3C4DCBE4BD585B811 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		353FB84B2D7553A8002131C1 /* GoogleService-Info-dev.plist in Resources */ = {isa = PBXBuildFile; fileRef = 353FB84A2D7553A8002131C1 /* GoogleService-Info-dev.plist */; };
 		35E3394B2C22A3AB007E532A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		35E3394C2C22A3AB007E532A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -36,11 +34,6 @@
 		55A7B308B3FF689DBBD3E8D4 /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B5BAE4A37C12708E8138027 /* libPods-tribe-tribe-dev.a */; };
 		80D66D8B2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D66D8A2ECD7AF0003D5C18 /* AppDelegate.swift */; };
 		80D66D8C2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D66D8A2ECD7AF0003D5C18 /* AppDelegate.swift */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		98522CA5FBAA40AD99C27A30 /* LufgaRegular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A85407311D804BE4BB8ACCD7 /* LufgaRegular.ttf */; };
-		C33B24D6C2E3459FB164E874 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
-		C6D34549A556477FA8A556AF /* LufgaMedium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 232935A90D7746F0AA02C4E0 /* LufgaMedium.ttf */; };
-		F2328C67E7FA4783516D9FB0 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -210,12 +203,12 @@
 				2316F64C44BB737FD7D1599F /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
-				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				D909674E36AC42B29E3D7959 /* Upload Debug Symbols to Sentry */,
 				97ACE4D32FA4A6D39E99687E /* [CP] Embed Pods Frameworks */,
 				482218A2849D633EF76AE686 /* [CP] Copy Pods Resources */,
 				EA9D1400154A8E9F5C74B57A /* [CP-User] [RNFB] Core Configuration */,
+				B7C98CF4AB9FCA2A08DC7797 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -296,6 +289,14 @@
 				353FB84B2D7553A8002131C1 /* GoogleService-Info-dev.plist in Resources */,
 				35E3394D2C22A3AB007E532A /* PrivacyInfo.xcprivacy in Resources */,
 				3AC0DD772C4FD1E2003E7D56 /* LufgaMedium.ttf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B7C98CF4AB9FCA2A08DC7797 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				315717C3C4DCBE4BD585B811 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,7 +517,7 @@
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 243;
+				CURRENT_PROJECT_VERSION = 246;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -553,7 +554,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 243;
+				CURRENT_PROJECT_VERSION = 246;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tribe;
@@ -589,7 +590,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 243;
+				CURRENT_PROJECT_VERSION = 246;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -627,7 +628,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 243;
+				CURRENT_PROJECT_VERSION = 246;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";

@@ -1867,7 +1867,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.5.6+4bdca0)":
+  - "react-native-bare-kit (0.9.3+42e299)":
     - boost
     - DoubleConversion
     - fast_float
@@ -3834,7 +3834,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 9497cb91cc03a25fb42182682fc1b678c1fb8dbb
+  react-native-bare-kit: d60f9f073783e370dcb825425ec83d614df6dac7
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1

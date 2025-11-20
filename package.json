@@ -75,7 +75,7 @@
     "react-localization": "1.0.19",
     "react-native": "0.81.5",
     "react-native-app-auth": "8.0.1",
-    "react-native-bare-kit": "0.5.6",
+    "react-native-bare-kit": "0.9.3",
     "react-native-biometrics": "3.0.1",
     "react-native-config": "1.5.2",
     "react-native-crypto": "^2.1.0",

@@ -3472,7 +3472,7 @@ bare-env@^3.0.0:
   dependencies:
     bare-os "^3.0.1"
 
-bare-events@^2.0.0, bare-events@^2.2.0, bare-events@^2.5.4, bare-events@^2.7.0:
+bare-events@^2.0.0, bare-events@^2.2.0, bare-events@^2.5.4, bare-events@^2.6.1, bare-events@^2.7.0:
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/bare-events/-/bare-events-2.8.2.tgz#7b3e10bd8e1fc80daf38bb516921678f566ab89f"
   integrity sha512-riJjyv1/mHLIPX4RwiK+oW9/4c3TEUeORHKefKAKnZ5kyslbN+HXowtbaVEqt4IMUB7OXlfixcs6gsFeo/jhiQ==
@@ -8307,12 +8307,12 @@ react-native-app-auth@8.0.1:
     invariant "2.2.4"
     react-native-base64 "0.0.2"
 
-react-native-bare-kit@0.5.6:
-  version "0.5.6"
-  resolved "https://registry.yarnpkg.com/react-native-bare-kit/-/react-native-bare-kit-0.5.6.tgz#53cf1713bd872d5b93d8e84dee3cb98caa3e0f62"
-  integrity sha512-iVg3I7gN1iVvlc26RGzaPyTpEZic+PRzJKhIo5XXLj5X2DpxFQTDjBaEG/+x+MJ0c/VPYldxRp8KDVpaDzQHLg==
+react-native-bare-kit@0.9.3:
+  version "0.9.3"
+  resolved "https://registry.yarnpkg.com/react-native-bare-kit/-/react-native-bare-kit-0.9.3.tgz#e13ff9d51f646438a2a5290d146c557064f9a7b3"
+  integrity sha512-EFFqLJl5ub7Pq9ROjBQFqSDSOyZBWxm0SiPI3uhe/2SOK/ZvB9gH2GAFoljlvx5f6P2AaRBbwF/G/mlyPtar4A==
   dependencies:
-    b4a "^1.6.6"
+    bare-events "^2.6.1"
     bare-link "^1.0.1"
     streamx "^2.21.0"
 
