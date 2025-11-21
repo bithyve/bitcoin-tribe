@@ -147,6 +147,7 @@ export const CreateGroup = () => {
       />
 
       <TabView
+        animationEnabled={false}
         renderTabBar={props => <TabHeader {...props} />}
         navigationState={{ index, routes }}
         renderScene={SceneMap({

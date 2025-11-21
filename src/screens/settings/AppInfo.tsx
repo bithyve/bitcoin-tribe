@@ -26,7 +26,7 @@ function AppInfo({ navigation }) {
         title={settings.appInfoTitle}
         subTitle={settings.appInfoScreenSubTitle}
         />
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
       <AppInfoContainer
         navigation={navigation}
         walletId={publicId}
