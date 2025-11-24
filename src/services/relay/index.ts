@@ -15,13 +15,13 @@ import { Asset as ImageAsset } from 'react-native-image-picker';
 
 const { HEXA_ID, RELAY } = config;
 export default class Relay {
-  public static getRegtestSats = async (address: string, amount: number) => {
+  public static getTestSats = async (address: string, amount: number) => {
     try {
       const res = await RestClient.post(`${RELAY}/btcfaucet/getcoins`, {
         HEXA_ID,
         address,
         amount,
-        network: 'iris',
+        network: 'testnet4',
       });
       return res.data;
     } catch (error) {
@@ -53,7 +53,7 @@ export default class Relay {
 
     try {
       if (network === NetworkType.REGTEST) {
-        await this.getRegtestSats(recipientAddress, 1);
+        await this.getTestSats(recipientAddress, 1);
         return { funded: true, txid: '' };
       } else {
         const res = await RestClient.post(`${RELAY}testnetFaucet`, {

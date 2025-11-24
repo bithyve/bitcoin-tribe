@@ -39,6 +39,8 @@ class RgbManager {
       switch network {
       case "TESTNET":
         return .testnet
+      case "TESTNET4":
+        return .testnet4
       case "REGTEST":
         return .regtest
       case "MAINNET":

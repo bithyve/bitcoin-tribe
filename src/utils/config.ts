@@ -54,7 +54,7 @@ class Configuration {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
     this.NETWORK_TYPE =
       this.ENVIRONMENT === APP_STAGE.DEVELOPMENT
-        ? NetworkType.REGTEST
+        ? NetworkType.TESTNET4
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
     this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
@@ -67,6 +67,8 @@ class Configuration {
         return bitcoinJS.networks.bitcoin;
       case NetworkType.REGTEST:
         return bitcoinJS.networks.regtest;
+      case NetworkType.TESTNET4:
+        return bitcoinJS.networks.testnet;
       default:
         return bitcoinJS.networks.testnet;
     }

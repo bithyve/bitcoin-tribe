@@ -187,7 +187,8 @@ function WalletDetails({ navigation, route }) {
           config.NETWORK_TYPE === NetworkType.MAINNET
             ? navigation.navigate(NavigationRoutes.GETBTCWITHRAMP)
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
-              config.NETWORK_TYPE === NetworkType.REGTEST
+              config.NETWORK_TYPE === NetworkType.REGTEST ||
+              config.NETWORK_TYPE === NetworkType.TESTNET4
             ? mutate()
             : setVisibleRequestTSats(true)
         }

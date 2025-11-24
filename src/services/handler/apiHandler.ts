@@ -35,6 +35,7 @@ import {
   predefinedMainnetNodes,
   predefinedRegtestNodes,
   predefinedTestnetNodes,
+  predefinedTestnet4Nodes,
 } from '../electrum/predefinedNodes';
 import {
   AverageTxFees,
@@ -805,6 +806,8 @@ export class ApiHandler {
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
         ? predefinedRegtestNodes
+        : config.NETWORK_TYPE === NetworkType.TESTNET4
+        ? predefinedTestnet4Nodes
         : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
