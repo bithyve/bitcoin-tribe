@@ -636,7 +636,7 @@ const DefaultCoin = ({
         <AppTouchable
           style={styles.balanceContainer}
           onPress={() => {
-            navigation.navigate(NavigationRoutes.WALLETDETAILS);
+            navigation.navigate(NavigationRoutes.WALLETDETAILS, {autoRefresh: true});
           }}>
           <IconBitcoin />
           <View style={{ marginVertical: hp(20) }} />
