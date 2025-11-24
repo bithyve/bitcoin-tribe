@@ -91,7 +91,7 @@ import CloudKit
         jsonObject["description"] = metaData.details
         jsonObject["timestamp"] = metaData.timestamp
         jsonObject["assetSchema"] = "\(metaData.assetSchema)"
-        jsonObject["issuedSupply"] = metaData.issuedSupply
+        jsonObject["issuedSupply"] = metaData.maxSupply
         let jsonData = try JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted)
         let jsonString = String(data: jsonData, encoding: .utf8)!
         return jsonString
@@ -391,7 +391,7 @@ import CloudKit
           "details": asset.details,
           "name": asset.name,
           "precision": asset.precision,
-          "issuedSupply": asset.issuedSupply,
+          "issuedSupply": "",
           "timestamp": asset.timestamp,
           "addedAt": asset.addedAt,
           "token": [
@@ -934,7 +934,7 @@ import CloudKit
           "settledBalance": asset?.balance.settled,
           "spendableBalance": asset?.balance.spendable,
           "dataPaths": dataPaths
-        ]
+        ] 
       }
       let json = Utility.convertToJSONString(params: data)
       callback(json)
@@ -1038,7 +1038,7 @@ import CloudKit
   
   @objc func backup(path: String, password: String, callback: @escaping ((String) -> Void)) -> Void {
     do {
-      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.regtest, mnemonic: password)
+      let keys = try restoreKeys(bitcoinNetwork: BitcoinNetwork.testnet4, mnemonic: password)
       let filePath = Utility.getBackupPath(fileName: keys.masterFingerprint)
 
       let response = try self.rgbManager.rgbWallet?.backup(backupPath: filePath?.path ?? "", password: password)
