@@ -65,7 +65,7 @@ export class ChatAdapter extends EventEmitter {
    * @returns Number of new invitations received
    * @throws Error if key pair not initialized
    */
-  async syncInbox(): Promise<{ synced: boolean }> {
+  async syncInbox(lastSyncIndex: number = 0): Promise<{ synced: boolean }> {
     if (!this.keyPair) {
       throw new Error('Key pair not initialized');
     }
@@ -114,7 +114,7 @@ export class ChatAdapter extends EventEmitter {
       // this.on('chat:message-received', handleInboxMessage);
 
       // Join inbox room (this triggers message sync from root peer)
-      await this.joinRoom(inboxRoomKey, 0);
+      await this.joinRoom(inboxRoomKey, lastSyncIndex);
       console.log('[ChatAdapter] 📬 Joined inbox room, fetching messages...');
 
       // Wait 5 seconds for messages to sync

@@ -9,6 +9,7 @@ import { StyleSheet, View, FlatList, Text, Image, Modal, Share, TextInput, Activ
 import { hp, wp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { HolepunchMessage } from 'src/services/messaging/holepunch/storage/MessageStorage';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
@@ -25,12 +26,13 @@ import QRCode from 'react-native-qrcode-svg';
 import Clipboard from '@react-native-clipboard/clipboard';
 import QRScanner from 'src/components/QRScanner';
 import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
-import { useQuery } from '@realm/react';
+import { useQuery, useRealm } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 function Community() {
   const theme: AppTheme = useTheme();
+  const realm = useRealm();
   const [rooms, setRooms] = useState<HolepunchRoom[]>([]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [refreshing, setRefreshing] = useState(false);
@@ -61,6 +63,7 @@ function Community() {
     syncInbox,
     getCurrentPeerPubKey,
     sendDMInvitation,
+    getInboxRoom,
   } = useChat();
 
   // Only get public key if service is initialized
@@ -114,7 +117,16 @@ function Community() {
 
         try {
           setIsSyncing(true);
-          const { synced } = await syncInbox();
+          
+          // Get inbox room and query its messages
+          const inboxRoom = await getInboxRoom();
+          const lastSyncIndex = inboxRoom 
+            ? realm.objects<HolepunchMessage>(RealmSchema.HolepunchMessage)
+                .filtered('roomId == $0', inboxRoom.roomId).length
+            : 0;
+          
+          console.log('[Community] 📬 Last sync index:', lastSyncIndex);
+          const { synced } = await syncInbox(lastSyncIndex);
 
           if (synced) {
             console.log('[Community] ✅ Auto-sync complete');
@@ -135,7 +147,7 @@ function Community() {
     };
 
     autoSyncInbox();
-  }, [isRootPeerConnected, isSyncing, hasAutoSynced, syncInbox, loadRooms]);
+  }, [isRootPeerConnected, isSyncing, hasAutoSynced, syncInbox, loadRooms, getInboxRoom]);
 
   useEffect(() => {
     if (error) {
@@ -323,7 +335,15 @@ function Community() {
     setIsSyncing(true);
     try {
       console.log('[Community] Starting inbox sync...');
-      const { synced } = await syncInbox();
+      
+      // Get inbox room and query its messages
+      const inboxRoom = await getInboxRoom();
+      const lastSyncIndex = inboxRoom 
+        ? realm.objects<HolepunchMessage>(RealmSchema.HolepunchMessage)
+            .filtered('roomId == $0', inboxRoom.roomId).length
+        : 0;
+
+      const { synced } = await syncInbox(lastSyncIndex);
       if (synced) {
         Toast('✅ Inbox synced');
         setTimeout(() => {

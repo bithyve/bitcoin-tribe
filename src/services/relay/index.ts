@@ -1065,8 +1065,7 @@ export default class Relay {
 
 
   public static createAppImageBackup = async (
-    appID:string,
-    publicId:string,
+    authToken:string,
     roomsObject:Object,
     settingsObject:string,
     tnxMetaObject:Object
@@ -1075,11 +1074,12 @@ export default class Relay {
       const res = await RestClient.post(
         `${RELAY}/backup/appImageBackup`,
         {
-          appID,
-          publicId,
           roomsObject,
           settingsObject,
           tnxMetaObject
+        },
+        {
+          Authorization: `Bearer ${authToken}`,
         }
       );
       return res.data;
