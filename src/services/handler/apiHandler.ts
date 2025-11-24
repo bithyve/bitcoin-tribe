@@ -474,13 +474,28 @@ export class ApiHandler {
       if (restore.error) {
         throw new Error(restore.error);
       } else {
+        const seed = bip39.mnemonicToSeedSync(mnemonic);
+        const publicId = WalletUtilities.getFingerprintFromSeed(seed);
+        let data;
+        let isRestore = false;
+        try {
+          const res = await Relay.getAppImage(publicId.toLowerCase());
+          if (res.status) {
+            data = res.app;
+            isRestore = true;
+          }
+        } catch (error) {
+          console.log('🚀 ~ GetAppImage error:',error);
+        }
+        // @ts-ignore
         await ApiHandler.setupNewApp({
-          appName: '',
+          appName: data?.name || '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: data?.imageUrl || '',
           mnemonic: mnemonic,
+          isRestore
         });
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
@@ -491,6 +506,12 @@ export class ApiHandler {
           },
         );
         // await ApiHandler.manageFcmVersionTopics();
+        await ApiHandler.restoreAppImage({
+          mnemonic,
+          settingsObject: data?.settingsObject,
+          roomsObject: data?.roomsObject,
+          tnxMetaObject: data?.tnxMetaObject,
+        });
       }
     } catch (error) {
       throw error;
@@ -548,48 +569,12 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
-        const encryptionKey = generateEncryptionKey(mnemonic);
-        try {
-          if (backup.app.settingsObject) {
-            const decrypted = decrypt(encryptionKey, backup.app.settingsObject);
-            const decryptedData = JSON.parse(decrypted);
-            Object.entries(decryptedData).forEach(
-              ([key, value]: [Keys, any]) => {
-                Storage.set(key, value);
-              },
-            );
-          }
-          if (backup.app.roomsObject) {
-            let rooms = [];
-            Object.entries(backup.app.roomsObject).forEach(
-              ([key, value]: [string, string]) => {
-                const decryptedData = JSON.parse(decrypt(encryptionKey, value));
-                rooms.push(decryptedData);
-              },
-            );
-            RealmDatabase.createBulk(
-              RealmSchema.HolepunchRoom,
-              rooms,
-              'modified',
-            );
-          }
-          if (backup.app.tnxMetaObject) {
-            let decryptedData = {};
-            Object.entries(backup.app.tnxMetaObject).forEach(([key, value]) => {
-              const decryptedValue = JSON.parse(decrypt(encryptionKey, value));
-              decryptedData[key] = decryptedValue;
-            });
-            await ApiHandler.refreshWallets({
-              wallets: dbManager.getCollection(RealmSchema.Wallet),
-              metaData: decryptedData,
-            });
-          }
-        } catch (error) {
-          console.log('🚀 AppRestoreFailed: ', error);
-        }
-        // disabled first app image backup, since already restored from backup
-        if (backup.app.settingsObject || backup.app.roomsObject)
-          Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+        await ApiHandler.restoreAppImage({
+          mnemonic,
+          settingsObject: backup.app?.settingsObject,
+          roomsObject: backup.app?.roomsObject,
+          tnxMetaObject: backup.app?.tnxMetaObject,
+        });
         // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
@@ -3347,5 +3332,49 @@ export class ApiHandler {
         message: 'App image backup failed',
       };
     }
+  }
+
+  static async restoreAppImage({
+    mnemonic,
+    settingsObject,
+    roomsObject,
+    tnxMetaObject,
+  }) {
+    const encryptionKey = generateEncryptionKey(mnemonic);
+    try {
+      if (settingsObject) {
+        const decrypted = decrypt(encryptionKey, settingsObject);
+        const decryptedData = JSON.parse(decrypted);
+        Object.entries(decryptedData).forEach(([key, value]: [Keys, any]) => {
+          Storage.set(key, value);
+        });
+      }
+      let rooms = [];
+      if (roomsObject) {
+        Object.entries(roomsObject).forEach(
+          ([key, value]: [string, string]) => {
+            const decryptedData = JSON.parse(decrypt(encryptionKey, value));
+            rooms.push(decryptedData);
+          },
+        );
+        RealmDatabase.createBulk(RealmSchema.HolepunchRoom, rooms, 'modified');
+      }
+      if (tnxMetaObject) {
+        let decryptedData = {};
+        Object.entries(tnxMetaObject).forEach(([key, value]) => {
+          const decryptedValue = JSON.parse(decrypt(encryptionKey, value));
+          decryptedData[key] = decryptedValue;
+        });
+        await ApiHandler.refreshWallets({
+          wallets: dbManager.getCollection(RealmSchema.Wallet),
+          metaData: decryptedData,
+        });
+      }
+    } catch (error) {
+      console.log('🚀 AppRestoreFailed: ', error);
+    }
+    // disabled first app image backup, since already restored from backup
+    if (settingsObject || roomsObject || tnxMetaObject)
+      Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
   }
 }
