@@ -140,6 +140,7 @@ object RGBWalletRepository {
     fun getNetwork(network: String): BitcoinNetwork {
         return when (network.uppercase()) {
             "TESTNET" -> BitcoinNetwork.TESTNET
+            "TESTNET4" -> BitcoinNetwork.TESTNET4
             "REGTEST" -> BitcoinNetwork.REGTEST
             "MAINNET" -> BitcoinNetwork.MAINNET
             "SIGNET" -> BitcoinNetwork.SIGNET

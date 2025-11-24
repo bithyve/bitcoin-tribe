@@ -33,7 +33,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun getName() = "RGB"
 
     private fun getRgbNetwork(network: String): BitcoinNetwork {
-        return if (network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
+        return if (network == "TESTNET4") BitcoinNetwork.TESTNET4 else BitcoinNetwork.MAINNET
     }
 
     private suspend fun resolvePromise(promise: Promise, result: String) {

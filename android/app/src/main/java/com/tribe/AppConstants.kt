@@ -11,6 +11,8 @@ object AppConstants {
     const val backupName = "%s.rgb_backup"
 
     const val testnetElectrumURL = "ssl://electrum.iriswallet.com:50013"
+    const val testnet4ElectrumURL = "ssl://electrum.iriswallet.com:50053"
+
     const val regtestElectrumURL = "electrum.rgbtools.org:50041"
     const val mainnetElectrumUrl = "ssl://electrum.iriswallet.com:50003"
 
@@ -40,6 +42,7 @@ object AppConstants {
     fun getElectrumUrl(network: String): String {
         return when (network.uppercase()) {
             "TESTNET" -> testnetElectrumURL
+            "TESTNET4" -> testnet4ElectrumURL
             "REGTEST" -> regtestElectrumURL
             "MAINNET" -> getNextMainnetUrl()
             else -> testnetElectrumURL
