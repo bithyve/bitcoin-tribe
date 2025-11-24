@@ -29,7 +29,7 @@ import kotlin.Exception
 object RGBHelper {
 
     val TAG = "RGBHelper"
-    private lateinit var driveClient: Drive
+    private var driveClient: Drive? = null
     private const val ZIP_MIME_TYPE = "application/zip"
 
 
@@ -500,7 +500,9 @@ object RGBHelper {
 
     fun restore(password: String, filePath: String, context: ReactApplicationContext): String {
         try {
-            restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath)
+            val rgbDir = AppConstants.rgbDir
+                ?: throw IllegalStateException("RGB directory not initialized")
+            restoreBackup(filePath, password, rgbDir.absolutePath)
             val jsonObject = JsonObject()
             jsonObject.addProperty("restore", true)
             return jsonObject.toString()

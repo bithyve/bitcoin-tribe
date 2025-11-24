@@ -21,6 +21,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     val TAG = "RGBMODULE"
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     
+    init {
+        AppConstants.ensureInitialized(reactContext.applicationContext)
+    }
+    
     companion object {
         private val gson = Gson()
     }
@@ -717,7 +721,9 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun resetData(promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                AppConstants.rgbDir.delete()
+                val rgbDir = AppConstants.rgbDir
+                    ?: throw IllegalStateException("RGB directory not initialized")
+                rgbDir.delete()
                 withContext(Dispatchers.Main) {
                     promise.resolve(true)
                 }
@@ -736,12 +742,14 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun getRgbDir(promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val dir = AppConstants.rgbDir.absolutePath
+                val rgbDir = AppConstants.rgbDir
+                    ?: throw IllegalStateException("RGB directory not initialized")
+                val dir = rgbDir.absolutePath
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("dir", dir)
                 promise.resolve(jsonObject.toString())
             } catch (e: Exception) {
-                Log.e(TAG, "resetData failed: ${e.message}", e)
+                Log.e(TAG, "getRgbDir failed: ${e.message}", e)
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", e.message)
                 promise.resolve(jsonObject.toString())
