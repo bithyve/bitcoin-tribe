@@ -51,6 +51,7 @@ const getStyles = (theme: AppTheme) =>
       width: '100%',
       marginVertical: hp(5),
       alignItems: 'center',
+      height:hp(100),
     },
     illustrationWrapper: {
       alignItems: 'center',
