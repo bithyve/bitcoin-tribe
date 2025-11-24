@@ -370,7 +370,7 @@ const getStyles = (theme: AppTheme) =>
       color: Colors.White,
       fontSize: 26,
       fontFamily: Fonts.LufgaSemiBold,
-      marginVertical: hp(10),
+      marginVertical: hp(20),
     },
     qrContainer: {
       marginTop: hp(10),
