@@ -23,6 +23,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
     Keys.IS_APP_IMAGE_BACKUP_ERROR,
   );
   const [isConnected, setIsConnected] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   //   Network Banner
   useEffect(() => {
@@ -40,7 +41,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
 
   const banners = [
     !isConnected && <NetworkBanner />,
-    isAppImageBackupError && <AppImageBackupBanner />,
+    isAppImageBackupError && <AppImageBackupBanner modalVisible={modalVisible} setModalVisible={setModalVisible}   />,
   ].filter(Boolean);
 
   if (!banners.length) return null;
@@ -52,7 +53,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
         renderItem={({ item }) => item}
         pagingEnabled
         height={hp(25)}
-        autoPlay = {banners.length > 1 ? true:false}
+        autoPlay = {banners.length > 1 && !modalVisible ? true:false}
         autoPlayInterval={DURATION}
         width={windowWidth}
         vertical={false}

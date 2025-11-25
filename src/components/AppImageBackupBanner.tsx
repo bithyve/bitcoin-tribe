@@ -20,13 +20,12 @@ export const AppImageBackupStatusType = {
   idle: 'idle',
 } as const;
 
-export const AppImageBackupBanner = () => {
+export const AppImageBackupBanner = ({modalVisible,setModalVisible}) => {
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const [visible, setVisible] = useState(false);
   const [isAppImageBackupError] = useMMKVBoolean(Keys.IS_APP_IMAGE_BACKUP_ERROR);
 
   const onPress = React.useCallback(() => {
@@ -36,7 +35,7 @@ export const AppImageBackupBanner = () => {
   const tapView = useMemo(() => {
     return (
       <AppTouchable
-        onPress={() => setVisible(true)}
+        onPress={() => setModalVisible(true)}
         style={styles.tapViewWrapper}>
         <TapInfoIcon />
       </AppTouchable>
@@ -55,8 +54,8 @@ export const AppImageBackupBanner = () => {
       </AppTouchable>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
             {common.appImageBackupFailureTooltip}
