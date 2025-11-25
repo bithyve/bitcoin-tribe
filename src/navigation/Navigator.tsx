@@ -437,7 +437,6 @@ function Navigator() {
       <BackupAlertBanner />
       <NodeConnectingSetup />
       <NodeConnected />
-      <BackupDoneBanner />
       <BannerMarquee/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen

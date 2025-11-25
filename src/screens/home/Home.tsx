@@ -92,7 +92,6 @@ function HomeScreen() {
     onSuccess: () => {
       setBackupDone(true);
       setTimeout(() => {
-        setBackupDone(false);
         setManualAssetBackupStatus(true);
       }, 1500);
     },
