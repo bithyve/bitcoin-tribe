@@ -434,7 +434,6 @@ function Navigator() {
         },
       }}>
       <RGBWalletStatus />
-      <BackupAlertBanner />
       <NodeConnectingSetup />
       <NodeConnected />
       <BannerMarquee/>

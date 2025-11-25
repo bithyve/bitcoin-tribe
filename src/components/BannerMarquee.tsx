@@ -13,6 +13,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import { CommunityServerBanner } from './CommunityServerBanner';
 import { AppContext } from 'src/contexts/AppContext';
 import BackupDoneBanner from './BackupDoneBanner';
+import BackupAlertBanner from './BackupAlertBanner';
 
 type BannerMarqueeProps = {};
 const DURATION = 3000;
@@ -24,7 +25,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   const { common } = useContext(LocalizationContext).translations;
   const { isConnected } = useNetInfo();
   const [modalVisible, setModalVisible] = useState(false);
-  const { communityStatus, isBackupDone, setBackupDone } =
+  const { communityStatus, isBackupDone, setBackupDone, isBackupInProgress } =
     useContext(AppContext);
   const [isAppImageBackupError] = useMMKVBoolean(
     Keys.IS_APP_IMAGE_BACKUP_ERROR,
@@ -37,6 +38,16 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   );
 
   const banners = [
+    isBackupInProgress && {
+      id: 'backupProgress',
+      element: (
+        <BackupAlertBanner
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ),
+    },
+
     isBackupDone && {
       id: 'backupDone',
       element: <BackupDoneBanner />,
