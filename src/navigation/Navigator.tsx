@@ -97,7 +97,6 @@ import GroupQr from 'src/screens/community/GroupQr';
 import { ScanQrScreen } from 'src/screens/community/ScanQRScreen';
 import { EditGroup } from 'src/screens/community/EditGroup';
 import AddCollectionItem from 'src/screens/assets/AddCollectionItem';
-import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
@@ -439,7 +438,6 @@ function Navigator() {
       <NodeConnectingSetup />
       <NodeConnected />
       <BackupDoneBanner />
-      <CommunityServerBanner/>
       <BannerMarquee/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen

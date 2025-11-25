@@ -10,6 +10,8 @@ import Colors from 'src/theme/Colors';
 import { hp, windowWidth } from 'src/constants/responsive';
 import NetInfo from '@react-native-community/netinfo';
 import Carousel from 'react-native-reanimated-carousel';
+import { CommunityServerBanner } from './CommunityServerBanner';
+import { AppContext } from 'src/contexts/AppContext';
 
 type BannerMarqueeProps = {};
 const DURATION = 3000;
@@ -24,6 +26,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   );
   const [isConnected, setIsConnected] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const { communityStatus } = useContext(AppContext);
 
   //   Network Banner
   useEffect(() => {
@@ -41,7 +44,8 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
 
   const banners = [
     !isConnected && <NetworkBanner />,
-    isAppImageBackupError && <AppImageBackupBanner modalVisible={modalVisible} setModalVisible={setModalVisible}   />,
+    isAppImageBackupError && <AppImageBackupBanner modalVisible={modalVisible} setModalVisible={setModalVisible}/>,
+    communityStatus != null &&<CommunityServerBanner modalVisible={modalVisible} setModalVisible={setModalVisible}/>
   ].filter(Boolean);
 
   if (!banners.length) return null;
@@ -76,7 +80,8 @@ const getStyles = (theme, insets) =>
       backgroundColor: Colors.FireOpal,
       alignItems: 'center',
       width: windowWidth,
-      height:hp(25)
+      height:hp(25),
+      justifyContent:"center"
     },
     text: {
       color: 'white',
