@@ -1063,12 +1063,11 @@ export default class Relay {
     }
   };
 
-
   public static createAppImageBackup = async (
-    authToken:string,
-    roomsObject:Object,
-    settingsObject:string,
-    tnxMetaObject:Object
+    authToken: string,
+    roomsObject: Object,
+    settingsObject: string,
+    tnxMetaObject: Object,
   ) => {
     try {
       const res = await RestClient.post(
@@ -1076,12 +1075,23 @@ export default class Relay {
         {
           roomsObject,
           settingsObject,
-          tnxMetaObject
+          tnxMetaObject,
         },
         {
           Authorization: `Bearer ${authToken}`,
-        }
+        },
       );
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getAppImage = async (appID: string) => {
+    try {
+      const res = await RestClient.post(`${RELAY}/backup/getAppImage`, {
+        appID,
+      });
       return res.data;
     } catch (err) {
       throw new Error(err);
