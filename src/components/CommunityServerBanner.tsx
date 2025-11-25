@@ -7,13 +7,13 @@ import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
 export const CommunityServerBanner = () => {
   const { communityStatus, setCommunityStatus } = useContext(AppContext);
-  const { translations } = useContext(LocalizationContext);
+   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
@@ -109,21 +109,11 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       backgroundColor: Colors.GOGreen,
     },
     errorContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.FireOpal,
       zIndex: 1000,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '100%',
+      width: windowWidth,
       paddingHorizontal: wp(16),
     },
     container: {

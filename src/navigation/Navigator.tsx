@@ -101,7 +101,7 @@ import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerificationScreen';
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
-import { AppImageBackupBanner } from 'src/components/AppImageBackupBanner';
+import { BannerMarquee } from 'src/components/BannerMarquee';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -440,7 +440,7 @@ function Navigator() {
       <NodeConnected />
       <BackupDoneBanner />
       <CommunityServerBanner/>
-      <AppImageBackupBanner/>
+      <BannerMarquee/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
           name={NavigationRoutes.LOGINSTACK}
