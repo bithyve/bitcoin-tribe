@@ -1,18 +1,23 @@
-import React, { useRef, useState } from 'react';
-import { View } from 'react-native';
+import React, { useRef, useState, useContext } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { useTheme } from 'react-native-paper';
-
 import CardSkeletonLoader from './CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
+import AppText from './AppText';
+import DeletedPost from 'src/assets/images/deletedPost.svg'
+import DeletedPostLight from 'src/assets/images/deletedPostLight.svg'
+import { LocalizationContext } from 'src/contexts/LocalizationContext';
 
 const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
   const webViewRef = useRef(null);
   const theme: AppTheme = useTheme();
+  const { translations } = useContext(LocalizationContext);
+  const { assets } = translations;
   const [loading, setLoading] = useState(true);
-  const [webViewHeight, setWebViewHeight] = useState(100);
   const [tweetVisible, setTweetVisible] = useState(true);
+  const styles = getStyles(theme);
 
   if (!tweetId) {
     return <View />;
@@ -80,20 +85,26 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
 
   const handleMessage = (event: any) => {
     const data = event.nativeEvent.data;
-    if (data === 'NOT_FOUND') {
+    if (data === 'NOT_FOUND' || data < 100) {
       setTweetVisible(false);
       setLoading(false);
       return;
     }
     const newHeight = parseInt(data, 10);
     if (!isNaN(newHeight) && newHeight > 0) {
-      setWebViewHeight(newHeight);
       setLoading(false);
     }
   };
 
   if (!tweetVisible) {
-    return null;
+    return (
+      <View style={styles.deletedCtr}>
+        {theme.dark ? <DeletedPost /> : <DeletedPostLight />}
+        <AppText variant="caption" style={styles.deletedCtrTxt}>
+          {assets.postDeletedOrUnavailable}
+        </AppText>
+      </View>
+    );
   }
 
   return (
@@ -104,7 +115,7 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
         originWhitelist={['*']}
         source={{ html }}
         style={{
-          height: webViewHeight,
+          height: hp(320),
           backgroundColor: theme.colors.primaryBackground,
           marginTop: hp(10),
         }}
@@ -119,3 +130,19 @@ const EmbeddedTweetView = ({ tweetId }: { tweetId: string }) => {
 };
 
 export default EmbeddedTweetView;
+
+const getStyles = (theme: AppTheme) =>
+  StyleSheet.create({
+    deletedCtr: {
+      backgroundColor: theme.colors.cardGradient1,
+      width: '100%',
+      padding: wp(28),
+      marginTop: hp(20),
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      alignItems: 'center',
+      gap: hp(15),
+    },
+    deletedCtrTxt: { textAlign: 'center', maxWidth: '65%' },
+  });

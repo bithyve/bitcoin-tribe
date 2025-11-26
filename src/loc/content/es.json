@@ -684,6 +684,7 @@
     "assetRegistrySubTitle2": "Se aplica un costo de servicio único de ",
     "assetRegistrySubTitle3": ". ¿No estás listo para registrarte? Puedes omitir el registro y aún así publicarlo en Twitter.",
     "sharePostTitle": "Compartir publicación en X",
+    "postDeletedOrUnavailable": "Esta publicación ha sido eliminada o ya no está disponible.",
     "verificationTitle": "VERIFICACIÓN",
     "payServiceFeeFundError": "Saldo insuficiente. Asegúrate de tener al menos 20,000 sats en tu billetera para cubrir el costo de servicio.",
     "recordCard": "Detalles del registro DNS",
