@@ -1,21 +1,14 @@
 import React, { useContext } from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
-import DeviceInfo from 'react-native-device-info';
-import { useTheme } from 'react-native-paper';
-
+import { View, Text, StyleSheet } from 'react-native';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
-import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowWidth } from 'src/constants/responsive';
 import { AppContext } from 'src/contexts/AppContext';
 
 const BackupDoneBanner = () => {
   const { isBackupDone } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
-  const hasNotch = DeviceInfo.hasNotch();
-  const theme: AppTheme = useTheme();
-  const styles = getStyles(theme, hasNotch);
 
   return isBackupDone ? (
     <View style={styles.banner}>
@@ -24,23 +17,14 @@ const BackupDoneBanner = () => {
   ) : null;
 };
 
-const getStyles = (theme: AppTheme, hasNotch) =>
+const styles =
   StyleSheet.create({
     banner: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.GOGreen,
-      zIndex: 1000,
-      paddingVertical: windowHeight > 820 ? hp(3) : 0,
       alignItems: 'center',
+      width:windowWidth,
+      height:hp(25),
+      justifyContent:"center"
     },
     text: {
       color: 'white',
