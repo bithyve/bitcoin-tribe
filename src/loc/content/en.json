@@ -684,6 +684,7 @@
     "assetRegistrySubTitle2": "A one-time service cost of ",
     "assetRegistrySubTitle3": "applies. Not ready to register? You can skip it and still share your asset on X",
     "sharePostTitle": "Share post on X",
+    "postDeletedOrUnavailable": "This post has been deleted or is no longer available.",
     "verificationTitle": "VERIFICATION",
     "payServiceFeeFundError": "Insufficient balance. Please ensure you have at least 20,000 sats in your wallet to cover the service cost.",
     "recordCard": "DNS Record Details",

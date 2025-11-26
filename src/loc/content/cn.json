@@ -684,6 +684,7 @@
     "assetRegistrySubTitle2": "一次性服务成本为 ",
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
+    "postDeletedOrUnavailable": "此帖子已被删除或不再可用。",
     "verificationTitle": "验证",
     "payServiceFeeFundError": "余额不足。请确保您的钱包中至少有 20,000 sats 以支付服务成本。",
     "recordCard": "DNS记录详情",
