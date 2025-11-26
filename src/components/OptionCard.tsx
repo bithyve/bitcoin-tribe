@@ -63,19 +63,24 @@ function OptionCard(props: OptionCardProps) {
               </AppText>
             )}
           </View>
-{showIcon &&          <View style={styles.iconWrapper}>
-            {showRightArrow ? (
-              isThemeDark ? (
-                <IconRightArrow />
+          {showIcon && (
+            <View style={styles.iconWrapper}>
+              {showRightArrow ? (
+                isThemeDark ? (
+                  <IconRightArrow
+                    height={44}
+                    width={44}
+                  />
+                ) : (
+                  <IconRightArrowLight height={44} width={44} />
+                )
+              ) : isThemeDark ? (
+                <IconArrow />
               ) : (
-                <IconRightArrowLight />
-              )
-            ) : isThemeDark ? (
-              <IconArrow />
-            ) : (
-              <IconArrowLight />
-            )}
-          </View>}
+                <IconArrowLight />
+              )}
+            </View>
+          )}
           {rightIcon && <View style={styles.iconWrapper}>{rightIcon}</View>}
         </View>
       </GradientView>

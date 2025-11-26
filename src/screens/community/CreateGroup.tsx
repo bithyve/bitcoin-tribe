@@ -495,7 +495,7 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       marginBottom: hp(13),
     },
     imageWrapper: {
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     imageStyle: {
       height: hp(80),
@@ -515,7 +515,6 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       paddingVertical: hp(14),
       borderStyle: 'dashed',
       marginBottom: hp(10),
-      alignSelf: 'center',
     },
 
     // Join Tab

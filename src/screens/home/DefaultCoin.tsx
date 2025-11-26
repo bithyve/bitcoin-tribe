@@ -60,7 +60,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       backgroundColor: theme.colors.primaryBackground,
     },
     largeHeaderContainer: {
-      borderColor: theme.colors.borderColor,
+      borderColor: isThemeDark ? '#111' : '#fff',
       borderWidth: 1,
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
