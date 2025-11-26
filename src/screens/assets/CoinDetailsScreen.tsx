@@ -298,21 +298,17 @@ const CoinDetailsScreen = () => {
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={2}
-          height={isBalanceRequired? hp(100):hp(84)}
+          height={isBalanceRequired ? hp(89) : hp(64)}
           disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress || !isEligibleForCampaign}>
-          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(96):hp(80)}]}>
+          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(85):hp(60)}]}>
             <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>
                 <AppText
                   numberOfLines={2}
-                  style={
-                    isBalanceRequired
-                      ? {
-                          opacity: 0.5,
-                          marginHorizontal: wp(4),
-                        }
-                      : { marginHorizontal: wp(4), }
-                  }
+                  style={{
+                    marginHorizontal: wp(4),
+                    opacity: isBalanceRequired ? 0.5 : 1,
+                  }}
                   variant="body1">
                   {getCampaignButtonText === 'Claimed' ? 'Claim submitted successfully. Distribution may take time.' : coin.campaign.description}
                 </AppText>
@@ -514,6 +510,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     btnClaimTextDisabled: {
       color: isThemeDark ? '#fff' : '#091229',
+      fontSize: 14,
     },
     gradientBorderCard: {
       marginBottom: hp(10),
