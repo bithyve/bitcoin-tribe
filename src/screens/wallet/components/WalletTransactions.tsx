@@ -177,6 +177,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               getCurrencyIcon(
                 isThemeDark ? IconBitcoin : IconBitcoinLight,
                 isThemeDark ? 'dark' : 'light',
+                16
               )}
             <AppText
               variant="body1"
