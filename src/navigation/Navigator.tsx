@@ -433,7 +433,6 @@ function Navigator() {
           text: '',
         },
       }}>
-      <RGBWalletStatus />
       <NodeConnectingSetup />
       <NodeConnected />
       <BannerMarquee/>

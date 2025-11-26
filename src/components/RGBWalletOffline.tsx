@@ -8,7 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -18,7 +18,7 @@ import Toast from './Toast';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
-const RGBWalletStatus = () => {
+const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
   const {
     isWalletOnline,
     appType,
@@ -35,7 +35,6 @@ const RGBWalletStatus = () => {
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
   const [walletWentOnline, setWalletWentOnline] = useState(false);
-  const [visible, setVisible] = useState(false);
 
   const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
@@ -88,7 +87,7 @@ const RGBWalletStatus = () => {
         setWalletWentOnline(false);
       }, 1500);
     }
-    setVisible(false);
+    setModalVisible(false);
   }, [isWalletOnline]);
 
   const getRetryMessage = useMemo(() => {
@@ -116,14 +115,14 @@ const RGBWalletStatus = () => {
 
   const tapView = useMemo(() => {
     return (
-      <AppTouchable onPress={() => setVisible(true)} style={styles.tapViewWrapper}>
+      <AppTouchable onPress={() => setModalVisible(true)} style={styles.tapViewWrapper}>
         <TapInfoIcon />
       </AppTouchable>
     );
   }, [common.tapToInfo]);
 
   return (
-    <View style={styles.container}>
+    <View>
       {isWalletOnline === WalletOnlineStatus.Error ? (
         <AppTouchable style={styles.errorContainer} onPress={onPress}>
           <AppText style={styles.text}>{msg}</AppText>
@@ -142,8 +141,8 @@ const RGBWalletStatus = () => {
 
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
           {isWalletOnline === WalletOnlineStatus.InProgress ? common.gettingRGBWalletOnlineMessage : formatString(common.gettingRGBWalletOnlineAttempt, { attempt: retryAttempt })}
@@ -158,7 +157,6 @@ const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     onlineContainer: {
       backgroundColor: Colors.GOGreen,
-      zIndex: 1000,
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -181,19 +179,10 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       flexDirection: 'row',
     },
     container: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 40
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.SelectiveYellow,
-      zIndex: 1000, // Ensures the banner is above everything
       alignItems: 'center',
+      width:windowWidth,
+      height:hp(25),
     },
     text: {
       color: 'white',

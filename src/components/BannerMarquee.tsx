@@ -14,6 +14,7 @@ import { CommunityServerBanner } from './CommunityServerBanner';
 import { AppContext } from 'src/contexts/AppContext';
 import BackupDoneBanner from './BackupDoneBanner';
 import BackupAlertBanner from './BackupAlertBanner';
+import RGBWalletStatus from './RGBWalletOffline';
 
 type BannerMarqueeProps = {};
 const DURATION = 3000;
@@ -38,6 +39,14 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   );
 
   const banners = [
+    {
+      id:'rgbWallet',
+      element: <RGBWalletStatus
+      modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+      />
+    },
+
     isBackupInProgress && {
       id: 'backupProgress',
       element: (
@@ -116,7 +125,6 @@ const getStyles = (theme, insets) =>
       top: insets.top,
       left: 0,
       right: 0,
-      backgroundColor: '#00ffffa1',
       zIndex: 1000,
     },
     errorBanner: {
