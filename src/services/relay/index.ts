@@ -4,7 +4,6 @@ import { NetworkType } from '../wallets/enums';
 import { AverageTxFeesByNetwork } from '../wallets/interfaces';
 import {
   Asset,
-  Coin,
   Collection,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
@@ -21,7 +20,7 @@ export default class Relay {
         HEXA_ID,
         address,
         amount,
-        network: 'testnet4',
+        network: config.NETWORK_TYPE === NetworkType.TESTNET4 ? 'testnet4' : 'iris',
       });
       return res.data;
     } catch (error) {
@@ -52,7 +51,7 @@ export default class Relay {
     }
 
     try {
-      if (network === NetworkType.REGTEST) {
+      if (network === NetworkType.REGTEST || network === NetworkType.TESTNET4) {
         await this.getTestSats(recipientAddress, 1);
         return { funded: true, txid: '' };
       } else {
