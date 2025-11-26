@@ -181,9 +181,6 @@ function HomeScreen() {
           setNodeInitStatus(false);
           if (prevStatus === NodeStatusType.IN_PROGRESS) {
             setNodeConnected(true);
-            setTimeout(() => {
-              setNodeConnected(false);
-            }, 1500);
           }
         } else {
           await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
@@ -220,9 +217,6 @@ function HomeScreen() {
             await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
             setNodeInitStatus(false);
             setNodeConnected(true);
-            setTimeout(() => {
-              setNodeConnected(false);
-            }, 1500);
             break;
           case PushNotificationType.NODE_PAUSED:
             startNode;

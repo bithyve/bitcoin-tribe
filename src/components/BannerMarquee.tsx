@@ -15,6 +15,8 @@ import { AppContext } from 'src/contexts/AppContext';
 import BackupDoneBanner from './BackupDoneBanner';
 import BackupAlertBanner from './BackupAlertBanner';
 import RGBWalletStatus from './RGBWalletOffline';
+import NodeConnected from './NodeConnected';
+import NodeConnectingSetup from './NodeConnectingSetup';
 
 type BannerMarqueeProps = {};
 const DURATION = 3000;
@@ -26,8 +28,15 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   const { common } = useContext(LocalizationContext).translations;
   const { isConnected } = useNetInfo();
   const [modalVisible, setModalVisible] = useState(false);
-  const { communityStatus, isBackupDone, setBackupDone, isBackupInProgress } =
-    useContext(AppContext);
+  const {
+    communityStatus,
+    isBackupDone,
+    setBackupDone,
+    isBackupInProgress,
+    isNodeConnect,
+    setNodeConnected,
+    isNodeInitInProgress,
+  } = useContext(AppContext);
   const [isAppImageBackupError] = useMMKVBoolean(
     Keys.IS_APP_IMAGE_BACKUP_ERROR,
   );
@@ -40,11 +49,13 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
 
   const banners = [
     {
-      id:'rgbWallet',
-      element: <RGBWalletStatus
-      modalVisible={modalVisible}
+      id: 'rgbWallet',
+      element: (
+        <RGBWalletStatus
+          modalVisible={modalVisible}
           setModalVisible={setModalVisible}
-      />
+        />
+      ),
     },
 
     isBackupInProgress && {
@@ -86,6 +97,21 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
         />
       ),
     },
+
+    isNodeConnect && {
+      id: 'nodeConnected',
+      element: <NodeConnected />,
+    },
+
+    isNodeInitInProgress && {
+      id: 'nodeConnecting',
+      element: (
+        <NodeConnectingSetup
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ),
+    },
   ].filter(Boolean);
 
   useEffect(() => {
@@ -96,6 +122,11 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
     if (banners[index].id == 'backupDone') {
       setTimeout(() => {
         setBackupDone(false);
+      }, 1500);
+    }
+    if (banners[index].id == 'nodeConnected') {
+      setTimeout(() => {
+        setNodeConnected(false);
       }, 1500);
     }
   };

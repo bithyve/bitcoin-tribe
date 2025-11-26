@@ -433,8 +433,6 @@ function Navigator() {
           text: '',
         },
       }}>
-      <NodeConnectingSetup />
-      <NodeConnected />
       <BannerMarquee/>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen
