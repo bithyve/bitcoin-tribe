@@ -58,20 +58,17 @@ function ImportXPost() {
       assetId,
       schema,
       asset,
-      verified,
     }: {
       tweetId: string;
       assetId: string;
       schema: RealmSchema;
       asset: Asset;
-      verified: boolean;
     }) =>
       ApiHandler.validateTweetForAsset(
         tweetId,
         assetId,
         schema,
         asset,
-        verified,
       ),
   );
 
@@ -170,7 +167,6 @@ function ImportXPost() {
           storage.set(rateLimitedUrlKey, tweetUrl.trim());
           setIsRateLimited(true);
           setRateLimitRemainingTime(RATE_LIMIT_DURATION);
-          Toast('Rate limit reached. You can retry after 15 minutes.', true);
         } else {
           Toast(result?.reason || 'Unknown error.', true);
         }

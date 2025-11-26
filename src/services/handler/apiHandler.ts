@@ -2972,7 +2972,6 @@ export class ApiHandler {
     assetId: string,
     schema: RealmSchema,
     asset: Asset,
-    verified: boolean,
   ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
       const response = await fetchAndVerifyTweet(tweetId);
@@ -3028,16 +3027,12 @@ export class ApiHandler {
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       );
 
-      const twitterEntry = existingAsset?.issuer?.verifiedBy?.find(
-        v => v.type === IssuerVerificationMethod.TWITTER,
-      );
-
       const twitterPostData = {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
-        id: twitterEntry?.id ?? '',
-        name: twitterEntry?.name ?? '',
-        username: twitterEntry?.username ?? '',
+        id: '',
+        name:  '',
+        username: '',
       };
 
       if (twitterPostIndex !== -1) {
@@ -3046,14 +3041,12 @@ export class ApiHandler {
         updatedVerifiedBy.push(twitterPostData);
       }
       let isVerified = false;
-      if (verified && twitterEntry) {
-        const relayResponse = await Relay.verifyIssuer(
-          'appID',
-          asset.assetId,
-          twitterPostData,
-        );
-        isVerified = relayResponse.status;
-      }
+      const relayResponse = await Relay.verifyIssuer(
+        'appID',
+        asset.assetId,
+        twitterPostData,
+      );
+      isVerified = relayResponse.status;
       await dbManager.updateObjectByPrimaryId(
         schema,
         'assetId',
