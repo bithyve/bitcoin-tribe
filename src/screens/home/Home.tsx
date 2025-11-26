@@ -84,6 +84,7 @@ function HomeScreen() {
     setNodeConnected,
     setIsWalletOnline,
     isWalletOnline,
+    setWalletWentOnline
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
   const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
@@ -143,6 +144,8 @@ function HomeScreen() {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
         const response = await ApiHandler.makeWalletOnline();
         setWalletOnline(response.status);
+        if(response.status)
+        setWalletWentOnline(true);
         setIsWalletOnline(
           response.status
             ? WalletOnlineStatus.Online

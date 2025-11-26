@@ -17,6 +17,8 @@ import BackupAlertBanner from './BackupAlertBanner';
 import RGBWalletStatus from './RGBWalletOffline';
 import NodeConnected from './NodeConnected';
 import NodeConnectingSetup from './NodeConnectingSetup';
+import { RgbWalletOnlineBanner } from './RgbWalletOnlineBanner';
+import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 
 type BannerMarqueeProps = {};
 const DURATION = 3000;
@@ -36,6 +38,9 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
     isNodeConnect,
     setNodeConnected,
     isNodeInitInProgress,
+    walletWentOnline,
+    setWalletWentOnline,
+    isWalletOnline,
   } = useContext(AppContext);
   const [isAppImageBackupError] = useMMKVBoolean(
     Keys.IS_APP_IMAGE_BACKUP_ERROR,
@@ -48,7 +53,8 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   );
 
   const banners = [
-    {
+    (isWalletOnline === WalletOnlineStatus.Error ||
+      isWalletOnline === WalletOnlineStatus.InProgress) && {
       id: 'rgbWallet',
       element: (
         <RGBWalletStatus
@@ -56,6 +62,11 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
           setModalVisible={setModalVisible}
         />
       ),
+    },
+
+    walletWentOnline && {
+      id: 'rgbWalletOnline',
+      element: <RgbWalletOnlineBanner />,
     },
 
     isBackupInProgress && {
@@ -116,7 +127,7 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
 
   useEffect(() => {
     if (banners.length === 1) onSnapToItem(0);
-  }, [banners.length]);
+  }, [banners]);
 
   const onSnapToItem = index => {
     if (banners[index].id == 'backupDone') {
@@ -127,6 +138,11 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
     if (banners[index].id == 'nodeConnected') {
       setTimeout(() => {
         setNodeConnected(false);
+      }, 1500);
+    }
+    if (banners[index].id == 'rgbWalletOnline') {
+      setTimeout(() => {
+        setWalletWentOnline(false);
       }, 1500);
     }
   };

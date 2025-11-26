@@ -25,6 +25,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
     setIsWalletOnline,
     reSyncWallet,
     reSyncingWallet,
+    setWalletWentOnline
   } = useContext(AppContext);
   const { translations, formatString } = useContext(LocalizationContext);
   const { common } = translations;
@@ -34,7 +35,6 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
   const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
-  const [walletWentOnline, setWalletWentOnline] = useState(false);
 
   const onPress = React.useCallback(() => {
     if (isWalletOnline === WalletOnlineStatus.Error) {
@@ -81,11 +81,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
 
   useEffect(() => {
     if (isWalletOnline === WalletOnlineStatus.Online) {
-      setWalletWentOnline(true);
       setretryAttempt(0);
-      setTimeout(() => {
-        setWalletWentOnline(false);
-      }, 1500);
     }
     setModalVisible(false);
   }, [isWalletOnline]);
@@ -96,14 +92,16 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
 
   useEffect(() => {
     if (appType && makeWalletOnline.data?.status !== undefined) {
+      if(makeWalletOnline.data?.status)
+        setWalletWentOnline(true);
+      if (makeWalletOnline.data?.error) {
+        Toast(makeWalletOnline.data?.error, true);
+      }
       setIsWalletOnline(
         makeWalletOnline.data?.status
           ? WalletOnlineStatus.Online
           : WalletOnlineStatus.Error,
       );
-      if (makeWalletOnline.data?.error) {
-        Toast(makeWalletOnline.data?.error, true);
-      }
     }
   }, [makeWalletOnline.data?.status, appType]);
 
@@ -133,10 +131,6 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
           <AppText style={styles.text}>{getRetryMessage}</AppText>
           {tapView}
         </AppTouchable>
-      ) : walletWentOnline ? (
-        <AppTouchable style={styles.onlineContainer} disabled>
-          <AppText style={styles.text}>{common.walletWentOnline}</AppText>
-        </AppTouchable>
       ) : null}
 
       <Portal>
@@ -155,13 +149,6 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
 
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
-    onlineContainer: {
-      backgroundColor: Colors.GOGreen,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: wp(16),
-    },
     errorContainer: {
       backgroundColor: Colors.FireOpal,
       zIndex: 1000, // Ensures the banner is above everything
