@@ -75,7 +75,7 @@
 		35B1B56D2C69C091007C473A /* tribe-dev.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "tribe-dev.entitlements"; sourceTree = "<group>"; };
 		35B1B56E2C69C098007C473A /* tribe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = tribe.entitlements; path = tribe/tribe.entitlements; sourceTree = "<group>"; };
 		35E339592C22A3AB007E532A /* tribe-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "tribe-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		35E3395A2C22A3AC007E532A /* tribe-dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tribe-dev-Info.plist"; path = "/Users/c58/Workspace/tribe/ios/tribe-dev-Info.plist"; sourceTree = "<absolute>"; };
+               35E3395A2C22A3AC007E532A /* tribe-dev-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "tribe-dev-Info.plist"; path = "tribe-dev-Info.plist"; sourceTree = "<group>"; };
 		35EFBBBB2C3F710C00E57650 /* tribe-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "tribe-Bridging-Header.h"; sourceTree = "<group>"; };
 		35EFBBBD2C3F710C00E57650 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		35EFBBC02C3F739300E57650 /* rgb_libFFI.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = rgb_libFFI.xcframework; sourceTree = "<group>"; };
