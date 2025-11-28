@@ -32,6 +32,7 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function ReceiveAssetScreen() {
   const { translations, formatString } = useContext(LocalizationContext);
@@ -71,6 +72,8 @@ function ReceiveAssetScreen() {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(insets);
 
   useEffect(() => {
     if (app.appType !== AppType.ON_CHAIN) {
@@ -285,37 +288,42 @@ function ReceiveAssetScreen() {
               message={assets.invoiceCopiedMsg}
             />
           </View>
-          <FooterNote
-            title={common.note}
-            subTitle={formatString(receciveScreen.noteSubTitle, {
-              time: invoiceExpiry / 3600,
-              type: invoiceType === InvoiceMode.Witness ? 'witness' : 'blinded',
-            })}
-            customStyle={styles.advanceOptionStyle}
-          />
         </View>
       )}
+      <FooterNote
+        title={common.note}
+        subTitle={formatString(receciveScreen.noteSubTitle, {
+          time: invoiceExpiry / 3600,
+          type: invoiceType === InvoiceMode.Witness ? 'witness' : 'blinded',
+        })}
+        customStyle={styles.advanceOptionStyle}
+      />
     </ScreenContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  advanceOptionStyle: {
-    backgroundColor: 'transparent',
-  },
-  detailsContainer: {
-    height: '74%',
-    marginTop: hp(20),
-  },
-  addAmountModalContainerStyle: {
-    width: '96%',
-    alignSelf: 'center',
-  },
-  footerView: {
-    height: '8%',
-    marginHorizontal: wp(16),
-    marginVertical: wp(10),
-  },
-});
+const getStyles = insets =>
+  StyleSheet.create({
+    advanceOptionStyle: {
+      backgroundColor: 'transparent',
+      position: 'absolute',
+      bottom: insets.bottom,
+      left: wp(20),
+      right: wp(20),
+    },
+    detailsContainer: {
+      height: '74%',
+      marginTop: hp(20),
+    },
+    addAmountModalContainerStyle: {
+      width: '96%',
+      alignSelf: 'center',
+    },
+    footerView: {
+      height: '8%',
+      marginHorizontal: wp(16),
+      marginVertical: wp(10),
+    },
+  });
 
 export default ReceiveAssetScreen;

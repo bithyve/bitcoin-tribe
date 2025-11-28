@@ -63,7 +63,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           </AppText>
         </View>
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText}>{recipientAddress}</AppText>
+          <AppText style={styles.valueText}>{recipientAddress}</AppText>
         </View>
       </View>
       <View style={styles.contentWrapper}>
@@ -91,7 +91,7 @@ function SendSuccessContainer(props: sendSuccessProps) {
           <AppText style={styles.labelText}>{sendScreen.feeRate}:</AppText>
         </View>
         <View style={styles.valueWrapper}>
-          <AppText style={styles.labelText}>
+          <AppText style={styles.valueText}>
             {feeRate} sat/vB ~ {estimateBlockTime * 10} {'min'}
           </AppText>
         </View>
@@ -178,16 +178,15 @@ const getStyles = (theme: AppTheme) =>
     contentWrapper: {
       flexDirection: 'row',
       width: '100%',
-      marginVertical: hp(10),
-      marginBottom: hp(20),
+      marginVertical: hp(5),
     },
     labelWrapper: {
-      width: '45%',
+      width: '40%',
     },
     valueWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      width: '55%',
+      width: '60%',
       justifyContent: 'flex-end',
     },
     labelText: {
@@ -195,6 +194,7 @@ const getStyles = (theme: AppTheme) =>
     },
     valueText: {
       color: theme.colors.headingColor,
+      textAlign:"right"
     },
     satsText: {
       color: theme.colors.headingColor,

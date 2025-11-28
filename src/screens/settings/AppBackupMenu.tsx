@@ -32,12 +32,14 @@ import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import BackupPhraseModal from 'src/components/BackupPhraseModal';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(theme,insets);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
@@ -279,7 +281,7 @@ function AppBackupMenu({ navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, insets) =>
   StyleSheet.create({
     headerWrapper: {
       marginBottom: hp(25),
@@ -306,7 +308,7 @@ const getStyles = (theme: AppTheme) =>
     },
     textStepTime: {
       color: theme.colors.headingColor,
-      marginBottom: hp(5),
+      marginBottom: insets.bottom + hp(5),
       textAlign: 'center',
     },
     bodyWrapper: {
