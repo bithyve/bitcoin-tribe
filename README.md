@@ -25,8 +25,24 @@ Before getting started, make sure you have a proper [React Native development en
 3. Install the project dependencies using Yarn:
    The prepare scripts will automatically install pods and nodeify crypto-related packages for react-native
    ```shell
-   yarn install
-   ```
+  yarn install
+  ```
+
+### Environment Variables
+
+The build scripts expect several credentials to be provided via environment variables:
+
+| Variable | Purpose |
+| --- | --- |
+| `MYAPP_RELEASE_STORE_FILE` | Path to the Android keystore used for signing release builds |
+| `MYAPP_RELEASE_KEY_ALIAS` | Alias of the signing key |
+| `MYAPP_RELEASE_STORE_PASSWORD` | Keystore password |
+| `MYAPP_RELEASE_KEY_PASSWORD` | Key password |
+| `STORE_PASSWORD` | Same as `MYAPP_RELEASE_STORE_PASSWORD`, used by Fastlane |
+| `KEY_PASSWORD` | Same as `MYAPP_RELEASE_KEY_PASSWORD`, used by Fastlane |
+| `KEY_ALIAS` | Same as `MYAPP_RELEASE_KEY_ALIAS`, used by Fastlane |
+| `SENTRY_AUTH_TOKEN` | Authentication token for uploading build artifacts to Sentry |
+
 
 4. Build the bare worklet
   ```shell
