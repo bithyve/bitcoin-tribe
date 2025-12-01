@@ -181,6 +181,7 @@ function Community() {
 
       // Always reload rooms list
       await loadRooms();
+      await handleSyncInbox();
     } catch (error) {
       console.error('[Community] Refresh error:', error);
     } finally {
@@ -454,31 +455,11 @@ function Community() {
         <>
           {/* Action buttons for My DM QR, Start DM, and Sync Inbox */}
           <View style={styles.actionButtonsContainer}>
-            {/* My DM QR Button */}
-            <AppTouchable
-              style={styles.actionButton}
-              onPress={handleShowQR}
-              activeOpacity={0.7}
-            >
-              <View style={styles.actionButtonContent}>
-                <AppText style={styles.actionButtonText}>DM QR</AppText>
-              </View>
-            </AppTouchable>
 
-            {/* Start DM Button */}
-            <AppTouchable
-              style={[styles.actionButton, styles.primaryActionButton]}
-              onPress={handleShowStartDM}
-              activeOpacity={0.7}
-            >
-              <AppText style={styles.primaryActionButtonText}>
-                Start DM
-              </AppText>
-            </AppTouchable>
           </View>
 
           {/* Sync Inbox Button */}
-          <View style={styles.syncButtonContainer}>
+          {/* <View style={styles.syncButtonContainer}>
             <AppTouchable
               style={[
                 styles.syncButton,
@@ -499,7 +480,7 @@ function Community() {
                 </AppText>
               )}
             </AppTouchable>
-          </View>
+          </View> */}
 
           <FlatList
             data={rooms}

@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigator from './navigation/Navigator';
 import Contexts from './contexts/Contexts';
-import { SentryWrapper } from './services/sentry';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
@@ -17,4 +16,4 @@ function App() {
   );
 }
 
-export default SentryWrapper(App);
+export default App;

@@ -333,7 +333,7 @@ import CloudKit
             "settled": asset.balance.settled,
             "spendable": asset.balance.spendable,
           ],
-          "issuedSupply": asset.issuedSupply,
+          "maxSupply": asset.issuedSupply,
           "timestamp": asset.timestamp,
           "addedAt": asset.addedAt
         ]

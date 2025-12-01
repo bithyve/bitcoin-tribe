@@ -1708,7 +1708,7 @@ export class ApiHandler {
       dbManager.createObject(RealmSchema.Coin, {
         ...asset,
         addedAt: Date.now(),
-        issuedSupply: asset.issuedSupply.toString(),
+        issuedSupply: asset?.issuedSupply?.toString(),
         balance: {
           spendable: '0',
           future: '0',
@@ -2155,8 +2155,13 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      console.log('response', response);
       if (response) {
-        response.issuedSupply = response.issuedSupply.toString();
+        if(response.maxSupply) {
+          response.maxSupply = response.maxSupply.toString();
+        } else {
+          response.issuedSupply = response.issuedSupply.toString();
+        }
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
         });

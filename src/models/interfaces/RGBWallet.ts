@@ -112,7 +112,7 @@ export interface Transfer {
 
 export interface MetaData {
   assetSchema: string;
-  issuedSupply: string;
+  maxSupply: string;
   name: string;
   precision: number;
   ticker: string;
@@ -137,7 +137,7 @@ export interface Coin {
   isDefault: boolean;
   assetId: string;
   balance: Balance;
-  issuedSupply: string;
+  maxSupply: string;
   name: string;
   iconUrl?: string;
   precision: number;
@@ -184,7 +184,7 @@ export interface Collectible {
   assetId: string;
   balance: Balance;
   details: string;
-  issuedSupply: string;
+  maxSupply: string;
   media: Media;
   name: string;
   precision: number;

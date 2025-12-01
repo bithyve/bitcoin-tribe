@@ -248,9 +248,9 @@ const CoinsMetaDataScreen = () => {
               title={assets.issuedSupply}
               value={
                 coin.metaData && coin.metaData.precision === 0
-                  ? numberWithCommas(Number(coin?.metaData?.issuedSupply))
+                  ? numberWithCommas(Number(coin?.metaData?.maxSupply))
                   : numberWithCommas(
-                      Number(coin?.metaData?.issuedSupply) /
+                      Number(coin?.metaData?.maxSupply) /
                         10 ** coin?.metaData?.precision,
                     )
               }

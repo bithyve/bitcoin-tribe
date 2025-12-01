@@ -10,7 +10,7 @@ export const MetaData = {
   name: RealmSchema.MetaData,
   properties: {
     assetSchema: 'string',
-    issuedSupply: 'string',
+    maxSupply: 'string',
     name: 'string',
     precision: 'int?',
     ticker: 'string?',
@@ -84,7 +84,7 @@ export const CoinSchema: ObjectSchema = {
     isDefault: 'bool?',
     addedAt: 'int',
     balance: `${RealmSchema.Balance}?`,
-    issuedSupply: 'string',
+    maxSupply: 'string',
     disclaimer: 'string?{}',
     name: 'string',
     precision: 'int',

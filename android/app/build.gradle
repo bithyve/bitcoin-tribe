@@ -73,7 +73,6 @@ def enableProguardInReleaseBuilds = false
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
-apply from: new File(["node", "--print", "require.resolve('@sentry/react-native/package.json')"].execute().text.trim(), "../sentry.gradle")
 android {
     packagingOptions {
         exclude 'lib/armeabi-v7a/**'
@@ -94,7 +93,7 @@ android {
         applicationId "com.bithyve.tribe"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 250
+        versionCode 251
         versionName "0.5.11"
         missingDimensionStrategy 'react-native-camera', 'general'
         manifestPlaceholders = [

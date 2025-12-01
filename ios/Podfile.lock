@@ -1879,7 +1879,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+7657b2)":
+  - "react-native-bare-kit (0.9.3+d82ab8)":
     - boost
     - DoubleConversion
     - fast_float
@@ -3205,36 +3205,6 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNSentry (6.22.0):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-hermes
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.56.2)
-    - SocketRocket
-    - Yoga
   - RNShare (11.1.0):
     - boost
     - DoubleConversion
@@ -3415,7 +3385,6 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.56.2)
   - SocketRocket (0.7.1)
   - TOCropViewController (2.8.0)
   - VisionCamera (4.7.2):
@@ -3541,7 +3510,6 @@ DEPENDENCIES:
   - RNReactNativeHapticFeedback (from `../node_modules/react-native-haptic-feedback`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
-  - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNWorklets (from `../node_modules/react-native-worklets`)
@@ -3568,7 +3536,6 @@ SPEC REPOS:
     - React-Codegen
     - SDWebImage
     - SDWebImageWebPCoder
-    - Sentry
     - SocketRocket
     - TOCropViewController
     - ZXingObjC
@@ -3791,8 +3758,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
-  RNSentry:
-    :path: "../node_modules/@sentry/react-native"
   RNShare:
     :path: "../node_modules/react-native-share"
   RNSVG:
@@ -3863,7 +3828,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 394c193ce12dc9768f54a95ae794304ec6b8a011
+  react-native-bare-kit: 58ad3b517a2896a68c6c910d9b4f5d32b3a7527c
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -3928,13 +3893,11 @@ SPEC CHECKSUMS:
   RNReactNativeHapticFeedback: be4f1b4bf0398c30b59b76ed92ecb0a2ff3a69c6
   RNReanimated: f39d5f29612cb37617241ea2e91bfecaabe0d1c4
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
-  RNSentry: a20c5194cc6d7902683276f399a6eb5206fb9f05
   RNShare: 87a0674ce05bf224021e992ab5f34fe576b58aee
   RNSVG: 6f39605a4c4d200b11435c35bd077553c6b5963a
   RNWorklets: ab618bf7d1c7fd2cb793b9f0f39c3e29274b3ebf
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: b53951377b78e21a734f5dc8318e333dbfc682d7
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   TOCropViewController: 797deaf39c90e6e9ddd848d88817f6b9a8a09888
   VisionCamera: 30b358b807324c692064f78385e9a732ce1bebfe

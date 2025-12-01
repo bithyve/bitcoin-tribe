@@ -166,7 +166,7 @@ function HomeHeader({
           {showAdd && (
             <IconWrapper
               onPress={() => {
-                navigation.navigate(NavigationRoutes.CREATEGROUP);
+                navigation.navigate(NavigationRoutes.PROFILEINFO);
               }}>
               {isThemeDark ? <CreateGroup /> : <CreateGroupLight />}
             </IconWrapper>

@@ -30,7 +30,9 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>250</string>
+	<string>251</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>twitter</string>
@@ -94,14 +96,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleURLTypes</key>
-	<array>
-	<dict>
-		<key>CFBundleURLSchemes</key>
-		<array>
-		<string>tribe</string>
-		</array>
-	</dict>
-	</array>
 </dict>
 </plist>
