@@ -75,7 +75,7 @@ export const CreateGroup = () => {
 
   // Navigate to chat when room is created/joined
   useEffect(() => {
-    if (currentRoom) {
+    if (currentRoom && currentRoom.roomType != HolepunchRoomType.INBOX) {
       (navigation as any).navigate(NavigationRoutes.CHAT, {
         roomId: currentRoom.roomId,
       });
