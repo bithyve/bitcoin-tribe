@@ -407,23 +407,14 @@ function Community() {
                 </AppText>
               </View>
             )}
-            {/* Room type indicator badge */}
-            <View style={[
-              styles.roomTypeBadge,
-              isDM ? styles.dmBadge : styles.groupBadge
-            ]}>
-              <AppText style={styles.roomTypeBadgeText}>
-                {isDM ? 'DM' : 'G'}
-              </AppText>
-            </View>
           </View>
-          <View style={styles.roomInfo}>
+        </View>
+        <View style={styles.roomInfo}>
             <AppText variant="heading3SemiBold">{item.roomName}</AppText>
             <AppText variant="caption" style={styles.roomDesc}>
               {item.roomDescription}
             </AppText>
           </View>
-        </View>
         <AppText variant="caption" style={styles.roomTime}>
           {formatSmartTime(item?.lastActive)}
         </AppText>
@@ -441,11 +432,11 @@ function Community() {
       </View>
 
       {/* Connection Status Bar */}
-      {connectionStatus && (
+      {/* {connectionStatus && (
         <View style={[styles.statusBar, { backgroundColor: connectionStatus.color }]}>
           <AppText style={styles.statusBarText}>{connectionStatus.text}</AppText>
         </View>
-      )}
+      )} */}
 
       {isInitializing ? (
         <View style={styles.loadingContainer}>
@@ -678,7 +669,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.optionsCardGradient2,
       marginVertical: hp(15),
     },
-    roomCard: { flexDirection: 'row', justifyContent: 'space-between' },
+    roomCard: { flexDirection: 'row', justifyContent: 'space-between',  },
     roomCardRow: {
       gap: wp(15),
       flexDirection: 'row',
@@ -689,7 +680,6 @@ const getStyles = (theme: AppTheme) =>
       paddingTop: hp(10),
     },
     roomImageContainer: {
-      position: 'relative',
     },
     roomImage: {
       height: wp(50),
@@ -732,6 +722,8 @@ const getStyles = (theme: AppTheme) =>
     },
     roomInfo: {
       flex: 1,
+      marginHorizontal: wp(10),
+      marginVertical: hp(5),
     },
 
     // Action buttons
