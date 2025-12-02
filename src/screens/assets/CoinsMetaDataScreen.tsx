@@ -246,19 +246,18 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.rowWrapper}>
             <Item
               title={assets.issuedSupply}
-              value={
-                coin.metaData && coin.metaData.precision === 0
-                  ? numberWithCommas(Number(coin?.metaData?.maxSupply))
+              value={coin.precision === 0
+                  ? numberWithCommas(Number(coin?.maxSupply))
                   : numberWithCommas(
-                      Number(coin?.metaData?.maxSupply) /
-                        10 ** coin?.metaData?.precision,
+                      Number(coin?.maxSupply) /
+                        10 ** coin?.precision,
                     )
               }
               width={'45%'}
             />
             <Item
               title={assets.precision}
-              value={coin.metaData && coin.metaData.precision}
+              value={coin.precision}
               width={'45%'}
             />
           </View>
