@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from 'react';
-import { Share, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -30,6 +30,7 @@ import OptionCard from 'src/components/OptionCard';
 import { useChat } from 'src/hooks/useChat';
 import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import Share from 'react-native-share';
 
 const qrSize = (windowWidth * 65) / 100;
 
@@ -99,10 +100,11 @@ const ProfileInfo = () => {
     try {
       if (!viewShotRef.current) return;
       const uri = await viewShotRef.current.capture();
-      await Share.share({
-        message: `${community.shareQrMessage} ${contactDeepLink.split('/')[2]}`,
-        url: `file://${uri}`,
-      });
+      const shareOptions = {
+        message:`${community.shareQrMessage} ${contactDeepLink}`,
+        url: `file://${uri}`, 
+      }
+      await Share.open(shareOptions);
     } catch (error) {
       console.error('Error sharing QR code:', error);
       Toast(common.failedToShareQrCode, true);
