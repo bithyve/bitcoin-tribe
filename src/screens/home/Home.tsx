@@ -200,9 +200,7 @@ function HomeScreen() {
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app?.appType === AppType.ON_CHAIN) {
-        if (isWalletOnline === WalletOnlineStatus.Online) {
           checkBackupRequired();
-        }
       }
     },
   });
