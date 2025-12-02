@@ -2153,14 +2153,13 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetMetaData(
         assetId,
         ApiHandler.appType,
-        ApiHandler.api,
+        ApiHandler.api, 
       );
-      console.log('response', response);
       if (response) {
         if(response.maxSupply) {
-          response.maxSupply = response.maxSupply.toString();
+          response.maxSupply = response?.maxSupply.toString();
         } else {
-          response.issuedSupply = response.issuedSupply.toString();
+          response.issuedSupply = response?.issuedSupply?.toString();
         }
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
