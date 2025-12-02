@@ -2158,8 +2158,15 @@ export class ApiHandler {
       if (response) {
         if(response.maxSupply) {
           response.maxSupply = response?.maxSupply.toString();
-        } else {
+        } 
+        if(response.issuedSupply) {
           response.issuedSupply = response?.issuedSupply?.toString();
+        }
+        if(response.knownCirculatingSupply) {
+          response.knownCirculatingSupply = response?.knownCirculatingSupply?.toString();
+        }
+        if(response.initialSupply) {
+          response.initialSupply = response?.initialSupply?.toString();
         }
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
