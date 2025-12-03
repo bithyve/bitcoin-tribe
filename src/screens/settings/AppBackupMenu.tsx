@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import {
   useMMKVBoolean,
@@ -155,7 +155,7 @@ function AppBackupMenu({ navigation }) {
         enableBack={true}
         style={styles.headerWrapper}
       />
-      <View style={styles.bodyWrapper}>
+      <ScrollView style={styles.bodyWrapper}>
         {app.primaryMnemonic !== '' && (
           <View style={styles.itemContainer}>
             <AppText style={styles.textStep} variant="body1">
@@ -239,14 +239,12 @@ function AppBackupMenu({ navigation }) {
             )}
           </View>
         )}
-      </View>
-      <View>
-        <AppText style={styles.textStepTime} variant="body2">
+      </ScrollView>
+      <AppText style={styles.textStepTime} variant="body2">
           {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
             'DD MMM YY  •  hh:mm A',
           ) : 'Never'}`}
         </AppText>
-      </View>
       <ModalLoading visible={isLoading} />
       <EnterPasscodeModal
         title={settings.EnterPasscode}
@@ -308,7 +306,7 @@ const getStyles = (theme: AppTheme, insets) =>
     },
     textStepTime: {
       color: theme.colors.headingColor,
-      marginBottom: insets.bottom + hp(5),
+      paddingBottom: insets.bottom,
       textAlign: 'center',
     },
     bodyWrapper: {

@@ -37,6 +37,7 @@ const UTXOTabBar: React.FC<Props> = ({ navigationState, jumpTo }) => {
                 color: isActive
                   ? theme.colors.segmentSelectTitle
                   : theme.colors.secondaryHeadingColor,
+                  textAlign:"center",
               }}>
               {route.title}
             </AppText>
