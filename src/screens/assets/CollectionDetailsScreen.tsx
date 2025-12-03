@@ -39,7 +39,7 @@ import Infinity from 'src/assets/images/infinity.svg';
 import InfinityLight from 'src/assets/images/infinityLight.svg';
 import SelectOption from 'src/components/SelectOption';
 import config from 'src/utils/config';
-import FastImage from 'react-native-fast-image';
+import { CustomImage } from 'src/components/CustomImage';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -121,20 +121,12 @@ const CollectionDetailsScreen = () => {
     return (
       <>
         <MintedCtr />
-        <FastImage
-          source={{
-            uri: supportNetworkImage(headerImage),
-          }}
-          resizeMode="cover"
-          style={styles.bannerImage}
-        />
-        <FastImage
-          source={{
-            uri: mediaPath,
-          }}
-          resizeMode="cover"
-          style={styles.image}
-        />
+        <View>
+          <CustomImage uri={supportNetworkImage(headerImage)} imageStyle={styles.bannerImage} />
+        </View>
+        <View style={styles.imageCtr}>
+          <CustomImage uri={mediaPath} imageStyle={styles.image} size={40} />
+        </View>
         <View style={styles.headerCtr}>
           <AppHeader
             backIcon={<BackTranslucent />}
@@ -283,14 +275,19 @@ const getStyles = (theme: AppTheme, insets) =>
       borderBottomLeftRadius: 14,
       borderBottomRightRadius: 14,
     },
+    imageCtr:{
+      height: hp(80),
+      width: hp(80),
+      position: 'relative',
+      top: -40,
+      left: hp(16),
+      borderColor: theme.dark ? Colors.Black : Colors.White,
+    },
     image: {
       height: hp(80),
       width: hp(80),
       borderWidth: 2,
       borderRadius: 10,
-      position: 'relative',
-      top: -40,
-      left: hp(16),
       borderColor: theme.dark ? Colors.Black : Colors.White,
     },
     headerCtr: {
