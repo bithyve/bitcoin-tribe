@@ -20,7 +20,7 @@ import AssetIcon from './AssetIcon';
 import Colors from 'src/theme/Colors';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
-import FastImage from 'react-native-fast-image';
+import { CustomImage } from './CustomImage';
 
 type AssetCardProps = {
   asset: Asset;
@@ -109,20 +109,7 @@ const AssetCard = (props: AssetCardProps) => {
                 verified={asset?.issuer?.verified}
               />
             ) : (
-              <>
-                <FastImage
-                  source={{uri: uri}}
-                  style={styles.imageStyle}
-                  onLoadStart={() => setImageLoading(true)}
-                  onLoadEnd={() => setImageLoading(false)}
-                  onError={() => setImageLoading(false)}
-                />
-                {imageLoading && (
-                  <View style={styles.loaderOverlay}>
-                    <ActivityIndicator />
-                  </View>
-                )}
-              </>
+              <CustomImage uri={uri} imageStyle={styles.imageStyle}/>
             )}
           </View>
           <View style={styles.contentWrapper}>
@@ -224,15 +211,6 @@ const getStyles = (theme: AppTheme) =>
     innerCard: {
       flex: 1,
       borderRadius: 15,
-    },
-    loaderOverlay: {
-      position: 'absolute',
-      top: 0,
-      bottom: 0,
-      left: 0,
-      right: 0,
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   });
 export default AssetCard;

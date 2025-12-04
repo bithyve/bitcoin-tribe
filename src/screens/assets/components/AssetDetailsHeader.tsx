@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import {
   View,
   StyleSheet,
-  Image,
   Platform,
-  ImageBackground,
   StatusBar,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
@@ -15,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, wp } from 'src/constants/responsive';
+import { hp, windowWidth, wp } from 'src/constants/responsive';
 import {
   AssetSchema,
   Coin,
@@ -39,12 +37,11 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import useBalance from 'src/hooks/useBalance';
 import IconVerified from 'src/assets/images/issuer_verified.svg';
 import AssetBackIcon from 'src/assets/images/assetBackIcon.svg';
-import AssetInfoIcon from 'src/assets/images/assetInfoIcon.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
-import Colors from 'src/theme/Colors';
+import { CustomImage } from 'src/components/CustomImage';
 
 type assetDetailsHeaderProps = {
   assetName: string;
@@ -107,28 +104,24 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
 
   return (
     <>
-      {/* <Animated.View
-        style={[styles.smallHeader, { opacity: smallHeaderOpacity }]}>
-        <AppHeader title={assetTicker} rightIcon={headerRightIcon}/>
-      </Animated.View> */}
-      <View
-        // style={[styles.largeHeader, { height: largeHeaderHeight }]}
-        style={styles.largeHeader}>
-        <ImageBackground
-          style={styles.assetBackImageContainer}
-          imageStyle={styles.assetBackImageRadius}
-          resizeMode="cover"
-          source={{ uri: assetImage }}>
-          <StatusBar
-            translucent
-            backgroundColor="transparent"
-            barStyle="light-content"
+      <View style={styles.largeHeader}>
+        <StatusBar
+          translucent
+          backgroundColor="transparent"
+          barStyle="light-content"
+        />
+        <View style={styles.assetBackImageContainer}>
+          <CustomImage
+            uri={assetImage}
+            imageStyle={styles.assetBackImageRadius}
           />
-          <AppHeader
-            backIcon={<AssetBackIcon />}
-            style={styles.headerWrapper}
-          />
-        </ImageBackground>
+          <View style={styles.appHeaderCtr}>
+            <AppHeader
+              backIcon={<AssetBackIcon />}
+              style={styles.headerWrapper}
+            />
+          </View>
+        </View>
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             {app.appType === AppType.NODE_CONNECT ||
@@ -290,12 +283,19 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       position: 'relative',
       backgroundColor: theme.colors.walletBackgroundColor,
     },
+    appHeaderCtr: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
+    },
     assetBackImageContainer: {
       height: hp(235),
-      paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
-      marginBottom: hp(10),
+      width: windowWidth,
     },
     assetBackImageRadius: {
+      height: hp(235),
       borderBottomLeftRadius: 24,
       borderBottomRightRadius: 24,
     },

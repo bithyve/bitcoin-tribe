@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  ImageBackground,
   Platform,
   StyleSheet,
   View,
@@ -50,6 +49,7 @@ import Carousel, { Pagination } from 'react-native-reanimated-carousel';
 import { useSharedValue } from 'react-native-reanimated';
 import Colors from 'src/theme/Colors';
 import { TapGestureHandler } from 'react-native-gesture-handler';
+import { CustomImage } from 'src/components/CustomImage';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -69,8 +69,6 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       justifyContent: 'space-between',
     },
     largeHeaderContainer1: {
-      borderColor: theme.colors.borderColor,
-      borderWidth: 1,
       borderRadius: hp(20),
       backgroundColor: isThemeDark ? '#111' : '#fff',
       alignItems: 'center',
@@ -130,10 +128,15 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(20),
     },
     textCollectibleNameContainer: {
-      flex: 1,
       flexDirection: 'row',
       alignItems: 'flex-end',
       justifyContent: 'space-between',
+      position: 'absolute',
+      zIndex: 1000,
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
     },
     textCollectibleNameContainer2: {
       flex: 1,
@@ -150,7 +153,8 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       paddingTop: hp(15),
       borderBottomRightRadius: hp(20),
       borderBottomLeftRadius: hp(20),
-      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9))'
+      experimental_backgroundImage:
+        'linear-gradient(180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9))',
     },
     textCollectibleName: {
       marginLeft: wp(10),
@@ -221,12 +225,14 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderTopRightRadius: hp(20),
       width: '100%',
       position: 'absolute',
-      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))'
+      experimental_backgroundImage:
+        'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))',
     },
     collectionCampaignTxtCtr: {
       borderTopLeftRadius: hp(20),
       borderTopRightRadius: hp(20),
-      experimental_backgroundImage: 'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))'
+      experimental_backgroundImage:
+        'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))',
     },
     coinDataCtr: {
       padding: hp(20),
@@ -301,7 +307,6 @@ const CollectionItem = ({
     RealmSchema.Collectible,
     collection => collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
-  const [imageLoading, setImageLoading] = useState(false);
 
   const description = useMemo(() => {
     if (isCollectible) {
@@ -338,62 +343,50 @@ const CollectionItem = ({
               assetId: asset.assetId,
             });
           }
-        }}>
+        }}
+      >
         <View
           style={[
             styles.largeHeaderContainer1,
             isCampaignActive && styles.activeCampaignBorder,
-          ]}>
-          <ImageBackground
-            source={{
-              uri: isCollectible ? asset.media?.filePath : asset.media.filePath,
-            }}
-            resizeMode="cover"
-            style={styles.imageBackground}
-            imageStyle={styles.imageBackground}
-            onLoadStart={() => setImageLoading(true)}
-            onLoadEnd={() => setImageLoading(false)}
-            onError={() => setImageLoading(false)}>
-            <View style={styles.textCollectibleNameContainer}>
-              {imageLoading && (
-                <View style={styles.loaderOverlay}>
-                  <ActivityIndicator />
-                </View>
-              )}
-
-              {isCampaignActive && (
-                <View style={styles.activeCampaignDetailsCtr}>
-                  <View style={[styles.collectionCampaignTxtCtr]}>
-                    <AppText variant="subtitle2" style={styles.campaignTxt}>
-                      {asset?.campaign?.name}
-                    </AppText>
-                  </View>
-                </View>
-              )}
-
-              <View
-                style={styles.textCollectibleNameContainer1}
-              >
-                <View style={styles.textCollectibleNameContainer2}>
-                  <AppText
-                    variant="body1Bold"
-                    style={styles.textCollectibleName}>
-                    {asset.name}
+          ]}
+        >
+          <View style={styles.imageBackground}>
+            <CustomImage
+              uri={isCollectible ? asset.media?.filePath : asset.media.filePath}
+              imageStyle={styles.imageBackground}
+            />
+          </View>
+          <View style={styles.textCollectibleNameContainer}>
+            {isCampaignActive && (
+              <View style={styles.activeCampaignDetailsCtr}>
+                <View style={[styles.collectionCampaignTxtCtr]}>
+                  <AppText variant="subtitle2" style={styles.campaignTxt}>
+                    {asset?.campaign?.name}
                   </AppText>
-                  {asset.issuer?.verified ? (
-                    <IconVerified width={24} height={24} />
-                  ) : null}
                 </View>
-                {
-                  <AppText
-                    variant="muted"
-                    style={styles.textCollectibleDescription}>
-                    {description}
-                  </AppText>
-                }
               </View>
+            )}
+
+            <View style={styles.textCollectibleNameContainer1}>
+              <View style={styles.textCollectibleNameContainer2}>
+                <AppText variant="body1Bold" style={styles.textCollectibleName}>
+                  {asset.name}
+                </AppText>
+                {asset.issuer?.verified ? (
+                  <IconVerified width={24} height={24} />
+                ) : null}
+              </View>
+              {
+                <AppText
+                  variant="muted"
+                  style={styles.textCollectibleDescription}
+                >
+                  {description}
+                </AppText>
+              }
             </View>
-          </ImageBackground>
+          </View>
         </View>
       </TapGestureHandler>
     </>

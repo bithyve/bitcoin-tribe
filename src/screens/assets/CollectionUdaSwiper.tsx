@@ -35,7 +35,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { isWebUrl } from 'src/utils/url';
 import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
-import FastImage from 'react-native-fast-image';
+import { CustomImage } from 'src/components/CustomImage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -204,7 +204,7 @@ const FooterActionItems = ({
         <FlatList
           ref={bottomSliderRef}
           style={styles.imagesFlatList}
-          contentContainerStyle={{ gap: 5 }}
+          contentContainerStyle={{ gap: 2 }}
           data={assets}
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -213,12 +213,13 @@ const FooterActionItems = ({
           renderItem={({ item, index }) => {
             return (
               <Pressable onPress={() => scrollToIndex(index)}>
-                <FastImage
-                  source={{ uri: getMediaPath(item) }}
-                  style={[
+                <CustomImage uri={getMediaPath(item)}
+                imageStyle={[
                     styles.bottomImages,
                     index == activeIndex && styles.activeBottomImage,
                   ]}
+                  size={15}
+                  hideOnError
                 />
               </Pressable>
             );
@@ -325,6 +326,8 @@ const getStyles = (theme: AppTheme, insets) =>
       height: wp(40),
       width: wp(20),
       borderRadius: 6,
+      borderWidth:wp(2),
+      borderColor:'transparent'
     },
     imagesFlatList: {
       marginBottom: hp(10),

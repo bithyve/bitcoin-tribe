@@ -4,6 +4,7 @@ import { useTheme } from 'react-native-paper';
 
 import Identicon from './Identicon';
 import { AppTheme } from 'src/theme';
+import { CustomImage } from './CustomImage';
 
 type props = {
   iconUrl?: string;
@@ -21,7 +22,7 @@ const AssetIcon = ({ iconUrl, assetID, size, style, verified }: props) => {
   return (
     <View>
       {iconUrl ? (
-        <Image source={{ uri: iconUrl }} style={styles.imageStyle} />
+        <CustomImage uri={iconUrl} imageStyle={styles.imageStyle} size={size/2}/>
       ) : (
         <Identicon
           value={assetID}
