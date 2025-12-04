@@ -13,6 +13,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### upload_to_slack
+
+```sh
+[bundle exec] fastlane upload_to_slack
+```
+
+Upload the APK to Slack channel
+
 ### bump_version_code
 
 ```sh
