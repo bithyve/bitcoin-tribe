@@ -18,7 +18,13 @@ default_platform(:ios)
 platform :ios do
   desc "Push a new dev build to TestFlight"
   lane :dev do
-
+    file_name = "../../.env"
+    file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app"
+    auth_header = "Authorization: token #{ENV["GITHUB_ACCESS_TOKEN"]}"
+    sh(
+      "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
+      step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
+    )
     increment_build_number(xcodeproj: "tribe.xcodeproj")
 
     get_certificates( # Create or get certificate, and install it
@@ -42,7 +48,7 @@ platform :ios do
       teamid: CredentialsManager::AppfileConfig.try_fetch_value(:team_id)
     )
 
-    build_app(workspace: "tribe.xcworkspace", scheme: "tribe_dev", clean: true,
+    build_app(workspace: "tribe.xcworkspace", scheme: "tribe-dev", clean: true,
     export_method: "app-store",
     export_options: {
       provisioningProfiles: {
@@ -57,7 +63,13 @@ platform :ios do
 
   desc "Push a new live build to TestFlight"
   lane :live do
-    # increment_build_number(xcodeproj: "tribe.xcodeproj")
+    file_name = "../../.env"
+    file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/PRODUCTION/.env.app"
+    auth_header = "Authorization: token #{ENV["GITHUB_ACCESS_TOKEN"]}"
+    sh(
+      "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
+      step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
+    )
 
     get_certificates( # Create or get certificate, and install it
       output_path: "./builds" # Download certificate in the build folder (you don't need to create the folder)
@@ -137,9 +149,9 @@ after_all do |lane|
   slack(message: "Build success :rocket: \nBuild Number: " + buildNumber.to_s)
   end
 
-  # error do |lane, exception|
-  #   slack(
-  #     message: exception.message,
-  #     success:false
-  #   )
-  # end
+  error do |lane, exception|
+    slack(
+      message: exception.message,
+      success:false
+    )
+  end
