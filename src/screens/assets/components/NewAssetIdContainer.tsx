@@ -19,7 +19,7 @@ import ShareIconLight from 'src/assets/images/shareOutlineLight.svg';
 interface AssetIDContainerProps {
   assetId: string;
 }
-
+const IC_SIZE = 20
 export const NewAssetIdContainer = ({ assetId }: AssetIDContainerProps) => {
   const { translations } = React.useContext(LocalizationContext);
   const { common, assets } = translations;
@@ -58,18 +58,18 @@ export const NewAssetIdContainer = ({ assetId }: AssetIDContainerProps) => {
         <View style={styles.iconsCtr}>
           <AppTouchable style={styles.shareIconWrapper} onPress={onShare}>
             {isThemeDark ? (
-              <ShareIcon height={12} width={12} />
+              <ShareIcon height={IC_SIZE} width={IC_SIZE} />
             ) : (
-              <ShareIconLight height={12} width={12} />
+              <ShareIconLight height={IC_SIZE} width={IC_SIZE} />
             )}
           </AppTouchable>
           <AppTouchable
             style={styles.copyIconWrapper}
             onPress={() => handleCopyText(assetId)}>
             {isThemeDark ? (
-              <CopyIcon height={12} width={12} />
+              <CopyIcon height={IC_SIZE} width={IC_SIZE} />
             ) : (
-              <CopyIconLight height={12} width={12} />
+              <CopyIconLight height={IC_SIZE} width={IC_SIZE} />
             )}
           </AppTouchable>
         </View>
