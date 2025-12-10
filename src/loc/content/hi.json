@@ -94,7 +94,8 @@
     "communityServerUnavailable": "समुदाय सर्वर वर्तमान में अनुपलब्ध या पहुंच योग्य नहीं है।",
     "connectedToCommunityServer": "समुदाय सर्वर से जुड़ा हुआ",
     "communityServerOffline": "समुदाय सर्वर ऑफ़लाइन",
-    "communityServerOnline": "समुदाय सर्वर ऑनलाइन"
+    "communityServerOnline": "समुदाय सर्वर ऑनलाइन",
+    "connectingToCommunityServer": "समुदाय सर्वर से कनेक्ट हो रहा है..."
   },
   "onBoarding": {
     "welcome": "स्वागत है",

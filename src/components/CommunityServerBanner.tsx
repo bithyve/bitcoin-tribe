@@ -30,6 +30,11 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
           type: 'success',
         };
       }
+      case 'connecting':
+        return {
+          message: common.connectingToCommunityServer,
+          type: 'warning',
+        };
       case 'offline':
         return {
           message: common.communityServerOffline,
@@ -44,6 +49,8 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
           type: 'success',
         };
       }
+      default:
+        return null;
     }
   }, [communityStatus, common]);
 
@@ -63,7 +70,7 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
 
   return (
     <View>
-      {communityStatus ? (
+      {communityStatus && status ? (
         status.type == 'error' ? (
           <AppTouchable style={[styles.errorContainer]} onPress={onPress}>
             <AppText style={styles.text}>{status.message}</AppText>
@@ -71,6 +78,10 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
           </AppTouchable>
         ) : status.type == 'success' ? (
           <AppTouchable style={[styles.successContainer]} onPress={onPress}>
+            <AppText style={styles.text}>{status.message}</AppText>
+          </AppTouchable>
+        ) : status.type == 'warning' ? (
+          <AppTouchable style={[styles.warningContainer]} onPress={onPress}>
             <AppText style={styles.text}>{status.message}</AppText>
           </AppTouchable>
         ) : null
@@ -108,6 +119,14 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       paddingHorizontal: wp(16),
       height:hp(25),
       alignItems:"center"
+    },
+    warningContainer: {
+      alignItems: 'flex-start',
+      paddingHorizontal: wp(16),
+      backgroundColor: '#FFA500', // Orange color for warning/connecting state
+      width:windowWidth,
+      height:hp(25),
+      justifyContent:"center"
     },
     text: {
       color: 'white',
