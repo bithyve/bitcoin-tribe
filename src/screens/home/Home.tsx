@@ -10,8 +10,6 @@ import { useTheme } from 'react-native-paper';
 import {
   Alert,
   Linking,
-  Platform,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -25,7 +23,6 @@ import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import CoinAssetsList from './components/CoinAssetsList';
 import HomeHeader from './components/HomeHeader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -35,7 +32,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 import {
   Asset,
-  AssetType,
   AssetVisibility,
   Coin,
   WalletOnlineStatus,
@@ -51,9 +47,7 @@ import {
 } from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
-import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import DefaultCoin from './DefaultCoin';
-import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -345,31 +339,12 @@ function HomeScreen() {
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showScanner={true} />
       </View>
-      {presetAssets.length > 0 ? (
-        <ScrollView
+      <ScrollView
           showsVerticalScrollIndicator={false}
           bounces={false}
           >
             <DefaultCoin presetAssets={presetAssets}/>
         </ScrollView>
-      ) : (
-        <CoinAssetsList
-          listData={coins}
-          loading={refreshing && !isBackupInProgress && !isBackupDone}
-          onRefresh={handleRefresh}
-          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-          onPressAddNew={() => {
-            if (isNodeInitInProgress) {
-              Toast(node.connectingNodeToastMsg, true);
-              return;
-            }
-            handleNavigation(NavigationRoutes.ADDASSET, {
-              issueAssetType: AssetType.Coin,
-            });
-          }}
-          onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
-        />
-      )}
     </ScreenContainer>
   );
 }
