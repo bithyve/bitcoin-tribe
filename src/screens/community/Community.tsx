@@ -535,17 +535,22 @@ function Community() {
             onRefresh={handleRefresh}
             refreshing={refreshing}
             ListEmptyComponent={
-              <EmptyStateView
-                title={community.noConnectionTitle}
-                subTitle={community.noConnectionSubTitle}
-                IllustartionImage={
-                  isThemeDark ? (
-                    <EmptyCommunityIllustration />
-                  ) : (
-                    <EmptyCommunityIllustrationLight />
-                  )
-                }
-              />
+              <>
+                <EmptyStateView
+                  title={community.noConnectionTitle}
+                  subTitle={community.noConnectionSubTitle}
+                  IllustartionImage={
+                    isThemeDark ? (
+                      <EmptyCommunityIllustration />
+                    ) : (
+                      <EmptyCommunityIllustrationLight />
+                    )
+                  }
+                />
+                <AppText variant="heading3" style={styles.pullText}>
+                  Pull down to sync inbox
+                </AppText>
+              </>
             }
             style={styles.flatList}
             ItemSeparatorComponent={ItemSeparatorComponent}
@@ -724,7 +729,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.optionsCardGradient2,
       marginVertical: hp(15),
     },
-    roomCard: { flexDirection: 'row', justifyContent: 'space-between',  },
+    roomCard: { flexDirection: 'row', justifyContent: 'space-between' },
     roomCardRow: {
       gap: wp(15),
       flexDirection: 'row',
@@ -734,8 +739,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.mutedTab,
       paddingTop: hp(10),
     },
-    roomImageContainer: {
-    },
+    roomImageContainer: {},
     roomImage: {
       height: wp(50),
       width: wp(50),
@@ -1078,6 +1082,11 @@ const getStyles = (theme: AppTheme) =>
     loadingText: {
       marginTop: hp(12),
       color: theme.colors.text,
+    },
+    pullText: {
+      color: theme.colors.secondaryHeadingColor,
+      alignSelf: 'center',
+      marginTop: hp(5),
     },
   });
 
