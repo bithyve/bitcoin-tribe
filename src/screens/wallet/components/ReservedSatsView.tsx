@@ -65,6 +65,7 @@ function ReservedSatsView() {
               getCurrencyIcon(
                 isThemeDark ? IconBitcoin : IconBitcoinLight,
                 isThemeDark ? 'dark' : 'light',
+                16
               )}
             <AppText variant="body1" style={[styles.amountText]}>
               &nbsp;{getBalance(totalReserveSatsAmount)}

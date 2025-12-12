@@ -15,6 +15,8 @@ export const HolepunchRoomSchema: ObjectSchema = {
     lastActive: 'int',
     initializedIdentity: 'bool',
     roomImage: 'string?',
+    otherParticipantPubKey: 'string?',
+    isInboxRoom: 'bool?',
   },
 };
 

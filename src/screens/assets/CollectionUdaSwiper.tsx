@@ -35,6 +35,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { isWebUrl } from 'src/utils/url';
 import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
+import FastImage from 'react-native-fast-image';
 
 const { width, height } = Dimensions.get('window');
 
@@ -212,7 +213,7 @@ const FooterActionItems = ({
           renderItem={({ item, index }) => {
             return (
               <Pressable onPress={() => scrollToIndex(index)}>
-                <Image
+                <FastImage
                   source={{ uri: getMediaPath(item) }}
                   style={[
                     styles.bottomImages,

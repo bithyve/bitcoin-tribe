@@ -29,7 +29,7 @@ import kotlin.Exception
 object RGBHelper {
 
     val TAG = "RGBHelper"
-    private lateinit var driveClient: Drive
+    private var driveClient: Drive? = null
     private const val ZIP_MIME_TYPE = "application/zip"
 
 
@@ -338,17 +338,24 @@ object RGBHelper {
     }
 
     fun issueAssetUda(name: String, ticker: String, details: String, mediaFilePath: String, attachmentsFilePaths: List<String>): String? {
-        val asset = RGBWalletRepository.wallet?.issueAssetUda(
-            ticker,
-            name,
-            details,
-            AppConstants.rgbDefaultPrecision,
-            mediaFilePath,
-            attachmentsFilePaths,
-        )
-        val gson = Gson()
-        val json = gson.toJson(asset)
-        return  json
+        return try {
+            val contract = handleMissingFunds { RGBWalletRepository.wallet?.issueAssetUda(
+                ticker,
+                name,
+                details,
+                AppConstants.rgbDefaultPrecision,
+                mediaFilePath,
+                attachmentsFilePaths,
+            ) }
+            val gson = Gson()
+            val json = gson.toJson(contract)
+            return json.toString()
+        }catch (e: Exception) {
+            val message = e.message
+            val jsonObject = JsonObject()
+            jsonObject.addProperty("error", message)
+            return jsonObject.toString()
+        }
     }
 
     fun failTransfer(batchTransferIdx: Int, noAssetOnly: Boolean, skipSync: Boolean): Boolean? {
@@ -500,7 +507,9 @@ object RGBHelper {
 
     fun restore(password: String, filePath: String, context: ReactApplicationContext): String {
         try {
-            restoreBackup(filePath, password, AppConstants.rgbDir.absolutePath)
+            val rgbDir = AppConstants.rgbDir
+                ?: throw IllegalStateException("RGB directory not initialized")
+            restoreBackup(filePath, password, rgbDir.absolutePath)
             val jsonObject = JsonObject()
             jsonObject.addProperty("restore", true)
             return jsonObject.toString()

@@ -47,7 +47,7 @@ function TransactionInfoSection(props: transactionInfoSectionProps) {
           getCurrencyIcon(
             isThemeDark ? IconBitcoin : IconBitcoinLight,
             isThemeDark ? 'dark' : 'light',
-            25,
+            20,
           )}
         <AppText variant="heading1" style={styles.textStyle}>
           &nbsp;{getBalance(amount)}

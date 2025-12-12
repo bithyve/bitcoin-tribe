@@ -69,8 +69,7 @@ const TransactionButtons = (props: transButtonProps) => {
               theme.colors.transButtonBackColor,
             ]}
             icon={
-              config.NETWORK_TYPE === NetworkType.TESTNET ||
-              config.NETWORK_TYPE === NetworkType.REGTEST ? (
+              config.NETWORK_TYPE !== NetworkType.MAINNET ? (
                 isThemeDark ? (
                   <IconRequest />
                 ) : (
@@ -85,8 +84,7 @@ const TransactionButtons = (props: transButtonProps) => {
             textColor={theme.colors.roundBuyCTATitle}
             buttonColor={theme.colors.buyCtaBorderColor}
             title={
-              config.NETWORK_TYPE === NetworkType.TESTNET ||
-              config.NETWORK_TYPE === NetworkType.REGTEST
+              config.NETWORK_TYPE !== NetworkType.MAINNET
                 ? common.request
                 : common.buy
             }

@@ -1,4 +1,4 @@
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useState, useContext, useCallback, useEffect } from 'react';
 import { Image, Platform, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
@@ -34,6 +34,9 @@ import AssetIcon from 'src/components/AssetIcon';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
+import Deeplinking from 'src/utils/DeepLinking';
+import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import { useChat } from 'src/hooks/useChat';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -54,6 +57,7 @@ function SendScreen({ route, navigation }) {
   const [addAssetModal, setAddAssetModal] = useState(false);
   const [assetData, setAssetData] = useState<Asset | null>(null);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { currentRoom, createRoom, sendDMInvitation } = useChat();
 
   const navigateWithDelay = (callback: () => void) => {
     setVisible(false);
@@ -120,25 +124,26 @@ function SendScreen({ route, navigation }) {
         }
       }
 
-      if (value.startsWith('tribe://')) {
+      
+      if (value.startsWith(Deeplinking.scheme)) {
         setIsScanning(true);
         setVisibleModal(false);
-        navigateWithDelay(() => {
-          const urlParts = value.split('/');
-          const path = urlParts[2];
-          if (path === deeplinkType.Contact) {
-            const contactKey = urlParts[3];
-            const publicKey = urlParts[4];
-            navigation.navigate(NavigationRoutes.COMMUNITY, {
-              contactKey,
-              type: CommunityType.Peer,
-              publicKey,
-            });
-          } else if (path === deeplinkType.Group) {
-            const groupKey = urlParts[3];
-            navigation.navigate(NavigationRoutes.COMMUNITY, {
-              groupKey,
-              type: CommunityType.Group,
+        navigateWithDelay(async () => {
+          const parsedUrl = new URL(value);
+          const {
+            roomKey,
+            roomName,
+            roomType,
+            roomDescription,
+            publicKey,
+            contactName,
+          } = Object.fromEntries(parsedUrl.searchParams.entries());
+          if (roomType == HolepunchRoomType.GROUP)
+            createRoom(roomName, roomType, roomDescription, '', roomKey);
+          else {
+            const dmRoom = await sendDMInvitation(publicKey, contactName);
+            (navigation as any).navigate(NavigationRoutes.CHAT, {
+              roomId: dmRoom.roomId,
             });
           }
         });
@@ -269,6 +274,15 @@ function SendScreen({ route, navigation }) {
   const onProceed = async (paymentInfo: string) => {
     await handlePaymentInfo({ paymentInfo }, 'proceed');
   };
+  
+   useEffect(() => {
+      if (currentRoom) {
+        (navigation as any).navigate(NavigationRoutes.CHAT, {
+          roomId: currentRoom.roomId,
+        });
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentRoom]);
 
   return (
     <ScreenContainer>

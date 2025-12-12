@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import EmptyStateView from 'src/components/EmptyStateView';
 import RefreshControlView from 'src/components/RefreshControlView';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import {
   Asset,
@@ -130,57 +130,61 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
                 theme.colors.cardGradient1,
                 theme.colors.cardGradient2,
                 theme.colors.cardGradient3,
-              ]}>
-              <View style={styles.assetImageWrapper}>
-                {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
-                  <AssetIcon
-                    iconUrl={item.iconUrl}
-                    assetTicker={item.ticker}
-                    assetID={item.assetId}
-                    size={30}
-                    verified={item?.issuer?.verified}
-                  />
-                ) : (
-                  <Image
-                    source={{
-                      uri:
-                        item?.assetSchema.toUpperCase() === AssetSchema.UDA
-                          ? Platform.select({
-                              android: `file://${item?.token?.media?.filePath}`,
-                              ios: item?.token?.media?.filePath,
-                            })
-                          : Platform.select({
-                              android: `file://${item?.media?.filePath}`,
-                              ios: item?.media?.filePath,
-                            }),
-                    }}
-                    style={styles.imageStyle}
-                  />
-                )}
-              </View>
-              <View style={styles.assetDetailsContainer}>
-                <AppText variant="body2" style={styles.assetName}>
-                  {item.name}
-                </AppText>
-                <View style={styles.assetDetailsWrapper}>
-                  <AppText variant="body2" style={styles.assetTypeText}>
-                    {getAssetType(item.assetSchema)}
+              ]}
+            >
+              <View style={{ flex: 1, flexDirection: 'row', gap: wp(10) }}>
+                <View style={styles.assetImageWrapper}>
+                  {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
+                    <AssetIcon
+                      iconUrl={item.iconUrl}
+                      assetTicker={item.ticker}
+                      assetID={item.assetId}
+                      size={30}
+                      verified={item?.issuer?.verified}
+                    />
+                  ) : (
+                    <Image
+                      source={{
+                        uri:
+                          item?.assetSchema.toUpperCase() === AssetSchema.UDA
+                            ? Platform.select({
+                                android: `file://${item?.token?.media?.filePath}`,
+                                ios: item?.token?.media?.filePath,
+                              })
+                            : Platform.select({
+                                android: `file://${item?.media?.filePath}`,
+                                ios: item?.media?.filePath,
+                              }),
+                      }}
+                      style={styles.imageStyle}
+                    />
+                  )}
+                </View>
+                <View style={styles.assetDetailsContainer}>
+                  <AppText variant="body2" style={styles.assetName}>
+                    {item.name}
                   </AppText>
-                  <View style={styles.verticalLineStyle} />
-                  <AppText variant="body2" style={styles.assetBalance}>
-                    {item.precision === 0
-                      ? numberWithCommas(item?.balance?.future)
-                      : numberWithCommas(
-                          Number(item?.balance?.future) / 10 ** item.precision,
-                        )}
-                  </AppText>
+                  <View style={styles.assetDetailsWrapper}>
+                    <AppText variant="body2" style={styles.assetTypeText}>
+                      {getAssetType(item.assetSchema)}
+                    </AppText>
+                    <View style={styles.verticalLineStyle} />
+                    <AppText variant="body2" style={styles.assetBalance}>
+                      {item.precision === 0
+                        ? numberWithCommas(item?.balance?.future)
+                        : numberWithCommas(
+                            Number(item?.balance?.future) /
+                              10 ** item.precision,
+                          )}
+                    </AppText>
+                  </View>
                 </View>
               </View>
-
               <View style={styles.hiddenCtaWrapper}>
                 <AppTouchable
                   style={styles.hiddenCta}
-                  onPress={() => unHideAsset(item.assetId, item.assetSchema)}>
+                  onPress={() => unHideAsset(item.assetId, item.assetSchema)}
+                >
                   <AppText variant="caption" style={styles.hiddenCtaTitle}>
                     {settings.unHide}
                   </AppText>
@@ -197,21 +201,18 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       flexDirection: 'row',
-      width: '100%',
       marginVertical: hp(10),
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
       borderRadius: 10,
       padding: hp(15),
+      justifyContent: 'space-between',
     },
-    assetImageWrapper: {
-      width: '15%',
-    },
+    assetImageWrapper: {},
     assetDetailsContainer: {
-      width: '65%',
+      flex: 1,
     },
     hiddenCtaWrapper: {
-      width: '20%',
       alignItems: 'center',
       justifyContent: 'center',
     },

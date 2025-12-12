@@ -1,9 +1,5 @@
 import React, { ReactNode } from 'react';
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native';
-import { useTheme } from 'react-native-paper';
-import LinearGradient from 'react-native-linear-gradient';
-
-import { AppTheme } from 'src/theme';
+import { StyleProp, ViewStyle, View } from 'react-native';
 type GradientViewProps = {
   children: ReactNode;
   colors: [string, string, string];
@@ -12,17 +8,17 @@ type GradientViewProps = {
 
 function GradientView(props: GradientViewProps) {
   const { style, children, colors } = props;
-  const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <LinearGradient
-      colors={colors}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0.8, y: 2 }}
-      style={style}>
+    <View
+      style={[
+        style,
+        {
+          experimental_backgroundImage: `linear-gradient(45deg, ${colors[0]}, ${colors[2]})`,
+        },
+      ]}
+    >
       {children}
-    </LinearGradient>
+    </View>
   );
 }
-const getStyles = (theme: AppTheme) => StyleSheet.create({});
 export default GradientView;

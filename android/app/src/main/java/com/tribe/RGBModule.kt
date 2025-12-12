@@ -21,6 +21,10 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     val TAG = "RGBMODULE"
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
     
+    init {
+        AppConstants.ensureInitialized(reactContext.applicationContext)
+    }
+    
     companion object {
         private val gson = Gson()
     }
@@ -29,7 +33,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun getName() = "RGB"
 
     private fun getRgbNetwork(network: String): BitcoinNetwork {
-        return if (network == "TESTNET") BitcoinNetwork.TESTNET else BitcoinNetwork.MAINNET
+        return if (network == "TESTNET4") BitcoinNetwork.TESTNET4 else BitcoinNetwork.MAINNET
     }
 
     private suspend fun resolvePromise(promise: Promise, result: String) {
@@ -412,7 +416,7 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
             try {
                 val attachments = mutableListOf<String>()
                 for (i in 0 until attachmentsFilePaths.size()) {
-                    attachments.add(attachmentsFilePaths.getString(i))
+                    attachmentsFilePaths.getString(i)?.let { attachments.add(it) }
                 }
                 val response = RGBHelper.issueAssetUda(name, ticker, details, mediaFilePath, attachments)
                 withContext(Dispatchers.Main) {
@@ -717,7 +721,9 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun resetData(promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                AppConstants.rgbDir.delete()
+                val rgbDir = AppConstants.rgbDir
+                    ?: throw IllegalStateException("RGB directory not initialized")
+                rgbDir.delete()
                 withContext(Dispatchers.Main) {
                     promise.resolve(true)
                 }
@@ -736,12 +742,14 @@ class RGBModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMod
     fun getRgbDir(promise: Promise){
         coroutineScope.launch(Dispatchers.IO) {
             try {
-                val dir = AppConstants.rgbDir.absolutePath
+                val rgbDir = AppConstants.rgbDir
+                    ?: throw IllegalStateException("RGB directory not initialized")
+                val dir = rgbDir.absolutePath
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("dir", dir)
                 promise.resolve(jsonObject.toString())
             } catch (e: Exception) {
-                Log.e(TAG, "resetData failed: ${e.message}", e)
+                Log.e(TAG, "getRgbDir failed: ${e.message}", e)
                 val jsonObject = JsonObject()
                 jsonObject.addProperty("error", e.message)
                 promise.resolve(jsonObject.toString())

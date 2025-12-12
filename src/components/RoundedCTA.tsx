@@ -6,6 +6,7 @@ import Fonts from 'src/constants/Fonts';
 import { AppTheme } from 'src/theme';
 import GradientView from './GradientView';
 import { hp } from 'src/constants/responsive';
+import { TapGestureHandler } from 'react-native-gesture-handler';
 
 type RoundedCTAProps = {
   icon?: React.ReactNode;
@@ -39,20 +40,21 @@ function RoundedCTA(props: RoundedCTAProps) {
   const styles = getStyles(width, buttonColor, height);
   return (
     <GradientView style={styles.ctaContainerStyle} colors={colors}>
+      <TapGestureHandler onActivated={onPress}>
       <Button
         icon={() => icon}
         // mode="outlined"
         uppercase={false}
-        labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+        labelStyle={[styles.roundedCTATitle, styles.labelStyle, {color:textColor}]}
         style={styles.ctaContainerStyle}
         contentStyle={styles.contentStyle}
         // buttonColor={buttonColor}
-        textColor={textColor}
-        onPress={onPress}
+        // textColor={textColor}
         maxFontSizeMultiplier={1}
         disabled={disabled}>
         {title}
       </Button>
+      </TapGestureHandler>
     </GradientView>
   );
 }

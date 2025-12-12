@@ -355,7 +355,7 @@ const CollectibleMetaDataScreen = () => {
                     )
                   : collectible?.metaData &&
                     numberWithCommas(
-                      Number(collectible?.metaData?.issuedSupply) /
+                      Number(collectible?.issuedSupply) /
                         10 ** collectible?.precision,
                     )
               }

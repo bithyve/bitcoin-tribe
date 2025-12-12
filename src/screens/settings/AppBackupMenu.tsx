@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import {
   useMMKVBoolean,
@@ -32,12 +32,14 @@ import Relay from 'src/services/relay';
 import Toast from 'src/components/Toast';
 import BackupPhraseModal from 'src/components/BackupPhraseModal';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 function AppBackupMenu({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
-  const styles = getStyles(theme);
+  const insets = useSafeAreaInsets();
+  const styles = getStyles(theme,insets);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
@@ -153,7 +155,7 @@ function AppBackupMenu({ navigation }) {
         enableBack={true}
         style={styles.headerWrapper}
       />
-      <View style={styles.bodyWrapper}>
+      <ScrollView style={styles.bodyWrapper}>
         {app.primaryMnemonic !== '' && (
           <View style={styles.itemContainer}>
             <AppText style={styles.textStep} variant="body1">
@@ -237,14 +239,12 @@ function AppBackupMenu({ navigation }) {
             )}
           </View>
         )}
-      </View>
-      <View>
-        <AppText style={styles.textStepTime} variant="body2">
+      </ScrollView>
+      <AppText style={styles.textStepTime} variant="body2">
           {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
             'DD MMM YY  •  hh:mm A',
           ) : 'Never'}`}
         </AppText>
-      </View>
       <ModalLoading visible={isLoading} />
       <EnterPasscodeModal
         title={settings.EnterPasscode}
@@ -279,7 +279,7 @@ function AppBackupMenu({ navigation }) {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (theme: AppTheme, insets) =>
   StyleSheet.create({
     headerWrapper: {
       marginBottom: hp(25),
@@ -306,7 +306,7 @@ const getStyles = (theme: AppTheme) =>
     },
     textStepTime: {
       color: theme.colors.headingColor,
-      marginBottom: hp(5),
+      paddingBottom: insets.bottom,
       textAlign: 'center',
     },
     bodyWrapper: {

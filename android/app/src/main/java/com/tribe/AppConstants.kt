@@ -6,11 +6,13 @@ import java.io.File
 object AppConstants {
 
     const val rgbDirName = ""
-    lateinit var appContext: Context
-    lateinit var rgbDir: File
+    var appContext: Context? = null
+    var rgbDir: File? = null
     const val backupName = "%s.rgb_backup"
 
     const val testnetElectrumURL = "ssl://electrum.iriswallet.com:50013"
+    const val testnet4ElectrumURL = "ssl://electrum.iriswallet.com:50053"
+
     const val regtestElectrumURL = "electrum.rgbtools.org:50041"
     const val mainnetElectrumUrl = "ssl://electrum.iriswallet.com:50003"
 
@@ -27,12 +29,20 @@ object AppConstants {
     @JvmStatic
     fun initContext(context: Context) {
         appContext = context
-        rgbDir = File(appContext.filesDir, rgbDirName)
+        rgbDir = File(context.filesDir, rgbDirName)
+    }
+    
+    @JvmStatic
+    fun ensureInitialized(context: Context) {
+        if (appContext == null || rgbDir == null) {
+            initContext(context)
+        }
     }
 
     fun getElectrumUrl(network: String): String {
         return when (network.uppercase()) {
             "TESTNET" -> testnetElectrumURL
+            "TESTNET4" -> testnet4ElectrumURL
             "REGTEST" -> regtestElectrumURL
             "MAINNET" -> getNextMainnetUrl()
             else -> testnetElectrumURL

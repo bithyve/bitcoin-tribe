@@ -1,28 +1,27 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 import { AppContext } from 'src/contexts/AppContext';
 import AppTouchable from './AppTouchable';
 import AppText from './AppText';
 import Colors from 'src/theme/Colors';
 
-const BackupAlertBanner = () => {
+const BackupAlertBanner = ({modalVisible, setModalVisible}) => {
   const { isBackupInProgress } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const [visible, setVisible] = useState(false);
 
   return isBackupInProgress ? (
     <>
-      <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
+      <AppTouchable style={styles.banner} onPress={() => setModalVisible(true)}>
         <View style={styles.titleWrapper}>
           <AppText variant="body2" style={styles.text}>
             {common.backupInProgress}
@@ -37,8 +36,8 @@ const BackupAlertBanner = () => {
       </AppTouchable>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
             {common.backupInProgressMsg}
@@ -53,22 +52,12 @@ const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     banner: {
       flexDirection: 'row',
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.SelectiveYellow,
-      zIndex: 1000,
       alignItems: 'center',
       justifyContent: 'space-between',
-      paddingVertical: windowHeight > 820 ? hp(3) : 0,
-      paddingHorizontal: hp(10),
+      paddingHorizontal: wp(16),
+      width:windowWidth,
+      height:hp(25)
     },
     text: {
       color: 'white',

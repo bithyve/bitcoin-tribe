@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from 'react';
-import { Share, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -27,11 +27,14 @@ import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ViewShot from 'react-native-view-shot';
 import OptionCard from 'src/components/OptionCard';
-import { deeplinkType } from 'src/models/interfaces/Community';
+import { useChat } from 'src/hooks/useChat';
+import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
+import Share from 'react-native-share';
 
 const qrSize = (windowWidth * 65) / 100;
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = () =>
   StyleSheet.create({
     bodyWrapper: {
       flex: 1,
@@ -75,18 +78,33 @@ const ProfileInfo = () => {
   const styles = getStyles(theme);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const pubKey = app?.publicId;  
-  const qrValue = `tribe://${deeplinkType.Contact}/${pubKey}`;
   const navigation = useNavigation();
   const viewShotRef = useRef<ViewShot>(null);
+
+    // Initialize P2P chat with useChat hook
+    const {
+      isInitializing,
+      getCurrentPeerPubKey,
+    } = useChat();
+  
+    // Only get public key if service is initialized
+    const userPublicKey = !isInitializing ? getCurrentPeerPubKey() : null;
+  
+    const contactDeepLink = userPublicKey ? Deeplinking.buildUrl(DeepLinkFeature.COMMUNITY, {
+      publicKey: userPublicKey,
+      contactName: app?.appName || 'Anonymous',
+      roomType: HolepunchRoomType.DIRECT_MESSAGE,
+    }) : null;
 
   const handleShare = async () => {
     try {
       if (!viewShotRef.current) return;
       const uri = await viewShotRef.current.capture();
-      await Share.share({
-        message: `${community.shareQrMessage} ${qrValue.split('/')[2]}`,
-        url: `file://${uri}`,
-      });
+      const shareOptions = {
+        message:`${community.shareQrMessage} ${contactDeepLink}`,
+        url: `file://${uri}`, 
+      }
+      await Share.open(shareOptions);
     } catch (error) {
       console.error('Error sharing QR code:', error);
       Toast(common.failedToShareQrCode, true);
@@ -95,7 +113,7 @@ const ProfileInfo = () => {
 
   const handleCopy = () => {
     try {
-      Clipboard.setString(qrValue);
+      Clipboard.setString(contactDeepLink);
       Toast(common.copiedToClipboard, false);
     } catch (error) {
       console.error('Error copying to clipboard:', error);
@@ -168,25 +186,25 @@ const ProfileInfo = () => {
           }}>
           <View style={styles.qrWrapper}>
             <QRCode
-              value={qrValue}
+              value={contactDeepLink}
               size={qrSize}
               logo={app?.walletImage ? { uri: app.walletImage } : undefined}
               logoSize={qrSize * 0.35}
               logoBorderRadius={qrSize * 0.3}
             />
           </View>
-          <AppText variant="heading1" style={styles.textName}>
+          {/* <AppText variant="heading1" style={styles.textName}>
             {app.appName}
-          </AppText>
+          </AppText> */}
         </ViewShot>
         {renderMenu()}
 
-        {/* <OptionCard
+        <OptionCard
           title={community.createGroup}
           onPress={() => {
-            Toast('Coming Soon', false);
+            navigation.navigate(NavigationRoutes.CREATEGROUP);
           }}
-        /> */}
+        />
       </View>
     </ScreenContainer>
   );

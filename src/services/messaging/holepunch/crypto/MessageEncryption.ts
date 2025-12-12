@@ -2,11 +2,18 @@
  * Message Encryption Service for P2P Chat
  * 
  * Uses crypto-js AES encryption for end-to-end encrypted messages.
- * Encryption happens in React Native, worklet only transports encrypted data.
+ * Uses X25519 (Curve25519) with ECDH for asymmetric encryption.
  * 
+ * Asymmetric Encryption (ECDH):
+ * - Sender: Encrypts with recipient's PUBLIC key + sender's PRIVATE key
+ * - Recipient: Decrypts with recipient's PRIVATE key + sender's PUBLIC key
+ * - Both compute the SAME shared secret via ECDH
+ * 
+ * Note: Ed25519 keys (signing) are converted to X25519 keys (encryption).
  */
 
 import cryptoJS from 'crypto-js';
+import { x25519, edwardsToMontgomeryPub, edwardsToMontgomeryPriv } from '@noble/curves/ed25519';
 
 export interface MessageData {
   text: string;
@@ -96,5 +103,126 @@ export class MessageEncryption {
    */
   static isValidRoomKey(roomKey: string): boolean {
     return /^[0-9a-f]{64}$/i.test(roomKey);
+  }
+
+  /**
+   * Encrypt data using ECDH (Elliptic Curve Diffie-Hellman)
+   * 
+   * Uses direct key agreement between sender and recipient:
+   * - Sender computes: sharedSecret = senderPrivate * recipientPublic
+   * - Recipient computes: sharedSecret = recipientPrivate * senderPublic
+   * - Both get the SAME shared secret (ECDH property)
+   * 
+   * @param data - Data to encrypt (string)
+   * @param recipientPublicKey - Recipient's Ed25519 public key (64-char hex string)
+   * @param senderPrivateKey - Sender's Ed25519 secret key (128-char hex string, includes private+public)
+   * @returns Encrypted string (base64 ciphertext)
+   */
+  static encryptWithPublicKey(
+    data: string,
+    recipientPublicKey: string,
+    senderPrivateKey: string
+  ): string {
+    try {
+      // Convert Ed25519 keys to X25519 (for encryption)
+      const recipientPubKeyBytes = this.hexToBytes(recipientPublicKey);
+      const recipientX25519PubKey = edwardsToMontgomeryPub(recipientPubKeyBytes);
+      
+      // Ed25519 secretKey from hypercore-crypto is 64 bytes (32-byte private + 32-byte public)
+      // We only need the first 32 bytes for the actual private key
+      const senderPrivKeyBytes = this.hexToBytes(senderPrivateKey);
+      const actualPrivateKey = senderPrivKeyBytes.slice(0, 32); // Extract first 32 bytes
+      const senderX25519PrivKey = edwardsToMontgomeryPriv(actualPrivateKey);
+      
+      // Compute shared secret: senderPrivate * recipientPublic
+      const sharedSecret = x25519.getSharedSecret(senderX25519PrivKey, recipientX25519PubKey);
+      
+      // Derive AES key from shared secret
+      const aesKey = cryptoJS.SHA256(
+        cryptoJS.lib.WordArray.create(Array.from(sharedSecret))
+      ).toString(cryptoJS.enc.Hex).substring(0, 64);
+      
+      // Encrypt data with AES
+      const encrypted = cryptoJS.AES.encrypt(data, aesKey);
+      
+      // Return encrypted data as base64
+      return encrypted.toString();
+    } catch (error) {
+      console.error('[MessageEncryption] ECDH encryption failed:', error);
+      throw new Error('Failed to encrypt with public key');
+    }
+  }
+  
+  /**
+   * Decrypt data using ECDH (Elliptic Curve Diffie-Hellman)
+   * 
+   * Uses direct key agreement between sender and recipient:
+   * - Recipient computes: sharedSecret = recipientPrivate * senderPublic
+   * - This matches the sender's: sharedSecret = senderPrivate * recipientPublic
+   * - Both get the SAME shared secret (ECDH property)
+   * 
+   * @param encryptedPayload - Encrypted string (base64 ciphertext)
+   * @param ownPrivateKey - Own Ed25519 secret key (128-char hex string, includes private+public)
+   * @param senderPublicKey - Sender's Ed25519 public key (64-char hex string)
+   * @returns Decrypted data as string
+   */
+  static decryptWithPrivateKey(
+    encryptedPayload: string,
+    ownPrivateKey: string,
+    senderPublicKey: string
+  ): string {
+    try {
+      // Convert Ed25519 keys to X25519 (for encryption)
+      // Ed25519 secretKey from hypercore-crypto is 64 bytes (32-byte private + 32-byte public)
+      // We only need the first 32 bytes for the actual private key
+      const ownPrivKeyBytes = this.hexToBytes(ownPrivateKey);
+      const actualPrivateKey = ownPrivKeyBytes.slice(0, 32); // Extract first 32 bytes
+      const ownX25519PrivKey = edwardsToMontgomeryPriv(actualPrivateKey);
+      
+      const senderPubKeyBytes = this.hexToBytes(senderPublicKey);
+      const senderX25519PubKey = edwardsToMontgomeryPub(senderPubKeyBytes);
+      
+      // Compute shared secret: ownPrivate * senderPublic
+      // This produces the SAME shared secret as encryption computed
+      const sharedSecret = x25519.getSharedSecret(ownX25519PrivKey, senderX25519PubKey);
+      
+      // Derive AES key from shared secret (same derivation as encryption)
+      const aesKey = cryptoJS.SHA256(
+        cryptoJS.lib.WordArray.create(Array.from(sharedSecret))
+      ).toString(cryptoJS.enc.Hex).substring(0, 64);
+      
+      // Decrypt data with AES
+      const decrypted = cryptoJS.AES.decrypt(encryptedPayload, aesKey);
+      const decryptedString = decrypted.toString(cryptoJS.enc.Utf8);
+      
+      if (!decryptedString) {
+        throw new Error('Decryption failed - invalid key or corrupted data');
+      }
+      
+      return decryptedString;
+    } catch (error) {
+      console.error('[MessageEncryption] ECDH decryption failed:', error);
+      throw new Error('Failed to decrypt with private key');
+    }
+  }
+  
+  /**
+   * Convert hex string to Uint8Array
+   */
+  private static hexToBytes(hex: string): Uint8Array {
+    const bytes = new Uint8Array(hex.length / 2);
+    for (let i = 0; i < hex.length; i += 2) {
+      bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    }
+    return bytes;
+  }
+  
+  /**
+   * Convert Uint8Array to hex string
+   */
+  private static bytesToHex(bytes: Uint8Array): string {
+    return Array.from(bytes)
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
   }
 }

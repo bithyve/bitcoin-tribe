@@ -12,6 +12,18 @@ export const predefinedTestnetNodes: NodeDetail[] = [
   },
 ];
 
+export const predefinedTestnet4Nodes: NodeDetail[] = [
+  {
+    id: 333, // sequence 3-x-x; avoids collision w/ own node
+    host: 'electrum.iriswallet.com',
+    port: '50053',
+    isConnected: false,
+    useKeeperNode: false,
+    useSSL: true,
+    isDefault: true,
+  },
+];
+
 export const predefinedRegtestNodes: NodeDetail[] = [
   {
     id: 444, // sequence 4-x-x; avoids collision w/ own node

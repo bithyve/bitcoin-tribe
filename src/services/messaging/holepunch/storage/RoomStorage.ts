@@ -4,6 +4,8 @@ import RealmDatabase from 'src/storage/realm/realm';
 
 export enum HolepunchRoomType {
   GROUP = 'GROUP',
+  DIRECT_MESSAGE = 'DIRECT_MESSAGE',
+  INBOX = 'INBOX',  // Personal inbox room
 }
 
 export interface HolepunchRoom {
@@ -18,6 +20,10 @@ export interface HolepunchRoom {
   lastActive: number,
   initializedIdentity: boolean,  // true if the identity message has been sent to the room
   roomImage?: string,
+  
+  // DM-specific fields
+  otherParticipantPubKey?: string,   // For DMs: the other person's public key
+  isInboxRoom?: boolean,              // Flag for inbox rooms
 }
 
 export class RoomStorage {
@@ -54,6 +60,8 @@ export class RoomStorage {
         lastActive: Number(r.lastActive),
         initializedIdentity: Boolean(r.initializedIdentity),
         roomImage: r.roomImage ? String(r.roomImage) : undefined,
+        otherParticipantPubKey: r.otherParticipantPubKey ? String(r.otherParticipantPubKey) : undefined,
+        isInboxRoom: r.isInboxRoom ? Boolean(r.isInboxRoom) : undefined,
       }));
       // Sort by last active (most recent first)
       rooms.sort((a, b) => (b.lastActive || 0) - (a.lastActive || 0));
@@ -85,6 +93,8 @@ export class RoomStorage {
         lastActive: Number(r.lastActive),
         initializedIdentity: Boolean(r.initializedIdentity),
         roomImage: r.roomImage ? String(r.roomImage) : undefined,
+        otherParticipantPubKey: r.otherParticipantPubKey ? String(r.otherParticipantPubKey) : undefined,
+        isInboxRoom: r.isInboxRoom ? Boolean(r.isInboxRoom) : undefined,
       };
     } catch (error) {
       console.error('[RoomStorage] Failed to get room:', error);

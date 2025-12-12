@@ -5,7 +5,7 @@ import { Modal, Portal, useTheme } from 'react-native-paper';
 
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth } from 'src/constants/responsive';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 import { AppContext } from 'src/contexts/AppContext';
 import AppTouchable from './AppTouchable';
@@ -13,18 +13,17 @@ import AppText from './AppText';
 import GradientView from './GradientView';
 import Colors from 'src/theme/Colors';
 
-const NodeConnectingSetup = () => {
+const NodeConnectingSetup = ({modalVisible, setModalVisible}) => {
   const { isNodeInitInProgress } = useContext(AppContext);
   const { translations } = useContext(LocalizationContext);
   const { common, node } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const [visible, setVisible] = useState(false);
 
   return isNodeInitInProgress ? (
     <>
-      <AppTouchable style={styles.banner} onPress={() => setVisible(true)}>
+      <AppTouchable style={styles.banner} onPress={() => setModalVisible(true)}>
         <GradientView
           style={styles.container}
           colors={[
@@ -47,8 +46,8 @@ const NodeConnectingSetup = () => {
       </AppTouchable>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
             {node.connectingNodeInfo}
@@ -62,19 +61,10 @@ const NodeConnectingSetup = () => {
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     banner: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
-      zIndex: 1000,
       alignItems: 'center',
       justifyContent: 'space-between',
+      width:windowWidth,
+      height:hp(25)
     },
     container: {
       flex: Platform.OS === 'ios' ? 1 : 0,
