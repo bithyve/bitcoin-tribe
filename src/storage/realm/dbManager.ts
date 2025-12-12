@@ -55,7 +55,11 @@ const createObjectBulk = (
       schema === RealmSchema.Coin
     ) {
       objects.forEach(object => {
-        object.issuedSupply = object.issuedSupply.toString();
+        if(object?.maxSupply) {
+            object.maxSupply = object.maxSupply.toString();
+        } else if(object?.issuedSupply) {
+          object.issuedSupply = object.issuedSupply.toString();
+        }
         object.balance.spendable = object.balance.spendable.toString();
         object.balance.future = object.balance.future.toString();
         object.balance.settled = object.balance.settled.toString();

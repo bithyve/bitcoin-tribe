@@ -38,7 +38,7 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    # upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
   desc "Push a new live build from github actions to internal track on Play Store"

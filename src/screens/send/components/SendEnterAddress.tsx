@@ -15,6 +15,7 @@ import config from 'src/utils/config';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
 import { Keys } from 'src/storage';
+import Deeplinking from 'src/utils/DeepLinking';
 
 function SendEnterAddress({
   onDismiss,
@@ -59,7 +60,7 @@ function SendEnterAddress({
       setInvoiceValidationError('');
       return;
     }
-    if(text.startsWith('tribe://')) {
+    if(text.startsWith(Deeplinking.scheme)) {
       Keyboard.dismiss();
       setAddress(text);
       setInvoiceValidationError('');

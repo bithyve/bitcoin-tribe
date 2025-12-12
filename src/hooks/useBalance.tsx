@@ -39,7 +39,7 @@ const useBalance = () => {
   const getCurrencyIcon = (
     Icon: any,
     variation: 'light' | 'green' | 'dark' | 'grey' | 'slateGreen',
-    size?: number,
+    size: number = 14,
   ) =>
     getCurrencyImageByRegion(
       currencyCode,

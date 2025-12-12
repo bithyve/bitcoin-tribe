@@ -94,7 +94,8 @@
     "communityServerUnavailable": "Il server della comunità non è attualmente disponibile o non raggiungibile.",
     "connectedToCommunityServer": "Connesso al server della comunità",
     "communityServerOffline": "Server della comunità offline",
-    "communityServerOnline": "Server della comunità online"
+    "communityServerOnline": "Server della comunità online",
+    "connectingToCommunityServer": "Connessione al server della comunità..."
   },
   "onBoarding": {
     "welcome": "Benvenuto",
@@ -684,6 +685,7 @@
     "assetRegistrySubTitle2": "È previsto un costo di servizio una tantum di ",
     "assetRegistrySubTitle3": ". Non sei pronto a registrarti? Puoi saltare la registrazione e comunque pubblicare su Twitter.",
     "sharePostTitle": "Condividi il post su X",
+    "postDeletedOrUnavailable": "Questo post è stato eliminato o non è più disponibile.",
     "verificationTitle": "VERIFICA",
     "payServiceFeeFundError": "Saldo insufficiente. Assicurati di avere almeno 20.000 sats nel tuo wallet per coprire il costo di servizio.",
     "recordCard": "Dettagli del record DNS",

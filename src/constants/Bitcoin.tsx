@@ -162,6 +162,7 @@ export function CurrencyIcon({ symbol, styles = {}, size = 14 }) {
         fontSize: size,
         letterSpacing: 0.5,
         fontWeight: '900',
+        lineHeight: size *1.5
       }}>
       {symbol}
     </Text>
@@ -205,7 +206,7 @@ export const getCurrencyImageByRegion = (
     }
     return null;
   }
-  return <BTCIcon style={{ color: styles.color }} />;
+  return <BTCIcon style={{ color: styles.color }} height={size}  />;
 };
 
 export const getFiatIcon = (

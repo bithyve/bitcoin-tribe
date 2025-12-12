@@ -43,6 +43,7 @@ function Community() {
   const [scanning, setScanning] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [hasAutoSynced, setHasAutoSynced] = useState(false);
+  const [hasConnectionSettled, setHasConnectionSettled] = useState(false);
   const navigation = useNavigation();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -181,6 +182,7 @@ function Community() {
 
       // Always reload rooms list
       await loadRooms();
+      await handleSyncInbox();
     } catch (error) {
       console.error('[Community] Refresh error:', error);
     } finally {
@@ -360,12 +362,66 @@ function Community() {
     }
   };
 
+  // Reset settlement state when initialization starts
   useEffect(() => {
-    if (!isInitializing && !isRootPeerConnected)
-      setCommunityStatus('offline');
-    else if (communityStatus)
+    if (isInitializing) {
+      setHasConnectionSettled(false);
+    }
+  }, [isInitializing]);
+
+  // Track when connection settles (we've seen at least one connection event)
+  // Connection is considered "settled" when:
+  // 1. We've seen isRootPeerConnected become true (connected), OR
+  // 2. After initialization completes, we wait a reasonable time and if still not connected, mark as settled (offline)
+  useEffect(() => {
+    if (isInitializing) {
+      return;
+    }
+
+    // If we become connected, immediately mark as settled
+    if (isRootPeerConnected && !hasConnectionSettled) {
+      setHasConnectionSettled(true);
+      return;
+    }
+
+    // If we've already been connected before (settled), and we disconnect,
+    // we're still considered settled (just show offline status)
+    if (hasConnectionSettled && !isRootPeerConnected) {
+      // Already settled, no action needed
+      return;
+    }
+
+    // If we haven't settled yet and we're not connected, start a timer
+    // This gives time for the connection attempt to complete
+    if (!hasConnectionSettled && !isRootPeerConnected) {
+      const timer = setTimeout(() => {
+        setHasConnectionSettled(true);
+      }, 10000); // Give 10 seconds for connection attempt
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isRootPeerConnected, isInitializing, hasConnectionSettled]);
+
+  // Set community status based on connection state
+  useEffect(() => {
+    // Don't set status while initializing
+    if (isInitializing) {
+      return;
+    }
+
+    // If connection hasn't settled yet, show connecting
+    if (!hasConnectionSettled) {
+      setCommunityStatus('connecting');
+      return;
+    }
+
+    // Connection has settled, show final status
+    if (isRootPeerConnected) {
       setCommunityStatus('online');
-  }, [isInitializing, isRootPeerConnected]);
+    } else {
+      setCommunityStatus('offline');
+    }
+  }, [isInitializing, isRootPeerConnected, hasConnectionSettled]);
 
   // Get connection status for status bar
   const getConnectionStatus = () => {
@@ -406,23 +462,14 @@ function Community() {
                 </AppText>
               </View>
             )}
-            {/* Room type indicator badge */}
-            <View style={[
-              styles.roomTypeBadge,
-              isDM ? styles.dmBadge : styles.groupBadge
-            ]}>
-              <AppText style={styles.roomTypeBadgeText}>
-                {isDM ? 'DM' : 'G'}
-              </AppText>
-            </View>
           </View>
-          <View style={styles.roomInfo}>
+        </View>
+        <View style={styles.roomInfo}>
             <AppText variant="heading3SemiBold">{item.roomName}</AppText>
             <AppText variant="caption" style={styles.roomDesc}>
               {item.roomDescription}
             </AppText>
           </View>
-        </View>
         <AppText variant="caption" style={styles.roomTime}>
           {formatSmartTime(item?.lastActive)}
         </AppText>
@@ -440,11 +487,11 @@ function Community() {
       </View>
 
       {/* Connection Status Bar */}
-      {connectionStatus && (
+      {/* {connectionStatus && (
         <View style={[styles.statusBar, { backgroundColor: connectionStatus.color }]}>
           <AppText style={styles.statusBarText}>{connectionStatus.text}</AppText>
         </View>
-      )}
+      )} */}
 
       {isInitializing ? (
         <View style={styles.loadingContainer}>
@@ -454,31 +501,11 @@ function Community() {
         <>
           {/* Action buttons for My DM QR, Start DM, and Sync Inbox */}
           <View style={styles.actionButtonsContainer}>
-            {/* My DM QR Button */}
-            <AppTouchable
-              style={styles.actionButton}
-              onPress={handleShowQR}
-              activeOpacity={0.7}
-            >
-              <View style={styles.actionButtonContent}>
-                <AppText style={styles.actionButtonText}>DM QR</AppText>
-              </View>
-            </AppTouchable>
 
-            {/* Start DM Button */}
-            <AppTouchable
-              style={[styles.actionButton, styles.primaryActionButton]}
-              onPress={handleShowStartDM}
-              activeOpacity={0.7}
-            >
-              <AppText style={styles.primaryActionButtonText}>
-                Start DM
-              </AppText>
-            </AppTouchable>
           </View>
 
           {/* Sync Inbox Button */}
-          <View style={styles.syncButtonContainer}>
+          {/* <View style={styles.syncButtonContainer}>
             <AppTouchable
               style={[
                 styles.syncButton,
@@ -499,7 +526,7 @@ function Community() {
                 </AppText>
               )}
             </AppTouchable>
-          </View>
+          </View> */}
 
           <FlatList
             data={rooms}
@@ -508,17 +535,22 @@ function Community() {
             onRefresh={handleRefresh}
             refreshing={refreshing}
             ListEmptyComponent={
-              <EmptyStateView
-                title={community.noConnectionTitle}
-                subTitle={community.noConnectionSubTitle}
-                IllustartionImage={
-                  isThemeDark ? (
-                    <EmptyCommunityIllustration />
-                  ) : (
-                    <EmptyCommunityIllustrationLight />
-                  )
-                }
-              />
+              <>
+                <EmptyStateView
+                  title={community.noConnectionTitle}
+                  subTitle={community.noConnectionSubTitle}
+                  IllustartionImage={
+                    isThemeDark ? (
+                      <EmptyCommunityIllustration />
+                    ) : (
+                      <EmptyCommunityIllustrationLight />
+                    )
+                  }
+                />
+                <AppText variant="heading3" style={styles.pullText}>
+                  Pull down to sync inbox
+                </AppText>
+              </>
             }
             style={styles.flatList}
             ItemSeparatorComponent={ItemSeparatorComponent}
@@ -707,9 +739,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.mutedTab,
       paddingTop: hp(10),
     },
-    roomImageContainer: {
-      position: 'relative',
-    },
+    roomImageContainer: {},
     roomImage: {
       height: wp(50),
       width: wp(50),
@@ -751,6 +781,8 @@ const getStyles = (theme: AppTheme) =>
     },
     roomInfo: {
       flex: 1,
+      marginHorizontal: wp(10),
+      marginVertical: hp(5),
     },
 
     // Action buttons
@@ -1050,6 +1082,11 @@ const getStyles = (theme: AppTheme) =>
     loadingText: {
       marginTop: hp(12),
       color: theme.colors.text,
+    },
+    pullText: {
+      color: theme.colors.secondaryHeadingColor,
+      alignSelf: 'center',
+      marginTop: hp(5),
     },
   });
 

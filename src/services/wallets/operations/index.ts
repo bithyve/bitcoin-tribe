@@ -75,6 +75,8 @@ const updateOutputsForFeeCalculation = (outputs, network) => {
               ? bitcoinJS.networks.bitcoin
               : network === NetworkType.REGTEST
               ? bitcoinJS.networks.regtest
+              : network === NetworkType.TESTNET4
+              ? bitcoinJS.networks.testnet
               : bitcoinJS.networks.testnet,
           ).length + 3,
       };
@@ -738,6 +740,7 @@ export default class WalletOperations {
     // configure to procure fee by network type
     const averageTxFeeByNetwork: AverageTxFeesByNetwork = {
       [NetworkType.TESTNET]: averageTxFees,
+      [NetworkType.TESTNET4]: averageTxFees,
       [NetworkType.MAINNET]: averageTxFees,
       [NetworkType.REGTEST]: this.regtestFeeRates(),
     };

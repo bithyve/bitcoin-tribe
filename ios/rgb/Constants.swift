@@ -8,6 +8,7 @@ class Constants {
     let rgbDirName = ".rgb"
 
     let testnetElectrumUrl = "ssl://electrum.iriswallet.com:50013"
+    let testnet4ElectrumUrl = "ssl://electrum.iriswallet.com:50053"
     let regtestElectrumUrl = "electrum.rgbtools.org:50041"
     let mainnetElectrumUrl = "ssl://electrum.iriswallet.com:50003"
     let rgbHttpJsonRpcProtocol = "rgbhttpjsonrpc:"
@@ -34,6 +35,8 @@ class Constants {
         switch network {
         case "TESTNET":
             return testnetElectrumUrl
+        case "TESTNET4":
+            return testnet4ElectrumUrl
         case "REGTEST":
             return regtestElectrumUrl
         case "MAINNET":

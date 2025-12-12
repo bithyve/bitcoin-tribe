@@ -60,6 +60,7 @@ export default function UTXOTabs() {
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{ width: layout.width }}
+        animationEnabled={false}
       />
       <View>
         <UTXOInfoModal

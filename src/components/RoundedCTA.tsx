@@ -45,11 +45,11 @@ function RoundedCTA(props: RoundedCTAProps) {
         icon={() => icon}
         // mode="outlined"
         uppercase={false}
-        labelStyle={[styles.roundedCTATitle, styles.labelStyle]}
+        labelStyle={[styles.roundedCTATitle, styles.labelStyle, {color:textColor}]}
         style={styles.ctaContainerStyle}
         contentStyle={styles.contentStyle}
         // buttonColor={buttonColor}
-        textColor={textColor}
+        // textColor={textColor}
         maxFontSizeMultiplier={1}
         disabled={disabled}>
         {title}

@@ -39,6 +39,7 @@ import Infinity from 'src/assets/images/infinity.svg';
 import InfinityLight from 'src/assets/images/infinityLight.svg';
 import SelectOption from 'src/components/SelectOption';
 import config from 'src/utils/config';
+import FastImage from 'react-native-fast-image';
 
 const CollectionDetailsScreen = () => {
   const insets = useSafeAreaInsets();
@@ -120,14 +121,14 @@ const CollectionDetailsScreen = () => {
     return (
       <>
         <MintedCtr />
-        <Image
+        <FastImage
           source={{
             uri: supportNetworkImage(headerImage),
           }}
           resizeMode="cover"
           style={styles.bannerImage}
         />
-        <Image
+        <FastImage
           source={{
             uri: mediaPath,
           }}
@@ -276,11 +277,9 @@ const getStyles = (theme: AppTheme, insets) =>
       paddingBottom: insets.bottom,
     },
     bannerImage: {
-      paddingTop: 20,
       height: hp(210),
       width: '100%',
       borderWidth: 1,
-      paddingHorizontal: hp(16),
       borderBottomLeftRadius: 14,
       borderBottomRightRadius: 14,
     },
@@ -326,7 +325,7 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
       position: 'absolute',
       right: wp(16),
-      top: hp(290),
+      top: hp(220),
     },
     addNewIconWrapper: {
       position: 'absolute',

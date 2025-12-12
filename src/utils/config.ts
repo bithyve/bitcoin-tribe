@@ -32,7 +32,6 @@ class Configuration {
   public RELAY_URL: string = config.RELAY;
   public RELAY_VERSION: string = 'v1';
   public RELAY: string = `${this.RELAY_URL}/api/${this.RELAY_VERSION}`;
-  public SENTRY_DNS: string = config.SENTRY_DNS || '';
   public TWITTER_CLIENT_ID: string = 'ZjA1RnRiSEFfNm1ESGFuY21hM1I6MTpjaQ';
   public TRIBE_FCM_BROADCAST_CHANNEL: string =
     config.TRIBE_FCM_BROADCAST_CHANNEL;
@@ -54,7 +53,7 @@ class Configuration {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
     this.NETWORK_TYPE =
       this.ENVIRONMENT === APP_STAGE.DEVELOPMENT
-        ? NetworkType.REGTEST
+        ? NetworkType.TESTNET4
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
     this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
@@ -67,6 +66,8 @@ class Configuration {
         return bitcoinJS.networks.bitcoin;
       case NetworkType.REGTEST:
         return bitcoinJS.networks.regtest;
+      case NetworkType.TESTNET4:
+        return bitcoinJS.networks.testnet;
       default:
         return bitcoinJS.networks.testnet;
     }

@@ -70,11 +70,12 @@ export const CreateGroup = () => {
     currentRoom,
     createRoom,
     error,
+    sendDMInvitation,
   } = useChat();
 
   // Navigate to chat when room is created/joined
   useEffect(() => {
-    if (currentRoom) {
+    if (currentRoom && currentRoom.roomType != HolepunchRoomType.INBOX) {
       (navigation as any).navigate(NavigationRoutes.CHAT, {
         roomId: currentRoom.roomId,
       });
@@ -91,17 +92,34 @@ export const CreateGroup = () => {
 
   const joinRoomWithParams = async params => {
     try {
-      const { roomKey, roomName, roomType, roomDescription } = params as any;
+      const {
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      } = params as any;
+      console.log({
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      });
       navigation.setParams(null);
       setIndex(1);
-      if (!roomKey || !roomType || !roomDescription || !roomName) {
+      if (!roomType) {
         Toast('Invalid group link', true);
         return;
       }
 
       // If ready, join immediately
       if (!isInitializing && isRootPeerConnected) {
-        createRoom(roomName, roomType, roomDescription, '', roomKey);
+        if (roomType == HolepunchRoomType.GROUP)
+          createRoom(roomName, roomType, roomDescription, '', roomKey);
+        else await joinDm(publicKey, contactName);
         return;
       }
 
@@ -124,16 +142,32 @@ export const CreateGroup = () => {
   useEffect(() => {
     if (!pendingJoinRef.current) return;
     if (!isInitializing && isRootPeerConnected) {
-      const { roomKey, roomName, roomType, roomDescription } =
-        pendingJoinRef.current;
+      const {
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      } = pendingJoinRef.current;
       pendingJoinRef.current = null;
       if (pendingTimeoutRef.current) {
         clearTimeout(pendingTimeoutRef.current);
         pendingTimeoutRef.current = null;
       }
-      createRoom(roomName, roomType, roomDescription, '', roomKey);
+      if (roomType == HolepunchRoomType.GROUP)
+        createRoom(roomName, roomType, roomDescription, '', roomKey);
+      else joinDm(publicKey, contactName);
     }
   }, [isInitializing, isRootPeerConnected]);
+
+  const joinDm =async (publicKey, contactName)=>{
+    const dmRoom = await sendDMInvitation(publicKey, contactName);
+    (navigation as any).navigate(NavigationRoutes.CHAT, {
+      roomId: dmRoom.roomId,
+    });
+    return;
+  }
 
   return (
     <ScreenContainer>
@@ -147,6 +181,7 @@ export const CreateGroup = () => {
       />
 
       <TabView
+        animationEnabled={false}
         renderTabBar={props => <TabHeader {...props} />}
         navigationState={{ index, routes }}
         renderScene={SceneMap({

@@ -20,6 +20,7 @@ import AssetIcon from './AssetIcon';
 import Colors from 'src/theme/Colors';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
+import FastImage from 'react-native-fast-image';
 
 type AssetCardProps = {
   asset: Asset;
@@ -109,7 +110,7 @@ const AssetCard = (props: AssetCardProps) => {
               />
             ) : (
               <>
-                <Image
+                <FastImage
                   source={{uri: uri}}
                   style={styles.imageStyle}
                   onLoadStart={() => setImageLoading(true)}

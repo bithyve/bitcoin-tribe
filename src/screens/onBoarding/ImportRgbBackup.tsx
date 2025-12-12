@@ -7,7 +7,7 @@ import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import ImportBackup from 'src/assets/images/import_rgb_backup.svg';
 import { hp } from 'src/constants/responsive';
-import { pickSingle } from 'react-native-document-picker';
+import { keepLocalCopy, pick } from '@react-native-documents/picker';
 import UploadFile from 'src/assets/images/uploadFile.svg';
 import UploadAssetFileButton from '../collectiblesCoins/components/UploadAssetFileButton';
 import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
@@ -70,27 +70,30 @@ const ImportRgbBackup = () => {
   }, [status]);
 
   const pickFile = async () => {
-    pickSingle({
+    const file = await pick({
       transitionStyle: 'flipHorizontal',
-      copyTo: 'documentDirectory',
       mode: 'import',
-    }).then(res => {
-      console.log(res);
-      if (
-        res &&
-        res.fileCopyUri.substring(res.fileCopyUri.lastIndexOf('.')) ===
-          '.rgb_backup'
-      ) {
-        setVisibleLoader(true);
-        mutateAsync({
-          mnemonic: route.params.mnemonic,
-          filePath: res.fileCopyUri.replace('file://', ''),
-        });
-      } else {
-        setVisibleLoader(false);
-        Toast('Invalid RGB backup file', true);
-      }
+      allowMultiSelection: false,
     });
+    const [res] = await keepLocalCopy({
+      files: [
+        {
+          uri: file[0].uri,
+          fileName: file[0].name,
+        },
+      ],
+      destination: 'documentDirectory',
+    });
+    if ( res && file[0].name.split(".")[1] =='rgb_backup') {
+      setVisibleLoader(true);
+       mutateAsync({
+         mnemonic: route.params.mnemonic,
+         filePath: res.localUri.replace('file://', ''),
+       });
+    } else {
+      setVisibleLoader(false);
+      Toast('Invalid RGB backup file', true);
+    }
   };
 
   return (

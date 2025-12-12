@@ -6,7 +6,7 @@ import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -20,13 +20,12 @@ export const AppImageBackupStatusType = {
   idle: 'idle',
 } as const;
 
-export const AppImageBackupBanner = () => {
+export const AppImageBackupBanner = ({modalVisible,setModalVisible}) => {
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const [visible, setVisible] = useState(false);
   const [isAppImageBackupError] = useMMKVBoolean(Keys.IS_APP_IMAGE_BACKUP_ERROR);
 
   const onPress = React.useCallback(() => {
@@ -36,7 +35,7 @@ export const AppImageBackupBanner = () => {
   const tapView = useMemo(() => {
     return (
       <AppTouchable
-        onPress={() => setVisible(true)}
+        onPress={() => setModalVisible(true)}
         style={styles.tapViewWrapper}>
         <TapInfoIcon />
       </AppTouchable>
@@ -55,8 +54,8 @@ export const AppImageBackupBanner = () => {
       </AppTouchable>
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
             {common.appImageBackupFailureTooltip}
@@ -70,22 +69,12 @@ export const AppImageBackupBanner = () => {
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     errorContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
-      zIndex: 1000,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '100%',
+      width: windowWidth,
       paddingHorizontal: wp(16),
-      backgroundColor:Colors.FireOpal
+      backgroundColor:Colors.FireOpal,
+      height:hp(25)
     },
     text: {
       color: 'white',

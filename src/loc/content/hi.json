@@ -94,7 +94,8 @@
     "communityServerUnavailable": "समुदाय सर्वर वर्तमान में अनुपलब्ध या पहुंच योग्य नहीं है।",
     "connectedToCommunityServer": "समुदाय सर्वर से जुड़ा हुआ",
     "communityServerOffline": "समुदाय सर्वर ऑफ़लाइन",
-    "communityServerOnline": "समुदाय सर्वर ऑनलाइन"
+    "communityServerOnline": "समुदाय सर्वर ऑनलाइन",
+    "connectingToCommunityServer": "समुदाय सर्वर से कनेक्ट हो रहा है..."
   },
   "onBoarding": {
     "welcome": "स्वागत है",
@@ -684,6 +685,7 @@
     "assetRegistrySubTitle2": "एक बार की सेवा लागत ",
     "assetRegistrySubTitle3": " लागू होता है। अभी पंजीकरण के लिए तैयार नहीं हैं? आप पंजीकरण छोड़ सकते हैं और फिर भी Twitter पर पोस्ट कर सकते हैं।",
     "sharePostTitle": "X पर पोस्ट साझा करें",
+    "postDeletedOrUnavailable": "यह पोस्ट हटा दी गई है या अब उपलब्ध नहीं है।",
     "verificationTitle": "सत्यापन",
     "payServiceFeeFundError": "अपर्याप्त बैलेंस। कृपया सेवा लागत को कवर करने के लिए अपने वॉलेट में कम से कम 20,000 सैट्स सुनिश्चित करें।",
     "recordCard": "DNS रिकॉर्ड विवरण",

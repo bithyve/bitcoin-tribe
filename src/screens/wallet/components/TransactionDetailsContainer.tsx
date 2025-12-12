@@ -38,7 +38,7 @@ function TransactionDetailsContainer(props: WalletTransactionsProps) {
   const redirectToBlockExplorer = () => {
     if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
       const url = `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+        config.NETWORK_TYPE === NetworkType.TESTNET4 ? '/testnet4' : ''
       }/tx/${transaction.txid}`;
 
       navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
