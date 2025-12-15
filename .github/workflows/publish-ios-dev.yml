@@ -122,6 +122,21 @@ jobs:
           echo "SLACK_URL=${{ secrets.SLACK_URL }}" >> $GITHUB_ENV
           echo "SLACK_ACCESS_TOKEN=${{ secrets.SLACK_ACCESS_TOKEN }}" >> $GITHUB_ENV
 
+      - name: DEBUG – force Xcode to show signing errors
+        run: |
+          cd ios
+          xcodebuild archive \
+            -workspace tribe.xcworkspace \
+            -scheme tribe-dev \
+            -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath /tmp/tribe-dev.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGNING_REQUIRED=YES \
+            CODE_SIGNING_ALLOWED=YES \
+            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
+            | tee /tmp/archive.log
+
       # 6️⃣ Fastlane – Build & Upload to TestFlight
       - name: Run Fastlane to upload to TestFlight
         id: fastlane_step
