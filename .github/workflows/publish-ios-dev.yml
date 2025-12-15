@@ -73,7 +73,7 @@ jobs:
 
       - name: Set up Fastlane environment variables
         run: |
-          echo "FASTLANE_DISABLE_COLORS=1 >> $GITHUB_ENV
+          echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
           echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "FASTLANE_APP_STORE_CONNECT_API_KEY_ID=${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
