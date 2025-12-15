@@ -1,0 +1,86 @@
+name: Publish iOS dev app to TestFlight
+
+on:
+  push:
+    branches:
+      - testiOSDeploymentDev
+  workflow_dispatch:
+
+jobs:
+  ios-dev:
+    runs-on: macos-15.6
+
+    env:
+      FASTLANE_DISABLE_COLORS: "1"
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      FASTLANE_APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+
+    steps:
+      # 1️⃣ Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2️⃣ Setup Node
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: yarn
+
+      # 3️⃣ Install JS dependencies
+      - name: Install JS dependencies
+        run: yarn install
+
+      # 4️⃣ Setup Ruby
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Ensure Correct Bundler Version
+        run: bundler -v  
+
+      - name: Install Fastlane dependencies
+        run: |
+          cd ios
+          bundle config set --local path 'vendor/bundle'
+          bundle check || bundle install
+      
+      - name: Debug Installed Gems
+        run: bundle list
+
+      - name: Decode App Store API Key
+        run: |
+          mkdir -p ios/fastlane
+          echo "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ios/fastlane/AuthKey.p8
+          ls -la ios/fastlane/
+
+      # 5️⃣ Install CocoaPods
+      - name: Install CocoaPods
+        run: |
+          cd ios
+          pod install
+
+      # 6️⃣ Fastlane – Build & Upload to TestFlight
+      - name: Run Fastlane to upload to TestFlight
+        id: fastlane_step
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
+        run: |
+          bundle exec fastlane github_actions_dev --env dev
+
+      - name: Cleanup
+        if: always()
+        run: rm -rf ./fastlane/AuthKey.p8
+
+
