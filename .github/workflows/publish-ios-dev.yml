@@ -69,6 +69,7 @@ jobs:
         run: |
           cd ios
           pod install
+          cd ..
 
       # 6️⃣ Fastlane – Build & Upload to TestFlight
       - name: Run Fastlane to upload to TestFlight
@@ -76,6 +77,7 @@ jobs:
         env:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
         run: |
+          cd ios
           bundle exec fastlane github_actions_dev --env dev
 
       - name: Cleanup
