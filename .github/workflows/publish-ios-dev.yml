@@ -77,6 +77,11 @@ jobs:
           pod install
           cd ..
 
+      - name: Select Xcode 16.2
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.2.app
+          xcodebuild -version
+
       - name: Set up Fastlane environment variables
         run: |
           echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
