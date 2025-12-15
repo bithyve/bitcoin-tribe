@@ -20,6 +20,11 @@ jobs:
       MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
 
     steps:
+
+      - name: Debug match repo access
+        run: |
+          git ls-remote "$MATCH_GIT_URL" || echo "❌ Cannot access match repo"
+  
       # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
