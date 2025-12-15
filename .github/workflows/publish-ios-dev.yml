@@ -66,18 +66,22 @@ jobs:
           chmod 600 ios/fastlane/AuthKey.p8
           ls -la ios/fastlane/
 
+      - name: Select Xcode 16.4
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app
+          xcodebuild -version
+
+      - name: Check installed iOS SDKs
+        run: |
+          xcodebuild -showsdks
+
       # 5️⃣ Install CocoaPods
       - name: Install CocoaPods
         run: |
           cd ios
           pod install
           cd ..
-
-      - name: Select Xcode 16.2
-        run: |
-          sudo xcode-select -s /Applications/Xcode_16.2.app
-          xcodebuild -version
-
+  
       - name: Set up Fastlane environment variables
         run: |
           echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
