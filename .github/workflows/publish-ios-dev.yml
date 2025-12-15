@@ -33,6 +33,32 @@ jobs:
         with:
           node-version: 23.5.0
 
+      - name: Download rgb_libFFI XCFramework
+        run: |
+          set -e
+
+          mkdir -p ios/rgb
+          cd ios/rgb
+
+          echo "⬇️ Downloading rgb_libFFI.xcframework..."
+          curl -L \
+            https://github.com/RGB-Tools/rgb-lib-swift/releases/download/0.3.0-beta.4/rgb_libFFI.xcframework.zip \
+            -o rgb_libFFI.xcframework.zip
+
+          echo "📦 Extracting..."
+          unzip -o rgb_libFFI.xcframework.zip
+
+          echo "🧹 Cleaning up zip"
+          rm rgb_libFFI.xcframework.zip
+
+          echo "✅ Contents of ios/rgb:"
+          ls -la
+
+      - name: Verify rgb_libFFI.xcframework exists
+        run: |
+          test -d ios/rgb/rgb_libFFI.xcframework || \
+          (echo "❌ rgb_libFFI.xcframework missing" && exit 1)
+
       # 3️⃣ Install JS dependencies
       - name: Install JS dependencies
         run: yarn install
