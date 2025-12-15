@@ -8,7 +8,7 @@ on:
 
 jobs:
   ios-dev:
-    runs-on: macos-15.6
+    runs-on: macos-latest
 
     env:
       FASTLANE_DISABLE_COLORS: "1"
@@ -31,7 +31,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: yarn
 
       # 3️⃣ Install JS dependencies
       - name: Install JS dependencies
