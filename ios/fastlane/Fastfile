@@ -138,7 +138,7 @@ platform :ios do
       readonly: true,                       
       git_url: ENV["MATCH_GIT_URL"],        
       app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-      team_id: ENV["APPLE_TEAM_ID"]
+      team_id: ENV["APPLE_TEAM_ID"],
       keychain_name: "ci.keychain",
       keychain_password: ENV["KEYCHAIN_PASSWORD"]
     )
@@ -210,8 +210,8 @@ after_all do |lane|
   end
 
   error do |lane, exception|
-    slack(
-      message: exception.message,
-      success:false
-    )
+    # slack(
+    #   message: exception.message,
+    #   success:false
+    # )
   end
