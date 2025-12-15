@@ -523,9 +523,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = tribe/tribe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 258;
-				DEVELOPMENT_TEAM = Y5TCB759QL;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = tribe/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Tribe;
@@ -543,6 +545,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bithyve.tribe;
 				PRODUCT_NAME = tribe;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.bithyve.tribe";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -581,7 +584,7 @@
 				PRODUCT_NAME = tribe;
 				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Tribe RGB Production";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.bithyve.tribe";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;
@@ -598,9 +601,11 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "tribe-dev.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 258;
-				DEVELOPMENT_TEAM = Y5TCB759QL;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Tribe Dev";
@@ -618,6 +623,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.bithyve.tribe.dev;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.bithyve.tribe.dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -657,7 +663,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "079eeab3-0d4c-41a0-a7c7-a201f9bfbb43";
 				PROVISIONING_PROFILE_SPECIFIER = "com.bithyve.tribe AppStore";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "tribe-dev";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.bithyve.tribe.dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "rgb/tribe-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "tribe-Swift.h";
 				SWIFT_VERSION = 5.0;

@@ -148,6 +148,8 @@ platform :ios do
       scheme: "tribe-dev",
       clean: true,
       output_directory: "./builds",
+      export_method:'app-store',
+      xcargs: "-verbose"
     )
     upload_to_testflight(api_key: api_key)
     clean_build_artifacts
