@@ -130,8 +130,7 @@ platform :ios do
 
     content.each_line do |line|
       next if line.strip.empty? || line.start_with?("#")
-      key = line.split("=").first
-      UI.message("• #{key}=***")
+      UI.message("#{line}")
     end
     # --------------
 

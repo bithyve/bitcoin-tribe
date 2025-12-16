@@ -54,6 +54,11 @@ jobs:
             https://api.github.com/repos/bithyve/bitcoin-tribe-envs/contents/DEVELOPMENT/.env.app \
             -o .env
 
+      - name: Show downloaded env (keys only)
+        run: |
+          echo "==== .env keys ===="
+          sed -E 's/=.*$/=***/' .env
+  
       # 2️⃣ Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
