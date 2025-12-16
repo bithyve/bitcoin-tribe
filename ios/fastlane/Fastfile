@@ -109,15 +109,23 @@ platform :ios do
     unless ENV["GITHUB_TOKEN"] && !ENV["GITHUB_TOKEN"].strip.empty?
     UI.user_error!("❌ GITHUB_TOKEN is missing. Exiting lane.")
     end
-    UI.success("✅ GITHUB_TOKEN is present")
+    UI.message("🔐 GITHUB_TOKEN is present")
 
     file_name = "../../.env"
-    file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app"
+    file_url  = "https://api.github.com/repos/bithyve/bitcoin-tribe-envs/contents/.env.app?ref=DEVELOPMENT"
     auth_header = "Authorization: token #{ENV["GITHUB_TOKEN"]}"
+    UI.user_error!("❌ GITHUB_TOKEN missing") if ENV["GITHUB_TOKEN"].to_s.strip.empty?
     sh(
-      "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
-      step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
+      %Q(
+        curl -f -L \
+          -H "Authorization: Bearer #{ENV['GITHUB_TOKEN']}" \
+          -H "Accept: application/vnd.github.v3.raw" \
+          -o "#{file_name}" \
+          "#{file_url}"
+      ),
+      step_name: "Download .env from env repo"
       )
+
       UI.message("✅ .env download attempted")
     # ---- VERIFY FILE EXISTS ----
     if File.exist?(file_name)
