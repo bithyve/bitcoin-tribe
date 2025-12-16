@@ -9,11 +9,11 @@ on:
 jobs:
   ios-dev:
     runs-on: macos-latest
-
+    permissions:
+      contents: read 
     env:
       FASTLANE_DISABLE_COLORS: "1"
       MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
       FASTLANE_APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}
       APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
       APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
@@ -25,7 +25,6 @@ jobs:
         run: |
           echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
           echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
           echo "FASTLANE_APP_STORE_CONNECT_API_KEY_ID=${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
           echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
           echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
@@ -49,11 +48,11 @@ jobs:
 
       - name: Download env file
         run: |
-          curl -f -L \
-            -H "Authorization: Bearer ${{secrets.GITHUB_TOKEN}}" \
+          curl -L \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3.raw" \
-            -o .env \
-            https://api.github.com/repos/bithyve/bitcoin-tribe-envs/contents/.env.app?ref=DEVELOPMENT
+            https://api.github.com/repos/bithyve/bitcoin-tribe-envs/contents/DEVELOPMENT/.env.app \
+            -o .env
 
       # 2️⃣ Setup Node
       - name: Setup Node.js
