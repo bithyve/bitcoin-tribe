@@ -46,6 +46,17 @@ jobs:
         with:
           fetch-depth: 0
 
+
+      - name: Sanity check GITHUB_TOKEN presence
+        run: |
+          if [ -z "${GITHUB_TOKEN}" ]; then
+            echo "❌ GITHUB_TOKEN is empty"
+            exit 1
+          fi
+          echo "✅ GITHUB_TOKEN is present"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Download env file
         run: |
           curl -L \
