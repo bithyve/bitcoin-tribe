@@ -113,7 +113,34 @@ platform :ios do
       "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
       step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
       )
-      
+
+      UI.message("✅ .env download attempted")
+    # ---- VERIFY FILE EXISTS ----
+    if File.exist?(file_name)
+      UI.success("✅ .env file exists at #{file_name}")
+    else
+      UI.user_error!("❌ .env file does NOT exist at #{file_name}")
+    end
+
+    # ---- VERIFY FILE IS NOT EMPTY ----
+    content = File.read(file_name).strip
+
+    if content.empty?
+      UI.user_error!("❌ .env file is EMPTY")
+    else
+      UI.success("✅ .env file has content")
+    end
+
+    # ---- SAFE PREVIEW (no secrets leak) ----
+    UI.message("🔎 .env preview (keys only):")
+
+    content.each_line do |line|
+      next if line.strip.empty? || line.start_with?("#")
+      key = line.split("=").first
+      UI.message("• #{key}=***")
+    end
+    # --------------
+
     ENV["FASTLANE_DISABLE_COLORS"] = "1"
 
     UI.message("APPLE_TEAM_ID env: #{ENV['APPLE_TEAM_ID'] ? 'SET' : 'MISSING'}")
@@ -127,24 +154,24 @@ platform :ios do
       is_key_content_base64: false
     )
 
-    # create_keychain(
-    #   name: "temp_keychain",
-    #   password: ENV["KEYCHAIN_PASSWORD"],
-    #   default_keychain: true,
-    #   unlock: true,
-    #   timeout: 3600,
-    #   add_to_search_list: true
-    # )
+    create_keychain(
+      name: "temp_keychain",
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
 
-    # match(
-    #   type: "appstore",                     
-    #   readonly: true,                       
-    #   git_url: ENV["MATCH_GIT_URL"],        
-    #   app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-    #   team_id: ENV["APPLE_TEAM_ID"],
-    #   keychain_name: "temp_keychain",
-    #   keychain_password: ENV["KEYCHAIN_PASSWORD"]
-    # )
+    match(
+      type: "appstore",                     
+      readonly: true,                       
+      git_url: ENV["MATCH_GIT_URL"],        
+      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+      team_id: ENV["APPLE_TEAM_ID"],
+      keychain_name: "temp_keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+    )
 
     build_app(
       workspace: "tribe.xcworkspace",
@@ -208,47 +235,11 @@ platform :ios do
     build_number = get_build_number(xcodeproj: "tribe.xcodeproj")
     UI.success("✅ Live build successfully uploaded to TestFlight! Build Number: #{build_number}")
   end
-
-  desc "Create a temporary keychain"
-  lane :create_temp_keychain do
-    UI.message("Creating a temporary keychain...")
-
-    create_keychain(
-      name: "temp_keychain",
-      password: ENV["KEYCHAIN_PASSWORD"],
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600
-    )
-
-    UI.message("Temporary keychain created successfully.")
-  end
-
-  desc "Synchronize certificates and provisioning profiles"
-  lane :setup_provisioning_profiles do
-    required_vars = ["MATCH_GIT_URL", "APPLE_TEAM_ID", "KEYCHAIN_PASSWORD"]
-    required_vars.each do |var|
-      UI.user_error!("Missing required environment variable: #{var}") unless ENV[var]
-    end
-    UI.message("Setting up provisioning profiles...")
-    match(
-      type: "appstore",                     
-      readonly: true,                       
-      git_url: ENV["MATCH_GIT_URL"],        
-      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-      team_id: ENV["APPLE_TEAM_ID"],
-      keychain_name: "temp_keychain",
-      keychain_password: ENV["KEYCHAIN_PASSWORD"],
-      clone_branch_directly: true
-    )
-    UI.success("Successfully fetched provisioning profile")
-  end
-
 end
 
 after_all do |lane|
   buildNumber = get_build_number() 
-  slack(message: "Build success :rocket: \nBuild Number: " + buildNumber.to_s)
+  # slack(message: "Build success :rocket: \nBuild Number: " + buildNumber.to_s)
   end
 
   error do |lane, exception|

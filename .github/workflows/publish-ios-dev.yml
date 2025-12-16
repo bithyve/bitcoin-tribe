@@ -77,6 +77,20 @@ jobs:
       - name: Install JS dependencies
         run: yarn install
 
+      - name: Cache node_modules
+        id: modules-cache
+        uses: actions/cache@v3
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+
+      - name: Install Deps if necessary
+        if: steps.modules-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: yarn install
+
       # 4️⃣ Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
@@ -118,21 +132,23 @@ jobs:
           xcodebuild -showsdks
 
       # 5️⃣ Install CocoaPods
-      - name: Install CocoaPods
+      - name: Cache Pods
+        uses: actions/cache@v3
+        id: pods-cache
+        with:
+          path: ./ios/Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+
+      - name: Install pods
+        if: steps.pods-cache.outputs.cache-hit != 'true'
+        shell: bash
         run: |
-          cd ios
-          pod install
+          cd ios/
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
           cd ..
-
-      - name: Create Temporary Keychain
-        run: |
-          cd ios
-          bundle exec fastlane ios create_temp_keychain
-
-      - name: Setup Provisioning Profiles
-        run: |
-          cd ios
-          bundle exec fastlane ios setup_provisioning_profiles
 
       # 6️⃣ Fastlane – Build & Upload to TestFlight
       - name: Run Fastlane to upload to TestFlight
