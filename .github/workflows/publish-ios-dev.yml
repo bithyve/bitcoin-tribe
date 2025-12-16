@@ -21,6 +21,20 @@ jobs:
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
 
     steps:
+      - name: Set up Fastlane environment variables
+        run: |
+          echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
+          echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
+          echo "FASTLANE_APP_STORE_CONNECT_API_KEY_ID=${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
+          echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
+          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
+          echo "BUNDLE_IDENTIFIER=com.bithyve.tribe.dev" >> $GITHUB_ENV
+          echo "MATCH_GIT_URL=${{ secrets.MATCH_GIT_URL }}" >> $GITHUB_ENV
+          echo "FASTLANE_APPLE_ID=${{ secrets.FASTLANE_APPLE_ID }}" >> $GITHUB_ENV
+          echo "SLACK_URL=${{ secrets.SLACK_URL }}" >> $GITHUB_ENV
+          echo "SLACK_ACCESS_TOKEN=${{ secrets.SLACK_ACCESS_TOKEN }}" >> $GITHUB_ENV    
+
       # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -107,35 +121,14 @@ jobs:
           cd ios
           pod install
           cd ..
-  
-      - name: Set up Fastlane environment variables
-        run: |
-          echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
-          echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
-          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
-          echo "FASTLANE_APP_STORE_CONNECT_API_KEY_ID=${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
-          echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
-          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
-          echo "BUNDLE_IDENTIFIER=com.bithyve.tribe.dev" >> $GITHUB_ENV
-          echo "MATCH_GIT_URL=${{ secrets.MATCH_GIT_URL }}" >> $GITHUB_ENV
-          echo "FASTLANE_APPLE_ID=${{ secrets.FASTLANE_APPLE_ID }}" >> $GITHUB_ENV
-          echo "SLACK_URL=${{ secrets.SLACK_URL }}" >> $GITHUB_ENV
-          echo "SLACK_ACCESS_TOKEN=${{ secrets.SLACK_ACCESS_TOKEN }}" >> $GITHUB_ENV
 
-      - name: DEBUG – force Xcode to show signing errors
+      - name: Create Temporary Keychain
+        run: bundle exec fastlane ios create_temp_keychain
+
+      - name: Setup Provisioning Profiles
         run: |
           cd ios
-          xcodebuild archive \
-            -workspace tribe.xcworkspace \
-            -scheme tribe-dev \
-            -configuration Release \
-            -destination 'generic/platform=iOS' \
-            -archivePath /tmp/tribe-dev.xcarchive \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGNING_REQUIRED=YES \
-            CODE_SIGNING_ALLOWED=YES \
-            DEVELOPMENT_TEAM=$APPLE_TEAM_ID \
-            | tee /tmp/archive.log
+          bundle exec fastlane ios setup_provisioning_profiles
 
       # 6️⃣ Fastlane – Build & Upload to TestFlight
       - name: Run Fastlane to upload to TestFlight

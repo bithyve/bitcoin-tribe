@@ -127,24 +127,24 @@ platform :ios do
       is_key_content_base64: false
     )
 
-    create_keychain(
-      name: "ci.keychain",
-      password: ENV["KEYCHAIN_PASSWORD"],
-      default_keychain: true,
-      unlock: true,
-      timeout: 3600,
-      add_to_search_list: true
-    )
+    # create_keychain(
+    #   name: "temp_keychain",
+    #   password: ENV["KEYCHAIN_PASSWORD"],
+    #   default_keychain: true,
+    #   unlock: true,
+    #   timeout: 3600,
+    #   add_to_search_list: true
+    # )
 
-    match(
-      type: "appstore",                     
-      readonly: true,                       
-      git_url: ENV["MATCH_GIT_URL"],        
-      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-      team_id: ENV["APPLE_TEAM_ID"],
-      keychain_name: "ci.keychain",
-      keychain_password: ENV["KEYCHAIN_PASSWORD"]
-    )
+    # match(
+    #   type: "appstore",                     
+    #   readonly: true,                       
+    #   git_url: ENV["MATCH_GIT_URL"],        
+    #   app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+    #   team_id: ENV["APPLE_TEAM_ID"],
+    #   keychain_name: "temp_keychain",
+    #   keychain_password: ENV["KEYCHAIN_PASSWORD"]
+    # )
 
     build_app(
       workspace: "tribe.xcworkspace",
@@ -207,6 +207,40 @@ platform :ios do
     clean_build_artifacts
     UI.success("✅ Live build successfully uploaded to TestFlight! Build Number: #{latest_testflight_build_number}")
   end
+
+  desc "Create a temporary keychain"
+  lane :create_temp_keychain do
+    UI.message("Creating a temporary keychain...")
+
+    create_keychain(
+      name: "temp_keychain",
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+    )
+
+    UI.message("Temporary keychain created successfully.")
+  end
+
+  desc "Synchronize certificates and provisioning profiles"
+  lane :setup_provisioning_profiles do
+    required_vars = ["MATCH_GIT_URL", "APPLE_TEAM_ID", "KEYCHAIN_PASSWORD"]
+    ensure_env_vars(required_vars)
+    UI.message("Setting up provisioning profiles...")
+    match(
+      type: "appstore",                     
+      readonly: true,                       
+      git_url: ENV["MATCH_GIT_URL"],        
+      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+      team_id: ENV["APPLE_TEAM_ID"],
+      keychain_name: "temp_keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+      clone_branch_directly: true,
+      )
+      log_success("Successfully fetched provisioning profile")
+  end
+
 end
 
 after_all do |lane|
