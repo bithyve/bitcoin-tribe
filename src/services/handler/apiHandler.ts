@@ -35,6 +35,7 @@ import {
   predefinedMainnetNodes,
   predefinedRegtestNodes,
   predefinedTestnetNodes,
+  predefinedTestnet4Nodes,
 } from '../electrum/predefinedNodes';
 import {
   AverageTxFees,
@@ -83,6 +84,8 @@ import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
+import  RealmDatabase  from 'src/storage/realm/realm';
+import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -471,13 +474,28 @@ export class ApiHandler {
       if (restore.error) {
         throw new Error(restore.error);
       } else {
+        const seed = bip39.mnemonicToSeedSync(mnemonic);
+        const publicId = WalletUtilities.getFingerprintFromSeed(seed);
+        let data;
+        let isRestore = false;
+        try {
+          const res = await Relay.getAppImage(publicId.toLowerCase());
+          if (res.status) {
+            data = res.app;
+            isRestore = true;
+          }
+        } catch (error) {
+          console.log('🚀 ~ GetAppImage error:',error);
+        }
+        // @ts-ignore
         await ApiHandler.setupNewApp({
-          appName: '',
+          appName: data?.name || '',
           appType: AppType.ON_CHAIN,
           pinMethod: PinMethod.DEFAULT,
           passcode: '',
-          walletImage: '',
+          walletImage: data?.imageUrl || '',
           mnemonic: mnemonic,
+          isRestore
         });
         dbManager.updateObjectByPrimaryId(
           RealmSchema.VersionHistory,
@@ -488,6 +506,12 @@ export class ApiHandler {
           },
         );
         // await ApiHandler.manageFcmVersionTopics();
+        await ApiHandler.restoreAppImage({
+          mnemonic,
+          settingsObject: data?.settingsObject,
+          roomsObject: data?.roomsObject,
+          tnxMetaObject: data?.tnxMetaObject,
+        });
       }
     } catch (error) {
       throw error;
@@ -545,6 +569,12 @@ export class ApiHandler {
             title: `Restored ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           },
         );
+        await ApiHandler.restoreAppImage({
+          mnemonic,
+          settingsObject: backup.app?.settingsObject,
+          roomsObject: backup.app?.roomsObject,
+          tnxMetaObject: backup.app?.tnxMetaObject,
+        });
         // await ApiHandler.manageFcmVersionTopics();
       } else {
         throw new Error(backup.error);
@@ -761,6 +791,8 @@ export class ApiHandler {
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
         ? predefinedRegtestNodes
+        : config.NETWORK_TYPE === NetworkType.TESTNET4
+        ? predefinedTestnet4Nodes
         : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
@@ -788,7 +820,7 @@ export class ApiHandler {
     });
   }
 
-  static async refreshWallets({ wallets }: { wallets: Wallet[] }) {
+  static async refreshWallets({ wallets, metaData= null }: { wallets: Wallet[], metaData:Object }) {
     try {
       if (
         ApiHandler.appType === AppType.NODE_CONNECT ||
@@ -833,7 +865,19 @@ export class ApiHandler {
 
         for (const synchedWallet of synchedWallets) {
           // if (!synchedWallet.specs.hasNewUpdates) continue; // no new updates found
-
+          if (metaData) {
+            const md = metaData;
+            synchedWallet.specs.transactions =
+              synchedWallet.specs.transactions.map(tnx =>
+                md[tnx.txid]
+                  ? {
+                      ...tnx,
+                      metadata: { ...md[tnx.txid] },
+                      transactionKind: TransactionKind.SERVICE_FEE,
+                    }
+                  : tnx,
+              );
+          }
           dbManager.updateObjectById(RealmSchema.Wallet, synchedWallet.id, {
             specs: synchedWallet.specs,
           });
@@ -979,6 +1023,13 @@ export class ApiHandler {
         specs: {
           transactions: transactions,
           ...wallet.specs,
+        },
+      });
+      ApiHandler.backupAppImage({
+        tnxMeta: {
+          txid,
+          // @ts-ignore
+          metaData: transactions[index].metadata,
         },
       });
       return true;
@@ -1657,7 +1708,7 @@ export class ApiHandler {
       dbManager.createObject(RealmSchema.Coin, {
         ...asset,
         addedAt: Date.now(),
-        issuedSupply: asset.issuedSupply.toString(),
+        issuedSupply: asset?.issuedSupply?.toString(),
         balance: {
           spendable: '0',
           future: '0',
@@ -2102,10 +2153,21 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetMetaData(
         assetId,
         ApiHandler.appType,
-        ApiHandler.api,
+        ApiHandler.api, 
       );
       if (response) {
-        response.issuedSupply = response.issuedSupply.toString();
+        if(response.maxSupply) {
+          response.maxSupply = response?.maxSupply.toString();
+        } 
+        if(response.issuedSupply) {
+          response.issuedSupply = response?.issuedSupply?.toString();
+        }
+        if(response.knownCirculatingSupply) {
+          response.knownCirculatingSupply = response?.knownCirculatingSupply?.toString();
+        }
+        if(response.initialSupply) {
+          response.initialSupply = response?.initialSupply?.toString();
+        }
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
           metaData: response,
         });
@@ -2921,7 +2983,6 @@ export class ApiHandler {
     assetId: string,
     schema: RealmSchema,
     asset: Asset,
-    verified: boolean,
   ): Promise<{ success: boolean; tweet?: any; reason?: string }> => {
     try {
       const response = await fetchAndVerifyTweet(tweetId);
@@ -2977,16 +3038,12 @@ export class ApiHandler {
         v => v.type === IssuerVerificationMethod.TWITTER_POST,
       );
 
-      const twitterEntry = existingAsset?.issuer?.verifiedBy?.find(
-        v => v.type === IssuerVerificationMethod.TWITTER,
-      );
-
       const twitterPostData = {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
-        id: twitterEntry?.id ?? '',
-        name: twitterEntry?.name ?? '',
-        username: twitterEntry?.username ?? '',
+        id: '',
+        name:  '',
+        username: '',
       };
 
       if (twitterPostIndex !== -1) {
@@ -2995,14 +3052,12 @@ export class ApiHandler {
         updatedVerifiedBy.push(twitterPostData);
       }
       let isVerified = false;
-      if (verified && twitterEntry) {
-        const relayResponse = await Relay.verifyIssuer(
-          'appID',
-          asset.assetId,
-          twitterPostData,
-        );
-        isVerified = relayResponse.status;
-      }
+      const relayResponse = await Relay.verifyIssuer(
+        'appID',
+        asset.assetId,
+        twitterPostData,
+      );
+      isVerified = relayResponse.status;
       await dbManager.updateObjectByPrimaryId(
         schema,
         'assetId',
@@ -3195,5 +3250,135 @@ export class ApiHandler {
       return response;
     }
     return { claimed: false, error: receiveData.error };
+  }
+
+  static async backupAppImage({
+    settings = false,
+    room = null,
+    all = false,
+    tnxMeta = null,
+  }: {
+    settings?: boolean;
+    room?: null | any;
+    all?: boolean;
+    tnxMeta?: null | { txid: string; metaData: object };
+  }) {
+    Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, false);
+    try {
+      const app: any = dbManager.getCollection(RealmSchema.TribeApp)[0];
+      const encryptionKey = generateEncryptionKey(app.primaryMnemonic);
+      let settingsObject = '';
+      let roomsObject = {};
+      let tnxMetaObject = {};
+
+      if (all || settings) {
+        const keys = [Keys.APP_CURRENCY, Keys.APP_LANGUAGE, Keys.CURRENCY_MODE];
+
+        settingsObject = Object.fromEntries(
+          keys
+            .map(key => [key, Storage.get(key)])
+            .filter(([, value]) => value !== undefined && value !== null),
+        );
+        settingsObject = encrypt(encryptionKey, JSON.stringify(settingsObject));
+      }
+
+      if (all) {
+        const rooms = dbManager.getCollection(RealmSchema.HolepunchRoom);
+        for (const index in rooms) {
+          const room = rooms[index];
+          const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
+          const encryptedRoomId = encrypt(encryptionKey, room.roomId);
+          roomsObject[encryptedRoomId] = encryptedRoom;
+        }
+
+        const transactions = getJSONFromRealmObject(
+          dbManager.getObjectByIndex(RealmSchema.Wallet),
+        ).specs?.transactions;
+        for (const tnx of transactions) {
+          if (Object.keys(tnx.metadata).length) {
+            const encryptedMeta = encrypt(
+              encryptionKey,
+              JSON.stringify(tnx.metadata),
+            );
+            tnxMetaObject[tnx.txid] = encryptedMeta;
+          }
+        }
+      } else {
+        if (room) {
+          const encryptedRoom = encrypt(encryptionKey, JSON.stringify(room));
+          const encryptedRoomId = encrypt(encryptionKey, room.roomId);
+          roomsObject[encryptedRoomId] = encryptedRoom;
+        }
+        if (tnxMeta?.txid && tnxMeta?.metaData) {
+          const encryptedMeta = encrypt(
+            encryptionKey,
+            JSON.stringify(tnxMeta.metaData),
+          );
+          tnxMetaObject[tnxMeta.txid] = encryptedMeta;
+        }
+      }
+
+      await Relay.createAppImageBackup(
+        app.authToken,
+        roomsObject,
+        settingsObject,
+        tnxMetaObject,
+      );
+      return {
+        status: true,
+        message: 'App image backup created successfully',
+      };
+    } catch (err) {
+      Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, true);
+      console.log('🚀 ~ ApiHandler ~ backupAppImage ~ err:', err);
+      return {
+        status: false,
+        message: 'App image backup failed',
+      };
+    }
+  }
+
+  static async restoreAppImage({
+    mnemonic,
+    settingsObject,
+    roomsObject,
+    tnxMetaObject,
+  }) {
+    const encryptionKey = generateEncryptionKey(mnemonic);
+    try {
+      if (settingsObject) {
+        const decrypted = decrypt(encryptionKey, settingsObject);
+        const decryptedData = JSON.parse(decrypted);
+        Object.entries(decryptedData).forEach(([key, value]: [Keys, any]) => {
+          Storage.set(key, value);
+        });
+      }
+      let rooms = [];
+      if (roomsObject) {
+        Object.entries(roomsObject).forEach(
+          ([key, value]: [string, string]) => {
+            const decryptedData = JSON.parse(decrypt(encryptionKey, value));
+            rooms.push(decryptedData);
+          },
+        );
+        RealmDatabase.createBulk(RealmSchema.HolepunchRoom, rooms, 'modified');
+      }
+      if (tnxMetaObject) {
+        let decryptedData = {};
+        Object.entries(tnxMetaObject).forEach(([key, value]) => {
+          const decryptedValue = JSON.parse(decrypt(encryptionKey, value));
+          decryptedData[key] = decryptedValue;
+        });
+        await ApiHandler.refreshWallets({
+          wallets: dbManager.getCollection(RealmSchema.Wallet),
+          metaData: decryptedData,
+        });
+      }
+    } catch (error) {
+      console.log('🚀 AppRestoreFailed: ', error);
+    }
+    // disabled first app image backup, since already restored from backup
+    if (settingsObject || roomsObject || tnxMetaObject)
+      Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
   }
 }

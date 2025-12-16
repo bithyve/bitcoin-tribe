@@ -10,8 +10,6 @@ import { useTheme } from 'react-native-paper';
 import {
   Alert,
   Linking,
-  Platform,
-  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -25,7 +23,6 @@ import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import CoinAssetsList from './components/CoinAssetsList';
 import HomeHeader from './components/HomeHeader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
@@ -35,7 +32,6 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import { AppContext } from 'src/contexts/AppContext';
 import {
   Asset,
-  AssetType,
   AssetVisibility,
   Coin,
   WalletOnlineStatus,
@@ -51,11 +47,10 @@ import {
 } from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage } from '@react-native-firebase/messaging';
-import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import DefaultCoin from './DefaultCoin';
-import RefreshControlView from 'src/components/RefreshControlView';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
+import { useMMKVBoolean } from 'react-native-mmkv';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -83,14 +78,15 @@ function HomeScreen() {
     setNodeConnected,
     setIsWalletOnline,
     isWalletOnline,
+    setWalletWentOnline
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
+  const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
       setBackupDone(true);
       setTimeout(() => {
-        setBackupDone(false);
         setManualAssetBackupStatus(true);
       }, 1500);
     },
@@ -142,6 +138,8 @@ function HomeScreen() {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
         const response = await ApiHandler.makeWalletOnline();
         setWalletOnline(response.status);
+        if(response.status)
+        setWalletWentOnline(true);
         setIsWalletOnline(
           response.status
             ? WalletOnlineStatus.Online
@@ -180,9 +178,6 @@ function HomeScreen() {
           setNodeInitStatus(false);
           if (prevStatus === NodeStatusType.IN_PROGRESS) {
             setNodeConnected(true);
-            setTimeout(() => {
-              setNodeConnected(false);
-            }, 1500);
           }
         } else {
           await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
@@ -199,9 +194,7 @@ function HomeScreen() {
     mutationFn: ApiHandler.refreshRgbWallet,
     onSuccess: () => {
       if (app?.appType === AppType.ON_CHAIN) {
-        if (isWalletOnline === WalletOnlineStatus.Online) {
           checkBackupRequired();
-        }
       }
     },
   });
@@ -219,9 +212,6 @@ function HomeScreen() {
             await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
             setNodeInitStatus(false);
             setNodeConnected(true);
-            setTimeout(() => {
-              setNodeConnected(false);
-            }, 1500);
             break;
           case PushNotificationType.NODE_PAUSED:
             startNode;
@@ -330,36 +320,31 @@ function HomeScreen() {
     }
   };
 
+
+  useEffect(() => {
+    const checkFirstAppImageBackup = async () => {
+      if (!isFirstAppImageBackupCompleted) {
+        const res = await ApiHandler.backupAppImage({all: true});
+        setIsFirstAppImageBackupCompleted(res.status);
+      }
+    };
+    setTimeout(() => {
+      checkFirstAppImageBackup();
+    }, 5000);
+  }, []);
+  
+
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showScanner={true} />
       </View>
-      {presetAssets.length > 0 ? (
-        <ScrollView
+      <ScrollView
           showsVerticalScrollIndicator={false}
           bounces={false}
           >
             <DefaultCoin presetAssets={presetAssets}/>
         </ScrollView>
-      ) : (
-        <CoinAssetsList
-          listData={coins}
-          loading={refreshing && !isBackupInProgress && !isBackupDone}
-          onRefresh={handleRefresh}
-          refreshingStatus={refreshing && !isBackupInProgress && !isBackupDone}
-          onPressAddNew={() => {
-            if (isNodeInitInProgress) {
-              Toast(node.connectingNodeToastMsg, true);
-              return;
-            }
-            handleNavigation(NavigationRoutes.ADDASSET, {
-              issueAssetType: AssetType.Coin,
-            });
-          }}
-          onPressAsset={() => handleNavigation(NavigationRoutes.COINDETAILS)}
-        />
-      )}
     </ScreenContainer>
   );
 }

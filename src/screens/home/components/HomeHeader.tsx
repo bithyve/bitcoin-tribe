@@ -97,9 +97,7 @@ function HomeHeader({
               Toast(node.connectingNodeToastMsg, true);
               return;
             }
-            handleNavigation(NavigationRoutes.WALLETDETAILS, {
-              autoRefresh: true,
-            });
+            handleNavigation(NavigationRoutes.EDITWALLETPROFILE)
           }}
           style={styles.contentWrapper}>
           <View style={styles.contentWrapper}>
@@ -168,7 +166,7 @@ function HomeHeader({
           {showAdd && (
             <IconWrapper
               onPress={() => {
-                navigation.navigate(NavigationRoutes.CREATEGROUP);
+                navigation.navigate(NavigationRoutes.PROFILEINFO);
               }}>
               {isThemeDark ? <CreateGroup /> : <CreateGroupLight />}
             </IconWrapper>

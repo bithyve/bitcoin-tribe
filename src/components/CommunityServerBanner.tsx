@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { Modal, Portal, useTheme } from 'react-native-paper';
@@ -7,18 +7,17 @@ import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { windowHeight, wp } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
-export const CommunityServerBanner = () => {
+export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
   const { communityStatus, setCommunityStatus } = useContext(AppContext);
-  const { translations } = useContext(LocalizationContext);
+   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const [visible, setVisible] = useState(false);
 
   const status = useMemo(() => {
     switch (communityStatus) {
@@ -31,6 +30,11 @@ export const CommunityServerBanner = () => {
           type: 'success',
         };
       }
+      case 'connecting':
+        return {
+          message: common.connectingToCommunityServer,
+          type: 'warning',
+        };
       case 'offline':
         return {
           message: common.communityServerOffline,
@@ -45,6 +49,8 @@ export const CommunityServerBanner = () => {
           type: 'success',
         };
       }
+      default:
+        return null;
     }
   }, [communityStatus, common]);
 
@@ -55,7 +61,7 @@ export const CommunityServerBanner = () => {
   const tapView = useMemo(() => {
     return (
       <AppTouchable
-        onPress={() => setVisible(true)}
+        onPress={() => setModalVisible(true)}
         style={styles.tapViewWrapper}>
         <TapInfoIcon />
       </AppTouchable>
@@ -64,7 +70,7 @@ export const CommunityServerBanner = () => {
 
   return (
     <View>
-      {communityStatus ? (
+      {communityStatus && status ? (
         status.type == 'error' ? (
           <AppTouchable style={[styles.errorContainer]} onPress={onPress}>
             <AppText style={styles.text}>{status.message}</AppText>
@@ -74,12 +80,16 @@ export const CommunityServerBanner = () => {
           <AppTouchable style={[styles.successContainer]} onPress={onPress}>
             <AppText style={styles.text}>{status.message}</AppText>
           </AppTouchable>
+        ) : status.type == 'warning' ? (
+          <AppTouchable style={[styles.warningContainer]} onPress={onPress}>
+            <AppText style={styles.text}>{status.message}</AppText>
+          </AppTouchable>
         ) : null
       ) : null}
       <Portal>
         <Modal
-          visible={visible}
-          onDismiss={() => setVisible(false)}
+          visible={modalVisible}
+          onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
             {common.communityServerUnavailable}
@@ -93,52 +103,30 @@ export const CommunityServerBanner = () => {
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
     successContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 40
-        : 16,
-      left: 0,
-      right: 0,
-      zIndex: 1000,
       alignItems: 'flex-start',
       paddingHorizontal: wp(16),
       backgroundColor: Colors.GOGreen,
+      width:windowWidth,
+      height:hp(25),
+      justifyContent:"center"
     },
     errorContainer: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 35
-        : 16,
-      left: 0,
-      right: 0,
       backgroundColor: Colors.FireOpal,
       zIndex: 1000,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: '100%',
+      width: windowWidth,
       paddingHorizontal: wp(16),
+      height:hp(25),
+      alignItems:"center"
     },
-    container: {
-      position: Platform.OS === 'ios' ? 'absolute' : 'relative',
-      top: hasNotch
-        ? 40
-        : Platform.OS === 'ios' && windowHeight > 820
-        ? 50
-        : Platform.OS === 'android'
-        ? 40
-        : 16,
-      left: 0,
-      right: 0,
-      zIndex: 1000, // Ensures the banner is above everything
-      alignItems: 'center',
+    warningContainer: {
+      alignItems: 'flex-start',
+      paddingHorizontal: wp(16),
+      backgroundColor: '#FFA500', // Orange color for warning/connecting state
+      width:windowWidth,
+      height:hp(25),
+      justifyContent:"center"
     },
     text: {
       color: 'white',

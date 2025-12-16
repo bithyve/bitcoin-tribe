@@ -55,6 +55,8 @@ export const CreateGroup = () => {
       { key: 'join', title: common.join },
     ];
   }, []);
+  const pendingJoinRef = useRef<any | null>(null);
+  const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (params) joinRoomWithParams(params);
@@ -68,11 +70,12 @@ export const CreateGroup = () => {
     currentRoom,
     createRoom,
     error,
+    sendDMInvitation,
   } = useChat();
 
   // Navigate to chat when room is created/joined
   useEffect(() => {
-    if (currentRoom) {
+    if (currentRoom && currentRoom.roomType != HolepunchRoomType.INBOX) {
       (navigation as any).navigate(NavigationRoutes.CHAT, {
         roomId: currentRoom.roomId,
       });
@@ -89,24 +92,82 @@ export const CreateGroup = () => {
 
   const joinRoomWithParams = async params => {
     try {
-      const { roomKey, roomName, roomType, roomDescription } = params as any;
+      const {
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      } = params as any;
+      console.log({
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      });
       navigation.setParams(null);
       setIndex(1);
-      if (!roomKey || !roomType || !roomDescription || !roomName ) {
+      if (!roomType) {
         Toast('Invalid group link', true);
         return;
       }
-      if(isInitializing){
-        Toast('Please wait while server is initializing', true);
+
+      // If ready, join immediately
+      if (!isInitializing && isRootPeerConnected) {
+        if (roomType == HolepunchRoomType.GROUP)
+          createRoom(roomName, roomType, roomDescription, '', roomKey);
+        else await joinDm(publicKey, contactName);
         return;
       }
-      setTimeout(() => {
-         createRoom(roomName, roomType, roomDescription, '', roomKey);
-      }, 400);
+
+      pendingJoinRef.current = params;
+      Toast('Waiting for initialization...', false);
+
+      if (pendingTimeoutRef.current) clearTimeout(pendingTimeoutRef.current);
+
+      pendingTimeoutRef.current = setTimeout(() => {
+        if (pendingJoinRef.current) {
+          pendingJoinRef.current = null;
+          Toast('Initialization timed out. Try again later.', true);
+        }
+      }, 20000);
     } catch (error) {
       console.log('🚀 ~ CreateGroup ~ error:', error);
     }
   };
+
+  useEffect(() => {
+    if (!pendingJoinRef.current) return;
+    if (!isInitializing && isRootPeerConnected) {
+      const {
+        roomKey,
+        roomName,
+        roomType,
+        roomDescription,
+        publicKey,
+        contactName,
+      } = pendingJoinRef.current;
+      pendingJoinRef.current = null;
+      if (pendingTimeoutRef.current) {
+        clearTimeout(pendingTimeoutRef.current);
+        pendingTimeoutRef.current = null;
+      }
+      if (roomType == HolepunchRoomType.GROUP)
+        createRoom(roomName, roomType, roomDescription, '', roomKey);
+      else joinDm(publicKey, contactName);
+    }
+  }, [isInitializing, isRootPeerConnected]);
+
+  const joinDm =async (publicKey, contactName)=>{
+    const dmRoom = await sendDMInvitation(publicKey, contactName);
+    (navigation as any).navigate(NavigationRoutes.CHAT, {
+      roomId: dmRoom.roomId,
+    });
+    return;
+  }
 
   return (
     <ScreenContainer>
@@ -120,6 +181,7 @@ export const CreateGroup = () => {
       />
 
       <TabView
+        animationEnabled={false}
         renderTabBar={props => <TabHeader {...props} />}
         navigationState={{ index, routes }}
         renderScene={SceneMap({
@@ -467,7 +529,7 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       marginBottom: hp(13),
     },
     imageWrapper: {
-      alignItems: 'center',
+      alignItems: 'flex-start',
     },
     imageStyle: {
       height: hp(80),
@@ -487,7 +549,6 @@ const getStyles = (theme: AppTheme, inputHeight = 0) =>
       paddingVertical: hp(14),
       borderStyle: 'dashed',
       marginBottom: hp(10),
-      alignSelf: 'center',
     },
 
     // Join Tab

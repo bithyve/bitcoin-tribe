@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Alert, Platform, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -16,6 +16,9 @@ import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import UseRGBAssetPopupContainer from './components/UseRGBAssetPopupContainer';
+import config, { APP_STAGE } from 'src/utils/config';
+import { NetworkType } from 'src/services/wallets/enums';
+import * as bitcoinJS from 'bitcoinjs-lib';
 
 function WalletSetupOption({ navigation }) {
   const { translations } = useContext(LocalizationContext);
@@ -25,6 +28,33 @@ function WalletSetupOption({ navigation }) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [visible, setVisible] = useState(false);
+
+  const selectNetworkAndNavigate = (route: NavigationRoutes) => {
+    if (config.ENVIRONMENT === APP_STAGE.PRODUCTION) {
+      config.NETWORK_TYPE = NetworkType.MAINNET;
+      config.NETWORK = bitcoinJS.networks.bitcoin;
+      navigation.navigate(route);
+      return;
+    }
+    Alert.alert(
+      'Select Bitcoin Network',
+      'Select the network you want to use',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        ...[
+          { label: 'Testnet4', type: NetworkType.TESTNET4, net: bitcoinJS.networks.testnet },
+          { label: 'Regtest', type: NetworkType.REGTEST, net: bitcoinJS.networks.regtest },
+        ].map(({ label, type, net }) => ({
+          text: label,
+          onPress: () => {
+            config.NETWORK_TYPE = type;
+            config.NETWORK = net;
+            navigation.navigate(route);
+          },
+        })),
+      ]
+    );
+  };
 
   return (
     <ScreenContainer>
@@ -36,7 +66,7 @@ function WalletSetupOption({ navigation }) {
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
-        onPress={()=>navigation.navigate(NavigationRoutes.PROFILESETUP)}
+        onPress={() => selectNetworkAndNavigate(NavigationRoutes.PROFILESETUP)}
         style={styles.optionCardStyle}
       />
       <OptionCard
@@ -44,7 +74,9 @@ function WalletSetupOption({ navigation }) {
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}
         showRightArrow={true}
-        onPress={() => navigation.navigate(NavigationRoutes.ENTERSEEDSCREEN)}
+        onPress={() =>
+          selectNetworkAndNavigate(NavigationRoutes.ENTERSEEDSCREEN)
+        }
         style={styles.optionCardStyle}
       />
 
@@ -52,13 +84,14 @@ function WalletSetupOption({ navigation }) {
         visible={visible}
         enableClose={true}
         backColor={theme.colors.modalBackColor}
-        borderColor={theme.colors.modalBackColor}>
+        borderColor={theme.colors.modalBackColor}
+      >
         <UseRGBAssetPopupContainer
           title={onBoarding.useRGBAssetTitle}
           subTitle={onBoarding.useRGBAssetSubTitle}
           onPress={() => {
             setVisible(false);
-            navigation.navigate(NavigationRoutes.SELECTWALLET);
+            selectNetworkAndNavigate(NavigationRoutes.SELECTWALLET);
           }}
         />
       </ResponsePopupContainer>

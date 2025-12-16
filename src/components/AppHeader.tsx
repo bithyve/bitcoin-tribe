@@ -136,6 +136,7 @@ const getStyles = (theme: AppTheme, enableBack: boolean) =>
     },
     headerTitle: {
       color: theme.colors.headingColor,
+      textAlign:"center"
     },
     headerSubTitle: {
       color: theme.colors.secondaryHeadingColor,

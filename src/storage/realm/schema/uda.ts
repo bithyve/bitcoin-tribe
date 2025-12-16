@@ -10,7 +10,7 @@ export const UniqueDigitalAssetSchema: ObjectSchema = {
     assetId: 'string',
     balance: RealmSchema.Balance,
     details: 'string',
-    issuedSupply: 'string',
+    // issuedSupply: 'string',
     name: 'string',
     precision: 'int',
     ticker: 'string',

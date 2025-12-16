@@ -303,7 +303,8 @@ function EnterSeedContainer() {
                 key={word ? `${word + wordIndex}` : wordIndex}
                 style={styles.suggestionTouchView}
                 onPress={() => {
-                  Keyboard.dismiss();
+                  if (onChangeIndex == 4 || onChangeIndex == 11)
+                    Keyboard.dismiss();
                   const data = [...seedData];
                   data[onChangeIndex].name = word.trim();
                   setSeedData(data);

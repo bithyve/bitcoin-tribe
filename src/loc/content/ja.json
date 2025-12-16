@@ -65,6 +65,10 @@
     "tapToInfo": "情報を見るにはタップ",
     "backupInProgressMsg": "アセットバックアップが進行中です。アプリを閉じないでください。",
     "backDoneMsg": "アセットバックアップが完了しました。",
+    "appImageBackupSuccess": "アプリのバックアップが完了しました。",
+    "appImageBackupFailure": "アプリのバックアップに失敗しました。",
+    "appImageBackupInProgress": "アプリのバックアップを実行中",
+    "appImageBackupFailureTooltip": "アプリのバックアップに失敗しました。再試行するにはバナーをタップしてください。",
     "share": "共有",
     "scan": "スキャン",
     "copy": "コピー",
@@ -90,7 +94,8 @@
     "communityServerUnavailable": "コミュニティサーバーは現在利用できません、または到達できません。",
     "connectedToCommunityServer": "コミュニティサーバーに接続済み",
     "communityServerOffline": "コミュニティサーバーオフライン",
-    "communityServerOnline": "コミュニティサーバーオンライン"
+    "communityServerOnline": "コミュニティサーバーオンライン",
+    "connectingToCommunityServer": "コミュニティサーバーに接続中..."
   },
   "onBoarding": {
     "welcome": "ようこそ",
@@ -680,6 +685,7 @@
     "assetRegistrySubTitle2": "一度限りのサービスコストは ",
     "assetRegistrySubTitle3": " です。まだ登録の準備ができていませんか？登録をスキップして Twitter に投稿することもできます。",
     "sharePostTitle": "X に投稿を共有する",
+    "postDeletedOrUnavailable": "この投稿は削除されたか、利用できなくなりました。",
     "verificationTitle": "認証",
     "payServiceFeeFundError": "残高不足です。サービスコストをカバーするには、ウォレットに少なくとも 20,000 サトシがあることを確認してください。",
     "recordCard": "DNSレコードの詳細",

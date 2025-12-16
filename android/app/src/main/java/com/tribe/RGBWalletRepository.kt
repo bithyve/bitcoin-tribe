@@ -26,8 +26,10 @@ object RGBWalletRepository {
         try {
             online = null
             rgbNetwork = getNetwork(network)
+            val rgbDir = AppConstants.rgbDir
+                ?: throw IllegalStateException("RGB directory not initialized. Call AppConstants.initContext() first.")
             val walletData =  WalletData(
-                AppConstants.rgbDir.absolutePath,
+                rgbDir.absolutePath,
                 rgbNetwork!!,
                 DatabaseType.SQLITE,
                 1u,
@@ -44,6 +46,9 @@ object RGBWalletRepository {
         }catch (e: RgbLibException) {
             Log.d(TAG, "initialize: "+e.message)
             return Pair(false, e.message!!)
+        } catch (e: IllegalStateException) {
+            Log.d(TAG, "initialize: "+e.message)
+            return Pair(false, e.message ?: "RGB directory not initialized")
         }
     }
 
@@ -51,8 +56,9 @@ object RGBWalletRepository {
         val jsonObject = JsonObject()
         try {
             online = null
-            val rgbWalletDir = AppConstants.rgbDir
-                .resolve(masterFingerprint)
+            val rgbDir = AppConstants.rgbDir
+                ?: throw IllegalStateException("RGB directory not initialized")
+            val rgbWalletDir = rgbDir.resolve(masterFingerprint)
             Log.i("RGB", "Deleting rgb wallet path at: ${rgbWalletDir.path}")
             if (rgbWalletDir.deleteRecursively()) {
                 Log.i("RGB", "rgb wallet path deleted successfully.")
@@ -74,7 +80,12 @@ object RGBWalletRepository {
 
     fun deleteRuntimeLockFile(masterFingerprint: String) {
         try {
-            val runtimeLockPath = AppConstants.rgbDir
+            val rgbDir = AppConstants.rgbDir
+                ?: run {
+                    Log.e("RGB", "RGB directory not initialized")
+                    return
+                }
+            val runtimeLockPath = rgbDir
                 .resolve(masterFingerprint)
                 .resolve("rgb_runtime.lock")
             if (!runtimeLockPath.exists()) {
@@ -94,7 +105,12 @@ object RGBWalletRepository {
 
     fun writeToLogFile(masterFingerprint: String, content: String) {
         try {
-            val logFilePath = AppConstants.rgbDir
+            val rgbDir = AppConstants.rgbDir
+                ?: run {
+                    Log.e("RGB", "RGB directory not initialized")
+                    return
+                }
+            val logFilePath = rgbDir
                 .resolve(masterFingerprint)
                 .resolve("log")
 
@@ -124,6 +140,7 @@ object RGBWalletRepository {
     fun getNetwork(network: String): BitcoinNetwork {
         return when (network.uppercase()) {
             "TESTNET" -> BitcoinNetwork.TESTNET
+            "TESTNET4" -> BitcoinNetwork.TESTNET4
             "REGTEST" -> BitcoinNetwork.REGTEST
             "MAINNET" -> BitcoinNetwork.MAINNET
             "SIGNET" -> BitcoinNetwork.SIGNET

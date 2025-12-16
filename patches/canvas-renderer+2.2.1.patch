@@ -1,0 +1,29 @@
+diff --git a/node_modules/canvas-renderer/lib/png/pngEncoder.js b/node_modules/canvas-renderer/lib/png/pngEncoder.js
+index 7ee63e3..35d8828 100644
+--- a/node_modules/canvas-renderer/lib/png/pngEncoder.js
++++ b/node_modules/canvas-renderer/lib/png/pngEncoder.js
+@@ -26,7 +26,23 @@
+  
+ "use strict";
+ 
+-const zlib = require('zlib');
++// top of pngEncoder.js — fallback-friendly zlib
++let zlib;
++try {
++  zlib = require('zlib');               // Node environment
++} catch (err) {
++  try {
++    zlib = require('browserify-zlib');  // browser shim using pako under the hood
++  } catch (err2) {
++    // Final fallback: small adapter to pako (expects Buffer input/output)
++    const pako = require('pako');
++    zlib = {
++      deflateSync: (buf) => Buffer.from(pako.deflate(buf)),
++      deflateRawSync: (buf) => Buffer.from(pako.deflateRaw(buf)),
++      gzipSync: (buf) => Buffer.from(pako.gzip(buf))
++    };
++  }
++}
+ const PngBuffer = require("./pngBuffer");
+ const colorUtils = require("../colorUtils");
+ 

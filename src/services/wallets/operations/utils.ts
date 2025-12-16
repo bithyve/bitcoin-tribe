@@ -46,6 +46,8 @@ export default class WalletUtilities {
       return bitcoinJS.networks.bitcoin;
     } else if (type === NetworkType.REGTEST) {
       return bitcoinJS.networks.regtest;
+    } else if (type === NetworkType.TESTNET4) {
+      return bitcoinJS.networks.testnet;
     }
     return bitcoinJS.networks.testnet;
   };
@@ -87,7 +89,7 @@ export default class WalletUtilities {
     scriptType: BIP48ScriptTypes = BIP48ScriptTypes.NATIVE_SEGWIT,
   ): string => {
     const isTestnet =
-      type === NetworkType.TESTNET || type === NetworkType.REGTEST ? 1 : 0;
+      type === NetworkType.TESTNET || type === NetworkType.REGTEST || type === NetworkType.TESTNET4 ? 1 : 0;
     return `m/${purpose}'/${isTestnet}'/${accountNumber}'`;
   };
 

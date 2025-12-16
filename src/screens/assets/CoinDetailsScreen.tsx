@@ -222,16 +222,16 @@ const CoinDetailsScreen = () => {
     setLoading(true);
     try {
       const result = await ApiHandler.claimCampaign(
-        coin.campaign._id,
-        coin.campaign.mode,
+        coin?.campaign?._id || '',
+        coin?.campaign?.mode || '',
       );
       if (result.claimed) {
         Toast(result.message, false);
-        if (coin.campaign.exclusive === 'true') {
+        if (coin?.campaign?.exclusive === 'true') {
           const participatedCampaignsArray = JSON.parse(
             participatedCampaigns || '[]',
           );
-          participatedCampaignsArray.push(coin.campaign._id);
+          participatedCampaignsArray.push(coin?.campaign?._id || '');
           setParticipatedCampaigns(JSON.stringify(participatedCampaignsArray));
         }
       } else {
@@ -256,10 +256,10 @@ const CoinDetailsScreen = () => {
       return 'Requesting';
     }
     if (isEligibleForCampaign) {
-      return coin.campaign.buttonText;
+      return coin?.campaign?.buttonText || '';
     }
     return 'Claimed';
-  }, [isEligibleForCampaign, loading, coin.campaign.buttonText]);
+  }, [isEligibleForCampaign, loading, coin?.campaign?.buttonText]);
 
   return (
     <ScreenContainer>
@@ -275,7 +275,7 @@ const CoinDetailsScreen = () => {
             return;
           }
           navigation.navigate(NavigationRoutes.SCANASSET, {
-            assetId: coin.assetId,
+            assetId: coin?.assetId || '',
             rgbInvoice: '',
             wallet: wallet,
           });
@@ -286,35 +286,31 @@ const CoinDetailsScreen = () => {
             return;
           }
           navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-            invoiceAssetId: coin.assetId,
+            invoiceAssetId: coin?.assetId || '',
             chosenAsset: coin,
           });
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
         disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
       />
-      {coin.campaign.isActive === 'true' && (
+      {coin?.campaign?.isActive === 'true' && (
         <GradientBorderAnimated
           style={styles.gradientBorderCard}
           radius={hp(20)}
           strokeWidth={2}
-          height={isBalanceRequired? hp(100):hp(84)}
+          height={isBalanceRequired ? hp(89) : hp(64)}
           disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress || !isEligibleForCampaign}>
-          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(96):hp(80)}]}>
+          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(85):hp(60)}]}>
             <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>
                 <AppText
                   numberOfLines={2}
-                  style={
-                    isBalanceRequired
-                      ? {
-                          opacity: 0.5,
-                          marginHorizontal: wp(4),
-                        }
-                      : { marginHorizontal: wp(4), }
-                  }
+                  style={{
+                    marginHorizontal: wp(4),
+                    opacity: isBalanceRequired ? 0.5 : 1,
+                  }}
                   variant="body1">
-                  {getCampaignButtonText === 'Claimed' ? 'Claim submitted successfully. Distribution may take time.' : coin.campaign.description}
+                  {getCampaignButtonText === 'Claimed' ? 'Claim submitted successfully. Distribution may take time.' : coin?.campaign?.description || ''}
                 </AppText>
               </View>
               <AppTouchable
@@ -362,15 +358,15 @@ const CoinDetailsScreen = () => {
         refreshingStatus={refreshing}
         navigation={navigation}
         wallet={wallet}
-        coin={coin.name}
+        coin={coin?.name || ''}
         assetId={assetId}
-        precision={coin.precision}
+        precision={coin?.precision || 0}
         scrollY={scrollY}
         schema={RealmSchema.Coin}
       />
 
       <VerifyIssuerModal
-        assetId={coin.assetId}
+        assetId={coin?.assetId || ''}
         isVisible={showVerifyModal}
         onVerify={() => {
           setShowVerifyModal(false);
@@ -384,7 +380,7 @@ const CoinDetailsScreen = () => {
           setShowVerifyModal(false);
           navigateWithDelay(() =>
             navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-              assetId: coin.assetId,
+              assetId: coin?.assetId || '',
               schema: RealmSchema.Coin,
               savedDomainName: domainVerification?.name || '',
             }),
@@ -514,6 +510,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     btnClaimTextDisabled: {
       color: isThemeDark ? '#fff' : '#091229',
+      fontSize: 14,
     },
     gradientBorderCard: {
       marginBottom: hp(10),

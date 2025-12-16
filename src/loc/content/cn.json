@@ -65,6 +65,10 @@
     "tapToInfo": "点击查看信息",
     "backupInProgressMsg": "资产备份正在进行中。请勿关闭应用程序。",
     "backDoneMsg": "资产备份已完成。",
+    "appImageBackupSuccess": "应用已备份。",
+    "appImageBackupFailure": "应用备份失败。",
+    "appImageBackupInProgress": "应用备份进行中",
+    "appImageBackupFailureTooltip": "应用备份失败，点击横幅以重试。",
     "share": "分享",
     "scan": "扫描",
     "copy": "复制",
@@ -90,7 +94,8 @@
     "communityServerUnavailable": "社区服务器当前不可用或无法访问。",
     "connectedToCommunityServer": "已连接到社区服务器",
     "communityServerOffline": "社区服务器离线",
-    "communityServerOnline": "社区服务器在线"
+    "communityServerOnline": "社区服务器在线",
+    "connectingToCommunityServer": "正在连接到社区服务器..."
   },
   "onBoarding": {
     "welcome": "欢迎",
@@ -680,6 +685,7 @@
     "assetRegistrySubTitle2": "一次性服务成本为 ",
     "assetRegistrySubTitle3": "。还没准备好注册？您可以跳过注册，仍然可以在 Twitter 上发布。",
     "sharePostTitle": "在 X 上分享帖子",
+    "postDeletedOrUnavailable": "此帖子已被删除或不再可用。",
     "verificationTitle": "验证",
     "payServiceFeeFundError": "余额不足。请确保您的钱包中至少有 20,000 sats 以支付服务成本。",
     "recordCard": "DNS记录详情",

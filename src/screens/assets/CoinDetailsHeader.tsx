@@ -263,7 +263,7 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance, appType) =>
     },
     largeHeader: {
       alignItems: 'center',
-      height: windowHeight > 810 ? '45%' : '47%',
+      marginBottom: hp(10),
     },
     largeHeaderContainer: {
       borderColor: theme.colors.borderColor,

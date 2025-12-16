@@ -2,8 +2,6 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
-import VerticalGradientView from 'src/components/VerticalGradientView';
 import InfoIcon from 'src/assets/images/infoIcon1.svg';
 import InfoIconLight from 'src/assets/images/infoIcon1_light.svg';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -27,12 +25,7 @@ function VerificationSection(props: VerificationSectionProps) {
   const { common, assets } = translations;
   const styles = getStyles(theme);
   return (
-    <VerticalGradientView
-      colors={[
-        theme.colors.cardGradient4,
-        theme.colors.cardGradient5,
-        theme.colors.cardGradient5,
-      ]}
+    <View
       style={styles.gradientContainer}>
       <View style={styles.verifyViewWrapper}>
         <View style={styles.verifyTitleWrapper}>
@@ -49,7 +42,7 @@ function VerificationSection(props: VerificationSectionProps) {
         </AppTouchable>
       </View>
       {children}
-    </VerticalGradientView>
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -59,6 +52,7 @@ const getStyles = (theme: AppTheme) =>
       paddingHorizontal: hp(16),
       borderTopLeftRadius: hp(20),
       borderTopRightRadius: hp(20),
+      experimental_backgroundImage: `linear-gradient(180deg, ${theme.colors.cardGradient4}, ${theme.colors.cardGradient5})`
     },
     verifyViewWrapper: {
       flexDirection: 'row',

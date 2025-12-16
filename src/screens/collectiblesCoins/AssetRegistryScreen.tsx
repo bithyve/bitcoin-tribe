@@ -61,6 +61,7 @@ function AssetRegistryScreen() {
   const routeMap = (askVerify: boolean, isAddedToRegistry: boolean = false) => {
     switch (issueType) {
       case AssetType.Coin:
+        navigation.pop(1);
         navigation.replace(NavigationRoutes.COINDETAILS, {
           assetId,
           askReview: true,
@@ -70,6 +71,7 @@ function AssetRegistryScreen() {
         setDisabledCTA(false);
         break;
       case AssetType.Collectible:
+        navigation.pop(1);
         navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
           assetId,
           askReview: true,
@@ -79,6 +81,7 @@ function AssetRegistryScreen() {
         setDisabledCTA(false);
         break;
       case AssetType.UDA:
+        navigation.pop(1);
         navigation.replace(NavigationRoutes.UDADETAILS, {
           assetId,
           askReview: true,
