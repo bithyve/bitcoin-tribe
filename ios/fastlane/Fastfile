@@ -116,6 +116,9 @@ platform :ios do
       
     ENV["FASTLANE_DISABLE_COLORS"] = "1"
 
+    UI.message("APPLE_TEAM_ID env: #{ENV['APPLE_TEAM_ID'] ? 'SET' : 'MISSING'}")
+    UI.message("APPLE_TEAM_ID length: #{ENV['APPLE_TEAM_ID']&.length}")
+
     api_key_path = File.expand_path("../fastlane/AuthKey.p8", __dir__)
     api_key = app_store_connect_api_key(
       key_id: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY_ID"],
