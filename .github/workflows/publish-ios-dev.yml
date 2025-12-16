@@ -35,6 +35,12 @@ jobs:
           echo "SLACK_URL=${{ secrets.SLACK_URL }}" >> $GITHUB_ENV
           echo "SLACK_ACCESS_TOKEN=${{ secrets.SLACK_ACCESS_TOKEN }}" >> $GITHUB_ENV   
           
+      - name: Check repo access
+        run: |
+          curl -I \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/bithyve/bitcoin-tribe-envs
+
       # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
