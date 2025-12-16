@@ -88,7 +88,7 @@ jobs:
         run: gem install bundler
 
       - name: Ensure Correct Bundler Version
-        run: bundler -v  
+        run: bundle -v  
 
       - name: Install Fastlane dependencies
         run: |
@@ -97,7 +97,9 @@ jobs:
           bundle check || bundle install
       
       - name: Debug Installed Gems
-        run: bundle list
+        run: |
+          cd ios
+          bundle list
 
       - name: Decode App Store API Key
         run: |
@@ -123,7 +125,9 @@ jobs:
           cd ..
 
       - name: Create Temporary Keychain
-        run: bundle exec fastlane ios create_temp_keychain
+        run: |
+          cd ios
+          bundle exec fastlane ios create_temp_keychain
 
       - name: Setup Provisioning Profiles
         run: |
@@ -142,7 +146,7 @@ jobs:
       - name: Cleanup
         if: always()
         run: |
-            rm -rf ./fastlane/AuthKey.p8
-            rm -f ./.env
+            rm -f ios/fastlane/AuthKey.p8
+            rm -f .env
 
 

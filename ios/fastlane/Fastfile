@@ -151,12 +151,13 @@ platform :ios do
       scheme: "tribe-dev",
       clean: true,
       output_directory: "./builds",
-      export_method:'app-store',
+      export_method: "app-store",
       xcargs: "-verbose"
     )
     upload_to_testflight(api_key: api_key)
     clean_build_artifacts
-    UI.success("✅ Dev build successfully uploaded to TestFlight! Build Number: #{latest_testflight_build_number}")
+    build_number = get_build_number(xcodeproj: "tribe.xcodeproj")
+    UI.success("✅ Dev build successfully uploaded to TestFlight! Build Number: #{build_number}")
   end
   
   desc "Push a new live build to TestFlight (GitHub Actions)"
@@ -189,7 +190,6 @@ platform :ios do
       path: "tribe.xcodeproj",
       teamid: ENV["APPLE_TEAM_ID"]
     )
-    app_identifier = CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier)
     build_app(
       workspace: "tribe.xcworkspace",
       scheme: "tribe",
@@ -205,7 +205,8 @@ platform :ios do
     )
     upload_to_testflight(api_key: api_key)
     clean_build_artifacts
-    UI.success("✅ Live build successfully uploaded to TestFlight! Build Number: #{latest_testflight_build_number}")
+    build_number = get_build_number(xcodeproj: "tribe.xcodeproj")
+    UI.success("✅ Live build successfully uploaded to TestFlight! Build Number: #{build_number}")
   end
 
   desc "Create a temporary keychain"
@@ -217,7 +218,7 @@ platform :ios do
       password: ENV["KEYCHAIN_PASSWORD"],
       default_keychain: true,
       unlock: true,
-      timeout: 3600,
+      timeout: 3600
     )
 
     UI.message("Temporary keychain created successfully.")
@@ -226,7 +227,9 @@ platform :ios do
   desc "Synchronize certificates and provisioning profiles"
   lane :setup_provisioning_profiles do
     required_vars = ["MATCH_GIT_URL", "APPLE_TEAM_ID", "KEYCHAIN_PASSWORD"]
-    ensure_env_vars(required_vars)
+    required_vars.each do |var|
+      UI.user_error!("Missing required environment variable: #{var}") unless ENV[var]
+    end
     UI.message("Setting up provisioning profiles...")
     match(
       type: "appstore",                     
@@ -235,10 +238,10 @@ platform :ios do
       app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
       team_id: ENV["APPLE_TEAM_ID"],
       keychain_name: "temp_keychain",
-      keychain_password: ENV["KEYCHAIN_PASSWORD"]
-      clone_branch_directly: true,
-      )
-      log_success("Successfully fetched provisioning profile")
+      keychain_password: ENV["KEYCHAIN_PASSWORD"],
+      clone_branch_directly: true
+    )
+    UI.success("Successfully fetched provisioning profile")
   end
 
 end
