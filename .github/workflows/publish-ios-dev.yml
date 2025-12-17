@@ -20,34 +20,20 @@ jobs:
       MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
       GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+      FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+      SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
 
     steps:
       - name: Set up Fastlane environment variables
         run: |
           echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
-          echo "MATCH_PASSWORD=${{ secrets.MATCH_PASSWORD }}" >> $GITHUB_ENV
-          echo "FASTLANE_APP_STORE_CONNECT_API_KEY_ID=${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}" >> $GITHUB_ENV
-          echo "APP_STORE_CONNECT_ISSUER_ID=${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}" >> $GITHUB_ENV
-          echo "APPLE_TEAM_ID=${{ secrets.APPLE_TEAM_ID }}" >> $GITHUB_ENV
           echo "BUNDLE_IDENTIFIER=com.bithyve.tribe.dev" >> $GITHUB_ENV
-          echo "MATCH_GIT_URL=${{ secrets.MATCH_GIT_URL }}" >> $GITHUB_ENV
-          echo "FASTLANE_APPLE_ID=${{ secrets.FASTLANE_APPLE_ID }}" >> $GITHUB_ENV
-          echo "SLACK_URL=${{ secrets.SLACK_URL }}" >> $GITHUB_ENV
-          echo "SLACK_ACCESS_TOKEN=${{ secrets.SLACK_ACCESS_TOKEN }}" >> $GITHUB_ENV   
-          echo "GITHUB_TOKEN=${{ secrets.ACCESS_TOKEN_GITHUB }}" >> $GITHUB_ENV   
           
-      - name: Check repo access
-        run: |
-          curl -I \
-            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN_GITHUB }}" \
-            https://api.github.com/repos/bithyve/bitcoin-tribe-envs
-
-      # 1️⃣ Checkout repo
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
 
       - name: Sanity check GITHUB_TOKEN presence
         run: |
@@ -68,12 +54,6 @@ jobs:
             -o .env \
             https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app
 
-      - name: Show downloaded env (keys only)
-        run: |
-          echo "==== .env keys ===="
-          sed -E 's/=.*$/=***/' .env
-  
-      # 2️⃣ Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -82,21 +62,16 @@ jobs:
       - name: Download rgb_libFFI XCFramework
         run: |
           set -e
-
           mkdir -p ios/rgb
           cd ios/rgb
-
           echo "⬇️ Downloading rgb_libFFI.xcframework..."
           curl -L \
             https://github.com/RGB-Tools/rgb-lib-swift/releases/download/0.3.0-beta.4/rgb_libFFI.xcframework.zip \
             -o rgb_libFFI.xcframework.zip
-
           echo "📦 Extracting..."
           unzip -o rgb_libFFI.xcframework.zip
-
           echo "🧹 Cleaning up zip"
           rm rgb_libFFI.xcframework.zip
-
           echo "✅ Contents of ios/rgb:"
           ls -la
 
@@ -105,25 +80,21 @@ jobs:
           test -d ios/rgb/rgb_libFFI.xcframework || \
           (echo "❌ rgb_libFFI.xcframework missing" && exit 1)
 
-      # 3️⃣ Install JS dependencies
-      - name: Install JS dependencies
-        run: yarn install
+      - name: Get Yarn cache dir
+        id: yarn-cache
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache node_modules
-        id: modules-cache
+      - name: Cache Yarn cache
         uses: actions/cache@v3
         with:
-          path: ./node_modules
-          key: ${{ runner.os }}-modules-${{ hashFiles('yarn.lock') }}
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-modules-
+            ${{ runner.os }}-yarn-
+        
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile       
 
-      - name: Install Deps if necessary
-        if: steps.modules-cache.outputs.cache-hit != 'true'
-        shell: bash
-        run: yarn install
-
-      # 4️⃣ Setup Ruby
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -163,26 +134,20 @@ jobs:
         run: |
           xcodebuild -showsdks
 
-      # 5️⃣ Install CocoaPods
-      - name: Cache Pods
+      - name: Cache CocoaPods specs
         uses: actions/cache@v3
-        id: pods-cache
         with:
-          path: ./ios/Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
+          path: ~/.cocoapods
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-pods-
+            ${{ runner.os }}-cocoapods-
 
       - name: Install pods
-        if: steps.pods-cache.outputs.cache-hit != 'true'
-        shell: bash
         run: |
-          cd ios/
-          rm -rf Pods Podfile.lock
-          pod install --repo-update
+          cd ios
+          pod install
           cd ..
 
-      # 6️⃣ Fastlane – Build & Upload to TestFlight
       - name: Run Fastlane to upload to TestFlight
         id: fastlane_step
         env:
