@@ -107,32 +107,11 @@ platform :ios do
   desc "Push a new dev build to TestFlight (GitHub Actions)"
   lane :github_actions_dev do
     file_name = "../../.env"
-    # file_url  = "https://api.github.com/repos/bithyve/bitcoin-tribe-envs/contents/.env.app?ref=DEVELOPMENT"
-    # auth_header = "Authorization: token #{ENV["GITHUB_TOKEN"]}"
-    # ---- VERIFY FILE EXISTS ----
     if File.exist?(file_name)
       UI.success("✅ .env file exists at #{file_name}")
     else
       UI.user_error!("❌ .env file does NOT exist at #{file_name}")
     end
-
-    # ---- VERIFY FILE IS NOT EMPTY ----
-    content = File.read(file_name).strip
-
-    if content.empty?
-      UI.user_error!("❌ .env file is EMPTY")
-    else
-      UI.success("✅ .env file has content")
-    end
-
-    # ---- SAFE PREVIEW (no secrets leak) ----
-    UI.message("🔎 .env preview (keys only):")
-
-    content.each_line do |line|
-      next if line.strip.empty? || line.start_with?("#")
-      UI.message("#{line}")
-    end
-    # --------------
 
     ENV["FASTLANE_DISABLE_COLORS"] = "1"
 
@@ -232,7 +211,7 @@ end
 
 after_all do |lane|
   buildNumber = get_build_number() 
-  # slack(message: "Build success :rocket: \nBuild Number: " + buildNumber.to_s)
+  slack(message: "Build success :rocket: \nBuild Number: " + buildNumber.to_s)
   end
 
   error do |lane, exception|

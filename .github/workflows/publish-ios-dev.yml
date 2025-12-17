@@ -189,7 +189,7 @@ jobs:
           FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
         run: |
           cd ios
-          bundle exec fastlane github_actions_dev
+          ENVFILE=.env bundle exec fastlane github_actions_dev
 
       - name: Cleanup
         if: always()
