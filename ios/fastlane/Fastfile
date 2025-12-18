@@ -20,7 +20,7 @@ platform :ios do
   lane :dev do
     file_name = "../../.env"
     file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app"
-    auth_header = "Authorization: token #{ENV["GITHUB_ACCESS_TOKEN"]}"
+    auth_header = "Authorization: token #{ENV["GITHUB_TOKEN"]}"
     sh(
       "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
       step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
@@ -65,7 +65,7 @@ platform :ios do
   lane :live do
     file_name = "../../.env"
     file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/PRODUCTION/.env.app"
-    auth_header = "Authorization: token #{ENV["GITHUB_ACCESS_TOKEN"]}"
+    auth_header = "Authorization: token #{ENV["GITHUB_TOKEN"]}"
     sh(
       "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
       step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
@@ -95,7 +95,7 @@ platform :ios do
     export_method: "app-store",
     export_options: {
       provisioningProfiles: {
-          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) + " AppStore" # Value of this parameter is the name of the Provisioning Profile. By default, it will be "{bundleId} AppStore"
+          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => "match AppStore com.bithyve.tribe"
       }
     },
     build_path: "./builds",
@@ -104,22 +104,86 @@ platform :ios do
     clean_build_artifacts
   end
 
-  desc "Push a new live build to TestFlight (GitHub Actions)"
-  lane :github_actions_live do
+  desc "Push a new dev build to TestFlight (GitHub Actions)"
+  lane :github_actions_dev do
+    file_name = "../../.env"
+    if File.exist?(file_name)
+      UI.success("✅ .env file exists at #{file_name}")
+    else
+      UI.user_error!("❌ .env file does NOT exist at #{file_name}")
+    end
+
     ENV["FASTLANE_DISABLE_COLORS"] = "1"
+
+    UI.message("APPLE_TEAM_ID env: #{ENV['APPLE_TEAM_ID'] ? 'SET' : 'MISSING'}")
+    UI.message("APPLE_TEAM_ID length: #{ENV['APPLE_TEAM_ID']&.length}")
+
     api_key_path = File.expand_path("../fastlane/AuthKey.p8", __dir__)
     api_key = app_store_connect_api_key(
-      key_id: ENV["APP_STORE_CONNECT_API_KEY_ID"],
+      key_id: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY_ID"],
       issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
-      key_filepath: api_key_path
+      key_filepath: api_key_path,
+      is_key_content_base64: false
     )
-    get_certificates(api_key: api_key, output_path: "./builds")
-    get_provisioning_profile(api_key: api_key, output_path: "./builds", filename: "tribe_dist.mobileprovision")
-    update_project_provisioning(
-      xcodeproj: "tribe.xcodeproj",
-      target_filter: "tribe",
-      profile: "./builds/tribe_dist.mobileprovision",
-      build_configuration: "Release"
+
+    create_keychain(
+      name: "temp_keychain",
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
+    match(
+      type: "appstore",                     
+      readonly: true,                       
+      git_url: ENV["MATCH_GIT_URL"],        
+      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+      team_id: ENV["APPLE_TEAM_ID"],
+      keychain_name: "temp_keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
+    )
+
+    build_app(
+      workspace: "tribe.xcworkspace",
+      scheme: "tribe-dev",
+      clean: true,
+      output_directory: "./builds",
+      export_method: "app-store",
+      xcargs: "-verbose"
+    )
+    upload_to_testflight(api_key: api_key)
+    clean_build_artifacts
+    build_number = get_build_number(xcodeproj: "tribe.xcodeproj")
+    UI.success("✅ Dev build successfully uploaded to TestFlight! Build Number: #{build_number}")
+  end
+  
+  desc "Push a new live build to TestFlight (GitHub Actions)"
+  lane :github_actions_live do
+    file_name = "../../.env"
+    file_url = "https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/PRODUCTION/.env.app"
+    auth_header = "Authorization: token #{ENV["GITHUB_TOKEN"]}"
+    sh(
+      "curl -H '#{auth_header}' -o '#{file_name}' -s '#{file_url}'",
+      step_name: "curl -H '***' -o '#{file_name}' -s '#{file_url}'"
+    )
+
+    ENV["FASTLANE_DISABLE_COLORS"] = "1"
+
+    api_key_path = File.expand_path("../fastlane/AuthKey.p8", __dir__)
+    api_key = app_store_connect_api_key(
+      key_id: ENV["FASTLANE_APP_STORE_CONNECT_API_KEY_ID"],
+      issuer_id: ENV["APP_STORE_CONNECT_ISSUER_ID"],
+      key_filepath: api_key_path,
+      is_key_content_base64: false
+    )
+    match(
+      type: "appstore",                     
+      readonly: true,                       
+      git_url: ENV["MATCH_GIT_URL"],        
+      app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
+      team_id: ENV["APPLE_TEAM_ID"]
     )
     update_project_team(
       path: "tribe.xcodeproj",
@@ -130,17 +194,18 @@ platform :ios do
       scheme: "tribe",
       clean: true,
       export_method: "app-store",
+      build_path: "./builds",
+      output_directory: "./builds",
       export_options: {
         provisioningProfiles: {
-          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => "tribe_dist.mobileprovision"
+          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => "match AppStore com.bithyve.tribe"
         }
-      },
-      build_path: "./builds",
-      output_directory: "./builds"
+      }
     )
     upload_to_testflight(api_key: api_key)
     clean_build_artifacts
-    puts "✅ Live build successfully uploaded to TestFlight! Build Number: #{latest_build}"
+    build_number = get_build_number(xcodeproj: "tribe.xcodeproj")
+    UI.success("✅ Live build successfully uploaded to TestFlight! Build Number: #{build_number}")
   end
 end
 
@@ -150,8 +215,8 @@ after_all do |lane|
   end
 
   error do |lane, exception|
-    slack(
-      message: exception.message,
-      success:false
-    )
+    # slack(
+    #   message: exception.message,
+    #   success:false
+    # )
   end

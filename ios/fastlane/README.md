@@ -31,6 +31,14 @@ Push a new dev build to TestFlight
 
 Push a new live build to TestFlight
 
+### ios github_actions_dev
+
+```sh
+[bundle exec] fastlane ios github_actions_dev
+```
+
+Push a new dev build to TestFlight (GitHub Actions)
+
 ### ios github_actions_live
 
 ```sh

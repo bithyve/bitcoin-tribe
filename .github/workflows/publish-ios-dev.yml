@@ -1,0 +1,165 @@
+name: Publish iOS dev app to TestFlight
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  ios-dev:
+    runs-on: macos-latest
+    permissions:
+      contents: read 
+    env:
+      FASTLANE_DISABLE_COLORS: "1"
+      MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+      FASTLANE_APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+      KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+      GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+      FASTLANE_APPLE_ID: ${{ secrets.FASTLANE_APPLE_ID }}
+      SLACK_URL: ${{ secrets.SLACK_URL }}
+      SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
+
+    steps:
+      - name: Set up Fastlane environment variables
+        run: |
+          echo "FASTLANE_DISABLE_COLORS=1" >> $GITHUB_ENV
+          echo "BUNDLE_IDENTIFIER=com.bithyve.tribe.dev" >> $GITHUB_ENV
+          
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Sanity check GITHUB_TOKEN presence
+        run: |
+          if [ -z "${GITHUB_TOKEN}" ]; then
+            echo "❌ GITHUB_TOKEN is empty"
+            exit 1
+          fi
+          echo "✅ GITHUB_TOKEN is present"
+        env:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+
+      - name: Download env file
+        run: |
+          curl -L \
+            -H "Accept: application/vnd.github.object" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN_GITHUB }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -o .env \
+            https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 23.5.0
+
+      - name: Download rgb_libFFI XCFramework
+        run: |
+          set -e
+          mkdir -p ios/rgb
+          cd ios/rgb
+          echo "⬇️ Downloading rgb_libFFI.xcframework..."
+          curl -L \
+            https://github.com/RGB-Tools/rgb-lib-swift/releases/download/0.3.0-beta.4/rgb_libFFI.xcframework.zip \
+            -o rgb_libFFI.xcframework.zip
+          echo "📦 Extracting..."
+          unzip -o rgb_libFFI.xcframework.zip
+          echo "🧹 Cleaning up zip"
+          rm rgb_libFFI.xcframework.zip
+          echo "✅ Contents of ios/rgb:"
+          ls -la
+
+      - name: Verify rgb_libFFI.xcframework exists
+        run: |
+          test -d ios/rgb/rgb_libFFI.xcframework || \
+          (echo "❌ rgb_libFFI.xcframework missing" && exit 1)
+
+      - name: Get Yarn cache dir
+        id: yarn-cache
+        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+        
+      - name: Install JS dependencies
+        run: yarn install --frozen-lockfile       
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Install Bundler
+        run: gem install bundler
+
+      - name: Ensure Correct Bundler Version
+        run: bundle -v  
+
+      - name: Install Fastlane dependencies
+        run: |
+          cd ios
+          bundle config set --local path 'vendor/bundle'
+          bundle check || bundle install
+      
+      - name: Debug Installed Gems
+        run: |
+          cd ios
+          bundle list
+
+      - name: Decode App Store API Key
+        run: |
+          mkdir -p ios/fastlane
+          printf "%s" "${{ secrets.APP_STORE_CONNECT_API_KEY }}" | base64 --decode > ios/fastlane/AuthKey.p8
+          chmod 600 ios/fastlane/AuthKey.p8
+          ls -la ios/fastlane/
+
+      - name: Select Xcode 16.4
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.4.app
+          xcodebuild -version
+
+      - name: Check installed iOS SDKs
+        run: |
+          xcodebuild -showsdks
+
+      - name: Cache CocoaPods specs
+        uses: actions/cache@v3
+        with:
+          path: ~/.cocoapods
+          key: ${{ runner.os }}-cocoapods-${{ hashFiles('ios/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cocoapods-
+
+      - name: Install pods
+        run: |
+          cd ios
+          pod install
+          cd ..
+
+      - name: Run Fastlane to upload to TestFlight
+        id: fastlane_step
+        env:
+          FASTLANE_PASSWORD: ${{ secrets.APP_STORE_PASSWORD }}
+        run: |
+          cd ios
+          ENVFILE=.env bundle exec fastlane github_actions_dev
+
+      - name: Cleanup
+        if: always()
+        run: |
+            rm -f ios/fastlane/AuthKey.p8
+            rm -f .env
+
+
