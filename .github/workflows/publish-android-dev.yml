@@ -22,14 +22,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
 
     steps:
-      - name: Check disk usage before
-        run: df -h
-
-      - name: Delete huge unnecessary tools folder
-        run: rm -rf /opt/hostedtoolcache
-
-      - name: Check disk usage after
-        run: df -h
+      - name: Free disk space on runner
+        run: |
+          echo "📦 Disk usage BEFORE cleanup"
+          df -h
+          echo "🧹 Removing hosted tool cache"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "📦 Disk usage AFTER cleanup"
+          df -h
 
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -63,12 +63,13 @@ jobs:
         run: |
           echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' | jq . > android/key.json
           ls -lah android/key.json  # Verify file exists
-          cat android/key.json  # Debugging: Ensure JSON is valid
+          jq empty android/key.json  # Debugging: Ensure JSON is valid
           
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
