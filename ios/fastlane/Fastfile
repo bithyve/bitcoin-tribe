@@ -178,29 +178,33 @@ platform :ios do
       key_filepath: api_key_path,
       is_key_content_base64: false
     )
+
+    create_keychain(
+      name: "temp_keychain",
+      password: ENV["KEYCHAIN_PASSWORD"],
+      default_keychain: true,
+      unlock: true,
+      timeout: 3600,
+      add_to_search_list: true
+    )
+
     match(
       type: "appstore",                     
       readonly: true,                       
       git_url: ENV["MATCH_GIT_URL"],        
       app_identifier: CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier),
-      team_id: ENV["APPLE_TEAM_ID"]
+      team_id: ENV["APPLE_TEAM_ID"],
+      keychain_name: "temp_keychain",
+      keychain_password: ENV["KEYCHAIN_PASSWORD"]
     )
-    update_project_team(
-      path: "tribe.xcodeproj",
-      teamid: ENV["APPLE_TEAM_ID"]
-    )
+
     build_app(
       workspace: "tribe.xcworkspace",
       scheme: "tribe",
       clean: true,
       export_method: "app-store",
-      build_path: "./builds",
       output_directory: "./builds",
-      export_options: {
-        provisioningProfiles: {
-          CredentialsManager::AppfileConfig.try_fetch_value(:app_identifier) => "match AppStore com.bithyve.tribe"
-        }
-      }
+      xcargs: "-verbose"
     )
     upload_to_testflight(api_key: api_key)
     clean_build_artifacts
