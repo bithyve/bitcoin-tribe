@@ -1,0 +1,95 @@
+name: Publish Android dev app to PlayStore
+
+on:
+  push:
+    branches:
+      - androidDevDeploy 
+  workflow_dispatch:
+
+jobs:
+  android-dev:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD_DEV }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD_DEV }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS_DEV }}
+          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+          PACKAGE_NAME: ${{ secrets.PACKAGE_NAME_DEV }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
+
+    steps:
+      - name: Free disk space on runner
+        run: |
+          echo "📦 Disk usage BEFORE cleanup"
+          df -h
+          echo "🧹 Removing hosted tool cache"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "📦 Disk usage AFTER cleanup"
+          df -h
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download env file
+        run: |
+          curl -L \
+            -H "Accept: application/vnd.github.object" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN_GITHUB }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -o .env \
+            https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create required directories
+        run: mkdir -p android/app
+
+      - name: Decode and place signing key
+        run: |
+          echo "${{ secrets.SIGNING_KEY_DEV }}" | base64 --decode > android/app/debug.keystore
+          ls -lah android/app/debug.keystore  # Debugging: Ensure file exists
+          keytool -list -keystore android/app/debug.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD_DEV }}" -v
+          echo "Signing key decoded and placed successfully"
+
+      - name: Create Google Play Service Account JSON
+        run: |
+          echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' | jq . > android/key.json
+          ls -lah android/key.json  # Verify file exists
+          jq empty android/key.json  # Debugging: Ensure JSON is valid
+          
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Set up Ruby and Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: gem install fastlane
+
+      - name: Run Fastlane for Play Store Deployment
+        id: fastlane_step
+        run: |
+          cd android
+          ENVFILE=.env bundle exec fastlane github_actions_dev
+
+      - name: Cleanup
+        if: always()
+        run: |
+            rm -f .env

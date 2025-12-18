@@ -50,6 +50,14 @@ Push a new dev build to Slack
 
 Push a new live build from github actions to internal track on Play Store
 
+### android github_actions_dev
+
+```sh
+[bundle exec] fastlane android github_actions_dev
+```
+
+Push a new dev build from github actions to internal track on Play Store
+
 ### android live
 
 ```sh
