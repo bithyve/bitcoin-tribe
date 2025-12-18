@@ -497,7 +497,7 @@ const DefaultCoin = ({
   refreshingStatus,
   onRefresh,
 }: {
-  presetAssets: Asset[];
+  presetAssets: Asset[] | null;
   refreshingStatus: boolean;
   onRefresh: () => void;
 }) => {
@@ -585,12 +585,12 @@ const DefaultCoin = ({
     <View style={styles.container}>
       <View style={styles.row}>
         <Carousel
-          enabled={presetAssets.length > 1}
+          enabled={presetAssets && presetAssets.length > 1}
           ref={carouselRef}
           style={styles.list}
           width={windowWidth * 0.94}
           height={CARD_HEIGHT + hp(7)}
-          data={presetAssets}
+          data={presetAssets || []}
           onSnapToItem={setCurrentIndex}
           onProgressChange={progress}
           vertical
@@ -623,7 +623,7 @@ const DefaultCoin = ({
         <View style={styles.containerScrollIndicator}>
           <Pagination.Basic
             progress={progress}
-            data={presetAssets}
+            data={presetAssets || []}
             dotStyle={styles.scrollIndicatorItem}
             activeDotStyle={styles.scrollIndicatorItemCurrent}
             onPress={onPressPagination}
@@ -675,8 +675,8 @@ const DefaultCoin = ({
         refresh={onRefresh}
         refreshingStatus={false}
         wallet={wallet}
-        coin={currentAsset?.name || presetAssets[currentIndex].name}
-        assetId={currentAsset?.assetId || presetAssets[currentIndex].assetId}
+        coin={currentAsset?.name || presetAssets?.[currentIndex]?.name}
+        assetId={currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId}
         precision={currentAsset?.precision || 0}
         scrollY={0}
         schema={currentAssetSchema}

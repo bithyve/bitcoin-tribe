@@ -94,7 +94,8 @@
     "communityServerUnavailable": "コミュニティサーバーは現在利用できません、または到達できません。",
     "connectedToCommunityServer": "コミュニティサーバーに接続済み",
     "communityServerOffline": "コミュニティサーバーオフライン",
-    "communityServerOnline": "コミュニティサーバーオンライン"
+    "communityServerOnline": "コミュニティサーバーオンライン",
+    "connectingToCommunityServer": "コミュニティサーバーに接続中..."
   },
   "onBoarding": {
     "welcome": "ようこそ",

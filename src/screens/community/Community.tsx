@@ -43,6 +43,7 @@ function Community() {
   const [scanning, setScanning] = useState(true);
   const [isSyncing, setIsSyncing] = useState(false);
   const [hasAutoSynced, setHasAutoSynced] = useState(false);
+  const [hasConnectionSettled, setHasConnectionSettled] = useState(false);
   const navigation = useNavigation();
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
@@ -361,12 +362,66 @@ function Community() {
     }
   };
 
+  // Reset settlement state when initialization starts
   useEffect(() => {
-    if (!isInitializing && !isRootPeerConnected)
-      setCommunityStatus('offline');
-    else if (communityStatus)
+    if (isInitializing) {
+      setHasConnectionSettled(false);
+    }
+  }, [isInitializing]);
+
+  // Track when connection settles (we've seen at least one connection event)
+  // Connection is considered "settled" when:
+  // 1. We've seen isRootPeerConnected become true (connected), OR
+  // 2. After initialization completes, we wait a reasonable time and if still not connected, mark as settled (offline)
+  useEffect(() => {
+    if (isInitializing) {
+      return;
+    }
+
+    // If we become connected, immediately mark as settled
+    if (isRootPeerConnected && !hasConnectionSettled) {
+      setHasConnectionSettled(true);
+      return;
+    }
+
+    // If we've already been connected before (settled), and we disconnect,
+    // we're still considered settled (just show offline status)
+    if (hasConnectionSettled && !isRootPeerConnected) {
+      // Already settled, no action needed
+      return;
+    }
+
+    // If we haven't settled yet and we're not connected, start a timer
+    // This gives time for the connection attempt to complete
+    if (!hasConnectionSettled && !isRootPeerConnected) {
+      const timer = setTimeout(() => {
+        setHasConnectionSettled(true);
+      }, 10000); // Give 10 seconds for connection attempt
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isRootPeerConnected, isInitializing, hasConnectionSettled]);
+
+  // Set community status based on connection state
+  useEffect(() => {
+    // Don't set status while initializing
+    if (isInitializing) {
+      return;
+    }
+
+    // If connection hasn't settled yet, show connecting
+    if (!hasConnectionSettled) {
+      setCommunityStatus('connecting');
+      return;
+    }
+
+    // Connection has settled, show final status
+    if (isRootPeerConnected) {
       setCommunityStatus('online');
-  }, [isInitializing, isRootPeerConnected]);
+    } else {
+      setCommunityStatus('offline');
+    }
+  }, [isInitializing, isRootPeerConnected, hasConnectionSettled]);
 
   // Get connection status for status bar
   const getConnectionStatus = () => {
@@ -480,17 +535,22 @@ function Community() {
             onRefresh={handleRefresh}
             refreshing={refreshing}
             ListEmptyComponent={
-              <EmptyStateView
-                title={community.noConnectionTitle}
-                subTitle={community.noConnectionSubTitle}
-                IllustartionImage={
-                  isThemeDark ? (
-                    <EmptyCommunityIllustration />
-                  ) : (
-                    <EmptyCommunityIllustrationLight />
-                  )
-                }
-              />
+              <>
+                <EmptyStateView
+                  title={community.noConnectionTitle}
+                  subTitle={community.noConnectionSubTitle}
+                  IllustartionImage={
+                    isThemeDark ? (
+                      <EmptyCommunityIllustration />
+                    ) : (
+                      <EmptyCommunityIllustrationLight />
+                    )
+                  }
+                />
+                <AppText variant="heading3" style={styles.pullText}>
+                  Pull down to sync inbox
+                </AppText>
+              </>
             }
             style={styles.flatList}
             ItemSeparatorComponent={ItemSeparatorComponent}
@@ -669,7 +729,7 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.optionsCardGradient2,
       marginVertical: hp(15),
     },
-    roomCard: { flexDirection: 'row', justifyContent: 'space-between',  },
+    roomCard: { flexDirection: 'row', justifyContent: 'space-between' },
     roomCardRow: {
       gap: wp(15),
       flexDirection: 'row',
@@ -679,8 +739,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.mutedTab,
       paddingTop: hp(10),
     },
-    roomImageContainer: {
-    },
+    roomImageContainer: {},
     roomImage: {
       height: wp(50),
       width: wp(50),
@@ -1023,6 +1082,11 @@ const getStyles = (theme: AppTheme) =>
     loadingText: {
       marginTop: hp(12),
       color: theme.colors.text,
+    },
+    pullText: {
+      color: theme.colors.secondaryHeadingColor,
+      alignSelf: 'center',
+      marginTop: hp(5),
     },
   });
 

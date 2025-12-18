@@ -94,7 +94,8 @@
     "communityServerUnavailable": "Il server della comunità non è attualmente disponibile o non raggiungibile.",
     "connectedToCommunityServer": "Connesso al server della comunità",
     "communityServerOffline": "Server della comunità offline",
-    "communityServerOnline": "Server della comunità online"
+    "communityServerOnline": "Server della comunità online",
+    "connectingToCommunityServer": "Connessione al server della comunità..."
   },
   "onBoarding": {
     "welcome": "Benvenuto",
