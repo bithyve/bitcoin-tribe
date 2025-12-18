@@ -3,7 +3,7 @@ name: Publish iOS dev app to TestFlight
 on:
   push:
     branches:
-      - testiOSDeploymentDev
+      - dev
   workflow_dispatch:
 
 jobs:
