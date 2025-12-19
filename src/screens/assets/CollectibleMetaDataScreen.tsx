@@ -389,7 +389,6 @@ const CollectibleMetaDataScreen = () => {
                 {!collectible?.issuer?.verified && (
                   <View style={styles.seperatorView} />
                 )}
-              </>
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {isAddedInRegistry && (
                 <SelectOption
