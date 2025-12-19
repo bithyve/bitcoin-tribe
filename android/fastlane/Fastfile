@@ -60,16 +60,45 @@ platform :android do
       }
     )
     upload_to_play_store(
-      track: 'internal',
-      json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
-      package_name: 'com.bithyve.tribe'
+        track: 'internal',
+        json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
+        package_name: 'com.bithyve.tribe'
+      )
+
+      gradle(
+        task: 'assemble',
+        build_type: 'productionRelease',
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
+      )
+
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+  end
+
+  desc "Push a new dev build from github actions to internal track on Play Store"
+  lane :github_actions_dev do
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+    releaseFilePath = File.join(Dir.pwd, "..", "app", "debug.keystore")
+    gradle(task: 'clean')
+    gradle(
+      task: 'assemble',
+      build_type: 'devRelease',
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
     )
-    # file_path = lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH] || lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
-    # puts "🔍 Build Output Path: #{file_path}"
-    # if file_path.nil? || file_path.empty? || !File.exist?(file_path)
-    #   UI.user_error!("🚨 APK file not found at: #{file_path}")
-    # end
-    # upload_to_slack({ file_path: file_path })
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
   desc "Push a new live build to Slack and internal track on Play Store"
@@ -117,8 +146,6 @@ lane :upload_to_slack do |options|
   file_name = File.basename(file_path)
   access_token = ENV["SLACK_ACCESS_TOKEN"].to_s
   channel_id = "CN7K6RY9Z"
-
-  UI.message("Starting Slack upload flow for #{file_name} to channel: #{channel_id}")
 
   file_size = File.size(file_path)
   cmd_get_url = %Q(curl -sS -H "Authorization: Bearer #{access_token}" \
