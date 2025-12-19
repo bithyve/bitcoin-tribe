@@ -372,8 +372,6 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-            {hasIssuanceTransaction && (
-              <>
                 <VerifyIssuer
                   assetId={assetId}
                   schema={RealmSchema.Collectible}
@@ -394,7 +392,6 @@ const CollectibleMetaDataScreen = () => {
                   <View style={styles.seperatorView} />
                 )}
               </>
-            )}
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {isAddedInRegistry && (
                 <SelectOption
