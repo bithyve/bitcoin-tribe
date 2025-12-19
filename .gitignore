@@ -83,3 +83,4 @@ ios/rgb/rgb_libFFI.xcframework
 # react-native-config codegen
 ios/tmp.xcconfig
 ios/builds.xcarchive
+ios/fastlane/AuthKey.p8

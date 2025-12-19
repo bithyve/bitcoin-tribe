@@ -38,7 +38,7 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    # upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
   desc "Push a new live build from github actions to internal track on Play Store"
@@ -60,16 +60,45 @@ platform :android do
       }
     )
     upload_to_play_store(
-      track: 'internal',
-      json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
-      package_name: 'com.bithyve.tribe'
+        track: 'internal',
+        json_key_data: ENV["PLAY_STORE_SERVICE_ACCOUNT_JSON"],
+        package_name: 'com.bithyve.tribe'
+      )
+
+      gradle(
+        task: 'assemble',
+        build_type: 'productionRelease',
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
+      )
+
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+  end
+
+  desc "Push a new dev build from github actions to internal track on Play Store"
+  lane :github_actions_dev do
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+    releaseFilePath = File.join(Dir.pwd, "..", "app", "debug.keystore")
+    gradle(task: 'clean')
+    gradle(
+      task: 'assemble',
+      build_type: 'devRelease',
+      print_command: false,
+      properties: {
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
     )
-    # file_path = lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH] || lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
-    # puts "🔍 Build Output Path: #{file_path}"
-    # if file_path.nil? || file_path.empty? || !File.exist?(file_path)
-    #   UI.user_error!("🚨 APK file not found at: #{file_path}")
-    # end
-    # upload_to_slack({ file_path: file_path })
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
   desc "Push a new live build to Slack and internal track on Play Store"
@@ -104,23 +133,87 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    # upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 end
 
 desc "Upload the APK to Slack channel"
-private_lane :upload_to_slack do |options|
+lane :upload_to_slack do |options|
   file_path = options[:file_path].to_s
-  file_name = file_path.gsub(/\/.*\//,"")
-  access_token = ENV["SLACK_ACCESS_TOKEN"]
-  channel_name = "dev-ops"
-  sh "echo Uploading " + file_name + " to Slack"
-  sh "curl --limit-rate 2048K https://slack.com/api/files.upload -F token=\"" + access_token + "\" -F channels=\"" + channel_name + "\" -F title=\"" + file_name + "\" -F filename=\"" + file_name + "\" -F file=@" + file_path
+  UI.user_error!("No file_path provided to upload_to_slack") if file_path.empty?
+  UI.user_error!("File not found at path: #{file_path}") unless File.exist?(file_path)
+
+  file_name = File.basename(file_path)
+  access_token = ENV["SLACK_ACCESS_TOKEN"].to_s
+  channel_id = "CN7K6RY9Z"
+
+  file_size = File.size(file_path)
+  cmd_get_url = %Q(curl -sS -H "Authorization: Bearer #{access_token}" \
+    -F "filename=#{file_name}" -F "length=#{file_size}" \
+    https://slack.com/api/files.getUploadURLExternal)
+
+  result_get = Actions.sh(cmd_get_url)
+  begin
+    json_get = JSON.parse(result_get)
+  rescue JSON::ParserError
+    UI.user_error!("files.getUploadURLExternal returned non-JSON: #{result_get}")
+  end
+
+  unless json_get["ok"]
+    UI.user_error!("files.getUploadURLExternal failed: #{json_get['error']} — #{json_get}")
+  end
+
+  upload_url = json_get["upload_url"]
+  file_id = json_get["file_id"]
+  UI.message("Received upload_url and file_id: #{file_id}")
+
+  UI.message("Uploading file bytes to Slack's upload_url...")
+  cmd_upload = %Q(curl -sS --fail -X POST "#{upload_url}" -F "file=@\"#{file_path}\"" -F "filename=#{file_name}")
+  begin
+    upload_output = Actions.sh(cmd_upload)
+  rescue => ex
+    UI.user_error!("Failed to upload bytes to Slack upload_url: #{ex.message}")
+  end
+
+  UI.message("Telling Slack to complete the upload and share in channel...")
+
+files_param = [{ id: file_id, title: file_name }].to_json
+escaped_files_param = files_param.gsub("'", %q('"'"'))
+cmd_complete = %Q(
+  curl -sS -H "Authorization: Bearer #{access_token}" \
+    --form-string 'files=#{escaped_files_param}' \
+    --form-string "channel_id=#{channel_id}" \
+    https://slack.com/api/files.completeUploadExternal
+).strip
+
+  result_complete = Actions.sh(cmd_complete)
+  begin
+    json_complete = JSON.parse(result_complete)
+  rescue JSON::ParserError
+    UI.user_error!("files.completeUploadExternal returned non-JSON: #{result_complete}")
+  end
+
+  unless json_complete["ok"]
+    UI.user_error!("files.completeUploadExternal failed: #{json_complete['error']} — #{json_complete}")
+  end
+
+  UI.success("Uploaded #{file_name} to Slack successfully (file_id: #{file_id})")
+  json_complete
 end
 
+
 after_all do |lane|
-  # versionCode = android_get_version_code()
-  slack(message: "Build success :rocket:\nVersion Code: ")
+  gradle_file = "../app/build.gradle"
+  text = File.read(gradle_file)
+  m = text.match(/versionCode\s*=?\s*(\d+)/)
+  if m
+    version_code = m[1].to_i
+    slack(message: "Build success :rocket:\nVersion Code: #{version_code}")
+    version_code
+  else
+    UI.user_error!("versionCode not found in #{gradle_file}. If you compute versionCode dynamically, use the Gradle task approach.")
+    slack(message: "Build success :rocket:")
+  end
   end
 
   error do |lane, exception|

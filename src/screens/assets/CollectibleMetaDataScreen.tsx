@@ -65,6 +65,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import RegistryIconLight from 'src/assets/images/registryIcon_light.svg';
 import RegistryIcon from 'src/assets/images/registryIcon.svg';
 import ImageViewing from 'react-native-image-viewing';
+import { CustomImage } from 'src/components/CustomImage';
 
 type itemProps = {
   title: string;
@@ -282,15 +283,12 @@ const CollectibleMetaDataScreen = () => {
               </AppTouchable>
               {imageSize && (
                 <AppTouchable onPress={() => setVisible(true)}>
-                  <Image
-                    source={{
-                      uri: Platform.select({
-                        android: `file://${collectible.media?.filePath}`,
-                        ios: collectible.media?.filePath,
-                      }),
-                    }}
-                    resizeMode="cover"
-                    style={[
+                  <CustomImage
+                    uri={Platform.select({
+                      android: `file://${collectible.media?.filePath}`,
+                      ios: collectible.media?.filePath,
+                    })}
+                    imageStyle={[
                       styles.imageStyle,
                       {
                         width: imageSize.width,
@@ -372,8 +370,6 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-            {hasIssuanceTransaction && (
-              <>
                 <VerifyIssuer
                   assetId={assetId}
                   schema={RealmSchema.Collectible}
@@ -394,7 +390,6 @@ const CollectibleMetaDataScreen = () => {
                   <View style={styles.seperatorView} />
                 )}
               </>
-            )}
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {isAddedInRegistry && (
                 <SelectOption
