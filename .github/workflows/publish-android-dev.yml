@@ -1,7 +1,7 @@
 name: Send Android dev app to Slack 
 
 on:
-  pull_request:
+  push:
     branches:
       - upt/ghActionTriggers
   workflow_dispatch:
