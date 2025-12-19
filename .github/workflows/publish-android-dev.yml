@@ -3,7 +3,7 @@ name: Publish Android dev app to PlayStore
 on:
   push:
     branches:
-      - androidDevDeploy 
+      - dev 
   workflow_dispatch:
 
 jobs:

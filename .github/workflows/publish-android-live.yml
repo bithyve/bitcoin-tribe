@@ -1,19 +1,50 @@
 name: Publish Android live app to PlayStore
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
-      - dev 
+      - main 
+  workflow_dispatch:
 
 jobs:
-  build-android-live:
-    name: Build and publish Android live app to PlayStore
+  android-live:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
+          SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
+          SLACK_URL: ${{ secrets.SLACK_URL }}
+          PACKAGE_NAME: ${{ secrets.PACKAGE_NAME }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
 
     steps:
+      - name: Free disk space on runner
+        run: |
+          echo "📦 Disk usage BEFORE cleanup"
+          df -h
+          echo "🧹 Removing hosted tool cache"
+          sudo rm -rf /opt/hostedtoolcache
+          echo "📦 Disk usage AFTER cleanup"
+          df -h
+
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Download env file
+        run: |
+          curl -L \
+            -H "Accept: application/vnd.github.object" \
+            -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN_GITHUB }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            -o .env \
+            https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/PRODUCTION/.env.app
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -35,12 +66,13 @@ jobs:
         run: |
           echo '${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}' | jq . > android/key.json
           ls -lah android/key.json  # Verify file exists
-          cat android/key.json  # Debugging: Ensure JSON is valid
+          jq empty android/key.json  # Debugging: Ensure JSON is valid
           
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install
@@ -56,26 +88,11 @@ jobs:
 
       - name: Run Fastlane for Play Store Deployment
         id: fastlane_step
-        env:
-          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
-          PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
-          SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
-          SLACK_URL: ${{ secrets.SLACK_URL }}
         run: |
           cd android
-          bundle exec fastlane github_actions_live
+          ENVFILE=.env bundle exec fastlane github_actions_live
 
-      - name: Post PR comment with deployment status
+      - name: Cleanup
         if: always()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [[ "${{ steps.fastlane_step.outcome }}" == "success" ]]; then
-            STATUS="✅ Deployment to Play Store succeeded!"
-          else
-            STATUS="❌ Deployment to Play Store failed. Please check the logs for details."
-          fi
-          
-          gh pr comment ${{ github.event.pull_request.number }} --body "$STATUS"
+            rm -f .env
