@@ -3,7 +3,7 @@ name: Publish Android live app to PlayStore
 on:
   push:
     branches:
-      - androidProdDeployment 
+      - main 
   workflow_dispatch:
 
 jobs:

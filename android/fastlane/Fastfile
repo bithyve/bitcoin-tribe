@@ -65,19 +65,19 @@ platform :android do
         package_name: 'com.bithyve.tribe'
       )
 
-    #   gradle(
-    #     task: 'assemble',
-    #     build_type: 'productionRelease',
-    #     print_command: false,
-    #     properties: {
-    #       "android.injected.signing.store.file" => releaseFilePath,
-    #       "android.injected.signing.store.password" => store_password,
-    #       "android.injected.signing.key.alias" => key_alias,
-    #       "android.injected.signing.key.password" => key_password,
-    #     }
-    #   )
+      gradle(
+        task: 'assemble',
+        build_type: 'productionRelease',
+        print_command: false,
+        properties: {
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
+      )
 
-    # upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
   end
 
   desc "Push a new dev build from github actions to internal track on Play Store"
@@ -217,10 +217,10 @@ after_all do |lane|
   end
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success:false
-    # )
+    slack(
+      message: exception.message,
+      success:false
+    )
   end
 
 lane :bump_version_code do
