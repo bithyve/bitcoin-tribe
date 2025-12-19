@@ -1,9 +1,15 @@
 name: Publish Android dev app to PlayStore
 
 on:
-  push:
-    branches:
-      - dev 
+  # pull_request:
+  #   branches:
+  #     - dev
+  # workflow_dispatch:
+  #   inputs:
+  #     branch:
+  #       description: "Branch to run the workflow on"
+  #       required: false
+  #       default: dev
   workflow_dispatch:
 
 jobs:
@@ -33,6 +39,9 @@ jobs:
 
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.branch || github.ref_name }}
 
       - name: Download env file
         run: |
