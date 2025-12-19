@@ -1,4 +1,4 @@
-name: Publish Android dev app to PlayStore
+name: Send Android dev app to Slack
 
 on:
   push:
