@@ -1,15 +1,10 @@
 name: Send Android dev app to Slack 
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - upt/ghActionTriggers
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: "Branch to run the workflow on"
-        required: false
-        default: upt/ghActionTriggers
 
 jobs:
   android-dev:
