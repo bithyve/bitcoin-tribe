@@ -66,32 +66,26 @@ import RegistryIconLight from 'src/assets/images/registryIcon_light.svg';
 import RegistryIcon from 'src/assets/images/registryIcon.svg';
 import ImageViewing from 'react-native-image-viewing';
 import { CustomImage } from 'src/components/CustomImage';
+import { NewAssetIdContainer } from './components/NewAssetIdContainer';
 
 type itemProps = {
   title: string;
   value: string;
-  style?: StyleProp<ViewStyle>;
+  bold?:boolean;
 };
 
-export const Item = ({ title, value, style }: itemProps) => {
+export const Item = ({ title, value, bold = false }: itemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <View style={[styles.itemWrapper, style]}>
+     <View style={[styles.itemWrapper]}>
+      <AppText variant={ bold ? "heading2Bold" : "body1"} style={styles.valueText}>
+        {value}
+      </AppText>
       <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
-      <GradientView
-        colors={[
-          theme.colors.cardGradient1,
-          theme.colors.cardGradient2,
-          theme.colors.cardGradient3,
-        ]}
-        style={styles.assetNameWrapper}>
-        <AppText variant="body2" style={styles.valueText}>
-          {value}
-        </AppText>
-      </GradientView>
+      <View style={styles.divider} />
     </View>
   );
 };
@@ -334,13 +328,10 @@ const CollectibleMetaDataScreen = () => {
             <Item
               title={home.assetName}
               value={collectible && collectible.name}
+              bold
             />
-            <Item
-              title={home.assetDescription}
-              value={collectible && collectible.details}
-            />
-            <View style={styles.wrapper}>
-              <AssetIDContainer assetId={assetId} />
+            <View style={styles.gutter}>
+              <NewAssetIdContainer assetId={assetId} />
             </View>
             <Item
               title={assets.issuedSupply}
@@ -358,7 +349,10 @@ const CollectibleMetaDataScreen = () => {
                     )
               }
             />
-
+            <Item
+              title={collectible && collectible.details}
+              value={home.assetDescription }
+            />
             <Item
               title={assets.precision}
               value={collectible && collectible.precision}
@@ -523,7 +517,7 @@ const getStyles = (theme: AppTheme) =>
       paddingHorizontal: hp(16),
     },
     itemWrapper: {
-      marginVertical: hp(10),
+      marginTop: hp(10),
       paddingHorizontal: hp(16),
     },
     labelText: {
@@ -587,6 +581,15 @@ const getStyles = (theme: AppTheme) =>
     },
     viewRegistryCtaWrapper: {
       marginTop: hp(10),
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme.colors.separator,
+      marginTop: hp(10),
+    },
+    gutter: {
+      paddingHorizontal: wp(16),
     },
   });
 

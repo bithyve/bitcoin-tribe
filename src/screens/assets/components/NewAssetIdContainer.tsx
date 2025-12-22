@@ -49,7 +49,7 @@ export const NewAssetIdContainer = ({ assetId }: AssetIDContainerProps) => {
     <>
       <View style={styles.container}>
         <AppText
-          variant="heading2Bold"
+          variant="body1"
           numberOfLines={1}
           ellipsizeMode="tail"
           style={styles.assetIdTxt}>
