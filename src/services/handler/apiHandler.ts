@@ -7,7 +7,7 @@ import {
   TxPriority,
   WalletType,
 } from 'src/services/wallets/enums';
-import config from 'src/utils/config';
+import config, { APP_STAGE } from 'src/utils/config';
 import DeviceInfo from 'react-native-device-info';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import {
@@ -611,6 +611,9 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+      config.NETWORK_TYPE = app.networkType;
+    }
     // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
     // const isWalletOnline = await RGBServices.initiate(
     //   rgbWallet.mnemonic,
@@ -650,6 +653,9 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+      if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+        config.NETWORK_TYPE = app.networkType;
+      }
       return { key, isWalletOnline: false };
     } catch (error) {
       throw new Error('Invalid PIN');
@@ -678,6 +684,9 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
+    if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+      config.NETWORK_TYPE = app.networkType;
+    }
     return { key, isWalletOnline: false };
     if (
       app.appType === AppType.NODE_CONNECT ||
