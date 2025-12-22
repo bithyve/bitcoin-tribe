@@ -13,6 +13,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 # Available Actions
 
+### upload_to_slack
+
+```sh
+[bundle exec] fastlane upload_to_slack
+```
+
+Upload the APK to Slack channel
+
 ### bump_version_code
 
 ```sh
@@ -41,6 +49,14 @@ Push a new dev build to Slack
 ```
 
 Push a new live build from github actions to internal track on Play Store
+
+### android github_actions_dev
+
+```sh
+[bundle exec] fastlane android github_actions_dev
+```
+
+Push a new dev build from github actions to internal track on Play Store
 
 ### android live
 

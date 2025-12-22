@@ -434,7 +434,7 @@ export const UDADetailsScreen = ({ route, data }) => {
         overScrollMode="never">
         {showHeader && (
           <AppHeader
-            title={imageView ? '' : assets.udaDetails}
+            title={''}
             style={styles.headerStyle}
             backIcon={ isThemeDark? <BackTranslucent />: <BackTranslucentLight/>}
           />

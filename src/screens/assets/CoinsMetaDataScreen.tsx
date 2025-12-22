@@ -64,7 +64,8 @@ export const Item = ({ title, value, width = '100%' }) => {
           theme.colors.cardGradient2,
           theme.colors.cardGradient3,
         ]}
-        style={styles.assetNameWrapper}>
+        style={styles.assetNameWrapper}
+      >
         <AppText variant="body2" style={styles.valueText}>
           {value}
         </AppText>
@@ -193,7 +194,8 @@ const CoinsMetaDataScreen = () => {
       ) : (
         <ScrollView
           style={styles.scrollingContainer}
-          showsVerticalScrollIndicator={false}>
+          showsVerticalScrollIndicator={false}
+        >
           <View style={styles.wrapper}>
             <IssuerVerified
               id={twitterVerification?.id}
@@ -228,11 +230,7 @@ const CoinsMetaDataScreen = () => {
           </View>
           <View style={styles.rowWrapper}>
             <Item title={home.assetName} value={coin.name} width={'45%'} />
-            <Item
-              title={home.assetTicker}
-              value={coin.ticker}
-              width={'45%'}
-            />
+            <Item title={home.assetTicker} value={coin.ticker} width={'45%'} />
           </View>
           <View style={styles.wrapper}>
             <AssetIDContainer assetId={assetId} />
@@ -246,8 +244,11 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.rowWrapper}>
             <Item
               title={assets.issuedSupply}
-              value={coin.precision === 0
-                  ? numberWithCommas(Number(coin?.issuedSupply || coin?.maxSupply))
+              value={
+                coin.precision === 0
+                  ? numberWithCommas(
+                      Number(coin?.issuedSupply || coin?.maxSupply),
+                    )
                   : numberWithCommas(
                       Number(coin?.issuedSupply || coin?.maxSupply) /
                         10 ** coin?.precision,
@@ -269,27 +270,26 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
-          {hasIssuanceTransaction && (
-            <>
-              <VerifyIssuer
-                assetId={assetId}
-                schema={RealmSchema.Coin}
-                onVerificationComplete={() => setRefreshToggle(t => !t)}
-                onRegisterComplete={() => setRefreshToggle(t => !t)}
-                asset={coin}
-                showVerifyIssuer={showVerifyIssuer}
-                showDomainVerifyIssuer={showDomainVerifyIssuer}
-                onPressShare={() => {
-                  if (!coin?.isIssuedPosted) {
-                    setVisibleIssuedPostOnTwitter(true);
-                  } else if (!coin?.isVerifyPosted && verified) {
-                    setVisiblePostOnTwitter(true);
-                  }
-                }}
-              />
-              {!coin?.issuer?.verified && <View style={styles.seperatorView} />}
-            </>
-          )}
+          <>
+            <VerifyIssuer
+              assetId={assetId}
+              hasIssuanceTransaction={hasIssuanceTransaction}
+              schema={RealmSchema.Coin}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              onRegisterComplete={() => setRefreshToggle(t => !t)}
+              asset={coin}
+              showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
+              onPressShare={() => {
+                if (!coin?.isIssuedPosted) {
+                  setVisibleIssuedPostOnTwitter(true);
+                } else if (!coin?.isVerifyPosted && verified) {
+                  setVisiblePostOnTwitter(true);
+                }
+              }}
+            />
+            {!coin?.issuer?.verified && <View style={styles.seperatorView} />}
+          </>
           <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
             {isAddedInRegistry && (
               <SelectOption

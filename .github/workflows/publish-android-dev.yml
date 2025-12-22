@@ -1,24 +1,24 @@
-name: Publish Android live app to PlayStore
+name: Send Android dev app to Slack
 
 on:
   push:
     branches:
-      - main 
+      - dev 
   workflow_dispatch:
 
 jobs:
-  android-live:
+  android-dev:
     runs-on: ubuntu-latest
     permissions:
       contents: read
     env:
-          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD }}
-          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS }}
+          STORE_PASSWORD: ${{ secrets.SIGNING_STORE_PASSWORD_DEV }}
+          KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD_DEV }}
+          KEY_ALIAS: ${{ secrets.SIGNING_KEY_ALIAS_DEV }}
           PLAY_STORE_SERVICE_ACCOUNT_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_JSON }}
           SLACK_ACCESS_TOKEN: ${{ secrets.SLACK_ACCESS_TOKEN }}
           SLACK_URL: ${{ secrets.SLACK_URL }}
-          PACKAGE_NAME: ${{ secrets.PACKAGE_NAME }}
+          PACKAGE_NAME: ${{ secrets.PACKAGE_NAME_DEV }}
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN_GITHUB }}
 
     steps:
@@ -32,10 +32,7 @@ jobs:
           df -h
 
       - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.inputs.branch }}
+        uses: actions/checkout@v3
 
       - name: Download env file
         run: |
@@ -44,7 +41,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.ACCESS_TOKEN_GITHUB }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             -o .env \
-            https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/PRODUCTION/.env.app
+            https://raw.githubusercontent.com/bithyve/bitcoin-tribe-envs/DEVELOPMENT/.env.app
 
       - name: Set up JDK
         uses: actions/setup-java@v3
@@ -57,9 +54,9 @@ jobs:
 
       - name: Decode and place signing key
         run: |
-          echo "${{ secrets.SIGNING_KEY }}" | base64 --decode > android/app/release.keystore
-          ls -lah android/app/release.keystore  # Debugging: Ensure file exists
-          keytool -list -keystore android/app/release.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD }}" -v
+          echo "${{ secrets.SIGNING_KEY_DEV }}" | base64 --decode > android/app/debug.keystore
+          ls -lah android/app/debug.keystore  # Debugging: Ensure file exists
+          keytool -list -keystore android/app/debug.keystore -storepass "${{ secrets.SIGNING_KEY_PASSWORD_DEV }}" -v
           echo "Signing key decoded and placed successfully"
 
       - name: Create Google Play Service Account JSON
@@ -90,7 +87,7 @@ jobs:
         id: fastlane_step
         run: |
           cd android
-          ENVFILE=.env bundle exec fastlane github_actions_live
+          ENVFILE=.env bundle exec fastlane github_actions_dev
 
       - name: Cleanup
         if: always()
