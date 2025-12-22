@@ -94,6 +94,7 @@ export default class Relay {
       try {
         res = await RestClient.post(`${RELAY}/utils/fetchFeeAndExchangeRates`, {
           HEXA_ID,
+          network: config.NETWORK_TYPE.toString(),
         });
       } catch (err) {
         if (err.response) {
@@ -377,7 +378,10 @@ export default class Relay {
       }
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/servicefee`);
+        res = await RestClient.get(`${RELAY}/servicefee`, {
+          'Content-Type': 'application/json',
+          network: config.NETWORK_TYPE.toString(),
+        });
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
