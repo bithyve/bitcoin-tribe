@@ -3,7 +3,6 @@ import React, {
   useContext,
   useCallback,
   useState,
-  useRef,
 } from 'react';
 import { StyleSheet, ImageBackground } from 'react-native';
 import LottieView from 'lottie-react-native';
@@ -11,7 +10,6 @@ import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useMutation } from 'react-query';
 import { AppTheme } from 'src/theme';
-import ScreenContainer from 'src/components/ScreenContainer';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys, Storage } from 'src/storage';
