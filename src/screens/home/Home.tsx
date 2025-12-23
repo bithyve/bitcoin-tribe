@@ -51,6 +51,7 @@ import DefaultCoin from './DefaultCoin';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { AppUpdateModal } from './components/AppUpdateModal';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -339,12 +340,10 @@ function HomeScreen() {
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showScanner={true} />
       </View>
-      <ScrollView
-          showsVerticalScrollIndicator={false}
-          bounces={false}
-          >
-            <DefaultCoin presetAssets={presetAssets}/>
-        </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
+        <DefaultCoin presetAssets={presetAssets} />
+      </ScrollView>
+      <AppUpdateModal />
     </ScreenContainer>
   );
 }
