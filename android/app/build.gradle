@@ -182,7 +182,9 @@ dependencies {
 
     implementation 'com.google.mlkit:barcode-scanning:17.0.2' 
 
-      
+    implementation "com.google.android.play:app-update:2.1.0"
+    implementation "com.google.android.play:app-update-ktx:2.1.0"
+  
     implementation('com.google.api-client:google-api-client-android:2.2.0') {
         exclude group: 'org.apache.httpcomponents'
         exclude module: 'guava-jdk5'

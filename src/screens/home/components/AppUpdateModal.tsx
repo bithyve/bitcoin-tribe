@@ -1,5 +1,5 @@
-import React, { useContext, useMemo, useState } from 'react';
-import { View, StyleSheet, Modal } from 'react-native';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { View, StyleSheet, Modal, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
@@ -9,6 +9,8 @@ import { SizedBox } from 'src/components/SizedBox';
 import Fonts from 'src/constants/Fonts';
 import { hp, wp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { useAppVersion } from 'src/hooks/useAppVersion';
+import Relay from 'src/services/relay';
 import { AppTheme } from 'src/theme';
 
 export const AppUpdateModal = () => {
@@ -16,7 +18,37 @@ export const AppUpdateModal = () => {
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
-  const [showModal, setShowModal] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const {isVersionLowerOrEqualTo, checkAndInitiateAndroidUpdate} = useAppVersion();
+
+  useEffect(() => {
+  getAppUpdateInfo();
+  }, []);
+
+  const getAppUpdateInfo = async() => {
+    try {
+        const res = await Relay.getAppUpdateVersion();
+        if(res?.isForced){
+          if((Platform.OS === 'ios' && res.minIosVersion) || (Platform.OS === 'android' && res.minAndroidVersion)){
+            const isUpdateRequired = Platform.OS === 'ios' ? isVersionLowerOrEqualTo(res.minIosVersion) : isVersionLowerOrEqualTo(res.minAndroidVersion);
+            if(isUpdateRequired){
+              setShowModal(true);
+            } else {
+              setShowModal(false);
+            }
+        }
+      }
+    } catch (error) {
+      console.log("🚀 ~ getAppUpdateInfo ~ error:", error);
+      
+    }
+
+  }
+
+  const initiateAppUpdate = async () => {
+    checkAndInitiateAndroidUpdate();
+    setShowModal(false);
+  }
 
   return (
     <Modal
@@ -47,7 +79,7 @@ export const AppUpdateModal = () => {
           <View style={{ alignItems: 'center' }}>
             <Buttons
               primaryTitle={home.appUpdateButton}
-              primaryOnPress={() => {}}
+              primaryOnPress={initiateAppUpdate}
               height={hp(15)}
               width={'70%'}
             />
