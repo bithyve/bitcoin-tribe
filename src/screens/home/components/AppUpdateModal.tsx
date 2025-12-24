@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, Modal, Platform } from 'react-native';
+import { View, StyleSheet, Modal, Platform, Linking } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { useTheme } from 'react-native-paper';
 import AppText from 'src/components/AppText';
@@ -12,6 +12,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import Relay from 'src/services/relay';
 import { AppTheme } from 'src/theme';
+import { NativeModules } from 'react-native';
 
 export const AppUpdateModal = () => {
   const theme: AppTheme = useTheme();
@@ -19,36 +20,43 @@ export const AppUpdateModal = () => {
   const { translations } = useContext(LocalizationContext);
   const { home } = translations;
   const [showModal, setShowModal] = useState(false);
-  const {isVersionLowerOrEqualTo, checkAndInitiateAndroidUpdate} = useAppVersion();
+  const { isVersionLowerOrEqualTo, checkAndInitiateAndroidUpdate } =
+    useAppVersion();
 
   useEffect(() => {
-  getAppUpdateInfo();
+    getAppUpdateInfo();
   }, []);
 
-  const getAppUpdateInfo = async() => {
+  const getAppUpdateInfo = async () => {
     try {
-        const res = await Relay.getAppUpdateVersion();
-        if(res?.isForced){
-          if((Platform.OS === 'ios' && res.minIosVersion) || (Platform.OS === 'android' && res.minAndroidVersion)){
-            const isUpdateRequired = Platform.OS === 'ios' ? isVersionLowerOrEqualTo(res.minIosVersion) : isVersionLowerOrEqualTo(res.minAndroidVersion);
-            if(isUpdateRequired){
-              setShowModal(true);
-            } else {
-              setShowModal(false);
-            }
+      const res = await Relay.getAppUpdateVersion();
+      if (res?.isForced) {
+        if (
+          (Platform.OS === 'ios' && res.minIosVersion) ||
+          (Platform.OS === 'android' && res.minAndroidVersion)
+        ) {
+          const isUpdateRequired =
+            Platform.OS === 'ios'
+              ? isVersionLowerOrEqualTo(res.minIosVersion)
+              : isVersionLowerOrEqualTo(res.minAndroidVersion);
+          if (isUpdateRequired) {
+            setShowModal(true);
+          } else {
+            setShowModal(false);
+          }
         }
       }
     } catch (error) {
-      console.log("🚀 ~ getAppUpdateInfo ~ error:", error);
-      
+      console.log('🚀 ~ getAppUpdateInfo ~ error:', error);
     }
-
-  }
+  };
 
   const initiateAppUpdate = async () => {
-    checkAndInitiateAndroidUpdate();
+    if (Platform.OS === 'ios')
+    await NativeModules.AppStoreModule.openAppStore('6667112050');
+    else checkAndInitiateAndroidUpdate();
     setShowModal(false);
-  }
+  };
 
   return (
     <Modal
