@@ -41,6 +41,7 @@ import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import ModalLoading from 'src/components/ModalLoading';
 import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 export const CreateGroup = () => {
   const layout = useWindowDimensions();
@@ -117,8 +118,10 @@ export const CreateGroup = () => {
 
       // If ready, join immediately
       if (!isInitializing && isRootPeerConnected) {
-        if (roomType == HolepunchRoomType.GROUP)
+        if (roomType == HolepunchRoomType.GROUP){
           createRoom(roomName, roomType, roomDescription, '', roomKey);
+          logCustomEvent(events.JOIN_GROUP);
+        }
         else await joinDm(publicKey, contactName);
         return;
       }
@@ -155,14 +158,17 @@ export const CreateGroup = () => {
         clearTimeout(pendingTimeoutRef.current);
         pendingTimeoutRef.current = null;
       }
-      if (roomType == HolepunchRoomType.GROUP)
+      if (roomType == HolepunchRoomType.GROUP){
         createRoom(roomName, roomType, roomDescription, '', roomKey);
+        logCustomEvent(events.JOIN_GROUP);
+      }
       else joinDm(publicKey, contactName);
     }
   }, [isInitializing, isRootPeerConnected]);
 
   const joinDm =async (publicKey, contactName)=>{
     const dmRoom = await sendDMInvitation(publicKey, contactName);
+    logCustomEvent(events.JOIN_DM);
     (navigation as any).navigate(NavigationRoutes.CHAT, {
       roomId: dmRoom.roomId,
     });
@@ -263,6 +269,7 @@ const CreateTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
     try {
       await createRoom(name, HolepunchRoomType.GROUP, desc, image);
       Toast('Room created successfully!', false);
+      logCustomEvent(events.CREATE_GROUP);
     } catch (err) {
       console.error('Failed to create room:', err);
       Toast('Failed to create room', true);
@@ -407,6 +414,7 @@ const JoinTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
       if (!parsedJoinData?.roomKey) throw new Error('Invalid join data');
       await createRoom(parsedJoinData.roomName, parsedJoinData.roomType, parsedJoinData.roomDescription, parsedJoinData.roomImage, parsedJoinData.roomKey);
       Toast('Joined room successfully!', false);
+      logCustomEvent(events.JOIN_GROUP);
     } catch (err) {
       console.error('Failed to join room:', err);
       Toast('Failed to join room - invalid key or connection error', true);
