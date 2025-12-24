@@ -83,6 +83,7 @@ function HomeScreen() {
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
   const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
+  const [isTopicSubscribed,_]=useMMKVBoolean(Keys.IS_TOPIC_SUBSCRIBED);
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -332,6 +333,8 @@ function HomeScreen() {
     setTimeout(() => {
       checkFirstAppImageBackup();
     }, 5000);
+    // Topic subscription for app update notifications 
+    if (!isTopicSubscribed) ApiHandler.manageFcmVersionTopics();
   }, []);
   
 
