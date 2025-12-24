@@ -10,6 +10,7 @@ import { useTheme } from 'react-native-paper';
 import {
   Alert,
   Linking,
+  Platform,
   ScrollView,
   StyleSheet,
   View,
@@ -46,12 +47,14 @@ import {
   PushNotificationType,
 } from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
-import { getMessaging, onMessage } from '@react-native-firebase/messaging';
+import { getMessaging, onMessage,onNotificationOpenedApp,getInitialNotification } from '@react-native-firebase/messaging';
 import DefaultCoin from './DefaultCoin';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { AppUpdateModal } from './components/AppUpdateModal';
+import { useAppVersion } from 'src/hooks/useAppVersion';
+import { NativeModules } from 'react-native';
 
 function HomeScreen() {
   const theme: AppTheme = useTheme();
@@ -84,6 +87,7 @@ function HomeScreen() {
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
   const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
   const [isTopicSubscribed,_]=useMMKVBoolean(Keys.IS_TOPIC_SUBSCRIBED);
+  const {checkAndInitiateAndroidUpdate} =useAppVersion();
 
   const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
     onSuccess: () => {
@@ -223,8 +227,32 @@ function HomeScreen() {
         }
       });
 
+      const notificationHandler = onNotificationOpenedApp(
+        messaging,
+        remoteMessage => {
+          if (
+            remoteMessage?.data?.type ===
+            PushNotificationType.APP_UPDATE_AVAILABLE
+          )
+            if (Platform.OS === 'ios')
+              NativeModules.AppStoreModule.openAppStore('6667112050');
+            else checkAndInitiateAndroidUpdate();
+        },
+      );
+
+      getInitialNotification(messaging).then(remoteMessage => {
+        if (
+          remoteMessage?.data?.type ===
+          PushNotificationType.APP_UPDATE_AVAILABLE
+        )
+          if (Platform.OS === 'ios')
+            NativeModules.AppStoreModule.openAppStore('6667112050');
+          else checkAndInitiateAndroidUpdate();
+      });
+
       return () => {
         unsubscribe();
+        notificationHandler();
       };
     }, []),
   );
