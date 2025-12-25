@@ -41,6 +41,7 @@ import InsufficiantBalancePopupContainer from '../collectiblesCoins/components/I
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -232,6 +233,7 @@ const EnterInvoiceDetails = () => {
       setVisible(true);
       return;
     }
+    logCustomEvent(events.CREATED_INVOICE);
     navigation.replace(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',

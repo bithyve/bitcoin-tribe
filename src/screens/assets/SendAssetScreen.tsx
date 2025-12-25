@@ -65,6 +65,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const DUST_LIMIT = 330;
 
@@ -319,6 +320,7 @@ const SendAssetScreen = () => {
       setLoading(false);
       if (response?.txid) {
         setSuccessStatus(true);
+        logCustomEvent(events.SEND_ASSET);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
