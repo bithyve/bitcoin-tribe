@@ -240,7 +240,11 @@
     "pullDownInfo3": "強制更新が必要なときは？",
     "pullDownInfo4": "取引後に最新の更新情報をすぐに確認するため。",
     "pullDownInfo5": "アプリが最新のデータを即座に反映していることを確認するため。",
-    "udaName": "UDA名"
+    "udaName": "UDA名",
+    "appUpdateTitle": "更新が必要です",
+    "appUpdateSubTitle": "改善を行いました。最良の体験のために更新してください。",
+    "appUpdateButton": "今すぐ更新",
+    "appUpdateSkip": "今はスキップ"
   },
   "settings": {
     "setting": "設定",

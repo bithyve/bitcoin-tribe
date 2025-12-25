@@ -1100,4 +1100,13 @@ export default class Relay {
       throw new Error(err);
     }
   };
+
+  public static getAppUpdateVersion = async () => {
+    try {
+      const res = await RestClient.get(`${RELAY}/appUpdate/appUpdateVersion`);
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
 }

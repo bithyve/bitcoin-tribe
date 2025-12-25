@@ -301,7 +301,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            // await ApiHandler.manageFcmVersionTopics();
+            await ApiHandler.manageFcmVersionTopics();
             const apiHandler = new ApiHandler(
               rgbWallet,
               AppType.ON_CHAIN,
@@ -367,7 +367,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            // await ApiHandler.manageFcmVersionTopics();
+            await ApiHandler.manageFcmVersionTopics();
           }
         } else {
           const privateKeyHex = SHA256(rgbNodeInfo.pubkey).toString();
@@ -447,7 +447,7 @@ export class ApiHandler {
               date: new Date().toString(),
               title: `Initially installed ${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
             });
-            // await ApiHandler.manageFcmVersionTopics();
+            await ApiHandler.manageFcmVersionTopics();
           }
         }
         Storage.set(Keys.SETUPAPP, false);
@@ -2248,6 +2248,7 @@ export class ApiHandler {
         Storage.set(Keys.LAST_FCM_VERSION_TOPIC, appVersion);
       }
       await ApiHandler.subscribeToBroadcastChannel(messaging);
+      Storage.set(Keys.IS_TOPIC_SUBSCRIBED, true);
     } catch (error) {
       console.error('FCM topic management error:', error);
       throw error;
