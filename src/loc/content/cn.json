@@ -240,7 +240,11 @@
     "pullDownInfo3": "什么时候需要强制刷新？",
     "pullDownInfo4": "在进行交易后快速查看最新更新。",
     "pullDownInfo5": "确保您的应用程序立即反映最新数据。",
-    "udaName": "UDA 名称"
+    "udaName": "UDA 名称",
+    "appUpdateTitle": "需要更新",
+    "appUpdateSubTitle": "我们已进行改进。请更新以获得最佳体验。",
+    "appUpdateButton": "立即更新",
+    "appUpdateSkip": "暂时跳过"
   },
   "settings": {
     "setting": "设置",

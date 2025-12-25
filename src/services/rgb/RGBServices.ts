@@ -6,17 +6,15 @@ import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
 
 const { RGB } = NativeModules;
-
 export default class RGBServices {
-  static NETWORK = config.NETWORK_TYPE;
 
   static generateKeys = async (): Promise<RGBWallet> => {
-    const keys = await RGB.generateKeys(this.NETWORK);
+    const keys = await RGB.generateKeys(config.NETWORK_TYPE);
     return JSON.parse(keys);
   };
 
   static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
-    const keys = await RGB.restoreKeys(this.NETWORK, mnemonic);
+    const keys = await RGB.restoreKeys(config.NETWORK_TYPE, mnemonic);
     return JSON.parse(keys);
   };
 
@@ -108,7 +106,7 @@ export default class RGBServices {
   }> => {
     try {
       const data = await RGB.initiate(
-        this.NETWORK,
+        config.NETWORK_TYPE,
         mnemonic,
         accountXpubVanilla,
         accountXpubColored,
@@ -130,12 +128,12 @@ export default class RGBServices {
   };
 
   static getTransactions = async (mnemonic: string): Promise<[]> => {
-    const txns = await RGB.getTransactions(mnemonic, this.NETWORK);
+    const txns = await RGB.getTransactions(mnemonic, config.NETWORK_TYPE);
     return JSON.parse(txns);
   };
 
   static sync = async (mnemonic: string): Promise<string> => {
-    const isSynched = await RGB.sync(mnemonic, this.NETWORK);
+    const isSynched = await RGB.sync(mnemonic, config.NETWORK_TYPE);
     return isSynched;
   };
 
