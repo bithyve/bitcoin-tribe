@@ -94,6 +94,7 @@ export default class Relay {
       try {
         res = await RestClient.post(`${RELAY}/utils/fetchFeeAndExchangeRates`, {
           HEXA_ID,
+          network: config.NETWORK_TYPE.toString(),
         });
       } catch (err) {
         if (err.response) {
@@ -377,7 +378,10 @@ export default class Relay {
       }
       let res;
       try {
-        res = await RestClient.get(`${RELAY}/servicefee`);
+        res = await RestClient.get(`${RELAY}/servicefee`, {
+          'Content-Type': 'application/json',
+          network: config.NETWORK_TYPE.toString(),
+        });
       } catch (err) {
         if (err.response) {
           throw new Error(err.response.data.err);
@@ -1091,6 +1095,15 @@ export default class Relay {
       const res = await RestClient.post(`${RELAY}/backup/getAppImage`, {
         appID,
       });
+      return res.data;
+    } catch (err) {
+      throw new Error(err);
+    }
+  };
+
+  public static getAppUpdateVersion = async () => {
+    try {
+      const res = await RestClient.get(`${RELAY}/appUpdate/appUpdateVersion`);
       return res.data;
     } catch (err) {
       throw new Error(err);

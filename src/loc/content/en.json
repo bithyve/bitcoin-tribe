@@ -240,7 +240,11 @@
     "pullDownInfo3": "When to Use Forced Refresh?",
     "pullDownInfo4": "To quickly see the latest updates after making a transaction.",
     "pullDownInfo5": "To ensure your app reflects the most recent data instantly.",
-    "udaName": "UDA name"
+    "udaName": "UDA name",
+    "appUpdateTitle": "Update Required",
+    "appUpdateSubTitle": "We've made improvements. Please update for the best experience.",
+    "appUpdateButton": "Update Now",
+    "appUpdateSkip": "Skip for Now"
   },
   "settings": {
     "setting": "Settings",

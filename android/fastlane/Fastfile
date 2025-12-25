@@ -38,7 +38,7 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH], name: 'Bitcoin_Tribe_Dev'})
   end
 
   desc "Push a new live build from github actions to internal track on Play Store"
@@ -77,7 +77,7 @@ platform :android do
         }
       )
 
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH], name: 'Bitcoin_Tribe'})
   end
 
   desc "Push a new dev build from github actions to internal track on Play Store"
@@ -98,7 +98,7 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH], name: 'Bitcoin_Tribe_Dev'})
   end
 
   desc "Push a new live build to Slack and internal track on Play Store"
@@ -133,17 +133,26 @@ platform :android do
         "android.injected.signing.key.password" => key_password,
       }
     )
-    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]})
+    upload_to_slack({file_path: lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH, name: 'Bitcoin_Tribe']})
   end
 end
 
 desc "Upload the APK to Slack channel"
 lane :upload_to_slack do |options|
   file_path = options[:file_path].to_s
+  file_name = options[:name].to_s
   UI.user_error!("No file_path provided to upload_to_slack") if file_path.empty?
   UI.user_error!("File not found at path: #{file_path}") unless File.exist?(file_path)
 
-  file_name = File.basename(file_path)
+  gradle_file = File.join(Dir.pwd, "..", "app", "build.gradle")
+  gradle_text = File.read(gradle_file)
+  version_name_match = gradle_text.match(/versionName\s+"([^"]+)"/)
+  version_code_match = gradle_text.match(/versionCode\s+(\d+)/)
+  
+  version_name = version_name_match ? version_name_match[1] : "unknown"
+  version_code = version_code_match ? version_code_match[1] : "unknown"
+  message = "#{file_name}\nBuild success :rocket:\nVersion Name: #{version_name}; Version Code: #{version_code}"
+  file_name = "#{file_name}_v#{version_name}(#{version_code}).apk"
   access_token = ENV["SLACK_ACCESS_TOKEN"].to_s
   channel_id = "CN7K6RY9Z"
 
@@ -179,12 +188,10 @@ lane :upload_to_slack do |options|
 
 files_param = [{ id: file_id, title: file_name }].to_json
 escaped_files_param = files_param.gsub("'", %q('"'"'))
-cmd_complete = %Q(
-  curl -sS -H "Authorization: Bearer #{access_token}" \
-    --form-string 'files=#{escaped_files_param}' \
-    --form-string "channel_id=#{channel_id}" \
-    https://slack.com/api/files.completeUploadExternal
-).strip
+escaped_message = message.empty? ? nil : message.gsub('"', '\\"')
+cmd_complete = "curl -sS -H \"Authorization: Bearer #{access_token}\" \\\n    --form-string 'files=#{escaped_files_param}' \\\n    --form-string \"channel_id=#{channel_id}\""
+cmd_complete += " \\\n    --form-string \"initial_comment=#{escaped_message}\"" unless escaped_message.nil?
+cmd_complete += " \\\n    https://slack.com/api/files.completeUploadExternal"
 
   result_complete = Actions.sh(cmd_complete)
   begin

@@ -240,7 +240,11 @@
     "pullDownInfo3": "¿Cuándo usar la actualización forzada?",
     "pullDownInfo4": "Para ver rápidamente las últimas actualizaciones después de realizar una transacción.",
     "pullDownInfo5": "Para asegurarte de que la aplicación refleje los datos más recientes al instante.",
-    "udaName": "Nombre de UDA"
+    "udaName": "Nombre de UDA",
+    "appUpdateTitle": "Actualización requerida",
+    "appUpdateSubTitle": "Hemos hecho mejoras. Por favor actualiza para la mejor experiencia.",
+    "appUpdateButton": "Actualizar ahora",
+    "appUpdateSkip": "Omitir por ahora"
   },
   "settings": {
     "setting": "Configuraciones",

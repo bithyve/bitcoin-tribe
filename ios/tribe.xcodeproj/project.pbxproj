@@ -34,6 +34,10 @@
 		3AC0DD792C4FD1E8003E7D56 /* LufgaSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A27075539EE24D0EBF290736 /* LufgaSemiBold.ttf */; };
 		649330E69C09962E758B8B2C /* libPods-tribe-tribe-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87C8DD3632C301A71717BC9E /* libPods-tribe-tribe-dev.a */; };
 		809B08472EDD87D700E650C1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		80C3BC052EFB9B3C00476CE8 /* AppStoreModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C3BC042EFB9B3C00476CE8 /* AppStoreModule.swift */; };
+		80C3BC062EFB9B3C00476CE8 /* AppStoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 80C3BC032EFB9B3C00476CE8 /* AppStoreModule.m */; };
+		80C3BC072EFB9B3C00476CE8 /* AppStoreModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80C3BC042EFB9B3C00476CE8 /* AppStoreModule.swift */; };
+		80C3BC082EFB9B3C00476CE8 /* AppStoreModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 80C3BC032EFB9B3C00476CE8 /* AppStoreModule.m */; };
 		80D66D8B2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D66D8A2ECD7AF0003D5C18 /* AppDelegate.swift */; };
 		80D66D8C2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D66D8A2ECD7AF0003D5C18 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -62,6 +66,8 @@
 		35EFBBD22C3F751E00E57650 /* RGBModule.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RGBModule.h; sourceTree = "<group>"; };
 		4C5E787DA6F8BBD08415E095 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = tribe/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		5AD300EB53265D8851CF0C1D /* Pods-tribe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tribe.release.xcconfig"; path = "Target Support Files/Pods-tribe/Pods-tribe.release.xcconfig"; sourceTree = "<group>"; };
+		80C3BC032EFB9B3C00476CE8 /* AppStoreModule.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppStoreModule.m; sourceTree = "<group>"; };
+		80C3BC042EFB9B3C00476CE8 /* AppStoreModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreModule.swift; sourceTree = "<group>"; };
 		80D66D8A2ECD7AF0003D5C18 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = tribe/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = tribe/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87C8DD3632C301A71717BC9E /* libPods-tribe-tribe-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tribe-tribe-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +116,8 @@
 		13B07FAE1A68108700A75B9A /* tribe */ = {
 			isa = PBXGroup;
 			children = (
+				80C3BC032EFB9B3C00476CE8 /* AppStoreModule.m */,
+				80C3BC042EFB9B3C00476CE8 /* AppStoreModule.swift */,
 				35B1B56E2C69C098007C473A /* tribe.entitlements */,
 				35EFBBBA2C3F70F200E57650 /* rgb */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -339,7 +347,7 @@
 		};
 		35E339532C22A3AB007E532A /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
@@ -349,7 +357,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "set -e\n\nWITH_ENVIRONMENT=\"$REACT_NATIVE_PATH/scripts/xcode/with-environment.sh\"\nREACT_NATIVE_XCODE=\"$REACT_NATIVE_PATH/scripts/react-native-xcode.sh\"\n\n/bin/sh -c \"$WITH_ENVIRONMENT $REACT_NATIVE_XCODE\"\n";
 		};
@@ -490,6 +498,8 @@
 			files = (
 				35EFBBCD2C3F74D600E57650 /* RGBHelper.swift in Sources */,
 				35EFBBC42C3F73B700E57650 /* RgbLib.swift in Sources */,
+				80C3BC072EFB9B3C00476CE8 /* AppStoreModule.swift in Sources */,
+				80C3BC082EFB9B3C00476CE8 /* AppStoreModule.m in Sources */,
 				80D66D8B2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */,
 				35EFBBCA2C3F74BB00E57650 /* Utility.swift in Sources */,
 				35EFBBBE2C3F710C00E57650 /* Constants.swift in Sources */,
@@ -504,6 +514,8 @@
 			files = (
 				35EFBBCE2C3F74D600E57650 /* RGBHelper.swift in Sources */,
 				35EFBBC52C3F73B700E57650 /* RgbLib.swift in Sources */,
+				80C3BC052EFB9B3C00476CE8 /* AppStoreModule.swift in Sources */,
+				80C3BC062EFB9B3C00476CE8 /* AppStoreModule.m in Sources */,
 				80D66D8C2ECD7AF0003D5C18 /* AppDelegate.swift in Sources */,
 				35EFBBCB2C3F74BB00E57650 /* Utility.swift in Sources */,
 				35EFBBBF2C3F710C00E57650 /* Constants.swift in Sources */,
@@ -525,7 +537,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 269;
+				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
@@ -536,7 +548,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.6.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -564,7 +576,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 269;
+				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -574,7 +586,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.6.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -603,7 +615,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 269;
+				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
@@ -614,7 +626,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.6.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -643,7 +655,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 269;
+				CURRENT_PROJECT_VERSION = 271;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
@@ -653,7 +665,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.6.0;
+				MARKETING_VERSION = 0.6.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

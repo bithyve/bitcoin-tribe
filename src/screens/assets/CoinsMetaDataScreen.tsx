@@ -49,27 +49,21 @@ import EmbeddedTweetView from 'src/components/EmbeddedTweetView';
 import Relay from 'src/services/relay';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import config from 'src/utils/config';
+import { NewAssetIdContainer } from './components/NewAssetIdContainer';
 
 export const Item = ({ title, value, width = '100%' }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, width), [theme, width]);
   return (
-    <View style={styles.contentWrapper}>
+    // @ts-ignore
+     <View style={[styles.itemWrapper, { width }]}>
+      <AppText variant="heading2Bold" style={styles.valueText}>
+        {value}
+      </AppText>
       <AppText variant="body2" style={styles.labelText}>
         {title}
       </AppText>
-      <GradientView
-        colors={[
-          theme.colors.cardGradient1,
-          theme.colors.cardGradient2,
-          theme.colors.cardGradient3,
-        ]}
-        style={styles.assetNameWrapper}
-      >
-        <AppText variant="body2" style={styles.valueText}>
-          {value}
-        </AppText>
-      </GradientView>
+      <View style={styles.divider} />
     </View>
   );
 };
@@ -229,11 +223,13 @@ const CoinsMetaDataScreen = () => {
             />
           </View>
           <View style={styles.rowWrapper}>
-            <Item title={home.assetName} value={coin.name} width={'45%'} />
-            <Item title={home.assetTicker} value={coin.ticker} width={'45%'} />
+            <Item title={home.assetName} value={coin.name} />
           </View>
-          <View style={styles.wrapper}>
-            <AssetIDContainer assetId={assetId} />
+          <View style={styles.rowWrapper}>
+            <Item title={home.assetTicker} value={coin.ticker} />
+          </View>
+          <View style={styles.gutter}>
+            <NewAssetIdContainer assetId={assetId} />
           </View>
           <View style={styles.rowWrapper}>
             <Item
@@ -431,6 +427,19 @@ const getStyles = (theme: AppTheme, width) =>
       marginVertical: hp(10),
     },
     viewRegistryCtaWrapper: {},
+    // Item
+    itemWrapper: {
+      marginTop: hp(15),
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme.colors.separator,
+      marginTop: hp(15),
+    },
+    gutter: {
+      paddingHorizontal: wp(16),
+    },
   });
 
 export default CoinsMetaDataScreen;
