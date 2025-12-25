@@ -26,14 +26,17 @@ function HideAssetView(props: hideAssetViewProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
-    <View style={[styles.container]}>
-      <AppTouchable onPress={onPress} style={styles.hideAssetTextWrapper}>
-        <View>{isThemeDark ? <HideAsseIcon /> : <HideAssetIconLight />}</View>
-        <AppText variant="body2" style={[styles.titleStyle]}>
-          {title}
-        </AppText>
-      </AppTouchable>
-    </View>
+    <>
+      <View style={styles.divider} />
+      <View style={[styles.container]}>
+        <AppTouchable onPress={onPress} style={styles.hideAssetTextWrapper}>
+          <View>{isThemeDark ? <HideAsseIcon /> : <HideAssetIconLight />}</View>
+          <AppText variant="body2" style={[styles.titleStyle]}>
+            {title}
+          </AppText>
+        </AppTouchable>
+      </View>
+    </>
   );
 }
 const getStyles = (theme: AppTheme) =>
@@ -55,6 +58,12 @@ const getStyles = (theme: AppTheme) =>
     hideAssetTextWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    divider: {
+      width: '100%',
+      height: 1,
+      backgroundColor: theme.colors.separator,
+      marginTop: hp(15),
     },
   });
 export default HideAssetView;
