@@ -858,6 +858,11 @@ const SendAssetScreen = () => {
                 ? 1
                 : getEstimatedBlocksByPriority(selectedPriority)
             }
+            showCustomFee={isGasFree}
+            customFee={{
+              title: assets.serviceFee,
+              amount: '8 TUSDT',
+            }}
           />
         </ModalContainer>
       </KeyboardAvoidView>
