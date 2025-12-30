@@ -810,7 +810,15 @@
     "verified": "已验证",
     "viaX": "通过X",
     "unverified": "未验证",
-    "viewCollection": "查看收藏"
+    "viewCollection": "查看收藏",
+    "paymentMethod": "支付方式",
+    "standardTransfer": "标准转账",
+    "usesSatsForNetworkFee": "使用sats支付网络费用",
+    "zeroGasTransfer": "零Gas转账",
+    "poweredByOrbis1": "(由Orbis1提供支持)",
+    "noSatsNeeded": "无需sats",
+    "serviceFee": "服务费",
+    "paidInAssetNotBTC": "以资产支付，非BTC"
   },
   "community": {
     "fnfTitle": "社区",

@@ -810,7 +810,15 @@
     "verified": "सत्यापित",
     "viaX": "X के माध्यम से",
     "unverified": "असत्यापित",
-    "viewCollection": "संग्रह देखें"
+    "viewCollection": "संग्रह देखें",
+    "paymentMethod": "भुगतान विधि",
+    "standardTransfer": "मानक स्थानांतरण",
+    "usesSatsForNetworkFee": "नेटवर्क शुल्क के लिए sats का उपयोग करता है",
+    "zeroGasTransfer": "ज़ीरो-गैस स्थानांतरण",
+    "poweredByOrbis1": "(Orbis1 द्वारा संचालित)",
+    "noSatsNeeded": "कोई sats की आवश्यकता नहीं",
+    "serviceFee": "सेवा शुल्क",
+    "paidInAssetNotBTC": "एसेट में भुगतान, BTC में नहीं"
   },
   "community": {
     "fnfTitle": "समुदाय",

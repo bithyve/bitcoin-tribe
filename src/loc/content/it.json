@@ -810,7 +810,15 @@
     "verified": "Verificato",
     "viaX": "via X",
     "unverified": "Non verificato",
-    "viewCollection": "Visualizza Collezione"
+    "viewCollection": "Visualizza Collezione",
+    "paymentMethod": "Metodo di Pagamento",
+    "standardTransfer": "Trasferimento Standard",
+    "usesSatsForNetworkFee": "Usa sats per la commissione di rete",
+    "zeroGasTransfer": "Trasferimento Zero-Gas",
+    "poweredByOrbis1": "(Alimentato da Orbis1)",
+    "noSatsNeeded": "Nessun sats necessario",
+    "serviceFee": "Commissione di Servizio",
+    "paidInAssetNotBTC": "Pagato in asset, non in BTC"
   },
   "community": {
     "fnfTitle": "Comunità",

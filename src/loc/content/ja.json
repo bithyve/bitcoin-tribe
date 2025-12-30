@@ -810,7 +810,15 @@
     "verified": "認証済み",
     "viaX": "X経由",
     "unverified": "未認証",
-    "viewCollection": "コレクションを表示"
+    "viewCollection": "コレクションを表示",
+    "paymentMethod": "支払い方法",
+    "standardTransfer": "標準転送",
+    "usesSatsForNetworkFee": "ネットワーク手数料にsatsを使用",
+    "zeroGasTransfer": "ゼロガス転送",
+    "poweredByOrbis1": "(Orbis1提供)",
+    "noSatsNeeded": "sats不要",
+    "serviceFee": "サービス料金",
+    "paidInAssetNotBTC": "アセットで支払い、BTCではない"
   },
   "community": {
     "fnfTitle": "コミュニティ",
