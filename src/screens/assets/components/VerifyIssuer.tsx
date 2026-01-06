@@ -36,6 +36,7 @@ import AppText from 'src/components/AppText';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
@@ -244,6 +245,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
       setDisabledCTA(false);
+      logCustomEvent(events.REGISTERED_ASSET);
       setTimeout(() => {
         registerAsset();
       }, 400);

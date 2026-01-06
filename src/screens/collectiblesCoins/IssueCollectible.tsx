@@ -61,6 +61,7 @@ import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -180,6 +181,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
+        logCustomEvent(events.CREATE_CFA);
         setTimeout(() => {
           if (!addToRegistry) {
             navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
@@ -257,6 +259,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
+        logCustomEvent(events.CREATE_UDA);
         setTimeout(() => {
           if (!addToRegistry) {
             navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {

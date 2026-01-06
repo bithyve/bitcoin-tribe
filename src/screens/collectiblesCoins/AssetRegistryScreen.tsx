@@ -29,6 +29,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { AppContext } from 'src/contexts/AppContext';
 import Fonts from 'src/constants/Fonts';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
@@ -132,6 +133,7 @@ function AssetRegistryScreen() {
     if (payServiceFeeFeeMutation.isSuccess) {
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
+      logCustomEvent(events.REGISTERED_ASSET);
       setTimeout(() => {
         registerAsset();
       }, 400);

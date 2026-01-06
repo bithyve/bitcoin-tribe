@@ -37,6 +37,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Deeplinking from 'src/utils/DeepLinking';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import { useChat } from 'src/hooks/useChat';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -138,10 +139,13 @@ function SendScreen({ route, navigation }) {
             publicKey,
             contactName,
           } = Object.fromEntries(parsedUrl.searchParams.entries());
-          if (roomType == HolepunchRoomType.GROUP)
+          if (roomType == HolepunchRoomType.GROUP){
             createRoom(roomName, roomType, roomDescription, '', roomKey);
+            logCustomEvent(events.JOIN_GROUP);
+          }
           else {
             const dmRoom = await sendDMInvitation(publicKey, contactName);
+            logCustomEvent(events.JOIN_DM);
             (navigation as any).navigate(NavigationRoutes.CHAT, {
               roomId: dmRoom.roomId,
             });

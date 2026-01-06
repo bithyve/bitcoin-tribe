@@ -24,6 +24,7 @@ import config from 'src/utils/config';
 import * as SecureStore from 'src/storage/secure-store';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const styles = StyleSheet.create({
   containerImg: {
@@ -56,6 +57,7 @@ const ImportRgbBackup = () => {
       setKey(key);
       setVisibleLoader(false);
       Toast(onBoarding.appRecoveryMsg);
+      logCustomEvent(events.APP_RECOVERED)
       setTimeout(() => {
         navigation.replace(NavigationRoutes.APPSTACK);
       }, 400);

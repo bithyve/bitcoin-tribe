@@ -12,11 +12,23 @@ PODS:
   - DoubleConversion (1.1.6)
   - fast_float (8.0.0)
   - FBLazyVector (0.81.5)
+  - Firebase/AnalyticsWithoutAdIdSupport (11.8.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics/WithoutAdIdSupport (~> 11.8.0)
   - Firebase/CoreOnly (11.8.0):
     - FirebaseCore (~> 11.8.0)
   - Firebase/Messaging (11.8.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 11.8.0)
+  - FirebaseAnalytics/WithoutAdIdSupport (11.8.0):
+    - FirebaseCore (~> 11.8.0)
+    - FirebaseInstallations (~> 11.0)
+    - GoogleAppMeasurement/WithoutAdIdSupport (= 11.8.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
+    - GoogleUtilities/MethodSwizzler (~> 8.0)
+    - GoogleUtilities/Network (~> 8.0)
+    - "GoogleUtilities/NSData+zlib (~> 8.0)"
+    - nanopb (~> 3.30910.0)
   - FirebaseCore (11.8.1):
     - FirebaseCoreInternal (~> 11.8.0)
     - GoogleUtilities/Environment (~> 8.0)
@@ -41,6 +53,12 @@ PODS:
     - nanopb (~> 3.30910.0)
   - fmt (11.0.2)
   - glog (0.3.5)
+  - GoogleAppMeasurement/WithoutAdIdSupport (11.8.0):
+    - GoogleUtilities/AppDelegateSwizzler (~> 8.0)
+    - GoogleUtilities/MethodSwizzler (~> 8.0)
+    - GoogleUtilities/Network (~> 8.0)
+    - "GoogleUtilities/NSData+zlib (~> 8.0)"
+    - nanopb (~> 3.30910.0)
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
@@ -1879,7 +1897,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+d82ab8)":
+  - "react-native-bare-kit (0.9.3+867abb)":
     - boost
     - DoubleConversion
     - fast_float
@@ -2870,6 +2888,10 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
+  - RNFBAnalytics (21.11.0):
+    - Firebase/AnalyticsWithoutAdIdSupport (= 11.8.0)
+    - React-Core
+    - RNFBApp
   - RNFBApp (21.11.0):
     - Firebase/CoreOnly (= 11.8.0)
     - React-Core
@@ -3500,6 +3522,7 @@ DEPENDENCIES:
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
+  - "RNFBAnalytics (from `../node_modules/@react-native-firebase/analytics`)"
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBMessaging (from `../node_modules/@react-native-firebase/messaging`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -3522,11 +3545,13 @@ SPEC REPOS:
     - AppAuth
     - CocoaAsyncSocket
     - Firebase
+    - FirebaseAnalytics
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseInstallations
     - FirebaseMessaging
+    - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
     - libwebp
@@ -3738,6 +3763,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-device-info"
   RNFastImage:
     :path: "../node_modules/react-native-fast-image"
+  RNFBAnalytics:
+    :path: "../node_modules/@react-native-firebase/analytics"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBMessaging:
@@ -3778,6 +3805,7 @@ SPEC CHECKSUMS:
   fast_float: b32c788ed9c6a8c584d114d0047beda9664e7cc6
   FBLazyVector: 5beb8028d5a2e75dd9634917f23e23d3a061d2aa
   Firebase: d80354ed7f6df5f9aca55e9eb47cc4b634735eaf
+  FirebaseAnalytics: 4fd42def128146e24e480e89f310e3d8534ea42b
   FirebaseCore: 99fe0c4b44a39f37d99e6404e02009d2db5d718d
   FirebaseCoreExtension: 3d3f2017a00d06e09ab4ebe065391b0bb642565e
   FirebaseCoreInternal: df24ce5af28864660ecbd13596fc8dd3a8c34629
@@ -3785,6 +3813,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 487b634ccdf6f7b7ff180fdcb2a9935490f764e8
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
+  GoogleAppMeasurement: fc0817122bd4d4189164f85374e06773b9561896
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   hermes-engine: 9f4dfe93326146a1c99eb535b1cb0b857a3cd172
@@ -3828,7 +3857,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 58ad3b517a2896a68c6c910d9b4f5d32b3a7527c
+  react-native-bare-kit: d945d7c70b5c1ca69181aac1d328e9852e4a814d
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -3883,6 +3912,7 @@ SPEC CHECKSUMS:
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
+  RNFBAnalytics: bd6cecb65cc11ebdc88734691ab86c14addc0e52
   RNFBApp: fd5bf956d6114cd3172680ab9c2185143faaa385
   RNFBMessaging: 387873ff9c0deb29ec76b1a5c492d06012af58f4
   RNGestureHandler: 29bbca60c881e5243e219e3fe0016060002ed389
@@ -3904,6 +3934,6 @@ SPEC CHECKSUMS:
   Yoga: 728df40394d49f3f471688747cf558158b3a3bd1
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 2c34aebdb9882e837688d4045686f7352933574b
+PODFILE CHECKSUM: 5d4c0deb92a01962e4ec76dc7b80873101227cb2
 
 COCOAPODS: 1.16.2

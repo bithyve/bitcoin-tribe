@@ -30,6 +30,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import dbManager from 'src/storage/realm/dbManager';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import SendSuccessPopupContainer from './components/SendSuccessPopupContainer';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function VerifyDomain() {
   const navigation = useNavigation();
@@ -76,6 +77,7 @@ function VerifyDomain() {
             verifiedBy: response?.data?.issuer?.verifiedBy,
           },
         });
+        logCustomEvent(events.DOMAIN_VERIFIED)
         navigateWithDelay(() => {
           setVisible(true);
         });

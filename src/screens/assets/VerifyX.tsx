@@ -23,6 +23,7 @@ import { loginWithTwitter } from 'src/services/twitter';
 import { AppContext } from 'src/contexts/AppContext';
 import { saveTwitterHandle } from 'src/utils/socialHandleUtils';
 import TwitterVerificationInfoModal from './components/TwitterVerificationInfoModal';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function VerifyX() {
   const navigation = useNavigation();
@@ -113,6 +114,7 @@ function VerifyX() {
               verifiedBy: updatedVerifiedBy,
             },
           });
+          logCustomEvent(events.TWITTER_VERIFIED);
           navigation.goBack();
         }
       }
