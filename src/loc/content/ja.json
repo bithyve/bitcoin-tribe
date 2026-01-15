@@ -388,7 +388,8 @@
     "lightningAddress": "ライトニングアドレス",
     "chooseInvoiceType": "請求書の種類を選択",
     "onchain": "オンチェーン",
-    "lightning": "ライトニング"
+    "lightning": "ライトニング",
+    "validateUsingWatchTower": "WatchTower（Orbis1提供）を使用して検証"
   },
   "sendScreen": {
     "headerSubTitle": "ビットコインアドレス、RGB請求書、またはTribe QRコードをスキャン",

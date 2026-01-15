@@ -388,7 +388,8 @@
     "lightningAddress": "Dirección Lightning",
     "chooseInvoiceType": "Elige el tipo de factura",
     "onchain": "En cadena",
-    "lightning": "Relámpago"
+    "lightning": "Relámpago",
+    "validateUsingWatchTower": "Validar usando WatchTower(por Orbis1)"
   },
   "sendScreen": {
     "headerSubTitle": "Escanee una dirección Bitcoin, una factura RGB o cualquier código QR de Tribe",

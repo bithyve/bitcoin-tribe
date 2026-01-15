@@ -388,7 +388,8 @@
     "lightningAddress": "闪电地址",
     "chooseInvoiceType": "选择发票类型",
     "onchain": "链上",
-    "lightning": "闪电网络"
+    "lightning": "闪电网络",
+    "validateUsingWatchTower": "使用WatchTower（由Orbis1提供）进行验证"
   },
   "sendScreen": {
     "headerSubTitle": "扫描比特币地址、RGB发票或任何Tribe二维码",
