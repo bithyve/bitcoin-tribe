@@ -86,6 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import  RealmDatabase  from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
+import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -1230,6 +1231,7 @@ export class ApiHandler {
     linkedAmount,
     expiry,
     blinded = true,
+    useWatchTower = false,
   }) {
     try {
       assetId = assetId ?? '';
@@ -1273,6 +1275,9 @@ export class ApiHandler {
             linkedAmount: linkedAmount || 0,
           };
           dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
+        }
+        if(useWatchTower){
+          await addToWatchTower(response.invoice);
         }
       }
       ApiHandler.viewUtxos();
@@ -3390,5 +3395,26 @@ export class ApiHandler {
     // disabled first app image backup, since already restored from backup
     if (settingsObject || roomsObject || tnxMetaObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+  }
+}
+
+
+
+
+export const addToWatchTower=async(invoice:string)=> {
+  try {
+    const response = await axios.post(
+      'http://watchtower.orbis1.io/addToWatchTower',
+      { invoice }, // json body
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error('Error calling watch tower:', error.message);
+    throw error;
   }
 }

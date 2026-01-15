@@ -50,6 +50,7 @@ function ReceiveAssetScreen() {
   const selectedType = route.params.selectedType || 'bitcoin';
   const invoiceExpiry = route.params.invoiceExpiry || 86400;
   const invoiceType = route.params.invoiceType || InvoiceMode.Blinded;
+  const useWatchTower = route.params.useWatchTower || false;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
@@ -106,6 +107,7 @@ function ReceiveAssetScreen() {
           linkedAmount: amount,
           expiry: invoiceExpiry,
           blinded: invoiceType === InvoiceMode.Blinded,
+          useWatchTower
         });
       } else {
         createUtxos();
@@ -172,6 +174,7 @@ function ReceiveAssetScreen() {
         linkedAmount: 0,
         expiry: invoiceExpiry,
         blinded: invoiceType === InvoiceMode.Blinded,
+        useWatchTower
       });
     } else if (createUtxoError) {
       createUtxoReset();

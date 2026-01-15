@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme, SegmentedButtons } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
@@ -16,6 +16,8 @@ import { AppTheme } from 'src/theme';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import UncheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UncheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -129,6 +131,13 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       color: theme.colors.secondaryHeadingColor,
       fontFamily: Fonts.LufgaRegular,
     },
+    watchtowerCtr: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginTop: hp(20),
+      marginBottom: hp(10),
+    },
   });
 
 const EnterInvoiceDetails = () => {
@@ -184,6 +193,7 @@ const EnterInvoiceDetails = () => {
       utxo.rgbAllocations?.length === 0 &&
       utxo.pendingBlinded === 0,
   );
+  const [useWatchTower, setUseWatchTower] = useState(false);
 
   const styles = getStyles(theme, inputHeight, app.appType);
 
@@ -246,6 +256,7 @@ const EnterInvoiceDetails = () => {
       selectedType,
       invoiceExpiry,
       invoiceType,
+      useWatchTower
     });
   }
 
@@ -263,19 +274,25 @@ const EnterInvoiceDetails = () => {
     }
   };
 
+  const checkIcon = useMemo(() => {
+    if (isThemeDark) {
+      return useWatchTower ? <CheckIcon /> : <UncheckIcon />;
+    }
+    return useWatchTower ? <CheckIconLight /> : <UncheckIconLight />;
+  }, [useWatchTower]);
+
   return (
     <ScreenContainer>
       <AppHeader
         title={home.addAssets}
-        subTitle={
-          `Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`
-        }
+        subTitle={`Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`}
         enableBack={true}
       />
       <KeyboardAwareScrollView
         overScrollMode="never"
         bounces={false}
-        keyboardOpeningTime={0}>
+        keyboardOpeningTime={0}
+      >
         {app.appType !== AppType.ON_CHAIN && (
           <View>
             <View>
@@ -357,6 +374,16 @@ const EnterInvoiceDetails = () => {
               },
             ]}
           />
+          <Pressable onPress={()=>setUseWatchTower(prev=> !prev)}
+            style={styles.watchtowerCtr}
+          >
+            <View style={styles.checkIconWrapper}>{checkIcon}</View>
+            <View style={styles.reservedSatsWrapper1}>
+              <AppText variant="body2" >
+                {receciveScreen.validateUsingWatchTower}
+              </AppText>
+            </View>
+          </Pressable>
         </View>
         <View style={styles.footerWrapper}>
           {colorable.length === 0 && invoiceType === InvoiceMode.Blinded ? (
@@ -411,7 +438,8 @@ const EnterInvoiceDetails = () => {
           enableClose={true}
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}>
+          borderColor={theme.colors.borderColor}
+        >
           <InsufficiantBalancePopupContainer
             primaryOnPress={() => {
               setVisible(false);
