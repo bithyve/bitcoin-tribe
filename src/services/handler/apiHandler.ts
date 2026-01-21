@@ -3404,7 +3404,7 @@ export class ApiHandler {
 export const addToWatchTower=async(invoice:string)=> {
   try {
     const response = await axios.post(
-      'http://watchtower.orbis1.io/addToWatchTower',
+      'https://watchtower.orbis1.io/addToWatchTower',
       { invoice }, // json body
       {
         headers: {
