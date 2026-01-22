@@ -1897,7 +1897,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+867abb)":
+  - "react-native-bare-kit (0.9.3+657bb1)":
     - boost
     - DoubleConversion
     - fast_float
@@ -2854,6 +2854,34 @@ PODS:
     - Yoga
   - RealmJS (12.15.0):
     - React
+  - Rgb (0.2.6):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - RNCClipboard (1.16.3):
     - boost
     - DoubleConversion
@@ -3519,6 +3547,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeFs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - RealmJS (from `../node_modules/realm`)
+  - Rgb (from `../node_modules/react-native-rgb`)
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -3757,6 +3786,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@dr.pogodin/react-native-fs"
   RealmJS:
     :path: "../node_modules/realm"
+  Rgb:
+    :path: "../node_modules/react-native-rgb"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNDeviceInfo:
@@ -3857,7 +3888,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: d945d7c70b5c1ca69181aac1d328e9852e4a814d
+  react-native-bare-kit: a24e298784bfe4e3486b557b58f5b86dc4e6941c
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -3909,6 +3940,7 @@ SPEC CHECKSUMS:
   ReactCommon: 5f0e5c09a64a2717215dd84380e1a747810406f2
   ReactNativeFs: fa4d6c721fedd16abb5a7eb5c591303f147677b5
   RealmJS: 10fb99cdac98cad8a6c4471c967bd6be10307741
+  Rgb: ae8c91576fae767048d5f213a95c90b77437a888
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87

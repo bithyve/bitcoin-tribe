@@ -246,7 +246,7 @@ export class RLNNodeApiServices {
 
   public async listtransfers(body: {
     asset_id: string;
-  }): Promise<{ bytes_hex: string }> {
+  }): Promise<{ transfers: any[] }> {
     return this.request('/listtransfers', {
       method: 'POST',
       body: JSON.stringify(body),

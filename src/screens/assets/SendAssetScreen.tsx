@@ -304,7 +304,20 @@ const SendAssetScreen = () => {
   const sendAsset = useCallback(async () => {
     try {
       const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
+      console.log('decodedInvoice', decodedInvoice);
       setLoading(true);
+      console.log('assetAmount', {
+        assetId,
+        blindedUTXO: decodedInvoice.recipientId,
+        amount:
+          parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+          10 ** precision,
+        consignmentEndpoints: decodedInvoice.transportEndpoints,
+        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
+        isDonation,
+        schema: assetData?.assetSchema.toUpperCase(),
+        witnessSats: Number(invoiceType === InvoiceMode.Witness ? 330 : 0),
+      });
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,

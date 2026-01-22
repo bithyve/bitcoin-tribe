@@ -88,7 +88,8 @@ export interface Assignment {
 export interface Transfer {
   batchTransferIdx: number;
   createdAt: number;
-  idx: number;
+  transferIdx: number;
+  consignmentPath: string | null;
   kind: TransferKind;
   status: TransferStatus;
   updatedAt: number;
