@@ -33,9 +33,9 @@ export const AssignmentSchema = {
 export const TransferTransportEndpointSchema = {
   name: RealmSchema.TransferTransportEndpoint,
   properties: {
-    endpoint: 'string',
-    transportType: 'string',
-    used: 'bool',
+    endpoint: 'string?',
+    transportType: 'string?',
+    used: 'bool?',
   },
 };
 
@@ -53,9 +53,11 @@ export const AssetTransactionSchema = {
     batchTransferIdx: 'int?',
     createdAt: 'int',
     idx: 'int',
+    consignmentPath: 'string?',
     kind: 'string',
     status: 'string',
     transportEndpoints: `${RealmSchema.TransferTransportEndpoint}[]`,
+    assignmentsCount: 'int?',
     updatedAt: 'int',
     txid: 'string?',
     recipientId: 'string?',

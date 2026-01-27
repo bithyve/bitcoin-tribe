@@ -63,7 +63,7 @@ function AppBackupMenu({ navigation }) {
   const rgbAssetsbackup = async () => {
     try {
       setIsLoading(true);
-      const backup = await RGBServices.backup('', app.primaryMnemonic);
+      const backup = await RGBServices.backup('', app.primaryMnemonic, app.publicId);
       setIsLoading(false);
       if (backup.file) {
         setTimeout(async () => {

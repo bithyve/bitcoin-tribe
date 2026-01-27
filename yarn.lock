@@ -8348,6 +8348,9 @@ react-native-render-html@^6.3.4:
     stringify-entities "^3.1.0"
     urijs "^1.19.6"
 
+"react-native-rgb@file:../react-native-rgb":
+  version "0.2.6"
+
 react-native-root-siblings@^4.0.0:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-4.1.1.tgz#b7742db7634a87f507eb99a5fd699c4f10c46ab0"

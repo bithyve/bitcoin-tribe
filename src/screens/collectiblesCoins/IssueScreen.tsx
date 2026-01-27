@@ -41,6 +41,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Slider from 'src/components/Slider';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
+import { RgbLibErrors } from 'react-native-rgb';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -167,7 +168,14 @@ function IssueScreen() {
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      setLoading(false);
+      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+      } else {
+        Toast(error.message, true);
+        setLoading(false);
+      }
     }
   }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
 
