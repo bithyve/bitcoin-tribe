@@ -493,7 +493,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 277;
+				CURRENT_PROJECT_VERSION = 278;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
@@ -532,7 +532,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 277;
+				CURRENT_PROJECT_VERSION = 278;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = tribe/Info.plist;
@@ -571,7 +571,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 277;
+				CURRENT_PROJECT_VERSION = 278;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				ENABLE_BITCODE = NO;
@@ -611,7 +611,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 277;
+				CURRENT_PROJECT_VERSION = 278;
 				DEVELOPMENT_TEAM = Y5TCB759QL;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = Y5TCB759QL;
 				INFOPLIST_FILE = "tribe-dev-Info.plist";
