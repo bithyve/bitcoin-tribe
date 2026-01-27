@@ -66,6 +66,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
+import { RgbLibErrors } from 'react-native-rgb';
 
 const DUST_LIMIT = 330;
 
@@ -304,20 +305,7 @@ const SendAssetScreen = () => {
   const sendAsset = useCallback(async () => {
     try {
       const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
-      console.log('decodedInvoice', decodedInvoice);
       setLoading(true);
-      console.log('assetAmount', {
-        assetId,
-        blindedUTXO: decodedInvoice.recipientId,
-        amount:
-          parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
-          10 ** precision,
-        consignmentEndpoints: decodedInvoice.transportEndpoints,
-        feeRate: selectedFeeRate === 1 ? 2 : selectedFeeRate,
-        isDonation,
-        schema: assetData?.assetSchema.toUpperCase(),
-        witnessSats: Number(invoiceType === InvoiceMode.Witness ? 330 : 0),
-      });
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
@@ -355,12 +343,15 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
-      setLoading(false);
-      setVisible(false);
-      setTimeout(() => {
-        Toast(`Failed: ${error}`, true);
-      }, 500);
-      console.log(error);
+      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+        setTimeout(() => {
+          createUtxos.mutate();
+        }, 500);
+      } else {
+        Toast(error.message, true);
+        setLoading(false);
+        setVisible(false);
+      }
     }
   }, [invoice, assetAmount, navigation, isDonation]);
 
