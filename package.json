@@ -11,7 +11,7 @@
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
-    "bare-pack": "npx bare-pack --target ios --target android --linked --out src/services/messaging/holepunch/network/worklet/app.bundle.mjs src/services/messaging/holepunch/network/worklet/hyperswarm-worklet.mjs",
+    "bare-pack": "npx bare-pack --host ios --host android --linked --out src/services/messaging/holepunch/network/worklet/app.bundle.mjs src/services/messaging/holepunch/network/worklet/hyperswarm-worklet.mjs",
     "androidDevDebug": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
     "androidDevRelease": "ENVFILE=.env react-native run-android --mode=devRelease --appIdSuffix=dev",
     "androidProductionDebug": "ENVFILE=.env.production react-native run-android --mode=productionDebug",
