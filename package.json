@@ -1,6 +1,6 @@
 {
   "name": "tribe",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": true,
   "scripts": {
     "android": "ENVFILE=.env react-native run-android --mode=devDebug --appIdSuffix=dev",
@@ -100,7 +100,7 @@
     "react-native-qrcode-svg": "^6.3.1",
     "react-native-randombytes": "^3.0.0",
     "react-native-reanimated": "4.1.3",
-    "react-native-rgb": "0.2.2",
+    "react-native-rgb": "file:../react-native-rgb",
     "react-native-reanimated-carousel": "4.0.2",
     "react-native-render-html": "^6.3.4",
     "react-native-root-toast": "^3.6.0",
