@@ -388,7 +388,8 @@
     "lightningAddress": "Indirizzo Lightning",
     "chooseInvoiceType": "Scegli il tipo di fattura",
     "onchain": "On-chain",
-    "lightning": "Fulmine"
+    "lightning": "Fulmine",
+    "validateUsingWatchTower": "Valida usando WatchTower(di Orbis1)"
   },
   "sendScreen": {
     "headerSubTitle": "Scansiona un indirizzo Bitcoin, una fattura RGB o qualsiasi codice QR Tribe",
