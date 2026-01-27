@@ -66,7 +66,7 @@ function WalletSetupOption({ navigation }) {
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
         showRightArrow={true}
-        onPress={() => selectNetworkAndNavigate(NavigationRoutes.PROFILESETUP)}
+        onPress={() => selectNetworkAndNavigate(config.ENVIRONMENT === APP_STAGE.PRODUCTION ? NavigationRoutes.PROFILESETUP : NavigationRoutes.SELECTWALLET)}
         style={styles.optionCardStyle}
       />
       <OptionCard

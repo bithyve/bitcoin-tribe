@@ -48,8 +48,8 @@ const ViewLogs = () => {
 
   const readRgbLogs = useCallback(async () => {
     try {
-      const rgbDir = await RGBServices.getRgbDir();
-      const logFile = `${rgbDir.dir.replace('file://', '')}/${
+      const rgbDir = await RGBServices.getWalletData();
+      const logFile = `${rgbDir.dataDir.replace('file://', '')}/${
         rgbWallet.masterFingerprint
       }/log`;
       const fileExists = await RNFS.exists(logFile);

@@ -65,6 +65,8 @@ import dbManager from 'src/storage/realm/dbManager';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
+import { events, logCustomEvent } from 'src/services/analytics';
+import { RgbLibErrors } from 'react-native-rgb';
 
 const DUST_LIMIT = 330;
 
@@ -319,6 +321,7 @@ const SendAssetScreen = () => {
       setLoading(false);
       if (response?.txid) {
         setSuccessStatus(true);
+        logCustomEvent(events.SEND_ASSET);
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
@@ -340,12 +343,15 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
-      setLoading(false);
-      setVisible(false);
-      setTimeout(() => {
-        Toast(`Failed: ${error}`, true);
-      }, 500);
-      console.log(error);
+      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+        setTimeout(() => {
+          createUtxos.mutate();
+        }, 500);
+      } else {
+        Toast(error.message, true);
+        setLoading(false);
+        setVisible(false);
+      }
     }
   }, [invoice, assetAmount, navigation, isDonation]);
 

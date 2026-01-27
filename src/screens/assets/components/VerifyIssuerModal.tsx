@@ -19,6 +19,7 @@ import VerifyXIcon from 'src/assets/images/icon_verifyx.svg';
 import VerifyXIconLight from 'src/assets/images/icon_verifyx_light.svg';
 import { Keys } from 'src/storage';
 import SkipButton from 'src/components/SkipButton';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 interface VerifyIssuerModalProps {
   assetId: string;
@@ -108,6 +109,7 @@ const VerifyIssuerModal = ({
               );
               onVerify();
               setCompleteVerification(true);
+              logCustomEvent(events.TWITTER_VERIFIED);
               setLoading(false);
             }}
             secondaryTitle={'Domain'}

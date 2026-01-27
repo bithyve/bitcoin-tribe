@@ -20,6 +20,7 @@ end
 
 target 'tribe' do
   config = use_native_modules!
+  $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
   use_react_native!(
     :path => config[:reactNativePath],

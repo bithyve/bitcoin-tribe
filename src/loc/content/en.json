@@ -388,7 +388,8 @@
     "lightningAddress": "Lightning Address",
     "chooseInvoiceType": "Choose Invoice Type",
     "onchain": " On-chain",
-    "lightning": "Lightning"
+    "lightning": "Lightning",
+    "validateUsingWatchTower": "Validate using WatchTower(by Orbis1)"
   },
   "sendScreen": {
     "headerSubTitle": "Scan a Bitcoin Address, RGB invoice or any Tribe QR Code",

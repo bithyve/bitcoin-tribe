@@ -48,6 +48,7 @@ class Configuration {
   };
   public REGISTRY_URL: string;
   public COLLECTION_URL: string;
+  public PROXY_CONSIGNMENT_ENDPOINT: string = "rpcs://proxy.iriswallet.com/0.2/json-rpc";
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
