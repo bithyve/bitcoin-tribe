@@ -3433,6 +3433,7 @@ export const addToWatchTower=async(invoice:string)=> {
       {
         headers: {
           'Content-Type': 'application/json',
+          'Authorization':config.ORBIS1_API_KEY
         },
       }
     );
