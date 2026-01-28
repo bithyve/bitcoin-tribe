@@ -1,17 +1,20 @@
 import React, { useContext, useEffect } from 'react';
-import { useMutation, UseMutationResult } from 'react-query';
 import { CommonActions, useNavigation } from '@react-navigation/native';
+
+
 import { useQuery } from '@realm/react';
 import { useTheme } from 'react-native-paper';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import SelectOption from 'src/components/SelectOption';
-import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
+
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+
+
 import AppType from 'src/models/enums/AppType';
 import { StyleSheet, View } from 'react-native';
 import { AppTheme } from 'src/theme';
@@ -24,11 +27,12 @@ function WalletSettings() {
   const navigation = useNavigation();
 
   const styles = getStyles(theme);
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
 
-  const { mutate: fetchUTXOs }: UseMutationResult<RgbUnspent[]> = useMutation(
-    ApiHandler.viewUtxos,
-  );
+
+  const { viewUtxos } = useRgb();
+  const { mutate: fetchUTXOs } = viewUtxos;
+
 
   useEffect(() => {
     fetchUTXOs();
@@ -44,7 +48,8 @@ function WalletSettings() {
         <SelectOption
           title={strings.viewUnspent}
           // subTitle={strings.viewUnspent}
-          onPress={() => navigation.navigate(NavigationRoutes.VIEWUNSPENT)}
+          onPress={() => (navigation as any).navigate(NavigationRoutes.VIEWUNSPENT)}
+
         />
 
         {app.appType === AppType.ON_CHAIN ? (
@@ -62,8 +67,10 @@ function WalletSettings() {
     </ScreenContainer>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (_theme: AppTheme) =>
   StyleSheet.create({
+
+
     container: {
       marginTop: hp(20),
     },

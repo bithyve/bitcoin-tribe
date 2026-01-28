@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useMutation } from 'react-query';
 import { useQuery } from '@realm/react';
+
 import {
   CommonActions,
   useNavigation,
@@ -15,8 +15,9 @@ import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import {
+
   InvoiceMode,
   RgbUnspent,
   RGBWallet,
@@ -45,24 +46,30 @@ function ReceiveAssetScreen() {
   const theme: AppTheme = useTheme();
   const route = useRoute();
   const navigation = useNavigation();
-  const assetId = route.params.assetId || '';
-  const amount = route.params.amount || 0;
-  const selectedType = route.params.selectedType || 'bitcoin';
-  const invoiceExpiry = route.params.invoiceExpiry || 86400;
-  const invoiceType = route.params.invoiceType || InvoiceMode.Blinded;
-  const useWatchTower = route.params.useWatchTower || false;
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
-  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
   const {
-    mutate: createUtxos,
+    assetId = '',
+    amount = 0,
+    selectedType = 'bitcoin',
+    invoiceExpiry = 86400,
+    invoiceType = InvoiceMode.Blinded,
+    useWatchTower = false,
+  } = (route.params as any) || {};
+
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const { receiveAsset, receiveAssetOnLN, createUtxos, viewUtxos, refreshRgbWallet } = useRgb();
+  const { mutate, isLoading, error } = receiveAsset;
+  const generateLNInvoiceMutation = receiveAssetOnLN;
+
+  const {
+    mutate: createUtxosMutate,
     error: createUtxoError,
     data: createUtxoData,
     reset: createUtxoReset,
     isLoading: createUtxosLoading,
-  } = useMutation(ApiHandler.createUtxos);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
+  } = createUtxos;
+  const { mutate: fetchUTXOs } = viewUtxos;
+  const refreshRgbWalletMutation = refreshRgbWallet;
+
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [lightningInvoice, setLightningInvoice] = useState('');
@@ -89,8 +96,9 @@ function ReceiveAssetScreen() {
             blinded: invoiceType === InvoiceMode.Blinded,
           });
         } else {
-          createUtxos();
+          createUtxosMutate();
         }
+
       } else {
         generateLNInvoiceMutation.mutate({
           amount: Number(amount),
@@ -110,8 +118,9 @@ function ReceiveAssetScreen() {
           useWatchTower
         });
       } else {
-        createUtxos();
+        createUtxosMutate();
       }
+
     }
   }, []);
 
@@ -121,10 +130,11 @@ function ReceiveAssetScreen() {
         err?.message || err?.toString() || 'An unknown error occurred';
       const errorMessage = getErrorMessage(error);
       const handleSpecificError = message => {
-        if (message === 'Insufficient sats for RGB') {
-          createUtxos();
+        if (message === 'Insufficient balance' || message === 'Insufficient sats for RGB') {
+          createUtxosMutate();
           return true;
         } else if (message === 'Asset not found') {
+
           setTimeout(() => {
             mutate({
               assetId: '',
@@ -181,7 +191,7 @@ function ReceiveAssetScreen() {
       fetchUTXOs();
       refreshRgbWallet.mutate();
       navigation.goBack();
-      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+      if (createUtxoError.toString().includes('Insufficient sats for RGB')) {
         Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
       } else {
         Toast(assets.assetProcessErrorMsg, true);
@@ -243,13 +253,13 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
         onBackNavigation={() =>
-          navigation.canGoBack? navigation.goBack() :
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [{ name: NavigationRoutes.HOME }],
-            }),
-          )
+          navigation.canGoBack ? navigation.goBack() :
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [{ name: NavigationRoutes.HOME }],
+              }),
+            )
         }
       />
 

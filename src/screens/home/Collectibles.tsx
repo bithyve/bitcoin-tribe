@@ -3,14 +3,14 @@ import { useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import CollectibleAssetsList from './components/CollectibleAssetsList';
 import { AppTheme } from 'src/theme';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+import { useWallet } from 'src/hooks/wallet/useWallet';
 import {
   Asset,
   AssetSchema,
@@ -43,15 +43,8 @@ function Collectibles() {
     isNodeInitInProgress,
   } = useContext(AppContext);
 
-  const refreshRgbWallet = useMutation({
-    mutationFn: ApiHandler.refreshRgbWallet,
-    onSuccess: () => {
-      if (app.appType === AppType.ON_CHAIN) {
-      }
-    },
-  });
-
-  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+  const { refreshRgbWallet } = useRgb();
+  const { refreshWallets: refreshWallet } = useWallet();
   const wallet = useWallets({}).wallets[0];
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
@@ -59,7 +52,7 @@ function Collectibles() {
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const udas = useQuery<UniqueDigitalAsset>(
-    RealmSchema.UniqueDigitalAsset, 
+    RealmSchema.UniqueDigitalAsset,
     collection =>
       collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.appLinkScheme}'`, AssetVisibility.HIDDEN),
   );
@@ -135,7 +128,7 @@ function Collectibles() {
             handleNavigation(NavigationRoutes.COLLECTIBLEDETAILS, {
               assetId: asset.assetId,
             });
-          } else if(asset.slug) {
+          } else if (asset.slug) {
             handleNavigation(NavigationRoutes.COLLECTIONDETAILS, {
               collectionId: asset._id,
             });

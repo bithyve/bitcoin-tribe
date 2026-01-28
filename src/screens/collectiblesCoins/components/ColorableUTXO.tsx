@@ -7,13 +7,14 @@ import {
   View,
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { useQuery } from '@realm/react';
+
 import { useNavigation } from '@react-navigation/native';
 
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import {
+
   Asset,
   Coin,
   Collectible,
@@ -67,16 +68,17 @@ const ColorableUTXO = () => {
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
 
-  const { mutate, isLoading} = useMutation(ApiHandler.viewUtxos);
+  const { viewUtxos } = useRgb();
+  const { mutate, isLoading } = viewUtxos;
+
   useEffect(() => {
     mutate();
   }, [mutate]);
 
   const redirectToBlockExplorer = (txid: string) => {
     if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
-      const url = `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : config.NETWORK_TYPE === NetworkType.TESTNET4 ? '/testnet4' : ''
-      }/tx/${txid}`;
+      const url = `https://mempool.space${config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : config.NETWORK_TYPE === NetworkType.TESTNET4 ? '/testnet4' : ''
+        }/tx/${txid}`;
 
       navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
         url,
@@ -103,7 +105,7 @@ const ColorableUTXO = () => {
           <UnspentUTXOElement
             transID={
               app?.appType === AppType.NODE_CONNECT ||
-              app.appType === AppType.SUPPORTED_RLN
+                app.appType === AppType.SUPPORTED_RLN
                 ? `${item.utxo.outpoint}`
                 : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
             }

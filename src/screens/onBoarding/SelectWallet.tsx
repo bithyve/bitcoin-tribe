@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { PermissionsAndroid, Platform, StyleSheet, View } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+
 import { useMMKVBoolean } from 'react-native-mmkv';
 import {
   getMessaging,
@@ -26,7 +26,7 @@ import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useNode } from 'src/hooks/node/useNode';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
@@ -83,7 +83,7 @@ function SelectWallet() {
   const [visible, setVisible] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [checkedTermsCondition, SetCheckedTermsCondition] = useState(false);
-  const createNodeMutation = useMutation(ApiHandler.createSupportedNode);
+  const { createSupportedNode: createNodeMutation } = useNode();
 
   useEffect(() => {
     if (createNodeMutation.error) {
@@ -104,14 +104,14 @@ function SelectWallet() {
           setVisible(false);
           navigation.navigate(NavigationRoutes.PROFILESETUP, {
             nodeConnectParams: {
-              nodeUrl: createNodeMutation?.data?.nodes?.apiUrl,
-              nodeId: createNodeMutation?.data?.nodes?.node?.nodeId,
-              authentication: createNodeMutation?.data?.nodes?.token,
-              peerDNS: createNodeMutation?.data?.nodes?.peerDNS,
+              nodeUrl: (createNodeMutation?.data as any)?.nodes?.apiUrl,
+              nodeId: (createNodeMutation?.data as any)?.nodes?.node?.nodeId,
+              authentication: (createNodeMutation?.data as any)?.nodes?.token,
+              peerDNS: (createNodeMutation?.data as any)?.nodes?.peerDNS,
               mnemonic:
-                createNodeMutation?.data?.nodes?.node?.mnemonic ||
-                createNodeMutation?.data?.nodes?.node?.nodeId,
-              authToken: createNodeMutation?.data?.nodes?.authToken,
+                (createNodeMutation?.data as any)?.nodes?.node?.mnemonic ||
+                (createNodeMutation?.data as any)?.nodes?.node?.nodeId,
+              authToken: (createNodeMutation?.data as any)?.nodes?.authToken,
             },
             nodeInfo: {},
             appType: AppType.SUPPORTED_RLN,
@@ -275,20 +275,20 @@ function SelectWallet() {
           <NodeConnectSuccessPopupContainer
             title={onBoarding.nodeconnectSuccessfulTitle}
             subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
-            // onPress={() => {
-            //   setVisible(false);
-            //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
-            //     nodeConnectParams: {
-            //       nodeUrl: createNodeMutation.data.apiUrl,
-            //       nodeId: createNodeMutation.data.node.nodeId,
-            //       authentication: createNodeMutation.data.token,
-            //       peerDNS: createNodeMutation.data.peerDNS,
-            //       mnemonic: createNodeMutation.data.node.mnemonic,
-            //     },
-            //     nodeInfo: {},
-            //     appType: AppType.SUPPORTED_RLN,
-            //   });
-            // }}
+          // onPress={() => {
+          //   setVisible(false);
+          //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
+          //     nodeConnectParams: {
+          //       nodeUrl: createNodeMutation.data.apiUrl,
+          //       nodeId: createNodeMutation.data.node.nodeId,
+          //       authentication: createNodeMutation.data.token,
+          //       peerDNS: createNodeMutation.data.peerDNS,
+          //       mnemonic: createNodeMutation.data.node.mnemonic,
+          //     },
+          //     nodeInfo: {},
+          //     appType: AppType.SUPPORTED_RLN,
+          //   });
+          // }}
           />
         </ResponsePopupContainer>
       </View>

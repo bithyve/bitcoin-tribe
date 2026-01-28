@@ -15,8 +15,9 @@ import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import WalletUtilities from 'src/services/wallets/operations/utils';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 
@@ -32,6 +33,8 @@ function ScanAssetScreen({ navigation }) {
   const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
   const [isScanning, setIsScanning] = useState(true);
+  const { decodeInvoice } = useRgb();
+
 
   const handlePaymentInfo = useCallback(
     async (input: { codes?: Code[]; paymentInfo?: string }) => {
@@ -45,7 +48,9 @@ function ScanAssetScreen({ navigation }) {
       }
 
       if (value.startsWith('rgb:')) {
-        const res = await ApiHandler.decodeInvoice(value);
+        // @ts-ignore
+        const res = await decodeInvoice.mutateAsync(value);
+
         if (res.assetId) {
           const assetData = allAssets.find(
             item => item.assetId === res.assetId,

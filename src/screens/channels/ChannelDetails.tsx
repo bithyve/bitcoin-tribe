@@ -2,11 +2,10 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
@@ -83,7 +82,7 @@ const ChannelDetails = () => {
   const route = useRoute();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, theme.colors.ctaBackColor);
-  const closeChannelMutation = useMutation(ApiHandler.closeChannel);
+  const { closeChannel: closeChannelMutation } = useRgb();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { node, channel: channelTranslations, common } = translations;

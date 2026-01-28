@@ -20,8 +20,8 @@ import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Asset } from 'src/models/interfaces/RGBWallet';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { RealmSchema } from 'src/storage/enum';
 
 export const getRateLimitKey = (assetId: string) =>
@@ -35,7 +35,7 @@ function ImportXPost() {
   const theme: AppTheme = useTheme();
   const storage = new MMKV();
   const RATE_LIMIT_DURATION = 15 * 60 * 1000;
-  const { assetId, schema, asset } = useRoute().params;
+  const { assetId, schema, asset } = useRoute().params as any;
   const [appId] = useMMKVString(Keys.APPID);
   const { translations } = useContext(LocalizationContext);
   const { common, assets, sendScreen } = translations;
@@ -52,25 +52,8 @@ function ImportXPost() {
     item => item.verified === true,
   );
 
-  const { mutateAsync, isLoading } = useMutation(
-    ({
-      tweetId,
-      assetId,
-      schema,
-      asset,
-    }: {
-      tweetId: string;
-      assetId: string;
-      schema: RealmSchema;
-      asset: Asset;
-    }) =>
-      ApiHandler.validateTweetForAsset(
-        tweetId,
-        assetId,
-        schema,
-        asset,
-      ),
-  );
+  const { validateTweetForAsset } = useRgb();
+  const { mutateAsync, isLoading } = validateTweetForAsset;
 
   useEffect(() => {
     const rateLimitKey = getRateLimitKey(assetId);

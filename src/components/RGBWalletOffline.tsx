@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import { useMutation } from 'react-query';
 import { AppContext } from 'src/contexts/AppContext';
 import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -10,7 +9,7 @@ import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useApp } from 'src/hooks/app/useApp';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
@@ -18,7 +17,7 @@ import Toast from './Toast';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
-const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
+const RGBWalletStatus = ({ modalVisible, setModalVisible }) => {
   const {
     isWalletOnline,
     appType,
@@ -32,7 +31,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
   const hasNotch = DeviceInfo.hasNotch();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, hasNotch);
-  const makeWalletOnline = useMutation(ApiHandler.makeWalletOnline);
+  const { makeWalletOnline } = useApp();
   const navigation = useNavigation();
   const [retryAttempt, setretryAttempt] = useState(0);
 
@@ -92,7 +91,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
 
   useEffect(() => {
     if (appType && makeWalletOnline.data?.status !== undefined) {
-      if(makeWalletOnline.data?.status)
+      if (makeWalletOnline.data?.status)
         setWalletWentOnline(true);
       if (makeWalletOnline.data?.error) {
         Toast(makeWalletOnline.data?.error, true);
@@ -139,7 +138,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
           onDismiss={() => setModalVisible(false)}
           contentContainerStyle={[styles.tooltipContainer]}>
           <AppText variant="caption" style={styles.tooltipText}>
-          {isWalletOnline === WalletOnlineStatus.InProgress ? common.gettingRGBWalletOnlineMessage : formatString(common.gettingRGBWalletOnlineAttempt, { attempt: retryAttempt })}
+            {isWalletOnline === WalletOnlineStatus.InProgress ? common.gettingRGBWalletOnlineMessage : formatString(common.gettingRGBWalletOnlineAttempt, { attempt: retryAttempt })}
           </AppText>
         </Modal>
       </Portal>
@@ -168,8 +167,8 @@ const getStyles = (theme: AppTheme, hasNotch) =>
     container: {
       backgroundColor: Colors.SelectiveYellow,
       alignItems: 'center',
-      width:windowWidth,
-      height:hp(25),
+      width: windowWidth,
+      height: hp(25),
     },
     text: {
       color: 'white',
@@ -194,10 +193,10 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       top: hasNotch
         ? 50
         : Platform.OS === 'ios' && windowHeight > 820
-        ? 28
-        : Platform.OS === 'android'
-        ? 68
-        : 25,
+          ? 28
+          : Platform.OS === 'android'
+            ? 68
+            : 25,
     },
     tooltipText: {
       color: theme.colors.headingColor,

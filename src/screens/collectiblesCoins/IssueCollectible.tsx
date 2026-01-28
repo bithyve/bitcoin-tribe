@@ -7,13 +7,15 @@ import React, {
   useRef,
 } from 'react';
 import { Switch, useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import {
   StackActions,
+
   useNavigation,
   useRoute,
 } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import {
   FlatList,
   Image,
@@ -29,8 +31,8 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+
 import {
   AssetType,
   RgbUnspent,
@@ -67,7 +69,8 @@ import { RgbLibErrors } from 'react-native-rgb';
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueCollectibleScreen() {
-  const { issueAssetType, addToRegistry } = useRoute().params;
+  const { issueAssetType, addToRegistry } = useRoute().params as any;
+
   const { appType, isWalletOnline } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -99,15 +102,21 @@ function IssueCollectibleScreen() {
   const [image, setImage] = useState('');
   const [attachments, setAttachments] = useState([]);
   const {
-    mutate: createUtxos,
+    createUtxos,
+    viewUtxos,
+    refreshRgbWallet: refreshRgbWalletMutation,
+    issueNewCollectible,
+    issueAssetUda,
+  } = useRgb();
+
+  const {
     error: createUtxoError,
     data: createUtxoData,
     reset: createUtxoReset,
-  } = useMutation(ApiHandler.createUtxos);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  // const createUtxos = useMutation(ApiHandler.createUtxos);
-  const viewUtxos = useMutation(ApiHandler.viewUtxos);
-  const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
+  } = createUtxos;
+
+  const fetchUTXOs = viewUtxos.mutate;
+
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
@@ -135,7 +144,7 @@ function IssueCollectibleScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+      if (createUtxoError.toString().includes('Insufficient sats for RGB')) {
         Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
       } else {
         Toast(assets.assetProcessErrorMsg, true);
@@ -160,7 +169,8 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     setLoading(true);
     try {
-      const response = await ApiHandler.issueNewCollectible({
+      const response = await issueNewCollectible.mutateAsync({
+
         name: assetName.trim(),
         description: description.trim(),
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
@@ -168,7 +178,7 @@ function IssueCollectibleScreen() {
         filePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
-            appType === AppType.SUPPORTED_RLN
+              appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -203,16 +213,16 @@ function IssueCollectibleScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      if(error.code === "InsufficientAllocationSlots"){
+      if (error.code === 'InsufficientAllocationSlots') {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else {
         Toast(error.message, true);
@@ -233,14 +243,15 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     setLoading(true);
     try {
-      const response = await ApiHandler.issueAssetUda({
+      const response = await issueAssetUda.mutateAsync({
+
         name: assetName.trim(),
         details: description.trim(),
         ticker: assetTicker,
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
-            appType === AppType.SUPPORTED_RLN
+              appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -251,7 +262,7 @@ function IssueCollectibleScreen() {
           Platform.select({
             android:
               appType === AppType.NODE_CONNECT ||
-              appType === AppType.SUPPORTED_RLN
+                appType === AppType.SUPPORTED_RLN
                 ? attachment.startsWith('file://')
                   ? attachment
                   : `file://${path}`
@@ -287,16 +298,16 @@ function IssueCollectibleScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else {
         setLoading(false);
@@ -456,7 +467,7 @@ function IssueCollectibleScreen() {
       if (
         sanitizedText &&
         BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
+        MAX_ASSET_SUPPLY_VALUE
       ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);

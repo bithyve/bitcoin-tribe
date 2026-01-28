@@ -2,16 +2,20 @@ import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useQuery } from '@realm/react';
 import { CommonActions, useIsFocused } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import Toast from 'src/components/Toast';
+import { useWallet } from 'src/hooks/wallet/useWallet';
+
+import { useRgb } from 'src/hooks/rgb/useRgb';
+import { useNode } from 'src/hooks/node/useNode';
+
 import { AppTheme } from 'src/theme';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -29,7 +33,8 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
 
 function WalletDetails({ navigation, route }) {
-  const { autoRefresh } = route.params || {};
+  const { autoRefresh } = (route.params as any) || {};
+
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -47,31 +52,24 @@ function WalletDetails({ navigation, route }) {
 
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const { mutate, isLoading, isError, error } = useMutation(
-    ApiHandler.receiveTestSats,
-    {
-      onSuccess: () => {
-        if (
-          app?.appType === AppType.NODE_CONNECT ||
-          app?.appType === AppType.SUPPORTED_RLN
-        ) {
-          fetchOnChainTransaction();
-        }
-      },
-    },
-  );
-  const { mutate: getChannelMutate, data: channelsData } = useMutation(
-    ApiHandler.getChannels,
-  );
+  const { receiveTestSats, refreshWallets } = useWallet();
+  const { viewUtxos, getChannels, listPayments } = useRgb();
+  const { getNodeOnchainBtcTransactions } = useNode();
 
-  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
+  const { mutate, isLoading, isError, error } = receiveTestSats;
+
+
+  const { mutate: getChannelMutate, data: channelsData } = getChannels;
+
+  const listPaymentshMutation = listPayments;
   const {
     mutate: fetchOnChainTransaction,
     error: fetchTxnError,
     isError: fetchTxnIsError,
-  } = useMutation(ApiHandler.getNodeOnchainBtcTransactions);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
+  } = getNodeOnchainBtcTransactions;
+  const { mutate: fetchUTXOs } = viewUtxos;
+  const walletRefreshMutation = refreshWallets;
+
   const pullDownToRefresh = () => {
     setRefreshing(true);
     if (
@@ -112,8 +110,9 @@ function WalletDetails({ navigation, route }) {
 
   useEffect(() => {
     if (isError) {
-      Toast(error?.message || 'Failed to get test coins', true);
+      Toast((error as any)?.message || 'Failed to get test coins', true);
     }
+
   }, [isError, error]);
 
   useEffect(() => {
@@ -149,15 +148,16 @@ function WalletDetails({ navigation, route }) {
 
   const transactionsData =
     app?.appType === AppType.NODE_CONNECT ||
-    app?.appType === AppType.SUPPORTED_RLN
+      app?.appType === AppType.SUPPORTED_RLN
       ? Object.values({
-          ...rgbWallet?.lnPayments,
-          ...rgbWallet?.nodeOnchainTransactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
+        ...rgbWallet?.lnPayments,
+        ...rgbWallet?.nodeOnchainTransactions,
+      }).sort((a: any, b: any) => {
+        const dateA = new Date(a.createdAt).getTime() || 0;
+        const dateB = new Date(b.createdAt).getTime() || 0;
+        return dateA - dateB;
+      })
+
       : wallet?.specs?.transactions.slice(0, 4);
 
   return (
@@ -189,8 +189,8 @@ function WalletDetails({ navigation, route }) {
             : config.NETWORK_TYPE === NetworkType.TESTNET ||
               config.NETWORK_TYPE === NetworkType.REGTEST ||
               config.NETWORK_TYPE === NetworkType.TESTNET4
-            ? mutate()
-            : setVisibleRequestTSats(true)
+              ? mutate()
+              : setVisibleRequestTSats(true)
         }
         totalAssetLocalAmount={totalAssetLocalAmount}
       />
@@ -233,10 +233,5 @@ function WalletDetails({ navigation, route }) {
     </ScreenContainer>
   );
 }
-const getStyles = () =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-    },
-  });
 export default WalletDetails;
+

@@ -4,7 +4,6 @@ import {
   Image,
   Platform,
   StyleSheet,
-  View,
 } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -13,16 +12,14 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
-import { useMutation } from 'react-query';
-
-import ScreenContainer from 'src/components/ScreenContainer';
 import {
   Collectible,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import TransactionsList from './TransactionsList';
+
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -62,12 +59,13 @@ const CollectibleDetailsScreen = () => {
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
-  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const { mutate: getChannelMutate, data: channelsData } = useMutation(
-    ApiHandler.getChannels,
-  );
+  const {
+    listPayments: listPaymentshMutation,
+    getAssetTransactions: { mutate, isLoading },
+    refreshRgbWallet,
+    getChannels: { mutate: getChannelMutate, data: channelsData },
+  } = useRgb();
+
   const [refreshing, setRefreshing] = useState(false);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
@@ -180,13 +178,13 @@ const CollectibleDetailsScreen = () => {
   const transactionsData =
     appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
-          ...filteredPayments,
-          ...collectible?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
+        ...filteredPayments,
+        ...collectible?.transactions,
+      }).sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime() || 0;
+        const dateB = new Date(b.createdAt).getTime() || 0;
+        return dateA - dateB;
+      })
       : collectible?.transactions.slice(0, 4);
 
   const navigateWithDelay = (callback: () => void) => {
@@ -206,19 +204,19 @@ const CollectibleDetailsScreen = () => {
   //   outputRange: [0, 1],
   //   extrapolate: 'clamp',
   // });
-        const mediaPath = useMemo(() => {
-          const media = collectible?.media?.filePath;
-          if (media) {
-            if (isWebUrl(media)) {
-              return media;
-            }
-            return Platform.select({
-              android: `file://${media}`,
-              ios: media,
-            });
-          }
-          return null;
-        }, [collectible?.media?.filePath]);
+  const mediaPath = useMemo(() => {
+    const media = collectible?.media?.filePath;
+    if (media) {
+      if (isWebUrl(media)) {
+        return media;
+      }
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
+  }, [collectible?.media?.filePath]);
 
   return (
     // <ScreenContainer style={styles.container}>

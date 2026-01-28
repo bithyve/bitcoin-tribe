@@ -4,8 +4,9 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import ModalLoading from 'src/components/ModalLoading';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
+
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { hp, windowWidth, wp } from 'src/constants/responsive';
@@ -42,8 +43,8 @@ const LightningSend = () => {
   const { translations } = useContext(LocalizationContext);
   const { assets, common, lightning } = translations;
   const navigation = useNavigation();
-  const decodeInvoiceMutation = useMutation(ApiHandler.decodeLnInvoice);
-  const sendLnPaymentMutation = useMutation(ApiHandler.sendLNPayment);
+  const { decodeLnInvoice: decodeInvoiceMutation, sendLNPayment: sendLnPaymentMutation } = useRgb();
+
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);

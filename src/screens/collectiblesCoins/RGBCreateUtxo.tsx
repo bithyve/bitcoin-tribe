@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import AppHeader from 'src/components/AppHeader';
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
@@ -15,8 +16,8 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { RealmSchema } from 'src/storage/enum';
 import { AverageTxFeesByNetwork } from 'src/services/wallets/interfaces';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import ModalLoading from 'src/components/ModalLoading';
+
 import Toast from 'src/components/Toast';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -33,7 +34,8 @@ function RGBCreateUtxo() {
   const averageTxFeeByNetwork: AverageTxFeesByNetwork =
     JSON.parse(averageTxFeeJSON);
   const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const { createUtxos } = useRgb();
+
 
   useEffect(() => {
     if (createUtxos.data) {

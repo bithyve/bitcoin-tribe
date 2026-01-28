@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { FlatList, Platform, RefreshControl } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+
 import { useQuery } from '@realm/react';
 import { useNavigation } from '@react-navigation/native';
 
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import {
   Asset,
   Coin,
@@ -75,7 +76,9 @@ const ViewUnspentScreen = () => {
   );
   const uncolored = unspent.filter(utxo => utxo.utxo.colorable === false);
 
-  const { mutate } = useMutation(ApiHandler.viewUtxos);
+  const { viewUtxos } = useRgb();
+  const { mutate } = viewUtxos;
+
 
   const listData = useMemo(() => {
     switch (utxoType) {
@@ -94,9 +97,8 @@ const ViewUnspentScreen = () => {
 
   const redirectToBlockExplorer = (txid: string) => {
     if (config.NETWORK_TYPE !== NetworkType.REGTEST) {
-      const url = `https://mempool.space${
-        config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
-      }/tx/${txid}`;
+      const url = `https://mempool.space${config.NETWORK_TYPE === NetworkType.TESTNET ? '/testnet' : ''
+        }/tx/${txid}`;
 
       navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
         url,
@@ -146,7 +148,7 @@ const ViewUnspentScreen = () => {
             <UnspentUTXOElement
               transID={
                 app?.appType === AppType.NODE_CONNECT ||
-                app.appType === AppType.SUPPORTED_RLN
+                  app.appType === AppType.SUPPORTED_RLN
                   ? `${item.utxo.outpoint}`
                   : `${item.utxo.outpoint.txid}:${item.utxo.outpoint.vout}`
               }

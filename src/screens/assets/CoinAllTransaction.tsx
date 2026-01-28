@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
+
 import { FlatList, Platform, RefreshControl, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
@@ -28,9 +29,10 @@ function CoinAllTransaction() {
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
-  const { assetId, schema, hidePrecision=false, name } = useRoute().params as { assetId: string, schema: RealmSchema, hidePrecision:boolean, name: string };
+  const { assetId, schema, hidePrecision = false, name } = useRoute().params as { assetId: string, schema: RealmSchema, hidePrecision: boolean, name: string };
   const asset = useObject<Asset>(schema, assetId);
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+  const { getAssetTransactions: { mutate, isLoading } } = useRgb();
+
 
   return (
     <ScreenContainer>

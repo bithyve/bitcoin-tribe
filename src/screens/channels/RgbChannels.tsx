@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useMemo } from 'react';
 import { useQuery } from '@realm/react';
 import LottieView from 'lottie-react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -11,7 +10,7 @@ import AppHeader from 'src/components/AppHeader';
 import PlusIcon from 'src/assets/images/plus.svg';
 import PlusLightIcon from 'src/assets/images/plus_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import ChannelItem from './ChannelItem';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
@@ -34,9 +33,8 @@ const styles = StyleSheet.create({
 
 const RgbChannels = () => {
   const navigation = useNavigation();
-  const { mutate, isLoading, error, data } = useMutation(
-    ApiHandler.getChannels,
-  );
+  const { channels } = useRgb();
+  const { refetch, isLoading, data } = channels;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { translations } = useContext(LocalizationContext);
   const { node } = translations;
@@ -54,17 +52,16 @@ const RgbChannels = () => {
   }
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      mutate();
+      refetch();
     });
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, refetch]);
 
   return (
     <ScreenContainer>
       <AppHeader
-        title={`${node.channelsTitle}  ${
-          data && data?.length ? `(${data?.length})` : ''
-        }`}
+        title={`${node.channelsTitle}  ${data && data?.length ? `(${data?.length})` : ''
+          }`}
         rightIcon={
           data && data.length ? (
             isThemeDark ? (

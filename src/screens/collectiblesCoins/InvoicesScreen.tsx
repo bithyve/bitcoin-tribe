@@ -19,8 +19,9 @@ import Colors from 'src/theme/Colors';
 import AppTouchable from 'src/components/AppTouchable';
 import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import dbManager from 'src/storage/realm/dbManager';
+
 import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
@@ -120,7 +121,9 @@ const InvoicesScreen = () => {
   const { translations } = useContext(LocalizationContext);
   const { wallet } = translations;
   const rgbWallet: RGBWallet = useQuery(RealmSchema.RgbWallet)[0];
+  const { handleTransferFailure } = useRgb();
   const [isLoading, setIsLoading] = useState(false);
+
   const invoices = useMemo(() => {
     return rgbWallet.invoices.filter(invoice =>
       moment(invoice.expirationTimestamp * 1000).isAfter(moment()),
@@ -131,10 +134,11 @@ const InvoicesScreen = () => {
   const handleCancel = async (invoice: RgbInvoice) => {
     try {
       setIsLoading(true);
-      const result = await ApiHandler.handleTransferFailure(
-        invoice.batchTransferIdx,
-        false,
-      );
+      const result = await handleTransferFailure.mutateAsync({
+        batchTransferIdx: invoice.batchTransferIdx,
+        noAssetOnly: false,
+      });
+
       setIsLoading(false);
       if (result.status) {
         Toast(wallet.invoiceCancelled, false);

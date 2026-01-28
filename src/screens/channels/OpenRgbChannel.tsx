@@ -1,7 +1,6 @@
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
@@ -15,7 +14,7 @@ import TextField from 'src/components/TextField';
 import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import CustomToast from 'src/components/Toast';
 import AppText from 'src/components/AppText';
 import { AppTheme } from 'src/theme';
@@ -68,7 +67,7 @@ const OpenRgbChannel = () => {
 
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
-  const openChannelMutation = useMutation(ApiHandler.openChannel);
+  const { openChannel: openChannelMutation } = useRgb();
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme, inputHeight, inputAssetIDHeight);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -80,9 +79,9 @@ const OpenRgbChannel = () => {
   const assetsData: Asset[] = useMemo(() => {
     const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
     return combined
-      .filter(asset => 
-        asset && 
-        asset.balance && 
+      .filter(asset =>
+        asset &&
+        asset.balance &&
         Number(asset.balance.spendable) > 0
       )
       .sort((a, b) => a.timestamp - b.timestamp);
@@ -266,7 +265,7 @@ const OpenRgbChannel = () => {
           style={styles.assetAmtInput}
           inputStyle={styles.inputStyle}
           contentStyle={styles.contentStyle}
-          onRightTextPress={() => {}}
+          onRightTextPress={() => { }}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.headingColor}
         />
@@ -313,13 +312,13 @@ const OpenRgbChannel = () => {
           rightText={
             selectedAsset
               ? channelTranslation.availableBalanceText +
-                selectedAsset?.balance?.spendable
+              selectedAsset?.balance?.spendable
               : ''
           }
           style={styles.assetAmtInput}
           inputStyle={styles.inputStyle}
           contentStyle={styles.contentStyle}
-          onRightTextPress={() => {}}
+          onRightTextPress={() => { }}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.headingColor}
           error={assetAmountValidationError}

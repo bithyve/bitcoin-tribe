@@ -14,7 +14,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Keys, Storage } from 'src/storage';
 import PinMethod from 'src/models/enums/PinMethod';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useAuth } from 'src/hooks/auth/useAuth';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -24,7 +24,8 @@ function Splash({ navigation }) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { setKey, setIsWalletOnline, setAppType } = useContext(AppContext);
-  const { mutate, data } = useMutation(ApiHandler.login);
+  const { login } = useAuth();
+  const { mutate, data } = login;
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [animationFinished, setAnimationFinished] = useState(false);
 
@@ -46,10 +47,10 @@ function Splash({ navigation }) {
     try {
       const setupAppStatus = await Storage.get(Keys.SETUPAPP);
       const appId = await Storage.get(Keys.APPID);
-      
+
       if (appId && pinMethod !== PinMethod.DEFAULT) {
         return navigation.replace(NavigationRoutes.LOGIN);
-      } else  {
+      } else {
         return navigation.replace(NavigationRoutes.WALLETSETUPOPTION);
       }
 
@@ -77,27 +78,27 @@ function Splash({ navigation }) {
   }, [data, animationFinished, navigation, setKey]);
 
   return (
-      <ImageBackground
+    <ImageBackground
+      source={
+        isThemeDark
+          ? require('src/assets/images/background.png')
+          : require('src/assets/images/backgroundLight.png')
+      }
+      resizeMode="cover"
+      style={styles.backImage}>
+      <LottieView
         source={
           isThemeDark
-            ? require('src/assets/images/background.png')
-            : require('src/assets/images/backgroundLight.png')
+            ? require('src/assets/images/jsons/logoAnimation.json')
+            : require('src/assets/images/jsons/logoAnimation_light.json')
         }
-        resizeMode="cover"
-        style={styles.backImage}>
-        <LottieView
-          source={
-            isThemeDark
-              ? require('src/assets/images/jsons/logoAnimation.json')
-              : require('src/assets/images/jsons/logoAnimation_light.json')
-          }
-          autoPlay
-          loop={false}
-          style={styles.splashImageStyle}
-          onAnimationFailure={()=> setAnimationFinished(true)}
-          onAnimationFinish={() => setAnimationFinished(true)}
-        />
-      </ImageBackground>
+        autoPlay
+        loop={false}
+        style={styles.splashImageStyle}
+        onAnimationFailure={() => setAnimationFinished(true)}
+        onAnimationFinish={() => setAnimationFinished(true)}
+      />
+    </ImageBackground>
   );
 }
 const getStyles = (theme: AppTheme) =>

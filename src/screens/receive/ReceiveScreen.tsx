@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { Keys } from 'src/storage';
@@ -21,7 +20,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useNode } from 'src/hooks/node/useNode';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
@@ -53,9 +52,7 @@ function ReceiveScreen({ route }) {
   // const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
 
   const [address, setAddress] = useState('');
-  const getNodeOnchainBtcAddress = useMutation(
-    ApiHandler.getNodeOnchainBtcAddress,
-  );
+  const { getNodeOnchainBtcAddress } = useNode();
 
   useEffect(() => {
     if (

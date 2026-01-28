@@ -13,7 +13,6 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
-import { useMutation } from 'react-query';
 import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 
@@ -23,8 +22,9 @@ import {
   AssetVisibility,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { RealmSchema } from 'src/storage/enum';
+
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ModalLoading from 'src/components/ModalLoading';
 import GradientView from 'src/components/GradientView';
@@ -56,7 +56,7 @@ export const Item = ({ title, value, width = '100%' }) => {
   const styles = React.useMemo(() => getStyles(theme, width), [theme, width]);
   return (
     // @ts-ignore
-     <View style={[styles.itemWrapper, { width }]}>
+    <View style={[styles.itemWrapper, { width }]}>
       <AppText variant="heading2Bold" style={styles.valueText}>
         {value}
       </AppText>
@@ -87,7 +87,8 @@ const CoinsMetaDataScreen = () => {
   const { assets, home } = translations;
   const { assetId } = useRoute().params;
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const { getAssetMetaData: { mutate, isLoading } } = useRgb();
+
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -243,12 +244,12 @@ const CoinsMetaDataScreen = () => {
               value={
                 coin.precision === 0
                   ? numberWithCommas(
-                      Number(coin?.issuedSupply || coin?.maxSupply),
-                    )
+                    Number(coin?.issuedSupply || coin?.maxSupply),
+                  )
                   : numberWithCommas(
-                      Number(coin?.issuedSupply || coin?.maxSupply) /
-                        10 ** coin?.precision,
-                    )
+                    Number(coin?.issuedSupply || coin?.maxSupply) /
+                    10 ** coin?.precision,
+                  )
               }
               width={'45%'}
             />

@@ -17,7 +17,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { hp } from 'src/constants/responsive';
 import { Keys, Storage } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useAuth } from 'src/hooks/auth/useAuth';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import AppType from 'src/models/enums/AppType';
@@ -39,7 +39,7 @@ function AppBackupMenu({ navigation }) {
   const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const insets = useSafeAreaInsets();
-  const styles = getStyles(theme,insets);
+  const styles = getStyles(theme, insets);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
@@ -56,7 +56,7 @@ function AppBackupMenu({ navigation }) {
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
   const { setKey } = useContext(AppContext);
-  const login = useMutation(ApiHandler.verifyPin);
+  const { verifyPin: login } = useAuth();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
   const [isLoading, setIsLoading] = useState(false);
 
@@ -168,8 +168,8 @@ function AppBackupMenu({ navigation }) {
                 backup
                   ? navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY)
                   : pinMethod !== PinMethod.DEFAULT
-                  ? setVisible(true)
-                  : setVisibleBackupPhrase(true)
+                    ? setVisible(true)
+                    : setVisibleBackupPhrase(true)
               }
               backup={backup}
               manualAssetBackupStatus={false}
@@ -241,10 +241,10 @@ function AppBackupMenu({ navigation }) {
         )}
       </ScrollView>
       <AppText style={styles.textStepTime} variant="body2">
-          {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm A',
-          ) : 'Never'}`}
-        </AppText>
+        {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
+          'DD MMM YY  •  hh:mm A',
+        ) : 'Never'}`}
+      </AppText>
       <ModalLoading visible={isLoading} />
       <EnterPasscodeModal
         title={settings.EnterPasscode}

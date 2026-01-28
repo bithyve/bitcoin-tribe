@@ -7,8 +7,8 @@ import React, {
   useCallback,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+
 import {
   Image,
   ImageBackground,
@@ -23,7 +23,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
@@ -90,8 +91,13 @@ function IssueCollection() {
   const [collectionImage, setCollectionImage] = useState('');
   const [isFixedSupply, setisFixedSupply] = useState(true);
   const [isVerification, setIsVerification] = useState(false);
-  const { mutate: createUtxos } = useMutation(ApiHandler.createUtxos);
-  const viewUtxos = useMutation(ApiHandler.viewUtxos);
+  const {
+    createUtxos,
+    viewUtxos,
+    issueNewCollection,
+    payServiceFee,
+  } = useRgb();
+
   const totalSupplyInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
   const fees = JSON.parse(Storage.get(Keys.SERVICE_FEE) as string);
@@ -103,6 +109,7 @@ function IssueCollection() {
     RealmSchema.RgbWallet,
   );
   const navigation = useNavigation();
+
   const [collection, setCollection] = useState(null);
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -195,7 +202,7 @@ function IssueCollection() {
       if (
         sanitizedText &&
         BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
+        MAX_ASSET_SUPPLY_VALUE
       ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
@@ -238,7 +245,7 @@ function IssueCollection() {
         address: fees.collectionFee.address,
         fee: totalFee,
       };
-      const response = await ApiHandler.payServiceFee({
+      const response = await payServiceFee.mutateAsync({
         feeDetails,
         feeType: ServiceFeeType.CREATE_COLLECTION_FEE,
         collectionId: '',
@@ -258,7 +265,7 @@ function IssueCollection() {
 
   const issueCollection = useCallback(async () => {
     try {
-      const collection = await ApiHandler.issueNewCollection({
+      const collection = await issueNewCollection.mutateAsync({
         name: collectionName,
         ticker: 'TCOLP',
         details: description,
@@ -267,7 +274,7 @@ function IssueCollection() {
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
-            appType === AppType.SUPPORTED_RLN
+              appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
                 : `file://${path}`
@@ -278,7 +285,7 @@ function IssueCollection() {
           Platform.select({
             android:
               appType === AppType.NODE_CONNECT ||
-              appType === AppType.SUPPORTED_RLN
+                appType === AppType.SUPPORTED_RLN
                 ? collectionImage.startsWith('file://')
                   ? collectionImage
                   : `file://${path}`
@@ -301,9 +308,9 @@ function IssueCollection() {
         Toast(assets.failedToCreateCollection, true);
       }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else {
         Toast(error.message, true);
@@ -341,11 +348,11 @@ function IssueCollection() {
                 ? MOCK_BANNER
                 : MOCK_BANNER_LIGHT
               : {
-                  uri:
-                    Platform.OS === 'ios'
-                      ? image.replace('file://', '')
-                      : image,
-                }
+                uri:
+                  Platform.OS === 'ios'
+                    ? image.replace('file://', '')
+                    : image,
+              }
           }
           resizeMode="cover"
           style={styles.bannerImage}
@@ -365,11 +372,11 @@ function IssueCollection() {
                   ? MOCK_COLLECTION
                   : MOCK_COLLECTION_LIGHT
                 : {
-                    uri:
-                      Platform.OS === 'ios'
-                        ? collectionImage.replace('file://', '')
-                        : collectionImage,
-                  }
+                  uri:
+                    Platform.OS === 'ios'
+                      ? collectionImage.replace('file://', '')
+                      : collectionImage,
+                }
             }
             resizeMode="cover"
             style={styles.image}

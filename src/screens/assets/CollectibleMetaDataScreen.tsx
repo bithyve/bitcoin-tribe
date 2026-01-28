@@ -15,8 +15,8 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useObject, useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
+
 import Share from 'react-native-share';
 import moment from 'moment';
 import { useTheme } from 'react-native-paper';
@@ -31,8 +31,9 @@ import {
   AssetVisibility,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { RealmSchema } from 'src/storage/enum';
+
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';
 import ModalLoading from 'src/components/ModalLoading';
@@ -71,15 +72,15 @@ import { NewAssetIdContainer } from './components/NewAssetIdContainer';
 type itemProps = {
   title: string;
   value: string;
-  bold?:boolean;
+  bold?: boolean;
 };
 
 export const Item = ({ title, value, bold = false }: itemProps) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-     <View style={[styles.itemWrapper]}>
-      <AppText variant={ bold ? "heading2Bold" : "body1"} style={styles.valueText}>
+    <View style={[styles.itemWrapper]}>
+      <AppText variant={bold ? "heading2Bold" : "body1"} style={styles.valueText}>
         {value}
       </AppText>
       <AppText variant="body2" style={styles.labelText}>
@@ -118,7 +119,8 @@ const CollectibleMetaDataScreen = () => {
   const { assetId } = useRoute().params;
   const collectible = useObject<Collectible>(RealmSchema.Collectible, assetId);
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetMetaData);
+  const { getAssetMetaData: { mutate, isLoading } } = useRgb();
+
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [refresh, setRefresh] = useState(false);
@@ -337,21 +339,21 @@ const CollectibleMetaDataScreen = () => {
               title={assets.issuedSupply}
               value={
                 app.appType === AppType.NODE_CONNECT ||
-                app.appType === AppType.SUPPORTED_RLN
+                  app.appType === AppType.SUPPORTED_RLN
                   ? numberWithCommas(
-                      Number(collectible.issuedSupply) /
-                        10 ** collectible.precision,
-                    )
+                    Number(collectible.issuedSupply) /
+                    10 ** collectible.precision,
+                  )
                   : collectible?.metaData &&
-                    numberWithCommas(
-                      Number(collectible?.issuedSupply) /
-                        10 ** collectible?.precision,
-                    )
+                  numberWithCommas(
+                    Number(collectible?.issuedSupply) /
+                    10 ** collectible?.precision,
+                  )
               }
             />
             <Item
               title={collectible && collectible.details}
-              value={home.assetDescription }
+              value={home.assetDescription}
             />
             <Item
               title={assets.precision}
@@ -364,25 +366,25 @@ const CollectibleMetaDataScreen = () => {
                 .unix(collectible.metaData && collectible.metaData.timestamp)
                 .format('DD MMM YY  hh:mm A')}
             />
-                <VerifyIssuer
-                  assetId={assetId}
-                  schema={RealmSchema.Collectible}
-                  onVerificationComplete={() => setRefreshToggle(t => !t)}
-                  onRegisterComplete={() => setRefreshToggle(t => !t)}
-                  showVerifyIssuer={showVerifyIssuer}
-                  showDomainVerifyIssuer={showDomainVerifyIssuer}
-                  asset={collectible}
-                  onPressShare={() => {
-                    if (!collectible?.isIssuedPosted) {
-                      setVisibleIssuedPostOnTwitter(true);
-                    } else if (!collectible?.isVerifyPosted && verified) {
-                      setVisiblePostOnTwitter(true);
-                    }
-                  }}
-                />
-                {!collectible?.issuer?.verified && (
-                  <View style={styles.seperatorView} />
-                )}
+            <VerifyIssuer
+              assetId={assetId}
+              schema={RealmSchema.Collectible}
+              onVerificationComplete={() => setRefreshToggle(t => !t)}
+              onRegisterComplete={() => setRefreshToggle(t => !t)}
+              showVerifyIssuer={showVerifyIssuer}
+              showDomainVerifyIssuer={showDomainVerifyIssuer}
+              asset={collectible}
+              onPressShare={() => {
+                if (!collectible?.isIssuedPosted) {
+                  setVisibleIssuedPostOnTwitter(true);
+                } else if (!collectible?.isVerifyPosted && verified) {
+                  setVisiblePostOnTwitter(true);
+                }
+              }}
+            />
+            {!collectible?.issuer?.verified && (
+              <View style={styles.seperatorView} />
+            )}
             <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
               {isAddedInRegistry && (
                 <SelectOption

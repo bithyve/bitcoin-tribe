@@ -3,7 +3,7 @@ import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { encode as btoa } from 'base-64';
-import { useMutation } from 'react-query';
+
 import Clipboard from '@react-native-clipboard/clipboard';
 
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -12,7 +12,7 @@ import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
 import LightningNodeDetailsContainer from './components/LightningNodeDetailsContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useNode } from 'src/hooks/node/useNode';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
@@ -35,7 +35,7 @@ function RgbLightningNodeConnect() {
   const [authentication, setAuthentication] = useState(false);
   const [visible, setVisible] = useState(false);
   const [authType, setAuthType] = useState('Bearer');
-  const checkNodeConnection = useMutation(ApiHandler.checkRgbNodeConnection);
+  const { checkRgbNodeConnection: checkNodeConnection } = useNode();
 
   useEffect(() => {
     if (checkNodeConnection.data) {
@@ -48,11 +48,10 @@ function RgbLightningNodeConnect() {
               nodeConnectParams: {
                 nodeUrl: connectionURL,
                 nodeId: nodeID,
-                authentication: `${authType} ${
-                  authType === 'Basic'
-                    ? btoa(`${username}:${password}`)
-                    : bearerToken
-                }`,
+                authentication: `${authType} ${authType === 'Basic'
+                  ? btoa(`${username}:${password}`)
+                  : bearerToken
+                  }`,
               },
               nodeInfo: checkNodeConnection.data,
               appType: AppType.NODE_CONNECT,
@@ -61,10 +60,9 @@ function RgbLightningNodeConnect() {
         }, 400);
       } else {
         Toast(
-          `${
-            checkNodeConnection.data.error ||
-            checkNodeConnection.data.message ||
-            checkNodeConnection.data.Message
+          `${(checkNodeConnection.data as any).error ||
+          (checkNodeConnection.data as any).message ||
+          (checkNodeConnection.data as any).Message
           }`,
           true,
         );
@@ -116,11 +114,10 @@ function RgbLightningNodeConnect() {
           checkNodeConnection.mutate({
             nodeUrl: connectionURL,
             nodeId: nodeID,
-            authentication: `${authType} ${
-              authType === 'Basic'
-                ? btoa(`${username}:${password}`)
-                : bearerToken
-            }`,
+            authentication: `${authType} ${authType === 'Basic'
+              ? btoa(`${username}:${password}`)
+              : bearerToken
+              }`,
           });
         }}
         isLoading={checkNodeConnection.isLoading}
@@ -149,22 +146,22 @@ function RgbLightningNodeConnect() {
           <NodeConnectSuccessPopupContainer
             title={onBoarding.nodeconnectSuccessfulTitle}
             subTitle={onBoarding.nodeconnectSuccessfulSubTitle}
-            // onPress={() => {
-            //   setVisible(false);
-            //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
-            //     nodeConnectParams: {
-            //       nodeUrl: connectionURL,
-            //       nodeId: nodeID,
-            //       authentication: `${authType} ${
-            //         authType === 'Basic'
-            //           ? btoa(`${username}:${password}`)
-            //           : bearerToken
-            //       }`,
-            //     },
-            //     nodeInfo: checkNodeConnection.data,
-            //     appType: AppType.NODE_CONNECT,
-            //   });
-            // }}
+          // onPress={() => {
+          //   setVisible(false);
+          //   navigation.navigate(NavigationRoutes.PROFILESETUP, {
+          //     nodeConnectParams: {
+          //       nodeUrl: connectionURL,
+          //       nodeId: nodeID,
+          //       authentication: `${authType} ${
+          //         authType === 'Basic'
+          //           ? btoa(`${username}:${password}`)
+          //           : bearerToken
+          //       }`,
+          //     },
+          //     nodeInfo: checkNodeConnection.data,
+          //     appType: AppType.NODE_CONNECT,
+          //   });
+          // }}
           />
         </ResponsePopupContainer>
       </View>

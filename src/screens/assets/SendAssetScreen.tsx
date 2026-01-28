@@ -14,7 +14,6 @@ import {
 } from '@react-navigation/native';
 import { Modal, Portal, Switch, useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
 import idx from 'idx';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useQuery } from '@realm/react';
@@ -23,8 +22,9 @@ import AppHeader from 'src/components/AppHeader';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import Toast from 'src/components/Toast';
+
 import TextField from 'src/components/TextField';
 import Buttons from 'src/components/Buttons';
 import AppText from 'src/components/AppText';
@@ -157,8 +157,8 @@ const AssetItem = ({
                   color: isThemeDark
                     ? Colors.Black
                     : tag === 'Coin'
-                    ? Colors.White
-                    : Colors.Black,
+                      ? Colors.White
+                      : Colors.Black,
                 },
               ]}>
               {numberWithCommas(amount)}
@@ -189,7 +189,12 @@ const SendAssetScreen = () => {
     : {};
   const averageTxFee: AverageTxFees =
     averageTxFeeByNetwork[config.NETWORK_TYPE];
-  const createUtxos = useMutation(ApiHandler.createUtxos);
+  const {
+    createUtxos,
+    decodeInvoice,
+    sendAsset: sendAssetMutation,
+  } = useRgb();
+
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
@@ -201,8 +206,8 @@ const SendAssetScreen = () => {
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
       : amount && amount !== '0'
-      ? (Number(amount) / 10 ** precision).toString()
-      : '',
+        ? (Number(amount) / 10 ** precision).toString()
+        : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -288,7 +293,7 @@ const SendAssetScreen = () => {
         Keyboard.dismiss();
         Toast(
           assets.checkSpendableAmt +
-            Number(assetData?.balance.spendable) / 10 ** precision,
+          Number(assetData?.balance.spendable) / 10 ** precision,
           true,
         );
       }
@@ -304,9 +309,11 @@ const SendAssetScreen = () => {
 
   const sendAsset = useCallback(async () => {
     try {
-      const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
       setLoading(true);
-      const response = await ApiHandler.sendAsset({
+      // @ts-ignore
+      const decodedInvoice = await decodeInvoice.mutateAsync(invoice);
+      // @ts-ignore
+      const response = await sendAssetMutation.mutateAsync({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
         amount:
@@ -318,6 +325,7 @@ const SendAssetScreen = () => {
         schema: assetData?.assetSchema.toUpperCase(),
         witnessSats: Number(invoiceType === InvoiceMode.Witness ? 330 : 0),
       });
+
       setLoading(false);
       if (response?.txid) {
         setSuccessStatus(true);
@@ -343,7 +351,7 @@ const SendAssetScreen = () => {
         }, 500);
       }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -368,7 +376,8 @@ const SendAssetScreen = () => {
         return;
       }
 
-      const res = await ApiHandler.decodeInvoice(cleanedText);
+      // @ts-ignore
+      const res = await decodeInvoice.mutateAsync(cleanedText);
       if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
         setInvoiceValidationError('Invalid invoice');
         Toast('This invoice is not valid for the current network', true);
@@ -406,7 +415,7 @@ const SendAssetScreen = () => {
     }
   };
 
-  const getInvoiceType = (invoice: string) => {};
+  const getInvoiceType = (invoice: string) => { };
 
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
@@ -425,8 +434,8 @@ const SendAssetScreen = () => {
       precision === 0
         ? spendable.toString()
         : (spendable / 10 ** precision)
-            .toFixed(precision)
-            .replace(/\.?0+$/, '');
+          .toFixed(precision)
+          .replace(/\.?0+$/, '');
 
     setAssetAmount(formatted);
   };
@@ -495,13 +504,12 @@ const SendAssetScreen = () => {
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
-                  android: `file://${
-                    assetData.media?.filePath || assetData?.token.media.filePath
+                android: `file://${assetData.media?.filePath || assetData?.token.media.filePath
                   }`,
-                  ios:
-                    assetData.media?.filePath ||
-                    assetData?.token.media.filePath,
-                })
+                ios:
+                  assetData.media?.filePath ||
+                  assetData?.token.media.filePath,
+              })
               : null
           }
           tag={
@@ -686,7 +694,7 @@ const SendAssetScreen = () => {
               inputStyle={styles.customFeeInputStyle}
               contentStyle={styles.feeInputContentStyle}
               rightText={'sat/vB'}
-              onRightTextPress={() => {}}
+              onRightTextPress={() => { }}
               rightCTATextColor={theme.colors.headingColor}
               error={customAmtValidationError}
               onSubmitEditing={() => {

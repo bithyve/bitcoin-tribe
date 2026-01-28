@@ -19,12 +19,13 @@ import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import ModalContainer from 'src/components/ModalContainer';
 import { TransactionKind } from 'src/services/wallets/enums';
 import { ServiceFee } from 'src/screens/home/components/AddAsset';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { WalletService } from 'src/services/wallet/WalletService';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
@@ -182,7 +183,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const [visible, setVisible] = useState(false);
   const [disabledCTA, setDisabledCTA] = useState(false);
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
-  const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
+  const { payServiceFee: payServiceFeeFeeMutation } = useRgb();
   const [wallet] = realmUseQuery<Wallet>(RealmSchema.Wallet);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const styles = React.useMemo(
@@ -251,7 +252,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }, 400);
     } else if (payServiceFeeFeeMutation.error) {
       const errorMessage =
-        payServiceFeeFeeMutation.error?.message ||
+        (payServiceFeeFeeMutation.error as any)?.message ||
         payServiceFeeFeeMutation.error?.toString() ||
         'An unexpected error occurred';
       if (errorMessage === 'Insufficient balance') {
@@ -310,7 +311,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
         );
         onRegisterComplete?.();
         if (tx) {
-          ApiHandler.updateTransaction({
+          WalletService.getInstance().updateTransaction({
             txid: tx.txid,
             updateProps: {
               metadata: {
@@ -352,9 +353,9 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
     <>
       {isAddedInRegistry ? (
         !showVerifyIssuer &&
-        !showDomainVerifyIssuer &&
-        asset?.isVerifyPosted &&
-        asset?.isIssuedPosted ? null : (
+          !showDomainVerifyIssuer &&
+          asset?.isVerifyPosted &&
+          asset?.isIssuedPosted ? null : (
           <VerificationSection onInfoPress={openTooltip} iconRef={iconRef}>
             <View style={styles.container}>
               <ModalLoading visible={isLoading} />
@@ -405,7 +406,8 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
                 <ServiceFee
                   onPay={async () => {
                     setDisabledCTA(true);
-                    await ApiHandler.refreshWallets({ wallets: [wallet] });
+                    setDisabledCTA(true);
+                    await WalletService.getInstance().refreshWallets([wallet]);
                     payServiceFeeFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
                   }}
                   feeDetails={feeDetails}

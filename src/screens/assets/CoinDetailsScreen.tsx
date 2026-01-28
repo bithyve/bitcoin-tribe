@@ -7,7 +7,7 @@ import {
   useRoute,
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
-import { useMutation } from 'react-query';
+
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   Coin,
@@ -15,8 +15,9 @@ import {
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import TransactionsList from './TransactionsList';
+
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -67,12 +68,14 @@ const CoinDetailsScreen = () => {
   } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const coin = useObject<Coin>(RealmSchema.Coin, assetId);
-  const listPaymentshMutation = useMutation(ApiHandler.listPayments);
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const { mutate: getChannelMutate, data: channelsData } = useMutation(
-    ApiHandler.getChannels,
-  );
+  const {
+    listPayments: listPaymentshMutation,
+    getAssetTransactions: { mutate, isLoading },
+    refreshRgbWallet,
+    getChannels: { mutate: getChannelMutate, data: channelsData },
+    claimCampaign,
+  } = useRgb();
+
   const [refreshing, setRefreshing] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [showVerifyModal, setShowVerifyModal] = useState(false);
@@ -159,7 +162,7 @@ const CoinDetailsScreen = () => {
   }, [navigation, assetId]);
 
   const isEligibleForCampaign = useMemo(() => {
-    if(coin?.campaign.exclusive === 'true') {
+    if (coin?.campaign.exclusive === 'true') {
       const participatedCampaignsArray = JSON.parse(
         participatedCampaigns || '[]',
       );
@@ -169,7 +172,7 @@ const CoinDetailsScreen = () => {
   }, [participatedCampaigns, coin?.campaign._id]);
 
   const isBalanceRequired = useMemo(() => {
-    if(coin?.campaign.mode === 'WITNESS') {
+    if (coin?.campaign.mode === 'WITNESS') {
       return false;
     }
     if (!isEligibleForCampaign) return false;
@@ -197,13 +200,13 @@ const CoinDetailsScreen = () => {
   const transactionsData =
     appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
-          ...filteredPayments,
-          ...coin?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
+        ...filteredPayments,
+        ...coin?.transactions,
+      }).sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime() || 0;
+        const dateB = new Date(b.createdAt).getTime() || 0;
+        return dateA - dateB;
+      })
       : coin?.transactions.slice(0, 4);
 
   const rawHtml = isThemeDark
@@ -221,10 +224,12 @@ const CoinDetailsScreen = () => {
   const onClaimCampaign = async () => {
     setLoading(true);
     try {
-      const result = await ApiHandler.claimCampaign(
-        coin?.campaign?._id || '',
-        coin?.campaign?.mode || '',
-      );
+      // @ts-ignore
+      const result = await claimCampaign.mutateAsync({
+        campaignId: coin?.campaign?._id || '',
+        mode: coin?.campaign?.mode || '',
+      });
+
       if (result.claimed) {
         Toast(result.message, false);
         if (coin?.campaign?.exclusive === 'true') {
@@ -300,7 +305,7 @@ const CoinDetailsScreen = () => {
           strokeWidth={2}
           height={isBalanceRequired ? hp(89) : hp(64)}
           disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress || !isEligibleForCampaign}>
-          <View style={[styles.campaignContainer, { height: isBalanceRequired? hp(85):hp(60)}]}>
+          <View style={[styles.campaignContainer, { height: isBalanceRequired ? hp(85) : hp(60) }]}>
             <View style={[styles.row, { marginHorizontal: wp(4), }]}>
               <View style={styles.campaignDescription}>
                 <AppText

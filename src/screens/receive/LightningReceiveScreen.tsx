@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
-import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 
 import AppHeader from 'src/components/AppHeader';
@@ -10,7 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 
@@ -19,7 +18,7 @@ function LightningReceiveScreen({ route }) {
   // const { receivingAddress } = route.params;
   const { translations } = useContext(LocalizationContext);
   const { receciveScreen, common } = translations;
-  const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
+  const { receiveAssetOnLN: generateLNInvoiceMutation } = useRgb();
 
   const [visible, setVisible] = useState(false);
   const [lightningInvoice, setLightningInvoice] = useState('');

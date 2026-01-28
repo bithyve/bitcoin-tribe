@@ -16,7 +16,7 @@ import { wp } from 'src/constants/responsive';
 import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useBackup } from 'src/hooks/backup/useBackup';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -33,6 +33,7 @@ function WalletBackupHistory({ navigation }) {
   const [words, setWords] = useState(app && app.primaryMnemonic.split(' '));
   const [visible, setVisible] = useState(false);
   const [backup, setBackup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const { createBackup } = useBackup();
 
   return (
     <ScreenContainer>
@@ -61,7 +62,7 @@ function WalletBackupHistory({ navigation }) {
           primaryOnPress={async () => {
             if (BackupType.SEED) {
               setVisible(false);
-              const response = await ApiHandler.createBackup(true);
+              const response = await createBackup.mutateAsync(true);
               if (response) {
                 setBackup(true);
                 setVisible(false);
@@ -74,7 +75,7 @@ function WalletBackupHistory({ navigation }) {
           }}
           secondaryOnPress={async () => {
             // setVisible(false);
-            const response = await ApiHandler.createBackup(false);
+            const response = await createBackup.mutateAsync(false);
             if (response) {
               setVisible(false);
               setTimeout(() => {

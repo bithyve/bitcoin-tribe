@@ -33,8 +33,8 @@ import {
 } from 'src/models/interfaces/RGBWallet';
 import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
-import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AppContext } from 'src/contexts/AppContext';
@@ -143,7 +143,8 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
   const { appType, isWalletOnline } = useContext(AppContext);
-  const { invoiceAssetId, chosenAsset } = useRoute().params;
+  const { invoiceAssetId, chosenAsset } = (useRoute().params as any) || {};
+
   const { receciveScreen, common, assets, home } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
@@ -176,9 +177,9 @@ const EnterInvoiceDetails = () => {
     return combined.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
-  const { mutateAsync, isLoading, data, reset } = useMutation(
-    ({ query }: { query: string }) => ApiHandler.searchAssetFromRegistry(query),
-  );
+  const { searchAssetFromRegistry } = useRgb();
+  const { mutateAsync, isLoading, data, reset } = searchAssetFromRegistry;
+
   const wallet: Wallet = useWallets({}).wallets[0];
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
@@ -223,13 +224,13 @@ const EnterInvoiceDetails = () => {
     ) {
       return (
         rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
-          rgbWallet?.nodeBtcBalance?.vanilla?.future >
+        rgbWallet?.nodeBtcBalance?.vanilla?.future >
         0
       );
     }
     return (
       wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
-        0 || colorable.length > 0
+      0 || colorable.length > 0
     );
   }, [
     colorable.length,
@@ -374,7 +375,7 @@ const EnterInvoiceDetails = () => {
               },
             ]}
           />
-          <Pressable onPress={()=>setUseWatchTower(prev=> !prev)}
+          <Pressable onPress={() => setUseWatchTower(prev => !prev)}
             style={styles.watchtowerCtr}
           >
             <View style={styles.checkIconWrapper}>{checkIcon}</View>

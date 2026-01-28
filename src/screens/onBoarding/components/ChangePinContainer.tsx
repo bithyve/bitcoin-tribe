@@ -12,8 +12,8 @@ import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import AppText from 'src/components/AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+
+import { useAuth } from 'src/hooks/auth/useAuth';
 import Toast from 'src/components/Toast';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import RememberPasscode from './RememberPasscode';
@@ -33,7 +33,7 @@ function ChangePinContainer() {
   const [passcodeFlag, setPasscodeFlag] = useState(true);
   const [visible, setVisible] = useState(false);
   const [confirmPasscodeFlag, setConfirmPasscodeFlag] = useState(0);
-  const changePin = useMutation(ApiHandler.changePin);
+  const { changePin } = useAuth();
   const { key } = useContext(AppContext);
 
   useEffect(() => {
