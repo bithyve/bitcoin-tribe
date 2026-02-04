@@ -2,7 +2,7 @@ import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
-import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter } from 'react-native-rgb';
+import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter, restoreBackup } from 'react-native-rgb';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 
@@ -455,7 +455,10 @@ export default class RGBServices {
     error?: string;
   }> => {
     const filePath = RNFS.DocumentDirectoryPath + `/${publicId}.rgb_backup`;
-    await RNFS.unlink(filePath);
+    const exists = await RNFS.exists(filePath);
+    if (exists) {
+      await RNFS.unlink(filePath);
+    }
     await RGBServices.RGBWallet.backup(filePath, password);
     return { file: filePath };
   };
@@ -466,9 +469,8 @@ export default class RGBServices {
   };
 
   static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
-    throw new Error('Not implemented');
-    // const data = await RGBServices.RGBWallet.restore(mnemonic, filePath);
-    // return JSON.parse(data);
+    const data = await restoreBackup(mnemonic, filePath);
+    return {};
   };
 
 
