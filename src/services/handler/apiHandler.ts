@@ -3425,20 +3425,21 @@ export class ApiHandler {
 
 
 
-export const addToWatchTower=async(invoice:string)=> {
+export const addToWatchTower = async (invoice: string) => {
   try {
     const response = await axios.post(
       'https://watchtower.orbis1.io/addToWatchTower',
-      { invoice }, // json body
+      { invoice, fcmToken: Storage.get(Keys.FCM_TOKEN) }, // json body
       {
         headers: {
           'Content-Type': 'application/json',
+          Authorization: config.ORBIS1_API_KEY,
         },
-      }
+      },
     );
     return response.data;
   } catch (error) {
     console.error('Error calling watch tower:', error.message);
     throw error;
   }
-}
+};
