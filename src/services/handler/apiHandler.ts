@@ -86,7 +86,13 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
+import {
+  restoreKeys,
+  BitcoinNetwork,
+  Wallet as NativeRGBWallet,
+  AssetSchema as NativeAssetSchema,
+} from 'orbis1-sdk-rn';
+import { addToWatchTower, setWatchTowerFcmToken } from 'src/services/watchtower/WatchTowerService';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
@@ -1302,7 +1308,7 @@ export class ApiHandler {
           };
           dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
         }
-        if(useWatchTower){
+        if (useWatchTower) {
           await addToWatchTower(response.invoice);
         }
       }
@@ -2380,6 +2386,7 @@ export class ApiHandler {
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
+        setWatchTowerFcmToken(token);
         return true;
       }
       return false;
@@ -3421,25 +3428,3 @@ export class ApiHandler {
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
   }
 }
-
-
-
-
-export const addToWatchTower = async (invoice: string) => {
-  try {
-    const response = await axios.post(
-      'https://watchtower.orbis1.io/addToWatchTower',
-      { invoice, fcmToken: Storage.get(Keys.FCM_TOKEN) }, // json body
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: config.ORBIS1_API_KEY,
-        },
-      },
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error calling watch tower:', error.message);
-    throw error;
-  }
-};
