@@ -2,7 +2,7 @@ import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
-import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter, restoreBackup } from 'react-native-rgb';
+import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter, restoreBackup } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 

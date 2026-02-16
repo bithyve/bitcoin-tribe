@@ -9,6 +9,19 @@ require Pod::Executable.execute_command('node', ['-p',
 platform :ios, min_ios_version_supported
 prepare_react_native_project!
 
+pre_install do |_installer|
+  Pod::Xcode::LinkageAnalyzer.singleton_class.class_eval do
+    alias_method :original_dynamic_binary?, :dynamic_binary?
+    def dynamic_binary?(binary)
+      original_dynamic_binary?(binary)
+    rescue Errno::EINVAL
+      @cached_dynamic_binary_results ||= {}
+      @cached_dynamic_binary_results[binary] = false
+    end
+  end
+end
+
+
 pod 'FirebaseCore', :modular_headers => true;
 pod 'GoogleUtilities', :modular_headers => true;
 

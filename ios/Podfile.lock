@@ -152,6 +152,34 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
+  - Orbis1Sdk (0.0.1):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - PromisesObjC (2.4.0)
   - RCT-Folly (2024.11.18.00):
     - boost
@@ -1897,7 +1925,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+37c7aa)":
+  - "react-native-bare-kit (0.9.3+ef269a)":
     - boost
     - DoubleConversion
     - fast_float
@@ -2080,8 +2108,34 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-netinfo (11.4.1):
+  - react-native-netinfo (11.5.2):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - react-native-pager-view (6.9.1):
     - boost
     - DoubleConversion
@@ -2854,34 +2908,6 @@ PODS:
     - Yoga
   - RealmJS (12.15.0):
     - React
-  - Rgb (0.2.4):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - SocketRocket
-    - Yoga
   - RNCClipboard (1.16.3):
     - boost
     - DoubleConversion
@@ -2928,7 +2954,7 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.29.1):
+  - RNGestureHandler (2.30.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -3073,7 +3099,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNQrGenerator (1.4.5):
+  - RNQrGenerator (1.4.6):
     - React
     - ZXingObjC
   - RNReactNativeHapticFeedback (2.3.3):
@@ -3460,6 +3486,7 @@ DEPENDENCIES:
   - GoogleUtilities
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
+  - Orbis1Sdk (from `../node_modules/orbis1-sdk-rn`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
   - RCTRequired (from `../node_modules/react-native/Libraries/Required`)
@@ -3547,7 +3574,6 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativeFs (from `../node_modules/@dr.pogodin/react-native-fs`)"
   - RealmJS (from `../node_modules/realm`)
-  - Rgb (from `../node_modules/react-native-rgb`)
   - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFastImage (from `../node_modules/react-native-fast-image`)
@@ -3614,6 +3640,8 @@ EXTERNAL SOURCES:
     :tag: hermes-2025-07-07-RNv0.81.0-e0fc67142ec0763c6b6153ca2bf96df815539782
   lottie-react-native:
     :path: "../node_modules/lottie-react-native"
+  Orbis1Sdk:
+    :path: "../node_modules/orbis1-sdk-rn"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -3786,8 +3814,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@dr.pogodin/react-native-fs"
   RealmJS:
     :path: "../node_modules/realm"
-  Rgb:
-    :path: "../node_modules/react-native-rgb"
   RNCClipboard:
     :path: "../node_modules/@react-native-clipboard/clipboard"
   RNDeviceInfo:
@@ -3852,6 +3878,7 @@ SPEC CHECKSUMS:
   lottie-ios: a881093fab623c467d3bce374367755c272bdd59
   lottie-react-native: 86fa7488b1476563f41071244aa73d5b738faf19
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
+  Orbis1Sdk: b9131e547a976343ca9a5b3ea5c324fa239e9822
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
@@ -3888,7 +3915,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: a49e868a621179d99f0eb211d3b95af2bfae0dd5
+  react-native-bare-kit: 166cc0f6a5d6774e62677aa7d3f7f52e6f8dc0d5
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -3898,7 +3925,7 @@ SPEC CHECKSUMS:
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
   react-native-keep-awake: 129cb4bd75d0f304a479b4c4527d2994fe18e43c
   react-native-mmkv: ac7507625cd74bac0eb5333604a7cd7b08fe9e3e
-  react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
+  react-native-netinfo: 57447b5a45c98808f8eae292cf641f3d91d13830
   react-native-pager-view: a0516effb17ca5120ac2113bfd21b91130ad5748
   react-native-randombytes: 4eeddad82d1fd57adda1cd5beffe67d041c9d6de
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
@@ -3940,18 +3967,17 @@ SPEC CHECKSUMS:
   ReactCommon: 5f0e5c09a64a2717215dd84380e1a747810406f2
   ReactNativeFs: fa4d6c721fedd16abb5a7eb5c591303f147677b5
   RealmJS: 10fb99cdac98cad8a6c4471c967bd6be10307741
-  Rgb: 178424c7c5b9a5a37440a8426d38b07e3ee46aba
   RNCClipboard: 4b58c780f63676367640f23c8e114e9bd0cf86ac
   RNDeviceInfo: f9d6fd102f8b11daa7ee322391b23cebee3bd95f
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
   RNFBAnalytics: bd6cecb65cc11ebdc88734691ab86c14addc0e52
   RNFBApp: fd5bf956d6114cd3172680ab9c2185143faaa385
   RNFBMessaging: 387873ff9c0deb29ec76b1a5c492d06012af58f4
-  RNGestureHandler: 29bbca60c881e5243e219e3fe0016060002ed389
+  RNGestureHandler: e37bdb684df1ac17c7e1d8f71a3311b2793c186b
   RNImageCropPicker: 5fd4ceaead64d8c53c787e4e559004f97bc76df7
   RNKeychain: a2c134ab796272c3d605e035ab727591000b30f3
   RNLocalize: ed3bbf7e995116ece078e169bda6928dde970cce
-  RNQrGenerator: b467624cdcb0e88108a8b4ca74c94b0978efa265
+  RNQrGenerator: af2f0888eb81b8ff99517a3929d6399444dcc56d
   RNReactNativeHapticFeedback: be4f1b4bf0398c30b59b76ed92ecb0a2ff3a69c6
   RNReanimated: f39d5f29612cb37617241ea2e91bfecaabe0d1c4
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
@@ -3966,6 +3992,6 @@ SPEC CHECKSUMS:
   Yoga: 728df40394d49f3f471688747cf558158b3a3bd1
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 5d4c0deb92a01962e4ec76dc7b80873101227cb2
+PODFILE CHECKSUM: 37e48b5c8a1b8973dc1b36a22fcb705ed051e076
 
 COCOAPODS: 1.16.2
