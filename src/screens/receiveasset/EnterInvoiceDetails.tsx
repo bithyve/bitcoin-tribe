@@ -44,6 +44,7 @@ import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { events, logCustomEvent } from 'src/services/analytics';
+import config, { APP_STAGE } from 'src/utils/config';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -375,16 +376,19 @@ const EnterInvoiceDetails = () => {
               },
             ]}
           />
-          <Pressable onPress={() => setUseWatchTower(prev => !prev)}
-            style={styles.watchtowerCtr}
-          >
-            <View style={styles.checkIconWrapper}>{checkIcon}</View>
-            <View style={styles.reservedSatsWrapper1}>
-              <AppText variant="body2" >
-                {receciveScreen.validateUsingWatchTower}
-              </AppText>
-            </View>
-          </Pressable>
+          {config.ENVIRONMENT != APP_STAGE.PRODUCTION && (
+            <Pressable
+              onPress={() => setUseWatchTower(prev => !prev)}
+              style={styles.watchtowerCtr}
+            >
+              <View style={styles.checkIconWrapper}>{checkIcon}</View>
+              <View style={styles.reservedSatsWrapper1}>
+                <AppText variant="body2">
+                  {receciveScreen.validateUsingWatchTower}
+                </AppText>
+              </View>
+            </Pressable>
+          )}
         </View>
         <View style={styles.footerWrapper}>
           {colorable.length === 0 && invoiceType === InvoiceMode.Blinded ? (
