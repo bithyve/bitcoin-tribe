@@ -19,15 +19,16 @@ import {
   IssuerVerificationMethod,
   TransferKind,
 } from 'src/models/interfaces/RGBWallet';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import AddNewAssetLight from 'src/assets/images/AddNewAsset_Light.svg';
 import AddNewAsset from 'src/assets/images/AddNewAsset.svg';
 import AppTouchable from 'src/components/AppTouchable';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
+
 import Colors from 'src/theme/Colors';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import BackTranslucent from 'src/assets/images/backTranslucent.svg';
@@ -53,7 +54,8 @@ const CollectionDetailsScreen = () => {
   )[0] as Collection;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
-  const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
+  const { getAssetTransactions: { mutate, isLoading } } = useRgb();
+
 
   const hasIssuanceTransaction = collection?.transactions.some(
     transaction => transaction.kind.toUpperCase() === TransferKind.ISSUANCE,
@@ -76,24 +78,24 @@ const CollectionDetailsScreen = () => {
   );
 
   const mediaPath = useMemo(() => {
-    if(collection?.token?.attachments[0]?.filePath) {
+    if (collection?.token?.attachments[0]?.filePath) {
       return Platform.select({
         android: `file://${collection?.token?.attachments[0]?.filePath}`,
         ios: collection?.token?.attachments[0]?.filePath,
       });
-    } else if(collection?.attachments[0]?.filePath) {
+    } else if (collection?.attachments[0]?.filePath) {
       return collection?.attachments[0]?.filePath
     }
     return null;
   }, [collection?.token?.attachments[0]?.filePath, collection?.attachments[0]?.filePath]);
 
   const headerImage = useMemo(() => {
-    if(collection?.token?.media?.filePath) {
+    if (collection?.token?.media?.filePath) {
       return Platform.select({
         android: `file://${collection?.token?.media?.filePath}`,
         ios: collection?.token?.media?.filePath,
       });
-    } else if(collection?.media?.filePath) {
+    } else if (collection?.media?.filePath) {
       return collection?.media?.filePath
     }
     return null;
@@ -152,7 +154,7 @@ const CollectionDetailsScreen = () => {
           </View>
           <View />
           <SizedBox height={hp(20)} />
-          <View style={[styles.verifiedCtr, {borderColor: isVerified? Colors.UFOGreen1: theme.colors.mutedTab,}]}>
+          <View style={[styles.verifiedCtr, { borderColor: isVerified ? Colors.UFOGreen1 : theme.colors.mutedTab, }]}>
             <AppText style={isVerified ? { color: Colors.UFOGreen1 } : { color: theme.colors.mutedTab }} variant="heading3">
               {isVerified ? assets.verified : assets.unverified}
             </AppText>
@@ -166,8 +168,8 @@ const CollectionDetailsScreen = () => {
                 style={!isVerified && styles.orangeText}>
                 {isVerified
                   ? collection?.issuer?.verifiedBy.find(
-                      item => item.type === IssuerVerificationMethod.TWITTER,
-                    )?.username
+                    item => item.type === IssuerVerificationMethod.TWITTER,
+                  )?.username
                   : assets.unverified}
               </AppText>
             </View>
@@ -181,8 +183,8 @@ const CollectionDetailsScreen = () => {
                 style={!isVerified && styles.orangeText}>
                 {isVerified
                   ? collection?.issuer?.verifiedBy.find(
-                      item => item.type === IssuerVerificationMethod.DOMAIN,
-                    )?.name
+                    item => item.type === IssuerVerificationMethod.DOMAIN,
+                  )?.name
                   : assets.unverified}
               </AppText>
             </View>
@@ -192,24 +194,24 @@ const CollectionDetailsScreen = () => {
     );
   };
 
-  const ListFooter = ()=>{
+  const ListFooter = () => {
     return <View style={styles.footerCtr}>
-        <SizedBox height={hp(10)} />
-          {hasIssuanceTransaction && <SelectOption
-            title={'Verification'}
-            subTitle={''}
-            onPress={() =>
-              navigation.dispatch(
-                CommonActions.navigate(
-                  NavigationRoutes.COLLECTIONVERIFICATIONSCREEN,
-                  {
-                    collectionId: collection._id,
-                  },
-                ),
-              )
-            }
-            testID={'collection_verification'}
-          />}
+      <SizedBox height={hp(10)} />
+      {hasIssuanceTransaction && <SelectOption
+        title={'Verification'}
+        subTitle={''}
+        onPress={() =>
+          navigation.dispatch(
+            CommonActions.navigate(
+              NavigationRoutes.COLLECTIONVERIFICATIONSCREEN,
+              {
+                collectionId: collection._id,
+              },
+            ),
+          )
+        }
+        testID={'collection_verification'}
+      />}
     </View>
   }
 
@@ -232,11 +234,11 @@ const CollectionDetailsScreen = () => {
                 tag={'COLLECTIBLE'}
                 onPress={() =>
                   navigation.dispatch(CommonActions.navigate(NavigationRoutes.COLLECTIONUDASWIPER, {
-                    index:index,
-                    assets: collection.items                    
+                    index: index,
+                    assets: collection.items
                   }))
                 }
-                isCollectionUda = {true}
+                isCollectionUda={true}
               />
             </View>
           );
@@ -275,7 +277,7 @@ const getStyles = (theme: AppTheme, insets) =>
       borderBottomLeftRadius: 14,
       borderBottomRightRadius: 14,
     },
-    imageCtr:{
+    imageCtr: {
       height: hp(80),
       width: hp(80),
       position: 'relative',
@@ -355,20 +357,19 @@ const getStyles = (theme: AppTheme, insets) =>
       alignItems: 'center',
     },
     textColor: { color: theme.colors.text },
-    footerCtr:{
-      marginTop:hp(10),
+    footerCtr: {
+      marginTop: hp(10),
       paddingHorizontal: wp(16),
     }
   });
 export default CollectionDetailsScreen;
 
 
-const supportNetworkImage = (headerImage)=>{
-  if(headerImage.includes('https://'))
-    if(headerImage.startsWith('file://'))
-    {
+const supportNetworkImage = (headerImage) => {
+  if (headerImage.includes('https://'))
+    if (headerImage.startsWith('file://')) {
       const newHeaderImage = headerImage.replace('file://', '')
       return newHeaderImage
-    }else return headerImage
+    } else return headerImage
   else return headerImage;
 }

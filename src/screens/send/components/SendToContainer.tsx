@@ -9,8 +9,8 @@ import { useTheme } from 'react-native-paper';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
 import idx from 'idx';
+
 import { useQuery } from '@realm/react';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { AppTheme } from 'src/theme';
@@ -21,8 +21,8 @@ import AppText from 'src/components/AppText';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import Toast from 'src/components/Toast';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import { Keys, Storage } from 'src/storage';
+
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import useBalance from 'src/hooks/useBalance';
 import { PaymentInfoKind, TxPriority } from 'src/services/wallets/enums';
@@ -50,6 +50,8 @@ import config from 'src/utils/config';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';
 import WalletOperations from 'src/services/wallets/operations';
 import { requestAppReview } from 'src/services/appreview';
+import { useWallet } from 'src/hooks/wallet/useWallet';
+
 
 function SendToContainer({
   wallet,
@@ -90,15 +92,18 @@ function SendToContainer({
   );
   const [insufficientBalance, setInsufficientBalance] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [averageTxFee, setAverageTxFee] = useState({});
+  // @ts-ignore
+  const [averageTxFee, setAverageTxFee] = useState<AverageTxFees>({});
+
   const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const { prepareTransaction, broadcastTransaction: sendTransactionMutation } = useWallet();
   const {
     mutate: executePhaseOneTransaction,
     isLoading,
     error,
     data: phaseOneTxPrerequisites,
-  } = useMutation(ApiHandler.sendPhaseOne);
-  const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+  } = prepareTransaction;
+
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const styles = React.useMemo(
     () => getStyles(theme, inputHeight),
@@ -219,11 +224,10 @@ function SendToContainer({
         address: recipientAddress,
         amount: Number(amount.replace(/,/g, '')),
       },
-      averageTxFee,
       txPrerequisites: phaseOneTxPrerequisites,
-      selectedPriority,
-      customFeePerByte: customFee,
+      txPriority: selectedPriority,
     });
+
   };
 
   const balances = useMemo(() => {
@@ -283,11 +287,11 @@ function SendToContainer({
 
   const transferFee =
     app.appType === AppType.NODE_CONNECT ||
-    app.appType === AppType.SUPPORTED_RLN
+      app.appType === AppType.SUPPORTED_RLN
       ? idx(sendTransactionMutation, _ => _.data.txPrerequisites.fee_rate) || 0 // Use feeEstimate for NODE_CONNECT
       : isSendMax
-      ? sendMaxFee
-      : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
+        ? sendMaxFee
+        : idx(phaseOneTxPrerequisites, data => data[selectedPriority]?.fee) || 0;
 
   const onSendMax = useCallback(() => {
     if (!recipientAddress) {
@@ -426,7 +430,7 @@ function SendToContainer({
         <View style={styles.inputWrapper}>
           <AppText variant="body2" style={styles.recipientAddressLabel}>
             {initialCurrencyMode === CurrencyKind.SATS ||
-            initialCurrencyMode === CurrencyKind.BITCOIN
+              initialCurrencyMode === CurrencyKind.BITCOIN
               ? sendScreen.enterSats
               : sendScreen.enterFiat}
           </AppText>
@@ -529,7 +533,7 @@ function SendToContainer({
               inputStyle={styles.customFeeInputStyle}
               contentStyle={styles.contentStyle}
               rightText={'sat/vB'}
-              onRightTextPress={() => {}}
+              onRightTextPress={() => { }}
               rightCTATextColor={theme.colors.headingColor}
               error={customAmtValidationError}
               onSubmitEditing={() => {
@@ -572,7 +576,7 @@ function SendToContainer({
         enableCloseIcon={false}
         onDismiss={() =>
           sendTransactionMutation.status === 'loading' ||
-          sendTransactionMutation.status === 'success'
+            sendTransactionMutation.status === 'success'
             ? {}
             : setVisible(false)
         }>

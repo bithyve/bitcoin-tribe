@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
-import { useMutation } from 'react-query';
 import { FlatList, Platform, StyleSheet, View } from 'react-native';
 
 import AppHeader from 'src/components/AppHeader';
@@ -11,7 +10,7 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useBackup } from 'src/hooks/backup/useBackup';
 import { RealmSchema } from 'src/storage/enum';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import VersionHistoryItem from './components/VersionHistoryItem';
@@ -34,23 +33,23 @@ const CloudBackup = ({ navigation }) => {
   const data = useQuery(RealmSchema.CloudBackupHistory).map(
     getJSONFromRealmObject,
   );
-  const backup = useMutation(ApiHandler.backupRgbOnCloud);
+  const { backup: backupMutation } = useBackup();
   const lastIndex = data.length - 1;
 
   useEffect(() => {
-    if (backup.isSuccess) {
+    if (backupMutation.isSuccess) {
       setAssetBackup(true);
       Toast(settings.CLOUD_BACKUP_CREATED);
-    } else if (backup.isError) {
+    } else if (backupMutation.isError) {
       Toast(settings.CLOUD_BACKUP_FAILED, true);
     }
-  }, [backup.isSuccess, backup.isError, backup.isLoading]);
+  }, [backupMutation.isSuccess, backupMutation.isError, backupMutation.isLoading]);
 
   return (
     <ScreenContainer>
       <View>
         <ResponsePopupContainer
-          visible={backup.isLoading}
+          visible={backupMutation.isLoading}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
           borderColor={theme.colors.modalBackColor}>
@@ -108,7 +107,7 @@ const CloudBackup = ({ navigation }) => {
         <Buttons
           primaryTitle={common.backup}
           primaryOnPress={async () => {
-            backup.mutate();
+            backupMutation.mutate();
           }}
           secondaryTitle={''}
           secondaryOnPress={() => navigation.goBack()}

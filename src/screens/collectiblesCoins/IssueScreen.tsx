@@ -7,7 +7,6 @@ import React, {
   useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keyboard, Platform, StyleSheet, View } from 'react-native';
@@ -18,8 +17,9 @@ import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, windowWidth } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import Toast from 'src/components/Toast';
+
 import {
   AssetType,
   RgbUnspent,
@@ -69,14 +69,19 @@ function IssueScreen() {
     useState(false);
 
   const {
-    mutate: createUtxos,
+    createUtxos,
+    viewUtxos,
+    refreshRgbWallet: refreshRgbWalletMutation,
+    issueNewCoin,
+  } = useRgb();
+
+  const {
     error: createUtxoError,
     data: createUtxoData,
     reset: createUtxoReset,
-  } = useMutation(ApiHandler.createUtxos);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const viewUtxos = useMutation(ApiHandler.viewUtxos);
-  const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
+  } = createUtxos;
+
+  const fetchUTXOs = viewUtxos.mutate;
   const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
   );
@@ -103,7 +108,7 @@ function IssueScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+      if (createUtxoError.toString().includes('Insufficient sats for RGB')) {
         Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
       } else {
         Toast(assets.assetProcessErrorMsg, true);
@@ -128,12 +133,13 @@ function IssueScreen() {
     Keyboard.dismiss();
     setLoading(true);
     try {
-      const response = await ApiHandler.issueNewCoin({
+      const response = await issueNewCoin.mutateAsync({
         name: assetName.trim(),
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
       });
+
       if (response?.assetId) {
         setLoading(false);
         Toast(assets.assetCreateMsg);
@@ -161,16 +167,16 @@ function IssueScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
-          createUtxos();
+          createUtxos.mutate();
         }, 500);
       } else {
         Toast(error.message, true);
@@ -235,7 +241,7 @@ function IssueScreen() {
       if (
         sanitizedText &&
         BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
+        MAX_ASSET_SUPPLY_VALUE
       ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);

@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import AppHeader from 'src/components/AppHeader';
+
+
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
 import TransferDetailsContainer from './components/TransferDetailsContainer';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import Toast from 'src/components/Toast';
+
 import ModalContainer from 'src/components/ModalContainer';
 import { Platform, StyleSheet, View } from 'react-native';
 import PrimaryCTA from 'src/components/PrimaryCTA';
@@ -28,15 +30,15 @@ function TransferDetails({ route, navigation }) {
   const [visible, setVisible] = useState(false);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
+  const { handleTransferFailure } = useRgb();
   const {
     mutate: cancelTransactionMutation,
     isLoading,
     isSuccess,
     isError,
     error,
-  } = useMutation(() =>
-    ApiHandler.handleTransferFailure(transaction.batchTransferIdx, false),
-  );
+  } = handleTransferFailure;
+
 
   const amount = useMemo(() => {
     if (transaction.kind.toUpperCase() === TransferKind.SEND) {
@@ -44,7 +46,7 @@ function TransferDetails({ route, navigation }) {
     }
     return transaction?.assignments[0]?.amount;
   }, [transaction]);
-  
+
   useEffect(() => {
     if (isSuccess) {
       setTimeout(() => {
@@ -68,15 +70,16 @@ function TransferDetails({ route, navigation }) {
         assetId={assetId}
         schema={schema}
         transaction={transaction}
-        onPress={() => cancelTransactionMutation()}
+        onPress={() => cancelTransactionMutation({ batchTransferIdx: transaction.batchTransferIdx, noAssetOnly: false })}
       />
+
       <ModalContainer
         title={assets.txnCancelSuccessMsg}
         subTitle={''}
         height={Platform.OS === 'ios' ? '45%' : ''}
         visible={visible}
         enableCloseIcon={false}
-        onDismiss={() => {}}>
+        onDismiss={() => { }}>
         <View style={styles.modalBodyContainer}>
           <View style={styles.illustrationWrapper}>
             <CancelIllustration />

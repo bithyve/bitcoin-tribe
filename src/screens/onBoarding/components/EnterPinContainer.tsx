@@ -11,8 +11,8 @@ import DeleteIconLight from 'src/assets/images/delete_light.svg';
 import ReactNativeBiometrics from 'react-native-biometrics';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation } from '@react-navigation/native';
-import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+
+import { useAuth } from 'src/hooks/auth/useAuth';
 import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -32,8 +32,7 @@ function EnterPinContainer() {
   const navigation = useNavigation();
   const [passcode, setPasscode] = useState('');
   const [passcodeFlag, setPasscodeFlag] = useState(true);
-  const login = useMutation(ApiHandler.loginWithPin);
-  const biometricLogin = useMutation(ApiHandler.biometricLogin);
+  const { loginWithPin: login, biometricLogin } = useAuth();
   const { setKey, setIsWalletOnline } = useContext(AppContext);
   const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
   const [appId] = useMMKVString(Keys.APPID);

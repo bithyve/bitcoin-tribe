@@ -17,12 +17,16 @@ import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import { hp, wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+
+
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
 import useWallets from 'src/hooks/useWallets';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+import { useWallet } from 'src/hooks/wallet/useWallet';
+
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
 import Relay from 'src/services/relay';
 import AppText from 'src/components/AppText';
@@ -59,6 +63,9 @@ function SendScreen({ route, navigation }) {
   const [assetData, setAssetData] = useState<Asset | null>(null);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const { currentRoom, createRoom, sendDMInvitation } = useChat();
+  const { decodeInvoice, addAssetToWallet } = useRgb();
+  const { updateProfile } = useWallet(); // Not used here but good practice to have if needed, checking existing usage
+
 
   const navigateWithDelay = (callback: () => void) => {
     setVisible(false);
@@ -125,7 +132,7 @@ function SendScreen({ route, navigation }) {
         }
       }
 
-      
+
       if (value.startsWith(Deeplinking.scheme)) {
         setIsScanning(true);
         setVisibleModal(false);
@@ -139,7 +146,7 @@ function SendScreen({ route, navigation }) {
             publicKey,
             contactName,
           } = Object.fromEntries(parsedUrl.searchParams.entries());
-          if (roomType == HolepunchRoomType.GROUP){
+          if (roomType == HolepunchRoomType.GROUP) {
             createRoom(roomName, roomType, roomDescription, '', roomKey);
             logCustomEvent(events.JOIN_GROUP);
           }
@@ -156,8 +163,9 @@ function SendScreen({ route, navigation }) {
 
       if (value.startsWith('rgb:')) {
         try {
-          const res = await ApiHandler.decodeInvoice(value);
+          const res = await decodeInvoice.mutateAsync(value);
           if (res.network.toUpperCase() !== config.NETWORK_TYPE) {
+
             setVisible(false);
             setIsScanning(true);
             setVisibleModal(false);
@@ -185,6 +193,7 @@ function SendScreen({ route, navigation }) {
                   rgbInvoice: value,
                   amount: res?.assignment?.amount.toString(),
                 });
+
               });
             }
           } else {
@@ -278,15 +287,15 @@ function SendScreen({ route, navigation }) {
   const onProceed = async (paymentInfo: string) => {
     await handlePaymentInfo({ paymentInfo }, 'proceed');
   };
-  
-   useEffect(() => {
-      if (currentRoom) {
-        (navigation as any).navigate(NavigationRoutes.CHAT, {
-          roomId: currentRoom.roomId,
-        });
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentRoom]);
+
+  useEffect(() => {
+    if (currentRoom) {
+      (navigation as any).navigate(NavigationRoutes.CHAT, {
+        roomId: currentRoom.roomId,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentRoom]);
 
   return (
     <ScreenContainer>
@@ -351,7 +360,7 @@ function SendScreen({ route, navigation }) {
                 <AppText>{assetData?.name}</AppText>
               </View>
 
-              {assetData?.ticker&& (
+              {assetData?.ticker && (
                 <View style={styles.row}>
                   <AppText>{'Ticker: '}</AppText>
                   <AppText>{assetData?.ticker}</AppText>
@@ -368,14 +377,16 @@ function SendScreen({ route, navigation }) {
                 <AppText>
                   {numberWithCommas(
                     Number(assetData?.issuedSupply) /
-                      10 ** assetData?.precision,
+                    10 ** assetData?.precision,
                   )}
                 </AppText>
               </View>
             </View>
             <View>
+              {/* @ts-ignore */}
               {(assetData?.iconUrl || assetData?.media?.thumbnail) ? (
                 <Image
+
                   source={{
                     uri: assetData?.iconUrl || assetData?.media?.thumbnail,
                   }}
@@ -398,8 +409,9 @@ function SendScreen({ route, navigation }) {
           <Buttons
             primaryTitle={'Add To Wallet'}
             primaryOnPress={() => {
-              ApiHandler.addAssetToWallet({ asset: assetData });
+              addAssetToWallet.mutate({ asset: assetData });
               setAddAssetModal(false);
+
               Toast('Asset added to wallet', false);
             }}
             secondaryTitle={'Cancel'}

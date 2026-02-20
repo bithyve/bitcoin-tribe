@@ -14,8 +14,8 @@ import UploadFileLight from 'src/assets/images/uploadFile_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import Toast from 'src/components/Toast';
-import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+
+import { useApp } from 'src/hooks/app/useApp';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
@@ -39,9 +39,8 @@ const ImportRgbBackup = () => {
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [visibleLoader, setVisibleLoader] = useState(false);
-  const { mutateAsync, status, isLoading, error } = useMutation(
-    ApiHandler.restoreWithBackupFile,
-  );
+  const { restoreWithBackupFile } = useApp();
+  const { mutateAsync, status, isLoading, error } = restoreWithBackupFile;
   const route = useRoute();
   const navigation = useNavigation();
   const { setKey } = useContext(AppContext);
@@ -86,12 +85,12 @@ const ImportRgbBackup = () => {
       ],
       destination: 'documentDirectory',
     });
-    if ( res && file[0].name.split(".")[1] =='rgb_backup') {
+    if (res && file[0].name.split(".")[1] == 'rgb_backup') {
       setVisibleLoader(true);
-       mutateAsync({
-         mnemonic: route.params.mnemonic,
-         filePath: res.localUri.replace('file://', ''),
-       });
+      mutateAsync({
+        mnemonic: (route.params as any).mnemonic,
+        filePath: (res as any).localUri.replace('file://', ''),
+      });
     } else {
       setVisibleLoader(false);
       Toast('Invalid RGB backup file', true);

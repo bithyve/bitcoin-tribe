@@ -16,7 +16,7 @@ import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useBackup } from 'src/hooks/backup/useBackup';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { BackupType } from 'src/models/enums/Backup';
@@ -35,6 +35,7 @@ function AppBackup({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [activeIndex, setActiveIndex] = useState(null);
   const [backup, setBackup] = useMMKVBoolean(Keys.WALLET_BACKUP);
+  const { createBackup } = useBackup();
   return (
     <ScreenContainer>
       <AppHeader
@@ -80,7 +81,7 @@ function AppBackup({ navigation }) {
           primaryOnPress={async () => {
             if (BackupType.SEED) {
               setVisible(false);
-              const response = await ApiHandler.createBackup(true);
+              const response = await createBackup.mutateAsync(true);
               if (response) {
                 setBackup(true);
                 setTimeout(() => {
@@ -92,7 +93,7 @@ function AppBackup({ navigation }) {
           }}
           secondaryOnPress={async () => {
             setVisible(false);
-            const response = await ApiHandler.createBackup(false);
+            const response = await createBackup.mutateAsync(false);
             if (response) {
               navigation.navigate(NavigationRoutes.WALLETBACKUPHISTORY);
               setTimeout(() => {

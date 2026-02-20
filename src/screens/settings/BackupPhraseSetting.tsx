@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import AppHeader from 'src/components/AppHeader';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 
@@ -13,7 +12,7 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useAuth } from 'src/hooks/auth/useAuth';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 
@@ -28,7 +27,7 @@ function BackupPhraseSetting() {
   const [visible, setVisible] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
-  const login = useMutation(ApiHandler.verifyPin);
+  const { verifyPin: login } = useAuth();
 
   useEffect(() => {
     if (login.error) {
@@ -64,8 +63,8 @@ function BackupPhraseSetting() {
             pinMethod !== PinMethod.DEFAULT
               ? setVisible(true)
               : navigation.navigate(NavigationRoutes.APPBACKUP, {
-                  viewOnly: true,
-                });
+                viewOnly: true,
+              });
           }
           // navigation.navigate(NavigationRoutes.APPBACKUP, {
           //   viewOnly: true,

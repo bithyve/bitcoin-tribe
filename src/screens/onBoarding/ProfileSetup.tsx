@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useApp } from 'src/hooks/app/useApp';
 import PinMethod from 'src/models/enums/PinMethod';
 import { AppContext } from 'src/contexts/AppContext';
 import { decrypt, hash512 } from 'src/utils/encryption';
@@ -56,7 +55,7 @@ function ProfileSetup() {
 
   const [profileImage, setProfileImage] = useState(null);
   const { setKey } = useContext(AppContext);
-  const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
+  const { setupNewApp: setupNewAppMutation } = useApp();
   const [isLoading, setIsLoading] = useState(false);
 
 

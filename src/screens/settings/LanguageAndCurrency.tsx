@@ -22,7 +22,7 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useBackup } from 'src/hooks/backup/useBackup';
 
 function LanguageAndCurrency() {
   const navigation = useNavigation();
@@ -40,15 +40,16 @@ function LanguageAndCurrency() {
   );
   const updated = useRef(false);
 
-   useEffect(() => {
+  useEffect(() => {
     updated.current = true;
   }, [language, currency, currentCurrencyMode]);
 
+  const { backupAppImage } = useBackup();
   useEffect(() => {
-   return ()=>{
-    updated.current &&
-      ApiHandler.backupAppImage({ settings: true });
-   }
+    return () => {
+      updated.current &&
+        backupAppImage.mutate({ settings: true });
+    }
   }, [navigation]);
 
   const selectedLanguage = availableLanguages.find(

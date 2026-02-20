@@ -6,11 +6,12 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { useTheme } from 'react-native-paper';
+
 import {
   Alert,
   Linking,
   Platform,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   View,
@@ -25,29 +26,31 @@ import { useMutation } from 'react-query';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import HomeHeader from './components/HomeHeader';
-import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useWallet } from 'src/hooks/wallet/useWallet';
+import { useBackup } from 'src/hooks/backup/useBackup';
+import { useNode } from 'src/hooks/node/useNode';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+import { useApp } from 'src/hooks/app/useApp';
+
 import { AppContext } from 'src/contexts/AppContext';
 import {
   Asset,
-  AssetVisibility,
-  Coin,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
-import { LocalizationContext } from 'src/contexts/LocalizationContext';
+
 import {
   NodeStatusType,
   PushNotificationType,
 } from 'src/models/enums/Notifications';
 import { getApp } from '@react-native-firebase/app';
-import { getMessaging, onMessage,onNotificationOpenedApp,getInitialNotification } from '@react-native-firebase/messaging';
+import { getMessaging, onMessage, onNotificationOpenedApp, getInitialNotification } from '@react-native-firebase/messaging';
 import DefaultCoin from './DefaultCoin';
 import { Keys, Storage } from 'src/storage';
 import Deeplinking from 'src/utils/DeepLinking';
@@ -57,11 +60,10 @@ import { useAppVersion } from 'src/hooks/useAppVersion';
 import { NativeModules } from 'react-native';
 
 function HomeScreen() {
-  const theme: AppTheme = useTheme();
+  /* const theme: AppTheme = useTheme(); */
   const prevStatusRef = useRef<string | null>(null);
-  const styles = useMemo(() => getStyles(theme), [theme]);
-  const { translations } = useContext(LocalizationContext);
-  const { node } = translations;
+  const styles = useMemo(() => getStyles(), []);
+
   const [walletOnline, setWalletOnline] = useState(false);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const latestVersion = useQuery<VersionHistory>(
@@ -72,12 +74,9 @@ function HomeScreen() {
   const {
     key,
     setBackupProcess,
-    setBackupDone,
-    setManualAssetBackupStatus,
-    isBackupInProgress,
     isBackupDone,
+    isBackupInProgress,
     setAppType,
-    isNodeInitInProgress,
     setNodeInitStatus,
     setNodeConnected,
     setIsWalletOnline,
@@ -85,67 +84,39 @@ function HomeScreen() {
     setWalletWentOnline
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
-  const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
-  const [isTopicSubscribed,_]=useMMKVBoolean(Keys.IS_TOPIC_SUBSCRIBED);
-  const {checkAndInitiateAndroidUpdate} =useAppVersion();
+  const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted] = useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
+  const [isTopicSubscribed, _] = useMMKVBoolean(Keys.IS_TOPIC_SUBSCRIBED);
+  const { checkAndInitiateAndroidUpdate } = useAppVersion();
 
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
-    onSuccess: () => {
-      setBackupDone(true);
-      setTimeout(() => {
-        setManualAssetBackupStatus(true);
-      }, 1500);
-    },
-  });
-  const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
-    ApiHandler.isBackupRequired,
-  );
-  const { mutate: startNode } = useMutation({
-    mutationFn: ({
-      nodeId,
-      authToken,
-    }: {
-      nodeId: string;
-      authToken: string;
-    }) => ApiHandler.startNode(nodeId, authToken),
-  });
-  const { mutate: listPaymentsMutate } = useMutation(
-    ApiHandler.getAssetTransactions,
-  );
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
+  const { checkVersion, manageFcmVersionTopics, syncFcmToken, makeWalletOnline, resetApp } = useApp();
+  const { backup, isBackupRequired: isBackupRequiredMutation, backupAppImage } = useBackup();
+  const { startNode, checkNodeStatus, saveNodeMnemonic } = useNode();
+  const { viewUtxos, refreshRgbWallet: refreshRgbWalletBase, fetchPresetAssets } = useRgb();
+  const { refreshWallets, getFeeAndExchangeRates } = useWallet();
+
+  const { mutate: backupMutate, isLoading } = backup;
+  const { mutate: checkBackupRequired, data: isBackupRequiredData } = isBackupRequiredMutation;
+  const { mutate: startNodeMutate } = startNode;
+  const { mutate: fetchUTXOs } = viewUtxos;
+  const { mutate: refreshWalletsMutate } = refreshWallets;
   const [refreshing, setRefreshing] = useState(false);
-  const refreshWallet = useMutation(ApiHandler.refreshWallets);
   const wallet = useWallets({}).wallets[0];
 
-  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
-    collection
-      .filtered(`visibility != $0`, AssetVisibility.HIDDEN)
-      .sorted('timestamp', true),
-  );
-  const coins = useMemo(() => {
-    if (!coinsResult) return [];
-    const coinsArray = coinsResult.slice();
-    const defaultCoinIndex = coinsArray.findIndex(c => c.isDefault);
-    if (defaultCoinIndex !== -1) {
-      const [defaultCoin] = coinsArray.splice(defaultCoinIndex, 1);
-      return [defaultCoin, ...coinsArray];
-    }
-    return coinsArray;
-  }, [coinsResult]);
+
 
   useEffect(() => {
-    ApiHandler.fetchPresetAssets();
+    fetchPresetAssets.mutate();
   }, []);
 
   useEffect(() => {
     const initializeWalletOnline = async () => {
-      if(isWalletOnline === WalletOnlineStatus.Online) return
+      if (isWalletOnline === WalletOnlineStatus.Online) return
       try {
         setIsWalletOnline(WalletOnlineStatus.InProgress);
-        const response = await ApiHandler.makeWalletOnline();
+        const response = await makeWalletOnline.mutateAsync(30);
         setWalletOnline(response.status);
-        if(response.status)
-        setWalletWentOnline(true);
+        if (response.status)
+          setWalletWentOnline(true);
         setIsWalletOnline(
           response.status
             ? WalletOnlineStatus.Online
@@ -170,23 +141,23 @@ function HomeScreen() {
   useEffect(() => {
     const fetchStatus = async () => {
       if (app.appType === AppType.SUPPORTED_RLN) {
-        const status = await ApiHandler.checkNodeStatus(
-          app?.id,
-          app?.authToken,
-        );
+        const status = await checkNodeStatus.mutateAsync({
+          nodeId: app?.id,
+          authToken: app?.authToken
+        });
         const prevStatus = prevStatusRef.current;
         if (status === NodeStatusType.IN_PROGRESS) {
           setNodeInitStatus(true);
         } else if (status === NodeStatusType.PAUSED) {
-          startNode;
+          startNodeMutate({ nodeId: app?.id, authToken: app?.authToken });
         } else if (status === NodeStatusType.RUNNING) {
-          await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+          await saveNodeMnemonic.mutateAsync({ nodeId: app?.id, authToken: app?.authToken });
           setNodeInitStatus(false);
           if (prevStatus === NodeStatusType.IN_PROGRESS) {
             setNodeConnected(true);
           }
         } else {
-          await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+          await saveNodeMnemonic.mutateAsync({ nodeId: app?.id, authToken: app?.authToken });
           setNodeInitStatus(false);
         }
         console.log('Node status:', status);
@@ -197,10 +168,10 @@ function HomeScreen() {
   }, []);
 
   const refreshRgbWallet = useMutation({
-    mutationFn: ApiHandler.refreshRgbWallet,
+    mutationFn: refreshRgbWalletBase.mutateAsync,
     onSuccess: () => {
       if (app?.appType === AppType.ON_CHAIN) {
-          checkBackupRequired();
+        checkBackupRequired();
       }
     },
   });
@@ -211,16 +182,16 @@ function HomeScreen() {
       const messaging = getMessaging(firebaseApp);
 
       const unsubscribe = onMessage(messaging, async remoteMessage => {
-        const { title, body } = remoteMessage.notification ?? {};
-        const { type } = remoteMessage.data ?? {};
-        switch (type?.toLowerCase()) {
+        // const { title, body } = remoteMessage.notification ?? {};
+        const type = typeof remoteMessage.data?.type === 'string' ? remoteMessage.data.type : '';
+        switch (type.toLowerCase()) {
           case PushNotificationType.NODE_INIT_COMPLETE:
-            await ApiHandler.saveNodeMnemonic(app?.id, app?.authToken);
+            await saveNodeMnemonic.mutateAsync({ nodeId: app?.id, authToken: app?.authToken });
             setNodeInitStatus(false);
             setNodeConnected(true);
             break;
           case PushNotificationType.NODE_PAUSED:
-            startNode;
+            startNodeMutate({ nodeId: app?.id, authToken: app?.authToken });
             break;
           default:
             break;
@@ -262,10 +233,10 @@ function HomeScreen() {
   }, [isLoading]);
 
   useEffect(() => {
-    if (isBackupRequired) {
+    if (isBackupRequiredData) {
       backupMutate();
     }
-  }, [isBackupRequired]);
+  }, [isBackupRequiredData]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -285,7 +256,7 @@ function HomeScreen() {
           {
             text: 'OK',
             onPress: () => {
-              ApiHandler.resetApp(key);
+              resetApp.mutate(key);
               navigation.dispatch(
                 CommonActions.reset({
                   index: 0,
@@ -299,32 +270,30 @@ function HomeScreen() {
       );
     }
     setAppType(app?.appType);
-    ApiHandler.checkVersion();
-    ApiHandler.getFeeAndExchangeRates();
-    ApiHandler.syncFcmToken();
+    checkVersion.mutate();
+    getFeeAndExchangeRates.mutate();
+    syncFcmToken.mutate();
     if (walletOnline) {
       fetchUTXOs();
-      refreshWallet.mutate({ wallets: [wallet] });
+      refreshWalletsMutate({ wallets: [wallet] });
     }
   }, [app?.appType, walletOnline]);
 
-  const handleNavigation = (route, params?) => {
-    navigation.dispatch(CommonActions.navigate(route, params));
-  };
+
 
   const handleRefresh = () => {
     if (isBackupInProgress || isBackupDone || !walletOnline) {
       return;
     }
     setRefreshing(true);
-    ApiHandler.fetchPresetAssets();
+    fetchPresetAssets.mutate();
     refreshRgbWallet.mutate();
     checkBackupRequired();
-    refreshWallet.mutate({ wallets: [wallet] });
+    refreshWalletsMutate({ wallets: [wallet] });
     setTimeout(() => setRefreshing(false), 2000);
   };
 
-    useEffect(() => {
+  useEffect(() => {
     Linking.getInitialURL().then(url => { // cold start 
       if (url) handleDeepLink({ url });
     });
@@ -354,7 +323,7 @@ function HomeScreen() {
   useEffect(() => {
     const checkFirstAppImageBackup = async () => {
       if (!isFirstAppImageBackupCompleted) {
-        const res = await ApiHandler.backupAppImage({all: true});
+        const res = await backupAppImage.mutateAsync({ all: true });
         setIsFirstAppImageBackupCompleted(res.status);
       }
     };
@@ -362,29 +331,38 @@ function HomeScreen() {
       checkFirstAppImageBackup();
     }, 5000);
     // Topic subscription for app update notifications 
-    if (!isTopicSubscribed) ApiHandler.manageFcmVersionTopics();
+    if (!isTopicSubscribed) manageFcmVersionTopics.mutate();
   }, []);
-  
+
 
   return (
     <ScreenContainer style={styles.container}>
       <View style={styles.headerWrapper}>
         <HomeHeader showBalance={false} showScanner={true} />
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-        <DefaultCoin presetAssets={presetAssets} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        bounces={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }>
+        <DefaultCoin
+          presetAssets={presetAssets}
+          refreshingStatus={refreshing}
+          onRefresh={handleRefresh}
+        />
       </ScrollView>
       <AppUpdateModal />
     </ScreenContainer>
   );
 }
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = () =>
   StyleSheet.create({
     container: {
       paddingHorizontal: 0,
       paddingTop: 0,
-      flex:0
+      flex: 0
     },
     headerWrapper: {
       margin: hp(16),

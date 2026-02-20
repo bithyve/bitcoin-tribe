@@ -2,23 +2,24 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useQuery } from '@realm/react';
 import { Keyboard } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
-import { useMMKVBoolean } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
+
+
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useWallet } from 'src/hooks/wallet/useWallet';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import EditProfileDetails from '../profile/EditProfileDetails';
-import { Keys } from 'src/storage';
+
+
 
 function EditWalletProfile({ navigation }) {
   const { translations } = useContext(LocalizationContext);
   const { onBoarding, wallet, common } = translations;
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0] as any;
+
 
   const [name, setName] = useState('');
   const [profileImage, setProfileImage] = useState(null);
@@ -26,18 +27,10 @@ function EditWalletProfile({ navigation }) {
   const [initialName, setInitialName] = useState('');
   const [enableEdit, setEnableEdit] = useState(false);
 
-  const { mutate: removeWalletPicture, isLoading } = useMutation({
-    mutationFn: ({ appID }: { appID: string }) =>
-      ApiHandler.removeWalletPicture(appID),
-    onSuccess: data => {
-      if (data.success) {
-        Toast('Wallet picture removed!');
-      }
-    },
-    onError: (error: any) => {
-      Toast(error?.message || 'Something went wrong', true);
-    },
-  });
+  const { removeWalletPicture, updateProfile } = useWallet();
+  const { isLoading } = removeWalletPicture;
+
+
 
   useEffect(() => {
     const fetchedName = app?.appName?.trim() || '';
@@ -74,7 +67,12 @@ function EditWalletProfile({ navigation }) {
       setLoading(true);
       Keyboard.dismiss();
       const imageToSend = skipProfileImage ? null : profileImage;
-      const updated = await ApiHandler.updateProfile(app.id, name, imageToSend);
+      const updated = await updateProfile.mutateAsync({
+        appId: app.id,
+        name,
+        image: imageToSend,
+      });
+
       if (updated) {
         setLoading(false);
         Toast(wallet.profileUpdateMsg);
@@ -92,10 +90,11 @@ function EditWalletProfile({ navigation }) {
   };
 
   const handleRemove = () => {
-    removeWalletPicture({
+    removeWalletPicture.mutate({
       appID: app?.id,
     });
   };
+
 
   return (
     <ScreenContainer>

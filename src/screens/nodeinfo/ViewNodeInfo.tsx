@@ -2,14 +2,13 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
 import LottieView from 'lottie-react-native';
 import { useQuery } from '@realm/react';
 
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useNode } from 'src/hooks/node/useNode';
 import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import useRgbWallets from 'src/hooks/useRgbWallets';
 import { Keys } from 'src/storage';
@@ -39,15 +38,11 @@ const ViewNodeInfo = () => {
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
-  const { mutate, isLoading, isError, error, data } = useMutation(
-    ApiHandler.viewNodeInfo,
-  );
-  const { mutate: checkStatus, isLoading: nodeStatusIsLoading } = useMutation(
-    () => ApiHandler.startNode(app?.id, app?.authToken),
-  );
-  const { setIsWalletOnline } = useContext(AppContext);
-  const syncMutation = useMutation(ApiHandler.syncNode);
-  const unlockNodeMutation = useMutation(ApiHandler.unlockNode);
+  const { nodeInfo: nodeInfoQuery, startNode, syncNode, unlockNode, checkNodeStatus } = useNode();
+  const { mutate, isLoading, isError, error, data } = nodeInfoQuery;
+  const { mutate: checkStatus, isLoading: nodeStatusIsLoading } = startNode;
+  const syncMutation = syncNode;
+  const unlockNodeMutation = unlockNode;
   const [nodeStatus, setSetNodeStatus] = useState('');
   const [nodeStatusLock, setSetNodeStatusLock] = useState(false);
   const [isNodeStatusLoading, setIsNodeStatusLoading] = useState(false);
@@ -71,10 +66,10 @@ const ViewNodeInfo = () => {
       ) {
         try {
           setIsNodeStatusLoading(true);
-          const status = await ApiHandler.checkNodeStatus(
-            app?.id,
-            app?.authToken,
-          );
+          const status = await checkNodeStatus.mutateAsync({
+            nodeId: app?.id,
+            authToken: app?.authToken,
+          });
           const formattedStatus = status && Capitalize(status);
           setSetNodeStatus(formattedStatus);
         } catch (error) {

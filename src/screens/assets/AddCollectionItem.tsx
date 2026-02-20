@@ -7,7 +7,6 @@ import React, {
   useRef,
 } from 'react';
 import { useTheme } from 'react-native-paper';
-import { useMutation } from 'react-query';
 import {
   StackActions,
   useNavigation,
@@ -27,8 +26,8 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import {
   RgbUnspent,
   RGBWallet,
@@ -66,7 +65,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { events, logCustomEvent } from 'src/services/analytics';
 
 function IssueCollectibleScreen() {
-  const { collectionId } = useRoute().params;
+  const { collectionId } = useRoute().params as { collectionId: string };
   const { appType, isWalletOnline } = useContext(AppContext);
   const popAction = StackActions.pop(2);
   const theme: AppTheme = useTheme();
@@ -97,23 +96,28 @@ function IssueCollectibleScreen() {
   const wallet: Wallet = useWallets({}).wallets[0];
   const [attachments, setAttachments] = useState([]);
   const {
-    mutate: createUtxos,
+    createUtxos,
+    viewUtxos,
+    refreshRgbWallet: refreshRgbWalletMutation,
+    mintCollectionItem,
+    payServiceFee,
+  } = useRgb();
+  const {
+    mutate: createUtxoMutate,
     error: createUtxoError,
     data: createUtxoData,
     reset: createUtxoReset,
-  } = useMutation(ApiHandler.createUtxos);
-  const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  // const createUtxos = useMutation(ApiHandler.createUtxos);
-  const viewUtxos = useMutation(ApiHandler.viewUtxos);
-  const refreshRgbWalletMutation = useMutation(ApiHandler.refreshRgbWallet);
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
+  } = createUtxos;
+
+  const { mutate: fetchUTXOs } = viewUtxos;
+  const rgbWallet: RGBWallet = (dbManager.getObjectByIndex(
     RealmSchema.RgbWallet,
-  );
+  ) as any) as RGBWallet;
   const assetTickerInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
 
-  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
+  const unspent: RgbUnspent[] = (rgbWallet.utxos || []).map((utxoStr: any) =>
+    typeof utxoStr === 'string' ? JSON.parse(utxoStr) : utxoStr,
   );
   const colorable = unspent.filter(
     utxo =>
@@ -152,7 +156,9 @@ function IssueCollectibleScreen() {
     setLoading(true);
     try {
       if (colorable.length === 0) {
-        await ApiHandler.createUtxos();
+        if (colorable.length === 0) {
+          await createUtxoMutate();
+        }
       }
       const collection = dbManager.getObjectByPrimaryId(
         RealmSchema.Collection,
@@ -167,7 +173,7 @@ function IssueCollectibleScreen() {
         },
         DeepLinkType.APP_LINK
       );
-      const response = await ApiHandler.mintCollectionItem({
+      const response = await mintCollectionItem.mutateAsync({
         collectionId: collectionId,
         name: assetName.trim(),
         details: description.trim() + ' ' + deepLinking,
@@ -175,10 +181,10 @@ function IssueCollectibleScreen() {
         mediaFilePath: Platform.select({
           android:
             appType === AppType.NODE_CONNECT ||
-            appType === AppType.SUPPORTED_RLN
+              appType === AppType.SUPPORTED_RLN
               ? image.startsWith('file://')
                 ? image
-                : `file://${path}`
+                : `file://${image}`
               : image.replace('file://', ''),
           ios: image.replace('file://', ''),
         }),
@@ -186,10 +192,10 @@ function IssueCollectibleScreen() {
           Platform.select({
             android:
               appType === AppType.NODE_CONNECT ||
-              appType === AppType.SUPPORTED_RLN
+                appType === AppType.SUPPORTED_RLN
                 ? attachment.startsWith('file://')
                   ? attachment
-                  : `file://${path}`
+                  : `file://${attachment}`
                 : attachment.replace('file://', ''),
             ios: attachment.replace('file://', ''),
           }),
@@ -210,7 +216,7 @@ function IssueCollectibleScreen() {
         response?.name === 'NoAvailableUtxos'
       ) {
         setTimeout(() => {
-          createUtxos();
+          createUtxoMutate();
         }, 500);
       } else if (response?.error) {
         setLoading(false);
@@ -251,7 +257,7 @@ function IssueCollectibleScreen() {
     Keyboard.dismiss();
     try {
       const result = await pickImage(false);
-      setImage(result);
+      setImage(result as string);
     } catch (error) {
       console.error(error);
     }
@@ -290,7 +296,7 @@ function IssueCollectibleScreen() {
         address: fees.collectionFee.address,
         fee: totalFee,
       };
-      const response = await ApiHandler.payServiceFee({
+      const response = await payServiceFee.mutateAsync({
         feeDetails,
         feeType: ServiceFeeType.MINT_COLLECTION_ITEM_FEE,
         collectionId: collectionId,
@@ -379,11 +385,11 @@ function IssueCollectibleScreen() {
                   ? MOCK_BANNER
                   : MOCK_BANNER_LIGHT
                 : {
-                    uri:
-                      Platform.OS === 'ios'
-                        ? image.replace('file://', '')
-                        : image,
-                  }
+                  uri:
+                    Platform.OS === 'ios'
+                      ? image.replace('file://', '')
+                      : image,
+                }
             }
             resizeMode="cover"
             style={styles.bannerImage}>
@@ -573,7 +579,7 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       flexDirection: 'row',
       alignItems: 'center',
       marginVertical: hp(20),
-      marginHorizontal:wp(16),
+      marginHorizontal: wp(16),
     },
     checkIconWrapper: {
       width: '10%',

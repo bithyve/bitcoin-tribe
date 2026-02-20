@@ -9,7 +9,7 @@ import { AppTheme } from 'src/theme';
 import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useBackup } from 'src/hooks/backup/useBackup';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
@@ -20,7 +20,7 @@ export const AppImageBackupStatusType = {
   idle: 'idle',
 } as const;
 
-export const AppImageBackupBanner = ({modalVisible,setModalVisible}) => {
+export const AppImageBackupBanner = ({ modalVisible, setModalVisible }) => {
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
   const hasNotch = DeviceInfo.hasNotch();
@@ -28,9 +28,11 @@ export const AppImageBackupBanner = ({modalVisible,setModalVisible}) => {
   const styles = getStyles(theme, hasNotch);
   const [isAppImageBackupError] = useMMKVBoolean(Keys.IS_APP_IMAGE_BACKUP_ERROR);
 
+  const { backupAppImage } = useBackup();
+
   const onPress = React.useCallback(() => {
-    ApiHandler.backupAppImage({all:true})
-  }, []);
+    backupAppImage.mutate({ all: true })
+  }, [backupAppImage]);
 
   const tapView = useMemo(() => {
     return (
@@ -73,8 +75,8 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       justifyContent: 'space-between',
       width: windowWidth,
       paddingHorizontal: wp(16),
-      backgroundColor:Colors.FireOpal,
-      height:hp(25)
+      backgroundColor: Colors.FireOpal,
+      height: hp(25)
     },
     text: {
       color: 'white',
@@ -97,10 +99,10 @@ const getStyles = (theme: AppTheme, hasNotch) =>
       top: hasNotch
         ? 50
         : Platform.OS === 'ios' && windowHeight > 820
-        ? 28
-        : Platform.OS === 'android'
-        ? 68
-        : 25,
+          ? 28
+          : Platform.OS === 'android'
+            ? 68
+            : 25,
     },
     tooltipText: {
       color: theme.colors.headingColor,

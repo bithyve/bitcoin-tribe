@@ -8,9 +8,9 @@ import SendToContainer from './components/SendToContainer';
 import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
-import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { ApiHandler } from 'src/services/handler/apiHandler';
-import { useMutation } from 'react-query';
+
+import { useWallet } from 'src/hooks/wallet/useWallet';
+
 
 
 function SendToScreen({ route }) {
@@ -28,7 +28,8 @@ function SendToScreen({ route }) {
   const selectedCurrency = availableCurrency.find(
     cur => cur.code === initialCurrency,
   );
-  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+  const { refreshWallets: refreshWallet } = useWallet();
+
 
   useEffect(() => {
     refreshWallet.mutate({ wallets: [wallet] });

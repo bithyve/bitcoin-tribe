@@ -15,8 +15,10 @@ import AssetRegisterIllustration from 'src/assets/images/assetRegisterIllustrati
 import SkipButton from 'src/components/SkipButton';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Relay from 'src/services/relay';
-import { ApiHandler } from 'src/services/handler/apiHandler';
 import useWallets from 'src/hooks/useWallets';
+import { useWallet } from 'src/hooks/wallet/useWallet';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import Toast from 'src/components/Toast';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -33,15 +35,18 @@ import { events, logCustomEvent } from 'src/services/analytics';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
-  const { assetId, askVerify, issueType } = useRoute().params;
+  const { assetId, askVerify, issueType } = useRoute().params as any;
+
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
   const { common, assets } = translations;
   const { setHasIssuedAsset } = useContext(AppContext);
   const styles = getStyles(theme);
   const wallet: Wallet = useWallets({}).wallets[0];
+  const { payServiceFee: payServiceFeeMutation } = useRgb();
+  const { updateTransaction, refreshWallets: refreshWalletsMutation } = useWallet();
   const getAssetIssuanceFeeMutation = useMutation(Relay.getAssetIssuanceFee);
-  const payServiceFeeFeeMutation = useMutation(ApiHandler.payServiceFee);
+
   const [feeDetails, setFeeDetails] = useState(null);
   const [disabledCTA, setDisabledCTA] = useState(false);
   const [swipeResetCounter, setSwipeResetCounter] = useState(0);
@@ -130,17 +135,17 @@ function AssetRegistryScreen() {
   ]);
 
   useEffect(() => {
-    if (payServiceFeeFeeMutation.isSuccess) {
+    if (payServiceFeeMutation.isSuccess) {
       getAssetIssuanceFeeMutation.reset();
-      payServiceFeeFeeMutation.reset();
+      payServiceFeeMutation.reset();
       logCustomEvent(events.REGISTERED_ASSET);
       setTimeout(() => {
         registerAsset();
       }, 400);
-    } else if (payServiceFeeFeeMutation.error) {
+    } else if (payServiceFeeMutation.error) {
       const errorMessage =
-        payServiceFeeFeeMutation.error?.message ||
-        payServiceFeeFeeMutation.error?.toString() ||
+        (payServiceFeeMutation.error as any)?.message ||
+        payServiceFeeMutation.error?.toString() ||
         'An unexpected error occurred';
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
@@ -150,9 +155,10 @@ function AssetRegistryScreen() {
       }
       setSwipeResetCounter(prev => prev + 1);
       setDisabledCTA(false);
-      payServiceFeeFeeMutation.reset();
+      payServiceFeeMutation.reset();
     }
-  }, [payServiceFeeFeeMutation]);
+  }, [payServiceFeeMutation]);
+
 
   const registerAsset = React.useCallback(async () => {
     try {
@@ -172,7 +178,7 @@ function AssetRegistryScreen() {
             tx.metadata?.assetId === '',
         );
         if (tx) {
-          ApiHandler.updateTransaction({
+          updateTransaction.mutate({
             txid: tx.txid,
             updateProps: {
               metadata: {
@@ -184,6 +190,7 @@ function AssetRegistryScreen() {
             },
           });
         }
+
       }
     } catch (error) {
       setDisabledCTA(false);
@@ -221,7 +228,7 @@ function AssetRegistryScreen() {
               </View>
               <View style={styles.valueWrapper}>
                 <AppText style={styles.labelText}>{`${numberWithCommas(
-                  feeDetails?.fee, 
+                  feeDetails?.fee,
                   0,
                 )} sats`}</AppText>
               </View>
@@ -233,9 +240,10 @@ function AssetRegistryScreen() {
               loadingTitle={assets.payInprocess}
               onSwipeComplete={async () => {
                 setDisabledCTA(true);
-                await ApiHandler.refreshWallets({ wallets: [wallet] });
-                payServiceFeeFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
+                await refreshWalletsMutation.mutateAsync({ wallets: [wallet] });
+                payServiceFeeMutation.mutate({ feeDetails, feeType: ServiceFeeType.REGISTER_ASSET_FEE, collectionId: '' });
               }}
+
               backColor={theme.colors.swipeToActionThumbColor}
               resetCounter={swipeResetCounter}
               loaderTextColor={theme.colors.primaryCTAText}
@@ -243,7 +251,7 @@ function AssetRegistryScreen() {
           )}
           {!!feeDetails && (
             <View style={styles.skipWrapper}>
-             {!disabledCTA && <SkipButton
+              {!disabledCTA && <SkipButton
                 disabled={disabledCTA}
                 onPress={() => {
                   setHasIssuedAsset(true);

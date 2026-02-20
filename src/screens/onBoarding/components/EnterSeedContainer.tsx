@@ -10,7 +10,7 @@ import { TextInput, useTheme } from 'react-native-paper';
 import * as bip39 from 'bip39';
 import { TextInput as RNTextInput } from 'react-native';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import { useMutation } from 'react-query';
+
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
@@ -23,7 +23,7 @@ import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import Toast from 'src/components/Toast';
 import RecoverRGBStatModal from './RecoverRGBStatModal';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useApp } from 'src/hooks/app/useApp';
 import PinMethod from 'src/models/enums/PinMethod';
 import { decrypt, hash512 } from 'src/utils/encryption';
 import config from 'src/utils/config';
@@ -58,8 +58,8 @@ function EnterSeedContainer() {
   const [visible, setVisible] = useState(false);
   const [visibleLoader, setVisibleLoader] = useState(false);
   const [onChangeIndex, setOnChangeIndex] = useState(-1);
-  const { mutateAsync, status, isLoading } = useMutation(ApiHandler.restoreApp);
-  const setupNewAppMutation = useMutation(ApiHandler.setupNewApp);
+  const { restoreApp, setupNewApp: setupNewAppMutation } = useApp();
+  const { mutateAsync, status, isLoading } = restoreApp;
 
   useEffect(() => {
     if (status === 'success') {

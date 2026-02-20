@@ -16,7 +16,8 @@ import {
   Collectible,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useRgb } from 'src/hooks/rgb/useRgb';
+import { useWallet } from 'src/hooks/wallet/useWallet';
 import { useMutation } from 'react-query';
 import useWallets from 'src/hooks/useWallets';
 import { hp } from 'src/constants/responsive';
@@ -28,8 +29,8 @@ function HiddenAssets() {
   const styles = getStyles(theme);
   const [refreshing, setRefreshing] = useState(false);
 
-  const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
-  const refreshWallet = useMutation(ApiHandler.refreshWallets);
+  const { refreshRgbWallet } = useRgb();
+  const { refreshWallets: refreshWallet } = useWallet();
   const wallet = useWallets({}).wallets[0];
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),

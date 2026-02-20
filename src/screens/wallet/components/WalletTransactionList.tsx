@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useIsFocused } from '@react-navigation/native';
-import { useMutation } from 'react-query';
+
+
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { hp, windowHeight } from 'src/constants/responsive';
@@ -16,8 +17,9 @@ import WalletTransactions from './WalletTransactions';
 import { AppTheme } from 'src/theme';
 import { Transaction } from 'src/services/wallets/interfaces';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useWallet } from 'src/hooks/wallet/useWallet';
 import Toast from 'src/components/Toast';
+
 import EmptyStateView from 'src/components/EmptyStateView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
@@ -39,14 +41,17 @@ function WalletTransactionList({
 }) {
   const isFocused = useIsFocused();
   const theme: AppTheme = useTheme();
-  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0];
+  const app: TribeApp = realmUseQuery(RealmSchema.TribeApp)[0] as any;
+
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme);
   const { translations } = useContext(LocalizationContext);
   const walletStrings = translations.wallet;
   const [refreshing, setRefreshing] = useState(false);
   const wallet: Wallet = useWallets({}).wallets[0];
-  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
+  const { refreshWallets } = useWallet();
+  const walletRefreshMutation = refreshWallets;
+
 
   const pullDownToRefresh = () => {
     setRefreshing(true);
@@ -102,12 +107,12 @@ function WalletTransactionList({
         ListFooterComponent={FooterComponent}
         renderItem={({ item }) => (
           <WalletTransactions
-          transId={item.transactionKind || item.txid}
+            transId={(item as any).transactionKind || item.txid}
             transDate={item.date}
             transAmount={
               app.appType === AppType.NODE_CONNECT ||
-              app.appType === AppType.SUPPORTED_RLN
-                ? `${item.received || item?.amtMsat / 1000}`
+                app.appType === AppType.SUPPORTED_RLN
+                ? `${(item as any).received || (item as any)?.amtMsat / 1000}`
                 : `${item.amount}`
             }
             transType={item.transactionType}
@@ -115,6 +120,7 @@ function WalletTransactionList({
             transaction={item}
             networkType={item.txid ? 'bitcoin' : 'lightning'}
           />
+
         )}
         keyExtractor={item => item.txid}
         showsVerticalScrollIndicator={false}
@@ -136,8 +142,9 @@ function WalletTransactionList({
     </View>
   );
 }
-const getStyles = (theme: AppTheme) =>
+const getStyles = (_theme: AppTheme) =>
   StyleSheet.create({
+
     container: {
       height: '100%',
       marginVertical: hp(5),

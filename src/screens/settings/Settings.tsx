@@ -58,8 +58,8 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
 import { hp, windowWidth } from 'src/constants/responsive';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
-import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { useAuth } from 'src/hooks/auth/useAuth';
+import { useRgb } from 'src/hooks/rgb/useRgb';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
 import BiometricUnlockModal from './components/BiometricUnlockModal';
 import HomeHeader from '../home/components/HomeHeader';
@@ -99,7 +99,7 @@ function SettingsScreen({ navigation }) {
   const [passcode, setPasscode] = useState('');
   const [invalidPin, setInvalidPin] = useState('');
   const [visibleBiometricUnlock, setVisibleBiometricUnlock] = useState(false);
-  const login = useMutation(ApiHandler.verifyPin);
+  const { verifyPin: login } = useAuth();
   const [showResetWalletModal, setShowResetWalletModal] = useState(false);
   const [showConfirmResetModal, setShowConfirmResetModal] = useState(false);
   const [resetTextInput, setResetTextInput] = useState('');
@@ -204,8 +204,9 @@ function SettingsScreen({ navigation }) {
             rgbWallet.masterFingerprint,
           );
           if (isWalletOnline && isWalletOnline.status) {
-            await ApiHandler.refreshRgbWallet();
-            await ApiHandler.fetchPresetAssets();
+            const { refreshRgbWallet, fetchPresetAssets } = useRgb();
+            await refreshRgbWallet.mutateAsync();
+            await fetchPresetAssets.mutateAsync();
             Toast(resetWalletMessages.WalletResetSuccessfully, false);
             setResettingWallet(false);
             navigation.navigate(NavigationRoutes.HOMESCREEN);
@@ -407,7 +408,7 @@ function SettingsScreen({ navigation }) {
       <ResponsePopupContainer
         visible={showFullSyncModal}
         onDismiss={() => setShowFullSyncModal(false)}
-        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        backColor={darkTheme ? theme.colors.cardGradient1 : '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
           <AppText variant="heading2" style={styles.headerText}>
@@ -442,7 +443,7 @@ function SettingsScreen({ navigation }) {
       <ResponsePopupContainer
         visible={showResetWalletModal}
         onDismiss={() => setShowResetWalletModal(false)}
-        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        backColor={darkTheme ? theme.colors.cardGradient1 : '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
           <AppText variant="heading2" style={styles.headerText}>
@@ -473,8 +474,8 @@ function SettingsScreen({ navigation }) {
 
       <ResponsePopupContainer
         visible={showConfirmResetModal}
-        onDismiss={() => {}}
-        backColor={darkTheme ? theme.colors.cardGradient1: '#F5F5F5'}
+        onDismiss={() => { }}
+        backColor={darkTheme ? theme.colors.cardGradient1 : '#F5F5F5'}
         borderColor={theme.colors.borderColor}>
         <KeyboardAwareScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.infoWrapper}>
@@ -534,7 +535,7 @@ function SettingsScreen({ navigation }) {
 
       <ResponsePopupContainer
         visible={resettingWallet}
-        onDismiss={() => {}}
+        onDismiss={() => { }}
         backColor={theme.colors.cardGradient1}
         borderColor={theme.colors.borderColor}>
         <View style={styles.infoWrapper}>
