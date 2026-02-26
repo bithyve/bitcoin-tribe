@@ -124,7 +124,7 @@ function ReceiveAssetScreen() {
         if (message === 'Insufficient sats for RGB') {
           createUtxos();
           return true;
-        } else if (message === 'Asset not found') {
+        } else if (error.code === 'AssetNotFound') {
           setTimeout(() => {
             mutate({
               assetId: '',
