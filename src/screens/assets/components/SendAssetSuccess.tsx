@@ -18,6 +18,10 @@ type sendAssetSuccessProps = {
   onSuccessPress: () => void;
   selectedPriority: string;
   estimateBlockTime: number;
+  // for gas free
+  gasFreeFee: string;
+  isGasFree: boolean;
+
 };
 function SendAssetSuccess(props: sendAssetSuccessProps) {
   const {
@@ -29,6 +33,8 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     onSuccessPress,
     selectedPriority,
     estimateBlockTime,
+    gasFreeFee,
+    isGasFree,
   } = props;
 
   const theme: AppTheme = useTheme();
@@ -53,11 +59,11 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
       </View>
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
-          <AppText style={styles.labelText}>{sendScreen.feeRate}:</AppText>
+          <AppText style={styles.labelText}>{isGasFree ? "Service Fee" : sendScreen.feeRate}:</AppText>
         </View>
         <View style={styles.valueWrapper}>
           <AppText style={styles.labelText}>
-            {feeRate} sat/vB ~ {estimateBlockTime * 10} {'min'}
+            {isGasFree ? `${gasFreeFee}` : `${feeRate} sat/vB ~ ${estimateBlockTime * 10} min`}
           </AppText>
         </View>
       </View>
