@@ -1,71 +1,43 @@
-import { NativeModules } from 'react-native';
-import { RGBWallet } from 'src/models/interfaces/RGBWallet';
 import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
+import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter, restoreBackup } from 'react-native-rgb';
+import { NetworkType } from '../wallets/enums';
+import * as RNFS from '@dr.pogodin/react-native-fs';
 
-const { RGB } = NativeModules;
 export default class RGBServices {
+  private static RGBWallet: Wallet;
 
-  static generateKeys = async (): Promise<RGBWallet> => {
-    const keys = await RGB.generateKeys(config.NETWORK_TYPE);
-    return JSON.parse(keys);
+  static getBitcoinNetwork = (): BitcoinNetwork => {
+    switch (config.NETWORK_TYPE) {
+      case NetworkType.MAINNET:
+        return BitcoinNetwork.MAINNET;
+      case NetworkType.TESTNET:
+        return BitcoinNetwork.TESTNET;
+      case NetworkType.REGTEST:
+        return BitcoinNetwork.REGTEST;
+      case NetworkType.TESTNET4:
+        return BitcoinNetwork.TESTNET4;
+      default:
+        return BitcoinNetwork.TESTNET;
+    }
   };
 
-  static restoreKeys = async (mnemonic: string): Promise<RGBWallet> => {
-    const keys = await RGB.restoreKeys(config.NETWORK_TYPE, mnemonic);
-    return JSON.parse(keys);
-  };
+  static getElectrumUrl(network: BitcoinNetwork): string {
+    return network === BitcoinNetwork.TESTNET ? "ssl://electrum.iriswallet.com:50013" : network === BitcoinNetwork.TESTNET4 ? "ssl://electrum.iriswallet.com:50053" : network === BitcoinNetwork.REGTEST ? "electrum.rgbtools.org:50041" : "ssl://electrum.iriswallet.com:50003";
+  }
 
-  static resetWallet = async (masterFingerprint: string): Promise<{status: boolean, error?: string}> => {
-    const keys = await RGB.resetWallet(masterFingerprint);
-    return JSON.parse(keys);
+
+  static resetWallet = async (masterFingerprint: string): Promise<{ status: boolean, error?: string }> => {
+    throw new Error('Not implemented');
+    // const keys = await RGB.resetWallet(masterFingerprint);
+    // return JSON.parse(keys);
   };
 
   static getAddress = async (): Promise<string> => {
-    const address = await RGB.getAddress();
+    const address = await RGBServices.RGBWallet.getAddress();
     return address;
-  };
-
-  static getRgbDir = async (): Promise<{
-    dir?: string,
-    error?: string,
-  }> => {
-    const address = await RGB.getRgbDir();
-    return JSON.parse(address);
-  };
-
-  static createUtxosBegin = async (
-    upTo: boolean,
-    num: Number,
-    size: Number,
-    feeRate: Number,
-    skipSync: boolean,
-  ): Promise<{ unsignedPsbt: string; error?: string }> => {
-    const response = await RGB.createUtxosBegin(
-      upTo,
-      num,
-      size,
-      feeRate,
-      skipSync,
-    );
-    return JSON.parse(response);
-  };
-
-  static signPsbt = async (
-    unsignedPsbt: string,
-  ): Promise<{ signedPsbt: string; error?: string }> => {
-    const response = await RGB.signPsbt(unsignedPsbt);
-    return JSON.parse(response);
-  };
-
-  static createUtxosEnd = async (
-    signedPsbt: string,
-    skipSync: boolean,
-  ): Promise<{ num: Number; error?: string }> => {
-    const response = await RGB.createUtxosEnd(signedPsbt, skipSync);
-    return JSON.parse(response);
   };
 
   static createUtxos = async (
@@ -75,7 +47,7 @@ export default class RGBServices {
     num: number = 2,
     size: number = 1000,
     upTo: boolean = false,
-  ): Promise<{ created: boolean; error?: string }> => {
+  ): Promise<{ created: boolean; error?: string, count?: number }> => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       const response = await api.createutxos({
         fee_rate: 5,
@@ -89,31 +61,40 @@ export default class RGBServices {
       }
       return { created: false };
     } else {
-      const response = await RGB.createUtxos(feePerByte, num, size, upTo);
-      return JSON.parse(response);
+      const response = await RGBServices.RGBWallet.createUtxos(upTo, num, size, feePerByte, false);
+      return { created: response > 0, count: response };
     }
   };
 
   static initiate = async (
     mnemonic: string,
+    xpub: string,
     accountXpubVanilla: string,
     accountXpubColored: string,
     masterFingerprint: string,
-    timeout: number = 60,
   ): Promise<{
     status: boolean;
     error: string;
   }> => {
     try {
-      const data = await RGB.initiate(
-        config.NETWORK_TYPE,
-        mnemonic,
-        accountXpubVanilla,
-        accountXpubColored,
-        masterFingerprint,
-        timeout
-      );
-      return JSON.parse(data);
+      const keys = {
+        mnemonic: mnemonic,
+        accountXpubVanilla: accountXpubVanilla,
+        accountXpubColored: accountXpubColored,
+        masterFingerprint: masterFingerprint,
+        xpub: xpub,
+      }
+      RGBServices.RGBWallet = new Wallet(keys, {
+        network: this.getBitcoinNetwork(),
+        maxAllocationsPerUtxo: 1,
+        supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
+        vanillaKeychain: 0
+      });
+      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), false);
+      return {
+        status: true,
+        error: '',
+      };
     } catch (error) {
       return {
         status: false,
@@ -122,19 +103,25 @@ export default class RGBServices {
     }
   };
 
-  static getBalance = async (): Promise<string> => {
-    const balance = await RGB.getBtcBalance();
-    return JSON.parse(balance);
+  static goOnline = async (
+    skipSync: boolean = false,
+  ): Promise<{ status: boolean; error?: string }> => {
+    try {
+      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), skipSync);
+      return { status: true };
+    } catch (error) {
+      return { status: false, error: `${error}` };
+    }
   };
 
-  static getTransactions = async (mnemonic: string): Promise<[]> => {
-    const txns = await RGB.getTransactions(mnemonic, config.NETWORK_TYPE);
-    return JSON.parse(txns);
+  static getBalance = async (): Promise<BtcBalance> => {
+    const balance = await RGBServices.RGBWallet.getBtcBalance();
+    return balance
   };
 
-  static sync = async (mnemonic: string): Promise<string> => {
-    const isSynched = await RGB.sync(mnemonic, config.NETWORK_TYPE);
-    return isSynched;
+  static getTransactions = async (): Promise<Transaction[]> => {
+    const txns = await RGBServices.RGBWallet.listTransactions(false);
+    return txns;
   };
 
   static syncRgbAssets = async (appType: AppType, api: RLNNodeApiServices) => {
@@ -150,8 +137,17 @@ export default class RGBServices {
         return response;
       }
     } else {
-      const assets = await RGB.syncRgbAssets();
-      return JSON.parse(assets);
+      await RGBServices.RGBWallet.sync();
+      const assets = await RGBServices.RGBWallet.listAssets([AssetSchema.NIA, AssetSchema.CFA, AssetSchema.UDA, AssetSchema.IFA]);
+      return assets;
+    }
+  };
+
+  static refresh = async ( appType: AppType, api: RLNNodeApiServices, assetId: string, filter: RefreshFilter[] ) => {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
+      await api.refreshtransfers({ skip_sync: false });
+    } else {
+      await RGBServices.RGBWallet.refresh(assetId, filter, false);
     }
   };
 
@@ -187,8 +183,14 @@ export default class RGBServices {
           return response;
         }
       } else {
-        const data = await RGB.receiveAsset(asset_id, amount, expiry, blinded);
-        return JSON.parse(data);
+        const data = await blinded ? RGBServices.RGBWallet.blindReceive(asset_id ? asset_id : null, {
+          type: 'ANY',
+          amount: amount,
+        }, expiry, [config.PROXY_CONSIGNMENT_ENDPOINT], 0) : RGBServices.RGBWallet.witnessReceive(asset_id ? asset_id : null, {
+          type: 'ANY',
+          amount: amount,
+        }, expiry, [config.PROXY_CONSIGNMENT_ENDPOINT], 0);
+        return data;
       }
     } catch (error) {
       return {
@@ -213,8 +215,8 @@ export default class RGBServices {
         return response;
       }
     } else {
-      const data = await RGB.getRgbAssetMetaData(assetId);
-      return JSON.parse(data);
+      const data = await RGBServices.RGBWallet.getAssetMetadata(assetId);
+      return data;
     }
   };
 
@@ -228,12 +230,30 @@ export default class RGBServices {
       if (response) {
         const data = snakeCaseToCamelCaseCase(response.transfers.reverse());
         return data;
-      } else {
-        return response;
       }
+      return [];
     } else {
-      const data = await RGB.getRgbAssetTransactions(assetId);
-      return JSON.parse(data);
+      let data = await RGBServices.RGBWallet.listTransfers(assetId);
+      data = data.map((transfer: Transfer) => {
+        return {
+          ...transfer,
+          requestedAssignment: transfer?.requestedAssignment ? {
+            amount: transfer.requestedAssignment.amount !== undefined 
+              ? transfer.requestedAssignment.amount.toString() 
+              : undefined,
+            type: transfer.requestedAssignment.type,
+          } : undefined,
+          assignments: transfer?.assignments?.map((assignment: Assignment) => {
+            return {
+              amount: assignment?.amount !== undefined 
+                ? assignment.amount.toString() 
+                : undefined,
+              type: assignment.type,
+            };
+          }),
+        };
+      });
+      return data;
     }
   };
 
@@ -259,8 +279,8 @@ export default class RGBServices {
         return response;
       }
     } else {
-      const data = await RGB.issueAssetNia(ticker, name, supply, precision);
-      return JSON.parse(data);
+      const data = await RGBServices.RGBWallet.issueAssetNia(ticker, name, precision, [Number(supply)]);
+      return data;
     }
   };
 
@@ -274,31 +294,31 @@ export default class RGBServices {
     api: RLNNodeApiServices,
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
-      const responseDigest = await api.postassetmedia({ filePath });
-      if (responseDigest) {
-        const response = await api.issueassetcfa({
-          amounts: [Number(supply)],
-          details: description,
-          name,
-          precision,
-          file_digest: responseDigest.digest,
-        });
-        if (response) {
-          const data = snakeCaseToCamelCaseCase(response);
-          return data.asset ? data.asset : data;
-        } else {
-          return response;
-        }
-      }
+      // const responseDigest = await api.postassetmedia({ filePath });
+      // if (responseDigest) {
+      //   const response = await api.issueassetcfa({
+      //     amounts: [Number(supply)],
+      //     details: description,
+      //     name,
+      //     precision,
+      //     file_digest: responseDigest.digest,
+      //   });
+      //   if (response) {
+      //     const data = snakeCaseToCamelCaseCase(response);
+      //     return data.asset ? data.asset : data;
+      //   } else {
+      //     return response;
+      //   }
+      // }
     } else {
-      const data = await RGB.issueAssetCfa(
+      const data = await RGBServices.RGBWallet.issueAssetCfa(
         name,
         description,
-        supply,
         precision,
+        [Number(supply)],
         filePath,
       );
-      return JSON.parse(data);
+      return data;
     }
   };
 
@@ -314,14 +334,15 @@ export default class RGBServices {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       // todo
     } else {
-      const data = await RGB.issueAssetUda(
-        name,
+      const data = await RGBServices.RGBWallet.issueAssetUda(
         ticker,
+        name,
         details,
+        0,
         mediaFilePath,
         attachmentsFilePaths,
       );
-      return JSON.parse(data);
+      return data;
     }
   };
 
@@ -333,7 +354,7 @@ export default class RGBServices {
     feePerByte,
     isDonation: boolean,
     schema: string,
-    witnessSats:number = 0,
+    witnessSats: number = 0,
     appType: AppType,
     api: RLNNodeApiServices,
   ): Promise<{}> => {
@@ -350,17 +371,27 @@ export default class RGBServices {
       });
       return response;
     } else {
-      const data = await RGB.sendAsset(
-        assetId,
-        blindedUTXO,
-        amount,
-        consignmentEndpoints,
-        feePerByte,
+      const recipientMap: Record<string, Recipient[]> = {
+        [assetId]: [{
+          recipientId: blindedUTXO,
+          assignment: { type: schema.toUpperCase() === 'UDA' ? 'NON_FUNGIBLE' : 'FUNGIBLE', amount: amount },
+          transportEndpoints: [consignmentEndpoints],
+          ...(witnessSats > 0 ? {
+            witnessData: {
+              amountSat: witnessSats,
+              blinding: null,
+            },
+          } : {}),
+        }],
+      };
+      const data = await RGBServices.RGBWallet.send(
+        recipientMap,
         isDonation,
-        schema,
-        witnessSats,
+        feePerByte,
+        0,
+        false,
       );
-      return JSON.parse(data);
+      return data;
     }
   };
 
@@ -369,16 +400,16 @@ export default class RGBServices {
     api: RLNNodeApiServices,
   ): Promise<{}> => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
-      const response = await api.listUnspents({ skip_sync: false });
-      if (response) {
-        const data = snakeCaseToCamelCaseCase(response.unspents);
-        return data;
-      } else {
-        return response.error;
-      }
+      // const response = await api.listUnspents({ skip_sync: false });
+      // if (response) {
+      //   const data = snakeCaseToCamelCaseCase(response.unspents);
+      //   return data;
+      // } else {
+      //   return response.error;
+      // }
     } else {
-      const data = await RGB.getUnspents();
-      return JSON.parse(data);
+      const data = await RGBServices.RGBWallet.listUnspents(false, false);
+      return data
     }
   };
 
@@ -386,22 +417,28 @@ export default class RGBServices {
    * Set the status for eligible transfers to [`TransferStatus::Failed`]
    */
   static failTransfer = async (
-    batchTransferIdx: Number,
+    batchTransferIdx: number,
     noAssetOnly: boolean,
   ): Promise<{ status: boolean; error?: string }> => {
-    const keys = await RGB.failTransfer(batchTransferIdx, noAssetOnly);
-    return JSON.parse(keys);
+    const data = await RGBServices.RGBWallet.failTransfers(batchTransferIdx, noAssetOnly, false);
+    return {
+      status: data,
+      error: undefined,
+    }
   };
 
   /**
    * Delete eligible transfers from the database
    */
   static deleteransfer = async (
-    batchTransferIdx: Number,
+    batchTransferIdx: number,
     noAssetOnly: boolean,
   ): Promise<{ status: boolean; error?: string }> => {
-    const keys = await RGB.deleteransfer(batchTransferIdx, noAssetOnly);
-    return JSON.parse(keys);
+    const data = await RGBServices.RGBWallet.deleteTransfers(batchTransferIdx, noAssetOnly);
+    return {
+      status: data,
+      error: undefined,
+    }
   };
 
   static getBtcBalance = async (api: RLNNodeApiServices) => {
@@ -412,54 +449,51 @@ export default class RGBServices {
   static backup = async (
     path: string,
     password: string,
+    publicId: string,
   ): Promise<{
     file: string;
     error?: string;
   }> => {
-    const data = await RGB.backup(path, password);
-    return JSON.parse(data);
+    const filePath = RNFS.DocumentDirectoryPath + `/${publicId}.rgb_backup`;
+    const exists = await RNFS.exists(filePath);
+    if (exists) {
+      await RNFS.unlink(filePath);
+    }
+    await RGBServices.RGBWallet.backup(filePath, password);
+    return { file: filePath };
   };
 
   static isBackupRequired = async (): Promise<{}> => {
-    const data = await RGB.isBackupRequired();
+    const data = await RGBServices.RGBWallet.backupInfo();
     return data;
   };
 
   static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
-    const data = await RGB.restore(mnemonic, filePath);
-    return JSON.parse(data);
+    const data = await restoreBackup(mnemonic, filePath);
+    return {};
   };
 
-  static isValidBlindedUtxo = async (invoiceData: string): Promise<{}> => {
-    const data = await RGB.isValidBlindedUtxo(invoiceData);
-    return data;
-  };
 
   static decodeInvoice = async (
     invoiceString: string,
-  ): Promise<{
-    recipientId?: string;
-    expirationTimestamp?: number;
-    assetId?: string;
-    assetSchema?: string;
-    network?: string;
-    transportEndpoints?: string;
-    error?: string;
-  }> => {
-    const data = await RGB.decodeInvoice(invoiceString);
-    return JSON.parse(data);
+  ): Promise<InvoiceData> => {
+    const data = await decodeInvoice(invoiceString);
+    return data
   };
 
   static getWalletData = async (): Promise<{
-    dataDir?: string;
-    bitcoinNetwork?: string;
-    databaseType?: string;
-    maxAllocationsPerUtxo?: string;
+    dataDir: string;
+    bitcoinNetwork: string;
+    databaseType: string;
+    maxAllocationsPerUtxo: number;
+    accountXpubVanilla: string;
+    accountXpubColored: string;
     mnemonic?: string;
-    pubkey?: string;
-    vanillaKeychain?: string;
+    masterFingerprint: string;
+    vanillaKeychain?: number;
+    supportedSchemas: string[];
   }> => {
-    const data = await RGB.getWalletData();
-    return JSON.parse(data);
+    const data = await RGBServices.RGBWallet.getWalletData();
+    return data;
   };
 }

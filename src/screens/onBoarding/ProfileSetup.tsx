@@ -20,6 +20,7 @@ import { AppTheme } from 'src/theme';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { hp, windowHeight } from 'src/constants/responsive';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
@@ -94,6 +95,7 @@ function ProfileSetup() {
     const hash = hash512(config.ENC_KEY_STORAGE_IDENTIFIER);
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
+    logCustomEvent(events.CREATE_NEW_APP);
     navigation.navigate(NavigationRoutes.ONBOARDINGSCREEN);
   };
   const initiateWalletCreation = () => {

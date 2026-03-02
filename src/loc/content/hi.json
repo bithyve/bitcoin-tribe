@@ -388,7 +388,8 @@
     "lightningAddress": "लाइटनिंग पता",
     "chooseInvoiceType": "चुनें इनवॉइस प्रकार",
     "onchain": "ऑन-चेन",
-    "lightning": "लाइटनिंग"
+    "lightning": "लाइटनिंग",
+    "validateUsingWatchTower": "WatchTower(Orbis1 द्वारा) का उपयोग करके सत्यापित करें"
   },
   "sendScreen": {
     "headerSubTitle": "बिटकॉइन पता, आरजीबी इनवॉइस या कोई भी ट्राइब QR कोड स्कैन करें",

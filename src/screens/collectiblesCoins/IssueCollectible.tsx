@@ -61,6 +61,8 @@ import AddMediaFileLight from 'src/assets/images/addMediaFileLight.svg';
 import UDACollectiblesInfoModal from './components/UDACollectiblesInfoModal';
 import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
+import { events, logCustomEvent } from 'src/services/analytics';
+import { RgbLibErrors } from 'react-native-rgb';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -180,6 +182,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
+        logCustomEvent(events.CREATE_CFA);
         setTimeout(() => {
           if (!addToRegistry) {
             navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
@@ -207,8 +210,14 @@ function IssueCollectibleScreen() {
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      setLoading(false);
-      Toast(`Unexpected error: ${error.message}`, true);
+      if(error.code === "InsufficientAllocationSlots"){
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+      } else {
+        Toast(error.message, true);
+        setLoading(false);
+      }
     }
   }, [
     assetName,
@@ -257,6 +266,7 @@ function IssueCollectibleScreen() {
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         // navigation.dispatch(popAction);
+        logCustomEvent(events.CREATE_UDA);
         setTimeout(() => {
           if (!addToRegistry) {
             navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
@@ -284,8 +294,14 @@ function IssueCollectibleScreen() {
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      setLoading(false);
-      Toast(`Unexpected error: ${error.message}`, true);
+      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+      } else {
+        setLoading(false);
+        Toast(error.message, true);
+      }
     }
   }, [
     assetName,
