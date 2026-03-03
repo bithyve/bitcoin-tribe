@@ -66,7 +66,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
-import { RgbLibErrors } from 'react-native-rgb';
+import { RgbLibErrors } from 'orbis1-sdk-rn';
 import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
 

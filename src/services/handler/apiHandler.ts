@@ -86,7 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'react-native-rgb';
+import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
