@@ -2,12 +2,27 @@ import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
-import { BitcoinNetwork, Wallet, AssetSchema, BtcBalance, decodeInvoice, InvoiceData, Transaction, Recipient, Assignment, Transfer, RefreshFilter, restoreBackup } from 'orbis1-sdk-rn';
+import { 
+  Orbis1SDK,
+  BitcoinNetwork, 
+  AssetSchema, 
+  BtcBalance, 
+  decodeInvoice, 
+  InvoiceData, 
+  Transaction, 
+  Recipient, 
+  Assignment, 
+  Transfer, 
+  RefreshFilter, 
+  restoreBackup,
+  LogLevel,
+} from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 
 export default class RGBServices {
-  private static RGBWallet: Wallet;
+  private static sdk: Orbis1SDK | null = null;
+  private static RGBWallet: any = null; // Will be the Wallet instance from SDK
 
   static getBitcoinNetwork = (): BitcoinNetwork => {
     switch (config.NETWORK_TYPE) {
@@ -79,18 +94,45 @@ export default class RGBServices {
     try {
       const keys = {
         mnemonic: mnemonic,
+        xpub: xpub,
         accountXpubVanilla: accountXpubVanilla,
         accountXpubColored: accountXpubColored,
         masterFingerprint: masterFingerprint,
-        xpub: xpub,
-      }
-      RGBServices.RGBWallet = new Wallet(keys, {
-        network: this.getBitcoinNetwork(),
-        maxAllocationsPerUtxo: 1,
-        supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
-        vanillaKeychain: 0
+      };
+      
+      // Determine environment based on network
+      const network = this.getBitcoinNetwork();
+      
+      // Create SDK instance
+      RGBServices.sdk = new Orbis1SDK({
+        apiKey: config.ORBIS1_API_KEY, 
+        wallet: {
+          enabled: true,
+          keys,
+          network,
+          supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
+          maxAllocationsPerUtxo: 1,
+          vanillaKeychain: 0,
+        },
+        features: {
+          gasFree: { name: 'gasFree', enabled: false },
+          watchTower: { name: 'watchTower', enabled: false },
+        },
+        logging: { level: LogLevel.ERROR },
       });
+      
+      // Initialize SDK
+      await RGBServices.sdk.initialize();
+      
+      // Get wallet instance once and store it
+      RGBServices.RGBWallet = RGBServices.sdk.getWallet();
+      if (!RGBServices.RGBWallet) {
+        throw new Error('Failed to get wallet from SDK');
+      }
+      
+      // Connect wallet to Electrum
       await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), false);
+      
       return {
         status: true,
         error: '',
