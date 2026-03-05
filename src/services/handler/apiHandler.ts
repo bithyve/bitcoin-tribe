@@ -86,7 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'react-native-rgb';
+import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
@@ -3419,6 +3419,44 @@ export class ApiHandler {
     // disabled first app image backup, since already restored from backup
     if (settingsObject || roomsObject || tnxMetaObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+  }
+
+  // Gas-Free Transfer Methods
+  static async requestGasFreeQuote(
+    userId: string,
+    assetId: string,
+    amount: string,
+    recipientInvoice: string,
+    numInputs?: number,
+    numOutputs?: number,
+  ) {
+    try {
+      const quote = await RGBServices.requestGasFreeQuote(
+        userId,
+        assetId,
+        amount,
+        recipientInvoice,
+        numInputs,
+        numOutputs,
+      );
+      return quote;
+    } catch (error) {
+      console.error('Error requesting gas-free quote:', error);
+      throw error;
+    }
+  }
+
+  static async confirmGasFreeTransfer(
+    request: any,
+    feeQuote: any,
+  ) {
+    try {
+      const result = await RGBServices.confirmGasFreeTransfer(request, feeQuote);
+      return result;
+    } catch (error) {
+      console.error('Error confirming gas-free transfer:', error);
+      throw error;
+    }
   }
 }
 

@@ -58,7 +58,7 @@ import { useNavigation } from '@react-navigation/native';
 import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
 import { events, logCustomEvent } from 'src/services/analytics';
-import { RgbLibErrors } from 'react-native-rgb';
+import { RgbLibErrors } from 'orbis1-sdk-rn';
 
 export const MOCK_BANNER = require('src/assets/images/mockBanner.png');
 export const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');

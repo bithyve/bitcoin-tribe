@@ -24,6 +24,7 @@ interface Props {
   backColor?: string;
   loaderTextColor?: string;
   resetCounter?: number;
+  disabled?: boolean;
 }
 
 const SwipeToAction: React.FC<Props> = ({
@@ -33,6 +34,7 @@ const SwipeToAction: React.FC<Props> = ({
   backColor = Colors.Golden,
   loaderTextColor = Colors.Black,
   resetCounter,
+  disabled = false,
 }) => {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
@@ -101,6 +103,8 @@ const SwipeToAction: React.FC<Props> = ({
   );
 
   const onHandlerStateChange = event => {
+    if (disabled) return; // Don't handle gestures when disabled
+    
     if (event.nativeEvent.state === State.BEGAN) {
       stopSwipeIndicator();
     }
@@ -122,11 +126,12 @@ const SwipeToAction: React.FC<Props> = ({
   return (
     <GestureHandlerRootView style={styles.container}>
       {!swiped ? (
-        <Animated.View style={[styles.track]}>
+        <Animated.View style={[styles.track, disabled && styles.disabledTrack]}>
           <View style={styles.dynamicBackgroundContainer}>
             <Animated.View
               style={[
                 styles.dynamicBackground,
+                disabled && styles.disabledBackground,
                 {
                   transform: [
                     {
@@ -150,6 +155,7 @@ const SwipeToAction: React.FC<Props> = ({
           <Animated.Text
             style={[
               styles.trackText,
+              disabled && styles.disabledText,
               {
                 transform: [
                   {
@@ -176,11 +182,13 @@ const SwipeToAction: React.FC<Props> = ({
             {title}
           </Animated.Text>
           <PanGestureHandler
+            enabled={!disabled}
             onGestureEvent={onGestureEvent}
             onHandlerStateChange={onHandlerStateChange}>
             <Animated.View
               style={[
                 styles.thumb,
+                disabled && styles.disabledThumb,
                 {
                   transform: [
                     {
@@ -287,6 +295,18 @@ const getStyles = (theme: AppTheme, backColor, loaderTextColor) =>
       fontSize: 16,
       fontFamily: Fonts.LufgaRegular,
       color: loaderTextColor,
+    },
+    disabledTrack: {
+      opacity: 0.5,
+    },
+    disabledBackground: {
+      backgroundColor: '#CCCCCC',
+    },
+    disabledText: {
+      color: '#999999',
+    },
+    disabledThumb: {
+      opacity: 0.6,
     },
   });
 
