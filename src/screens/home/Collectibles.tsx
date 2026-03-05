@@ -19,6 +19,7 @@ import {
   Coin,
   Collectible,
   Collection,
+  InflatableFungibleAsset,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -69,6 +70,9 @@ function Collectibles() {
   const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
+  const ifasResult = useQuery<InflatableFungibleAsset>(RealmSchema.IFA, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
   const coins = useMemo(() => {
     if (!coinsResult) return [];
     const coinsArray = coinsResult.slice();
@@ -79,13 +83,24 @@ function Collectibles() {
     }
     return coinsArray;
   }, [coinsResult,]);
+
+  const ifas = useMemo(() => {
+    if (!ifasResult) return [];
+    const ifasArray = ifasResult.slice();
+    const defaultCoinIndex = ifasArray.findIndex(c => c.isDefault);
+    if (defaultCoinIndex !== -1) {
+      ifasArray.splice(defaultCoinIndex, 1);
+      return ifasArray
+    }
+    return ifasArray;
+  }, [ifasResult,]);
   const [refreshing, setRefreshing] = useState(false);
 
   const assets: Asset[] = useMemo(() => {
-    return [...coins, ...collectibles, ...udas, ...collections]
+    return [...coins, ...ifas, ...collectibles, ...udas, ...collections]
       .map(item => item as Asset)
       .sort((a, b) => b.timestamp - a.timestamp);
-  }, [collectibles, udas, coins, collections]);
+  }, [collectibles, udas, coins, collections, ifas]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -127,6 +142,10 @@ function Collectibles() {
         onPressAsset={(asset: Asset) => {
           if (asset.assetSchema.toUpperCase() === AssetSchema.Coin) {
             handleNavigation(NavigationRoutes.COINDETAILS, {
+              assetId: asset.assetId,
+            });
+          } else if (asset.assetSchema.toUpperCase() === AssetSchema.IFA) {
+            handleNavigation(NavigationRoutes.IFADETAILS, {
               assetId: asset.assetId,
             });
           } else if (

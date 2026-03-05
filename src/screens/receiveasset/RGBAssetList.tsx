@@ -8,7 +8,7 @@ import {
   Platform,
   Keyboard,
 } from 'react-native';
-import { RadioButton, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 
 import { AppTheme } from 'src/theme';
@@ -19,7 +19,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
 import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
-import { Asset, AssetFace, AssetSchema } from 'src/models/interfaces/RGBWallet';
+import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
