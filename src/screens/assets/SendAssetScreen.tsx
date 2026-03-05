@@ -69,6 +69,7 @@ import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
 import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
+import type { FeeQuote, GasFreeTransferRequest } from 'orbis1-sdk-rn';
 
 const DUST_LIMIT = 330;
 
@@ -234,6 +235,9 @@ const SendAssetScreen = () => {
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType | null>(PaymentMethodType.SATS);
+  const [gasFreeQuote, setGasFreeQuote] = useState<FeeQuote | null>(null);
+  const [quoteExpiration, setQuoteExpiration] = useState<number | null>(null);
+  const [requestingQuote, setRequestingQuote] = useState(false);
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
@@ -309,6 +313,47 @@ const SendAssetScreen = () => {
     try {
       const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
       setLoading(true);
+
+      // Gas-free transfer flow
+      if (paymentMethod === PaymentMethodType.DOLLARS) {
+        if (!gasFreeQuote) {
+          Toast('Gas-free quote not found. Please try again.', true);
+          setLoading(false);
+          return;
+        }
+
+        try {
+          const request: GasFreeTransferRequest = {
+            userId: config.HEXA_ID,
+            assetId,
+            amount: (
+              parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+              10 ** precision
+            ).toString(),
+            recipientInvoice: invoice,
+            transportEndpoints: decodedInvoice.transportEndpoints,
+          };
+
+          const result = await ApiHandler.confirmGasFreeTransfer(request, gasFreeQuote);
+          setLoading(false);
+          if (result?.txid) {
+            setSuccessStatus(true);
+            logCustomEvent(events.SEND_ASSET);
+          } else {
+            setVisible(false);
+            setTimeout(() => {
+              Toast('Gas-free transfer failed. Please try again.', true);
+            }, 500);
+          }
+        } catch (error) {
+          setLoading(false);
+          setVisible(false);
+          setTimeout(() => {
+            Toast(`Gas-free transfer failed: ${error.message}`, true);
+          }, 500);
+        }
+      } else if (paymentMethod === PaymentMethodType.SATS) {
+       // Regular transfer flow (with sats)
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
@@ -345,6 +390,9 @@ const SendAssetScreen = () => {
           }
         }, 500);
       }
+      } else {
+        throw new Error('Invalid payment method');
+      }
     } catch (error) {
       if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
@@ -356,7 +404,7 @@ const SendAssetScreen = () => {
         setVisible(false);
       }
     }
-  }, [invoice, assetAmount, navigation, isDonation]);
+  }, [invoice, assetAmount, navigation, isDonation, paymentMethod, gasFreeQuote]);
 
   const validateAndSetInvoice = async (rawText: string, fromPaste = false) => {
     const cleanedText = rawText.replace(/\s/g, '');
@@ -721,7 +769,7 @@ const SendAssetScreen = () => {
                     fontFamily: Fonts.LufgaMedium,
                   }}
                 >
-                  $0.42
+                  $1
                 </AppText>
               </View>
               <AppText variant="caption" style={{ color: '#787878' }}>
@@ -754,26 +802,28 @@ const SendAssetScreen = () => {
           </View>
         )}
 
-        <View style={styles.containerSwitch}>
-          <AppText variant="body1" style={styles.sendDonationTitle}>
-            {assets.sendAsDonation}
-          </AppText>
-          <View style={styles.switchWrapper}>
-            <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
-              {isThemeDark ? (
-                <InfoIcon width={30} height={30} />
-              ) : (
-                <InfoIconLight width={30} height={30} />
-              )}
-            </AppTouchable>
+        {paymentMethod === PaymentMethodType.SATS && (
+          <View style={styles.containerSwitch}>
+            <AppText variant="body1" style={styles.sendDonationTitle}>
+              {assets.sendAsDonation}
+            </AppText>
+            <View style={styles.switchWrapper}>
+              <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
+                {isThemeDark ? (
+                  <InfoIcon width={30} height={30} />
+                ) : (
+                  <InfoIconLight width={30} height={30} />
+                )}
+              </AppTouchable>
 
-            <Switch
-              value={isDonation}
-              onValueChange={value => setIsDonation(value)}
-              color={theme.colors.accent1}
-            />
+              <Switch
+                value={isDonation}
+                onValueChange={value => setIsDonation(value)}
+                color={theme.colors.accent1}
+              />
+            </View>
           </View>
-        </View>
+        )}
 
         <ModalContainer
           title={
@@ -800,8 +850,13 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            gasFreeFee={"$0.42"} // TODO: @parsh update this with the actual gas free fee
+            gasFreeFee={gasFreeQuote ? `${gasFreeQuote.serviceFeeAmount / (10 ** precision)} ${assetData?.ticker || ''}` : "0"}
             isGasFree={paymentMethod === PaymentMethodType.DOLLARS}
+            quoteExpiration={quoteExpiration}
+            onQuoteExpired={() => {
+              setVisible(false);
+              Toast('Quote expired. Please try again.', true);
+            }}
             onSuccessPress={() => {
               setVisible(false);
               setTimeout(() => {
@@ -840,7 +895,7 @@ const SendAssetScreen = () => {
       <View style={styles.buttonWrapper}>
         <Buttons
           primaryTitle={common.next}
-          primaryOnPress={() => {
+          primaryOnPress={async () => {
             if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
               if (Number(assetData?.balance.spendable) === 0) {
@@ -854,22 +909,50 @@ const SendAssetScreen = () => {
               );
               return;
             }
-            // if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
-            //   Keyboard.dismiss();
-            //   Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
-            //   return;
-            // }
             Keyboard.dismiss();
-            setVisible(true);
+            
+            // For gas-free (DOLLARS) payment, request fee quote first
+            if (paymentMethod === PaymentMethodType.DOLLARS) {
+              setRequestingQuote(true);
+              try {
+                const quote = await ApiHandler.requestGasFreeQuote(
+                  config.HEXA_ID,
+                  assetId,
+                  (
+                    parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+                    10 ** precision
+                  ).toString(),
+                  invoice,
+                  1, // numInputs
+                  2, // numOutputs
+                );
+                setGasFreeQuote(quote);
+                
+                // Calculate expiration time
+                const expiresAt = new Date(quote.expiresAt).getTime();
+                setQuoteExpiration(expiresAt);
+                
+                setRequestingQuote(false);
+                setVisible(true);
+              } catch (error) {
+                setRequestingQuote(false);
+                Toast(`Failed to get gas-free quote: ${error.message}`, true);
+              }
+            } else {
+              // For regular (SATS) payment, show modal directly
+              setVisible(true);
+            }
           }}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
             loading ||
+            requestingQuote ||
             amountValidationError.length > 0 ||
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
+          primaryLoading={requestingQuote}
           width={'100%'}
         />
       </View>

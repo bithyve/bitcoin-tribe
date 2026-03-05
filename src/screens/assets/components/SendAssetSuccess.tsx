@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import LottieView from 'lottie-react-native';
@@ -21,7 +21,8 @@ type sendAssetSuccessProps = {
   // for gas free
   gasFreeFee: string;
   isGasFree: boolean;
-
+  quoteExpiration?: number | null;
+  onQuoteExpired?: () => void;
 };
 function SendAssetSuccess(props: sendAssetSuccessProps) {
   const {
@@ -35,6 +36,8 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     estimateBlockTime,
     gasFreeFee,
     isGasFree,
+    quoteExpiration,
+    onQuoteExpired,
   } = props;
 
   const theme: AppTheme = useTheme();
@@ -46,6 +49,40 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
     sendScreen,
     assets,
   } = translations;
+
+  // Countdown timer for quote expiration
+  const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
+  const [isQuoteExpired, setIsQuoteExpired] = useState(false);
+
+  useEffect(() => {
+    if (isGasFree && quoteExpiration && !onSuccessStatus) {
+      const updateTimer = () => {
+        const now = Date.now();
+        const remaining = Math.max(0, quoteExpiration - now);
+        setTimeRemaining(remaining);
+
+        if (remaining <= 0 && !isQuoteExpired) {
+          // Quote expired
+          setIsQuoteExpired(true);
+          if (onQuoteExpired) {
+            onQuoteExpired();
+          }
+        }
+      };
+
+      updateTimer();
+      const interval = setInterval(updateTimer, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [isGasFree, quoteExpiration, onSuccessStatus, isQuoteExpired, onQuoteExpired]);
+
+  const formatTimeRemaining = (ms: number): string => {
+    const totalSeconds = Math.floor(ms / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
 
   return !onSuccessStatus ? (
     <View style={styles.container}>
@@ -67,6 +104,18 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
           </AppText>
         </View>
       </View>
+      {isGasFree && timeRemaining !== null && (
+        <View style={styles.contentWrapper}>
+          <View style={styles.labelWrapper}>
+            <AppText style={styles.labelText}>Quote Expires In:</AppText>
+          </View>
+          <View style={styles.valueWrapper}>
+            <AppText style={[styles.labelText, { color: timeRemaining <= 0 ? '#FF6B6B' : timeRemaining < 30000 ? '#FFA500' : theme.colors.headingColor }]}>
+              {timeRemaining <= 0 ? 'EXPIRED' : formatTimeRemaining(timeRemaining)}
+            </AppText>
+          </View>
+        </View>
+      )}
       <View style={styles.contentWrapper}>
         <View style={styles.labelWrapper}>
           <AppText style={styles.labelText}>
@@ -86,6 +135,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
           onSwipeComplete={onPress}
           backColor={theme.colors.swipeToActionThumbColor}
           loaderTextColor={theme.colors.primaryCTAText}
+          disabled={isGasFree && isQuoteExpired}
         />
       </View>
     </View>
