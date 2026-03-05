@@ -16,6 +16,9 @@ import {
   RefreshFilter, 
   restoreBackup,
   LogLevel,
+  type FeeQuote,
+  type GasFreeTransferRequest,
+  type GasFreeTransferResult,
 } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
@@ -105,7 +108,7 @@ export default class RGBServices {
       
       // Create SDK instance
       RGBServices.sdk = new Orbis1SDK({
-        apiKey: config.ORBIS1_API_KEY, 
+        apiKey: config.ORBIS1_API_KEY,
         wallet: {
           enabled: true,
           keys,
@@ -115,8 +118,8 @@ export default class RGBServices {
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { name: 'gasFree', enabled: false },
-          watchTower: { name: 'watchTower', enabled: false },
+          gasFree: { name: 'gasFree', enabled: true },
+          watchTower: { name: 'watchTower', enabled: true },
         },
         logging: { level: LogLevel.ERROR },
       });
@@ -143,6 +146,13 @@ export default class RGBServices {
         error: `${error}`,
       };
     }
+  };
+
+  static getSDK = (): Orbis1SDK => {
+    if (!RGBServices.sdk) {
+      throw new Error('SDK not initialized. Call initiate() first.');
+    }
+    return RGBServices.sdk;
   };
 
   static goOnline = async (
@@ -537,5 +547,41 @@ export default class RGBServices {
   }> => {
     const data = await RGBServices.RGBWallet.getWalletData();
     return data;
+  };
+
+  // Gas-Free Transfer Methods
+  static requestGasFreeQuote = async (
+    userId: string,
+    assetId: string,
+    amount: string,
+    recipientInvoice: string,
+    numInputs?: number,
+    numOutputs?: number,
+  ): Promise<FeeQuote> => {
+    if (!RGBServices.sdk) {
+      throw new Error('SDK not initialized');
+    }
+    const gasFree = RGBServices.sdk.gasFree();
+    const quote = await gasFree.requestFeeQuote({
+      userId,
+      assetId,
+      amount,
+      recipientInvoice,
+      numInputs,
+      numOutputs,
+    });
+    return quote;
+  };
+
+  static confirmGasFreeTransfer = async (
+    request: GasFreeTransferRequest,
+    feeQuote: FeeQuote,
+  ): Promise<GasFreeTransferResult> => {
+    if (!RGBServices.sdk) {
+      throw new Error('SDK not initialized');
+    }
+    const gasFree = RGBServices.sdk.gasFree();
+    const result = await gasFree.confirmTransfer(request, feeQuote);
+    return result;
   };
 }
