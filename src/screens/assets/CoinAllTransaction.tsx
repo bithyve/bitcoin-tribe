@@ -20,6 +20,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { useObject } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
+import { filterGasFreeTransfers } from 'src/utils/gasFreeTransactions';
 
 function CoinAllTransaction() {
   const theme: AppTheme = useTheme();
@@ -32,12 +33,17 @@ function CoinAllTransaction() {
   const asset = useObject<Asset>(schema, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
+  // Filter out duplicate transfers from gas-free transactions
+  const filteredTransactions = React.useMemo(() => {
+    return asset?.transactions ? filterGasFreeTransfers(asset.transactions) : [];
+  }, [asset?.transactions]);
+
   return (
     <ScreenContainer>
       <AppHeader title={`${name} - Transactions`} />
       <FlatList
         style={styles.container}
-        data={asset?.transactions}
+        data={filteredTransactions}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView

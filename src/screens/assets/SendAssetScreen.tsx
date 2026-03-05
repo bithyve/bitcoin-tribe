@@ -70,6 +70,7 @@ import { RgbLibErrors } from 'orbis1-sdk-rn';
 import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
 import type { FeeQuote, GasFreeTransferRequest } from 'orbis1-sdk-rn';
+import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
 
 const DUST_LIMIT = 330;
 
@@ -337,6 +338,26 @@ const SendAssetScreen = () => {
           const result = await ApiHandler.confirmGasFreeTransfer(request, gasFreeQuote);
           setLoading(false);
           if (result?.txid) {
+            // Save gas-free transaction metadata with complete information
+            saveGasFreeTransaction({
+              txid: result.txid,
+              assetId: assetId,
+              recipientAmount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')) * 10 ** precision,
+              recipientInvoice: invoice,
+              timestamp: Date.now(),
+              feeQuote: {
+                quoteId: gasFreeQuote.quoteId,
+                serviceFeeAmount: gasFreeQuote.serviceFeeAmount,
+                serviceFeeInvoice: gasFreeQuote.serviceFeeInvoice,
+                serviceFeeRecipientId: gasFreeQuote.serviceFeeRecipientId,
+                miningFeeSats: gasFreeQuote.miningFeeSats,
+                feeRateSatPerVByte: gasFreeQuote.feeRateSatPerVByte,
+                serviceFeePercentage: gasFreeQuote.serviceFeePercentage,
+                expiresAt: gasFreeQuote.expiresAt,
+                createdAt: gasFreeQuote.createdAt,
+              },
+            });
+            
             setSuccessStatus(true);
             logCustomEvent(events.SEND_ASSET);
           } else {
@@ -894,7 +915,7 @@ const SendAssetScreen = () => {
       </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.next}
+          primaryTitle={requestingQuote ? 'Preparing Transaction...' : common.next}
           primaryOnPress={async () => {
             if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
@@ -952,7 +973,6 @@ const SendAssetScreen = () => {
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
           }
-          primaryLoading={requestingQuote}
           width={'100%'}
         />
       </View>

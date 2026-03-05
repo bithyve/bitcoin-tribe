@@ -25,6 +25,7 @@ import LoadingSpinner from 'src/components/LoadingSpinner';
 import InfoIcon from 'src/assets/images/infoIcon2.svg';
 import InfoIconLight from 'src/assets/images/infoIcon2_light.svg';
 import { Keys } from 'src/storage';
+import { filterGasFreeTransfers } from 'src/utils/gasFreeTransactions';
 
 function TransactionsList({
   transactions,
@@ -53,6 +54,11 @@ function TransactionsList({
   const styles = getStyles(theme);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const navigation = useNavigation();
+
+  // Filter out duplicate transfers from gas-free transactions
+  const filteredTransactions = React.useMemo(() => {
+    return filterGasFreeTransfers(transactions);
+  }, [transactions]);
 
   return (
     <View style={[styles.container, style]}>
@@ -88,7 +94,7 @@ function TransactionsList({
         //   { useNativeDriver: false },
         // )}
         style={styles.container2}
-        data={transactions}
+        data={filteredTransactions}
         refreshControl={
           Platform.OS === 'ios' ? (
             <RefreshControlView
@@ -115,7 +121,6 @@ function TransactionsList({
                 assetId: assetId,
                 precision: precision,
                 schema,
-                assetId
               });
             }}
             precision={precision}
