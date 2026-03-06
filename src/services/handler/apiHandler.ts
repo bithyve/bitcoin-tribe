@@ -86,7 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'react-native-rgb';
+import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
@@ -1405,6 +1405,13 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
+      if (assets?.ifa) {
+        dbManager.createObjectBulk(
+          RealmSchema.IFA,
+          assets.ifa,
+          Realm.UpdateMode.Modified,
+        );
+      }
       if (assets?.cfa) {
         const cfas = [];
         let hasProcessedCfa = false;
@@ -1782,6 +1789,76 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
+      if (response?.assetId) {
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const metadata = await RGBServices.getRgbAssetMetaData(
+          response?.assetId,
+          ApiHandler.appType,
+          ApiHandler.api,
+        );
+        await Relay.registerAsset(
+          app.id,
+          { ...metadata, ...response },
+          app.authToken,
+        );
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
+              },
+            },
+          });
+        }
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async issueIFA({
+    name,
+    ticker,
+    supply,
+    precision,
+    replaceRightsNum,
+    rejectListUrl
+  }: {
+    name: string;
+    ticker: string;
+    supply: string;
+    precision: number;
+    replaceRightsNum: number;
+    rejectListUrl: string | null;
+  }) {
+    try {
+      const assetResponse = await RGBServices.issueAssetIfa(
+        ticker,
+        name,
+        Number(precision),
+        [Number(supply)],
+        [],
+        Number(replaceRightsNum),
+        rejectListUrl,
+        ApiHandler.appType,
+      );
+      console.log(assetResponse)
       const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
@@ -3419,6 +3496,44 @@ export class ApiHandler {
     // disabled first app image backup, since already restored from backup
     if (settingsObject || roomsObject || tnxMetaObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+  }
+
+  // Gas-Free Transfer Methods
+  static async requestGasFreeQuote(
+    userId: string,
+    assetId: string,
+    amount: string,
+    recipientInvoice: string,
+    numInputs?: number,
+    numOutputs?: number,
+  ) {
+    try {
+      const quote = await RGBServices.requestGasFreeQuote(
+        userId,
+        assetId,
+        amount,
+        recipientInvoice,
+        numInputs,
+        numOutputs,
+      );
+      return quote;
+    } catch (error) {
+      console.error('Error requesting gas-free quote:', error);
+      throw error;
+    }
+  }
+
+  static async confirmGasFreeTransfer(
+    request: any,
+    feeQuote: any,
+  ) {
+    try {
+      const result = await RGBServices.confirmGasFreeTransfer(request, feeQuote);
+      return result;
+    } catch (error) {
+      console.error('Error confirming gas-free transfer:', error);
+      throw error;
+    }
   }
 }
 

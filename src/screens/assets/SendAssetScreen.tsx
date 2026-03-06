@@ -66,7 +66,11 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
-import { RgbLibErrors } from 'react-native-rgb';
+import { RgbLibErrors } from 'orbis1-sdk-rn';
+import Fonts from 'src/constants/Fonts';
+import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
+import type { FeeQuote, GasFreeTransferRequest } from 'orbis1-sdk-rn';
+import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
 
 const DUST_LIMIT = 330;
 
@@ -157,8 +161,8 @@ const AssetItem = ({
                   color: isThemeDark
                     ? Colors.Black
                     : tag === 'Coin'
-                    ? Colors.White
-                    : Colors.Black,
+                      ? Colors.White
+                      : Colors.Black,
                 },
               ]}>
               {numberWithCommas(amount)}
@@ -201,8 +205,8 @@ const SendAssetScreen = () => {
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
       ? '1'
       : amount && amount !== '0'
-      ? (Number(amount) / 10 ** precision).toString()
-      : '',
+        ? (Number(amount) / 10 ** precision).toString()
+        : '',
   );
 
   const [inputHeight, setInputHeight] = useState(100);
@@ -231,6 +235,10 @@ const SendAssetScreen = () => {
   const [selectedFeeRate, setSelectedFeeRate] = useState(
     averageTxFee?.[TxPriority.LOW]?.feePerByte,
   );
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethodType | null>(PaymentMethodType.SATS);
+  const [gasFreeQuote, setGasFreeQuote] = useState<FeeQuote | null>(null);
+  const [quoteExpiration, setQuoteExpiration] = useState<number | null>(null);
+  const [requestingQuote, setRequestingQuote] = useState(false);
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
@@ -288,7 +296,7 @@ const SendAssetScreen = () => {
         Keyboard.dismiss();
         Toast(
           assets.checkSpendableAmt +
-            Number(assetData?.balance.spendable) / 10 ** precision,
+          Number(assetData?.balance.spendable) / 10 ** precision,
           true,
         );
       }
@@ -306,6 +314,67 @@ const SendAssetScreen = () => {
     try {
       const decodedInvoice = await ApiHandler.decodeInvoice(invoice);
       setLoading(true);
+
+      // Gas-free transfer flow
+      if (paymentMethod === PaymentMethodType.DOLLARS) {
+        if (!gasFreeQuote) {
+          Toast('Gas-free quote not found. Please try again.', true);
+          setLoading(false);
+          return;
+        }
+
+        try {
+          const request: GasFreeTransferRequest = {
+            userId: config.HEXA_ID,
+            assetId,
+            amount: (
+              parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+              10 ** precision
+            ).toString(),
+            recipientInvoice: invoice,
+            transportEndpoints: decodedInvoice.transportEndpoints,
+          };
+
+          const result = await ApiHandler.confirmGasFreeTransfer(request, gasFreeQuote);
+          setLoading(false);
+          if (result?.txid) {
+            // Save gas-free transaction metadata with complete information
+            saveGasFreeTransaction({
+              txid: result.txid,
+              assetId: assetId,
+              recipientAmount: parseFloat(assetAmount && assetAmount.replace(/,/g, '')) * 10 ** precision,
+              recipientInvoice: invoice,
+              timestamp: Date.now(),
+              feeQuote: {
+                quoteId: gasFreeQuote.quoteId,
+                serviceFeeAmount: gasFreeQuote.serviceFeeAmount,
+                serviceFeeInvoice: gasFreeQuote.serviceFeeInvoice,
+                serviceFeeRecipientId: gasFreeQuote.serviceFeeRecipientId,
+                miningFeeSats: gasFreeQuote.miningFeeSats,
+                feeRateSatPerVByte: gasFreeQuote.feeRateSatPerVByte,
+                serviceFeePercentage: gasFreeQuote.serviceFeePercentage,
+                expiresAt: gasFreeQuote.expiresAt,
+                createdAt: gasFreeQuote.createdAt,
+              },
+            });
+            
+            setSuccessStatus(true);
+            logCustomEvent(events.SEND_ASSET);
+          } else {
+            setVisible(false);
+            setTimeout(() => {
+              Toast('Gas-free transfer failed. Please try again.', true);
+            }, 500);
+          }
+        } catch (error) {
+          setLoading(false);
+          setVisible(false);
+          setTimeout(() => {
+            Toast(`Gas-free transfer failed: ${error.message}`, true);
+          }, 500);
+        }
+      } else if (paymentMethod === PaymentMethodType.SATS) {
+       // Regular transfer flow (with sats)
       const response = await ApiHandler.sendAsset({
         assetId,
         blindedUTXO: decodedInvoice.recipientId,
@@ -342,8 +411,11 @@ const SendAssetScreen = () => {
           }
         }, 500);
       }
+      } else {
+        throw new Error('Invalid payment method');
+      }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
           createUtxos.mutate();
         }, 500);
@@ -353,7 +425,7 @@ const SendAssetScreen = () => {
         setVisible(false);
       }
     }
-  }, [invoice, assetAmount, navigation, isDonation]);
+  }, [invoice, assetAmount, navigation, isDonation, paymentMethod, gasFreeQuote]);
 
   const validateAndSetInvoice = async (rawText: string, fromPaste = false) => {
     const cleanedText = rawText.replace(/\s/g, '');
@@ -406,8 +478,6 @@ const SendAssetScreen = () => {
     }
   };
 
-  const getInvoiceType = (invoice: string) => {};
-
   const handlePasteAddress = async () => {
     const clipboardValue = await Clipboard.getString();
     await validateAndSetInvoice(clipboardValue, true);
@@ -425,8 +495,8 @@ const SendAssetScreen = () => {
       precision === 0
         ? spendable.toString()
         : (spendable / 10 ** precision)
-            .toFixed(precision)
-            .replace(/\.?0+$/, '');
+          .toFixed(precision)
+          .replace(/\.?0+$/, '');
 
     setAssetAmount(formatted);
   };
@@ -495,13 +565,12 @@ const SendAssetScreen = () => {
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
-                  android: `file://${
-                    assetData.media?.filePath || assetData?.token.media.filePath
+                android: `file://${assetData.media?.filePath || assetData?.token.media.filePath
                   }`,
-                  ios:
-                    assetData.media?.filePath ||
-                    assetData?.token.media.filePath,
-                })
+                ios:
+                  assetData.media?.filePath ||
+                  assetData?.token.media.filePath,
+              })
               : null
           }
           tag={
@@ -598,81 +667,139 @@ const SendAssetScreen = () => {
           </View>
         )} */}
 
-        <AppText variant="body2" style={styles.labelstyle}>
-          {sendScreen.fee}
-        </AppText>
-        <View style={styles.feeContainer}>
-          <FeePriorityButton
-            title={sendScreen.low}
-            priority={TxPriority.LOW}
-            selectedPriority={selectedPriority}
-            setSelectedPriority={() => {
-              if (averageTxFee && averageTxFee[TxPriority.LOW]) {
-                setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
-                setSelectedPriority(TxPriority.LOW);
-              } else {
-                Toast(
-                  'Unable to load transaction fee data. Please try again later.',
-                  true,
-                );
-              }
-            }}
-            feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
-            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-              TxPriority.LOW,
-            )}
-          />
-          <FeePriorityButton
-            title={sendScreen.medium}
-            priority={TxPriority.MEDIUM}
-            selectedPriority={selectedPriority}
-            setSelectedPriority={() => {
-              if (averageTxFee && averageTxFee[TxPriority.MEDIUM]) {
-                setSelectedFeeRate(averageTxFee[TxPriority.MEDIUM].feePerByte);
-                setSelectedPriority(TxPriority.MEDIUM);
-              } else {
-                Toast(
-                  'Unable to load transaction fee data. Please try again later.',
-                  true,
-                );
-              }
-            }}
-            feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
-            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-              TxPriority.MEDIUM,
-            )}
-          />
-          <FeePriorityButton
-            title={sendScreen.high}
-            priority={TxPriority.HIGH}
-            selectedPriority={selectedPriority}
-            setSelectedPriority={() => {
-              if (averageTxFee && averageTxFee[TxPriority.HIGH]) {
-                setSelectedFeeRate(averageTxFee[TxPriority.HIGH].feePerByte);
-                setSelectedPriority(TxPriority.HIGH);
-              } else {
-                Toast(
-                  'Unable to load transaction fee data. Please try again later.',
-                  true,
-                );
-              }
-            }}
-            feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
-            estimatedBlocksByPriority={getEstimatedBlocksByPriority(
-              TxPriority.HIGH,
-            )}
-          />
-          <FeePriorityButton
-            title={sendScreen.custom}
-            priority={TxPriority.CUSTOM}
-            selectedPriority={selectedPriority}
-            setSelectedPriority={() => {
-              setSelectedPriority(TxPriority.CUSTOM);
-            }}
-            feeRateByPriority={0}
-            estimatedBlocksByPriority={1}
+        {/* Select Payment Method */}
+        <View style={styles.divider} />
+
+        <View>
+          <AppText variant="body2" style={styles.labelstyle}>
+            {sendScreen.selectPaymentMethod}
+          </AppText>
+          <PaymentMethodButton
+            paymentMethod={paymentMethod}
+            setPaymentMethod={setPaymentMethod}
           />
         </View>
+
+        {paymentMethod == PaymentMethodType.SATS && (
+          <>
+            <AppText variant="body2" style={styles.labelstyle}>
+              {sendScreen.fee}
+            </AppText>
+            <View style={styles.feeContainer}>
+              <FeePriorityButton
+                title={sendScreen.low}
+                priority={TxPriority.LOW}
+                selectedPriority={selectedPriority}
+                setSelectedPriority={() => {
+                  if (averageTxFee && averageTxFee[TxPriority.LOW]) {
+                    setSelectedFeeRate(averageTxFee[TxPriority.LOW].feePerByte);
+                    setSelectedPriority(TxPriority.LOW);
+                  } else {
+                    Toast(
+                      'Unable to load transaction fee data. Please try again later.',
+                      true,
+                    );
+                  }
+                }}
+                feeRateByPriority={getFeeRateByPriority(TxPriority.LOW)}
+                estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                  TxPriority.LOW,
+                )}
+              />
+              <FeePriorityButton
+                title={sendScreen.medium}
+                priority={TxPriority.MEDIUM}
+                selectedPriority={selectedPriority}
+                setSelectedPriority={() => {
+                  if (averageTxFee && averageTxFee[TxPriority.MEDIUM]) {
+                    setSelectedFeeRate(
+                      averageTxFee[TxPriority.MEDIUM].feePerByte,
+                    );
+                    setSelectedPriority(TxPriority.MEDIUM);
+                  } else {
+                    Toast(
+                      'Unable to load transaction fee data. Please try again later.',
+                      true,
+                    );
+                  }
+                }}
+                feeRateByPriority={getFeeRateByPriority(TxPriority.MEDIUM)}
+                estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                  TxPriority.MEDIUM,
+                )}
+              />
+              <FeePriorityButton
+                title={sendScreen.high}
+                priority={TxPriority.HIGH}
+                selectedPriority={selectedPriority}
+                setSelectedPriority={() => {
+                  if (averageTxFee && averageTxFee[TxPriority.HIGH]) {
+                    setSelectedFeeRate(
+                      averageTxFee[TxPriority.HIGH].feePerByte,
+                    );
+                    setSelectedPriority(TxPriority.HIGH);
+                  } else {
+                    Toast(
+                      'Unable to load transaction fee data. Please try again later.',
+                      true,
+                    );
+                  }
+                }}
+                feeRateByPriority={getFeeRateByPriority(TxPriority.HIGH)}
+                estimatedBlocksByPriority={getEstimatedBlocksByPriority(
+                  TxPriority.HIGH,
+                )}
+              />
+              <FeePriorityButton
+                title={sendScreen.custom}
+                priority={TxPriority.CUSTOM}
+                selectedPriority={selectedPriority}
+                setSelectedPriority={() => {
+                  setSelectedPriority(TxPriority.CUSTOM);
+                }}
+                feeRateByPriority={0}
+                estimatedBlocksByPriority={1}
+              />
+            </View>
+          </>
+        )}
+        {/* Gas Free Fee section  */}
+        {paymentMethod == PaymentMethodType.DOLLARS && (
+          <>
+            <View style={styles.orbis1BannerCtr}>
+              <AppText variant="caption" style={{ color: 'white' }}>
+                GasFree powered by Orbis1
+              </AppText>
+            </View>
+
+            <AppText variant="body2" style={styles.labelstyle}>
+              {sendScreen.fee}
+            </AppText>
+            <View style={styles.gasFreeFeeContainer}>
+              <View style={styles.gasFreeFeeTxtCtr}>
+                <AppText
+                  variant="subtitle2"
+                  style={{ fontFamily: Fonts.LufgaMedium }}
+                >
+                  {sendScreen.estimatedFee}
+                </AppText>
+                <AppText
+                  variant="subtitle2"
+                  style={{
+                    color: theme.colors.accent1,
+                    fontFamily: Fonts.LufgaMedium,
+                  }}
+                >
+                  $1
+                </AppText>
+              </View>
+              <AppText variant="caption" style={{ color: '#787878' }}>
+                {sendScreen.exactFeeShownOnConfirmation}
+              </AppText>
+            </View>
+          </>
+        )}
+
         {selectedPriority === TxPriority.CUSTOM && (
           <View style={styles.inputWrapper}>
             <AppText variant="body2" style={styles.labelstyle}>
@@ -686,7 +813,7 @@ const SendAssetScreen = () => {
               inputStyle={styles.customFeeInputStyle}
               contentStyle={styles.feeInputContentStyle}
               rightText={'sat/vB'}
-              onRightTextPress={() => {}}
+              onRightTextPress={() => { }}
               rightCTATextColor={theme.colors.headingColor}
               error={customAmtValidationError}
               onSubmitEditing={() => {
@@ -696,26 +823,28 @@ const SendAssetScreen = () => {
           </View>
         )}
 
-        <View style={styles.containerSwitch}>
-          <AppText variant="body1" style={styles.sendDonationTitle}>
-            {assets.sendAsDonation}
-          </AppText>
-          <View style={styles.switchWrapper}>
-            <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
-              {isThemeDark ? (
-                <InfoIcon width={30} height={30} />
-              ) : (
-                <InfoIconLight width={30} height={30} />
-              )}
-            </AppTouchable>
+        {paymentMethod === PaymentMethodType.SATS && (
+          <View style={styles.containerSwitch}>
+            <AppText variant="body1" style={styles.sendDonationTitle}>
+              {assets.sendAsDonation}
+            </AppText>
+            <View style={styles.switchWrapper}>
+              <AppTouchable onPress={() => setVisibleDonationTranferInfo(true)}>
+                {isThemeDark ? (
+                  <InfoIcon width={30} height={30} />
+                ) : (
+                  <InfoIconLight width={30} height={30} />
+                )}
+              </AppTouchable>
 
-            <Switch
-              value={isDonation}
-              onValueChange={value => setIsDonation(value)}
-              color={theme.colors.accent1}
-            />
+              <Switch
+                value={isDonation}
+                onValueChange={value => setIsDonation(value)}
+                color={theme.colors.accent1}
+              />
+            </View>
           </View>
-        </View>
+        )}
 
         <ModalContainer
           title={
@@ -729,7 +858,8 @@ const SendAssetScreen = () => {
           onDismiss={() => {
             if (loading || successStatus) return;
             setVisible(false);
-          }}>
+          }}
+        >
           <SendAssetSuccess
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={formatTUsdt(assetData?.name)}
@@ -741,6 +871,13 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
+            gasFreeFee={gasFreeQuote ? `${gasFreeQuote.serviceFeeAmount / (10 ** precision)} ${assetData?.ticker || ''}` : "0"}
+            isGasFree={paymentMethod === PaymentMethodType.DOLLARS}
+            quoteExpiration={quoteExpiration}
+            onQuoteExpired={() => {
+              setVisible(false);
+              Toast('Quote expired. Please try again.', true);
+            }}
             onSuccessPress={() => {
               setVisible(false);
               setTimeout(() => {
@@ -778,8 +915,8 @@ const SendAssetScreen = () => {
       </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={common.next}
-          primaryOnPress={() => {
+          primaryTitle={requestingQuote ? 'Preparing Transaction...' : common.next}
+          primaryOnPress={async () => {
             if (Number(assetAmount) > assetData?.balance.spendable) {
               Keyboard.dismiss();
               if (Number(assetData?.balance.spendable) === 0) {
@@ -793,18 +930,45 @@ const SendAssetScreen = () => {
               );
               return;
             }
-            // if(invoiceType === InvoiceMode.Witness && Number(witnessSats) < DUST_LIMIT) {
-            //   Keyboard.dismiss();
-            //   Toast('Witness sats amount must be greater than network dust limit i.e 330 sats', true);
-            //   return;
-            // }
             Keyboard.dismiss();
-            setVisible(true);
+            
+            // For gas-free (DOLLARS) payment, request fee quote first
+            if (paymentMethod === PaymentMethodType.DOLLARS) {
+              setRequestingQuote(true);
+              try {
+                const quote = await ApiHandler.requestGasFreeQuote(
+                  config.HEXA_ID,
+                  assetId,
+                  (
+                    parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+                    10 ** precision
+                  ).toString(),
+                  invoice,
+                  1, // numInputs
+                  2, // numOutputs
+                );
+                setGasFreeQuote(quote);
+                
+                // Calculate expiration time
+                const expiresAt = new Date(quote.expiresAt).getTime();
+                setQuoteExpiration(expiresAt);
+                
+                setRequestingQuote(false);
+                setVisible(true);
+              } catch (error) {
+                setRequestingQuote(false);
+                Toast(`Failed to get gas-free quote: ${error.message}`, true);
+              }
+            } else {
+              // For regular (SATS) payment, show modal directly
+              setVisible(true);
+            }
           }}
           disabled={
             isButtonDisabled ||
             createUtxos.isLoading ||
             loading ||
+            requestingQuote ||
             amountValidationError.length > 0 ||
             customAmtValidationError.length > 0 ||
             invoiceValidationError.length > 0
@@ -823,7 +987,8 @@ const SendAssetScreen = () => {
         <Modal
           visible={visibleSpendableErrInfo}
           onDismiss={() => setVisibleSpendableErrInfo(false)}
-          contentContainerStyle={styles.tooltipContainer}>
+          contentContainerStyle={styles.tooltipContainer}
+        >
           <AppText variant="caption" style={styles.tooltipText}>
             {sendScreen.spendableBalErrorInfo}
           </AppText>
@@ -975,6 +1140,29 @@ const getStyles = (theme: AppTheme, inputHeight, tooltipPos) =>
     tooltipText: {
       color: theme.colors.headingColor,
       fontSize: 14,
+    },
+    orbis1BannerCtr: {
+      marginTop: hp(15),
+      padding: 7,
+      experimental_backgroundImage: `linear-gradient(90deg, ${theme.colors.primaryBackground}, #383213, ${theme.colors.primaryBackground})`,
+      alignItems: 'center',
+    },
+    gasFreeFeeContainer: {
+      borderWidth: 1,
+      borderColor: theme.colors.borderColor,
+      borderRadius: 15,
+      padding: 17,
+    },
+    gasFreeFeeTxtCtr: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginBottom: hp(4),
+    },
+    divider: {
+      height: 1,
+      width: '100%',
+      backgroundColor: theme.colors.borderColor,
+      marginVertical: hp(7),
     },
   });
 

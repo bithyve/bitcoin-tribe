@@ -9,7 +9,7 @@ import {
 export const MetaData = {
   name: RealmSchema.MetaData,
   properties: {
-    assetSchema: 'string',
+    assetSchema: 'string?',
     initialSupply: 'string?',
     maxSupply: 'string?',
     knownCirculatingSupply: 'string?',

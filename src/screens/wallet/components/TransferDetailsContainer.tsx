@@ -28,6 +28,7 @@ import { NetworkType } from 'src/services/wallets/enums';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import ElectrumClient from 'src/services/electrum/client';
 import { useObject } from '@realm/react';
+import { isGasFreeTransaction } from 'src/utils/gasFreeTransactions';
 
 type WalletTransactionsProps = {
   assetName: string;
@@ -52,9 +53,17 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
   const transfer = useObject<Asset>(schema, assetId).transactions.find(
     item => item.txid === transaction?.txid,
   );
+  const asset = useObject<Asset>(schema, assetId);
+  const precision = asset?.precision || 0;
+  const ticker = asset?.ticker || '';
   const [mismatchError, setMismatchError] = useState(false);
   const normalizedKind = transfer?.kind.toLowerCase().replace(/_/g, '');
   const normalizedStatus = transfer?.status.toLowerCase().replace(/_/g, '');
+  
+  // Check if this is a gas-free transaction
+  const gasFreeMetadata = transfer?.txid ? isGasFreeTransaction(transfer.txid) : null;
+  const isGasFree = !!gasFreeMetadata;
+  
   function normalize(value: string): string {
     return value.toLowerCase().replace(/_/g, '');
   }
@@ -84,23 +93,22 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
     Toast(assets.copiedTxIDMsg);
   };
 
-  const kindLabel =
-    normalizedKind === normalize(TransferKind.ISSUANCE) &&
+  const kindLabel = normalizedKind === normalize(TransferKind.ISSUANCE) &&
     normalizedStatus === normalize(TransferStatus.SETTLED)
-      ? settings.issuance
-      : normalizedKind === normalize(TransferKind.SEND) &&
-        normalizedStatus === normalize(TransferStatus.SETTLED)
-      ? settings.send
-      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
-        normalizedStatus === normalize(TransferStatus.SETTLED)
-      ? settings.receiveblind
-      : normalizedKind === normalize(TransferKind.SEND) &&
-        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
-      ? settings.waitingcounterpartySend
-      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
-        normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
-      ? settings.waitingcounterpartyReceive
-      : settings[transfer.status.toLowerCase().replace(/_/g, '')];
+    ? settings.issuance
+    : normalizedKind === normalize(TransferKind.SEND) &&
+      normalizedStatus === normalize(TransferStatus.SETTLED)
+    ? settings.send
+    : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+      normalizedStatus === normalize(TransferStatus.SETTLED)
+    ? settings.receiveblind
+    : normalizedKind === normalize(TransferKind.SEND) &&
+      normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
+    ? settings.waitingcounterpartySend
+    : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+      normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
+    ? settings.waitingcounterpartyReceive
+    : settings[transfer.status.toLowerCase().replace(/_/g, '')];
 
   const redirectToBlockExplorer = (txid: string) => {
     if (config.NETWORK_TYPE === NetworkType.REGTEST) {
@@ -217,6 +225,18 @@ function TransferDetailsContainer(props: WalletTransactionsProps) {
                 <TransferLabelContent label={wallet.amount} content={transAmount} />
               )
             }
+            {isGasFree && (
+              <TransferLabelContent
+                label={'Gas-Free'}
+                content={'True'}
+              />
+            )}
+            {isGasFree && gasFreeMetadata && (
+              <TransferLabelContent
+                label={'Service Fee'}
+                content={`${gasFreeMetadata.feeQuote.serviceFeeAmount / (10 ** precision)} ${ticker}`}
+              />
+            )}
             {transfer.txid && (
               <AppTouchable
                 onPress={() => redirectToBlockExplorer(transfer.txid)}>
