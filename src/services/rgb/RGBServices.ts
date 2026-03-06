@@ -19,6 +19,7 @@ import {
   type FeeQuote,
   type GasFreeTransferRequest,
   type GasFreeTransferResult,
+  type AssetIfa,
 } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
@@ -113,7 +114,7 @@ export default class RGBServices {
           enabled: true,
           keys,
           network,
-          supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
+          supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA, AssetSchema.IFA],
           maxAllocationsPerUtxo: 1,
           vanillaKeychain: 0,
         },
@@ -393,6 +394,32 @@ export default class RGBServices {
         0,
         mediaFilePath,
         attachmentsFilePaths,
+      );
+      return data;
+    }
+  };
+
+  static issueAssetIfa = async (
+    ticker: string,
+    name: string,
+    precision: number,
+    amounts: number[],
+    inflationAmounts: number[],
+    replaceRightsNum: number,
+    rejectListUrl: string | null,
+    appType: AppType,
+  ): Promise<AssetIfa> => {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
+      // todo
+    } else {
+      const data = await RGBServices.RGBWallet.issueAssetIfa(
+        ticker,
+        name,
+        precision,
+        amounts,
+        inflationAmounts,
+        replaceRightsNum,
+        rejectListUrl
       );
       return data;
     }

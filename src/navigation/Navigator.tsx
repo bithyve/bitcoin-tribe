@@ -35,7 +35,6 @@ import AppInfo from 'src/screens/settings/AppInfo';
 import AppVersionHistory from 'src/screens/settings/AppVersionHistory';
 import TransferDetails from 'src/screens/wallet/TransferDetails';
 import CoinAllTransaction from 'src/screens/assets/CoinAllTransaction';
-import ViewUnspent from 'src/screens/collectiblesCoins/ViewUnspentScreen';
 import CreatePin from 'src/screens/onBoarding/CreatePin';
 import CollectibleDetails from 'src/screens/assets/CollectibleDetailsScreen';
 import AddAsset from 'src/screens/home/components/AddAsset';
@@ -57,7 +56,6 @@ import OpenRgbChannel from 'src/screens/channels/OpenRgbChannel';
 import SendBTCScreen from 'src/screens/send/SendBTCScreen';
 import LightningSend from 'src/screens/send/LightningSend';
 import ChannelDetails from 'src/screens/channels/ChannelDetails';
-import RGBWalletStatus from 'src/components/RGBWalletOffline';
 import OnboardingSlides from 'src/screens/onBoarding/OnboardingSlides';
 import ImportRgbBackup from 'src/screens/onBoarding/ImportRgbBackup';
 import ViewLogs from 'src/screens/settings/ViewLogs';
@@ -73,8 +71,6 @@ import UDADetailsScreen from 'src/screens/assets/UDADetailsScreen';
 import HiddenAssets from 'src/screens/settings/HiddenAssets';
 import ChangePin from 'src/screens/onBoarding/ChangePin';
 import UTXOTabs from './tabNavigation/UTXOTabs';
-import BackupAlertBanner from 'src/components/BackupAlertBanner';
-import BackupDoneBanner from 'src/components/BackupDoneBanner';
 import AssetRegistryScreen from 'src/screens/collectiblesCoins/AssetRegistryScreen';
 import RegisterDomain from 'src/screens/assets/RegisterDomain';
 import VerifyDomain from 'src/screens/assets/VerifyDomain';
@@ -83,13 +79,12 @@ import ImportXPost from 'src/screens/assets/ImportXPost';
 import ProfileInfo from 'src/screens/community/ProfileInfo';
 import Chat from 'src/screens/community/Chat';
 import TransactionTypeInfoScreen from 'src/screens/assets/components/TransactionTypeInfoScreen';
-import NodeConnectingSetup from 'src/components/NodeConnectingSetup';
-import NodeConnected from 'src/components/NodeConnected';
 import GetBTCWithRamp from 'src/screens/wallet/GetBTCWithRamp';
 import InvoicesScreen from 'src/screens/collectiblesCoins/InvoicesScreen';
 import WebViewScreen from 'src/screens/wallet/WebViewScreen';
 import RequestOrSend from 'src/screens/community/RequestOrSend';
 import IssueCollection from 'src/screens/collectiblesCoins/IssueCollection';
+import IssueIfa from 'src/screens/collectiblesCoins/IssueIfa';
 import CollectionDetailsScreen from 'src/screens/assets/CollectionDetailsScreen';
 import { CreateGroup } from 'src/screens/community/CreateGroup';
 import { GroupInfo } from 'src/screens/community/GroupInfo';
@@ -101,6 +96,8 @@ import { CollectionVerificationScreen } from 'src/screens/assets/CollectionVerif
 import { useKeepAwake } from '@sayem314/react-native-keep-awake';
 import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 import { BannerMarquee } from 'src/components/BannerMarquee';
+import IFADetails from 'src/screens/assets/IFADetails';
+import IfaMetaData from 'src/screens/assets/IfaMetaDataScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -226,6 +223,18 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.ISSUECOLLECTION}
           component={IssueCollection}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ISSUEIFA}
+          component={IssueIfa}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.IFADETAILS}
+          component={IFADetails}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.IFAMETADATA}
+          component={IfaMetaData}
         />
         <Stack.Screen
           name={NavigationRoutes.RECEIVEASSET}

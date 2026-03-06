@@ -1405,6 +1405,13 @@ export class ApiHandler {
           Realm.UpdateMode.Modified,
         );
       }
+      if (assets?.ifa) {
+        dbManager.createObjectBulk(
+          RealmSchema.IFA,
+          assets.ifa,
+          Realm.UpdateMode.Modified,
+        );
+      }
       if (assets?.cfa) {
         const cfas = [];
         let hasProcessedCfa = false;
@@ -1782,6 +1789,76 @@ export class ApiHandler {
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const response = ApiHandler.parseAssetResponse(assetResponse);
+      if (response?.assetId) {
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const metadata = await RGBServices.getRgbAssetMetaData(
+          response?.assetId,
+          ApiHandler.appType,
+          ApiHandler.api,
+        );
+        await Relay.registerAsset(
+          app.id,
+          { ...metadata, ...response },
+          app.authToken,
+        );
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
+              },
+            },
+          });
+        }
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async issueIFA({
+    name,
+    ticker,
+    supply,
+    precision,
+    replaceRightsNum,
+    rejectListUrl
+  }: {
+    name: string;
+    ticker: string;
+    supply: string;
+    precision: number;
+    replaceRightsNum: number;
+    rejectListUrl: string | null;
+  }) {
+    try {
+      const assetResponse = await RGBServices.issueAssetIfa(
+        ticker,
+        name,
+        Number(precision),
+        [Number(supply)],
+        [],
+        Number(replaceRightsNum),
+        rejectListUrl,
+        ApiHandler.appType,
+      );
+      console.log(assetResponse)
       const response = ApiHandler.parseAssetResponse(assetResponse);
       if (response?.assetId) {
         const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);

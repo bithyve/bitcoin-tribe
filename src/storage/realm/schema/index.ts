@@ -53,6 +53,7 @@ import {
 } from './community';
 import { ElectrumTransactionSchema, VinSchema, VoutSchema } from './electrumTransaction';
 import { HolepunchRoomSchema, HolepunchMessageSchema, HolepunchPeerSchema } from './messaging';
+import { IFASchema } from './ifa';
 
 import { CollectionSchema } from './collection';
 export default [
@@ -110,4 +111,5 @@ export default [
   HolepunchMessageSchema,
   CollectionSchema,
   HolepunchPeerSchema,
+  IFASchema,
 ];
