@@ -53,12 +53,12 @@ const AssetCard = (props: AssetCardProps) => {
   const styles = useMemo(() => getStyles(theme), [theme]);
 
   const details = useMemo(() => {
-    if (asset.assetSchema === AssetSchema.Coin) return asset.ticker;
+    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return asset.ticker;
     return asset.details;
   }, [asset.assetSchema, asset.ticker, asset.details]);
 
   const uri = useMemo(() => {
-    if (asset.assetSchema === AssetSchema.Coin) return '';
+    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return '';
     const media = asset?.media?.filePath || asset?.token?.media?.filePath;
     if (media) {
       if (isWebUrl(media)) {
@@ -101,7 +101,7 @@ const AssetCard = (props: AssetCardProps) => {
             theme.colors.cardGradient3,
           ]}>
           <View style={styles.assetImageWrapper}>
-            {asset.assetSchema === AssetSchema.Coin ? (
+            {asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA ? (
               <AssetIcon
                 iconUrl={asset.iconUrl}
                 assetID={asset.assetId}

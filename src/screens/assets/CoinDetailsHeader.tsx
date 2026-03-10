@@ -5,11 +5,15 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuery as realmUseQuery } from '@realm/react';
 import { useNavigation } from '@react-navigation/native';
-
 import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
-import { Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { hp, wp } from 'src/constants/responsive';
+import {
+  AssetSchema,
+  Coin,
+  Collectible,
+  InflatableFungibleAsset,
+} from 'src/models/interfaces/RGBWallet';
 import AppHeader from 'src/components/AppHeader';
 import IconBTC from 'src/assets/images/icon_btc_new.svg';
 import IconBTCLight from 'src/assets/images/icon_btc_new_light.svg';
@@ -21,8 +25,6 @@ import {
   numberWithCommas,
 } from 'src/utils/numberWithCommas';
 import TransactionButtons from 'src/screens/wallet/components/TransactionButtons';
-import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
-import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import AppType from 'src/models/enums/AppType';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -35,7 +37,7 @@ import Toast from 'src/components/Toast';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 
 type assetDetailsHeaderProps = {
-  asset?: Coin | Collectible;
+  asset?: Coin | Collectible | InflatableFungibleAsset;
   onPressSetting?: () => void;
   onPressSend: () => void;
   onPressReceive: () => void;
@@ -89,7 +91,8 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
       </Animated.View> */}
       <View
         // style={[styles.largeHeader, { height: largeHeaderHeight }]}
-        style={styles.largeHeader}>
+        style={styles.largeHeader}
+      >
         <AppHeader
         // rightIcon={isThemeDark ? <InfoScreenIcon /> : <InfoScreenIconLight />}
         // onSettingsPress={onPressSetting}
@@ -102,10 +105,25 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                   Toast(node.connectingNodeToastMsg, true);
                   return;
                 }
-                navigation.navigate(NavigationRoutes.COINMETADATA, {
-                  assetId: asset.assetId,
-                });
-              }}>
+                if (asset.assetSchema.toUpperCase() === AssetSchema.Coin) {
+                  navigation.navigate(NavigationRoutes.COINMETADATA, {
+                    assetId: asset.assetId,
+                  });
+                } else if (
+                  asset.assetSchema.toUpperCase() === AssetSchema.Collectible
+                ) {
+                  navigation.navigate(NavigationRoutes.COLLECTIBLEMETADATA, {
+                    assetId: asset.assetId,
+                  });
+                } else if (
+                  asset.assetSchema.toUpperCase() === AssetSchema.IFA
+                ) {
+                  navigation.navigate(NavigationRoutes.IFAMETADATA, {
+                    assetId: asset.assetId,
+                  });
+                }
+              }}
+            >
               <View style={styles.identiconWrapper}>
                 <View style={styles.identiconWrapper2}>
                   <AssetIcon
@@ -126,10 +144,31 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                         Toast(node.connectingNodeToastMsg, true);
                         return;
                       }
-                      navigation.navigate(NavigationRoutes.COINMETADATA, {
-                        assetId: asset.assetId,
-                      });
-                    }}>
+                      if (
+                        asset.assetSchema.toUpperCase() === AssetSchema.Coin
+                      ) {
+                        navigation.navigate(NavigationRoutes.COINMETADATA, {
+                          assetId: asset.assetId,
+                        });
+                      } else if (
+                        asset.assetSchema.toUpperCase() ===
+                        AssetSchema.Collectible
+                      ) {
+                        navigation.navigate(
+                          NavigationRoutes.COLLECTIBLEMETADATA,
+                          {
+                            assetId: asset.assetId,
+                          },
+                        );
+                      } else if (
+                        asset.assetSchema.toUpperCase() === AssetSchema.IFA
+                      ) {
+                        navigation.navigate(NavigationRoutes.IFAMETADATA, {
+                          assetId: asset.assetId,
+                        });
+                      }
+                    }}
+                  >
                     <>
                       <View style={styles.btcBalanceWrapper}>
                         {isThemeDark ? <IconBTC /> : <IconBTCLight />}
@@ -152,24 +191,28 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     <View style={styles.lightningTotalBalanceContainer}>
                       <AppText
                         variant="caption"
-                        style={styles.totalBalanceLabel}>
+                        style={styles.totalBalanceLabel}
+                      >
                         Total:&nbsp;
                       </AppText>
                       <AppText
                         variant="caption"
-                        style={styles.totalBalanceLabel}>
+                        style={styles.totalBalanceLabel}
+                      >
                         {numberWithCommas(total)}
                       </AppText>
                     </View>
                     <View style={styles.lightningSpendableBalanceContainer}>
                       <AppText
                         variant="caption"
-                        style={styles.totalBalanceLabel}>
+                        style={styles.totalBalanceLabel}
+                      >
                         Spendable:&nbsp;
                       </AppText>
                       <AppText
                         variant="caption"
-                        style={styles.totalBalanceLabel}>
+                        style={styles.totalBalanceLabel}
+                      >
                         {formatLargeNumber(
                           Number(asset?.balance?.spendable) /
                             10 ** asset.precision,
@@ -187,10 +230,31 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                         Toast(node.connectingNodeToastMsg, true);
                         return;
                       }
-                      navigation.navigate(NavigationRoutes.COINMETADATA, {
-                        assetId: asset.assetId,
-                      });
-                    }}>
+                      if (
+                        asset.assetSchema.toUpperCase() === AssetSchema.Coin
+                      ) {
+                        navigation.navigate(NavigationRoutes.COINMETADATA, {
+                          assetId: asset.assetId,
+                        });
+                      } else if (
+                        asset.assetSchema.toUpperCase() ===
+                        AssetSchema.Collectible
+                      ) {
+                        navigation.navigate(
+                          NavigationRoutes.COLLECTIBLEMETADATA,
+                          {
+                            assetId: asset.assetId,
+                          },
+                        );
+                      } else if (
+                        asset.assetSchema.toUpperCase() === AssetSchema.IFA
+                      ) {
+                        navigation.navigate(NavigationRoutes.IFAMETADATA, {
+                          assetId: asset.assetId,
+                        });
+                      }
+                    }}
+                  >
                     <View style={styles.totalBalanceWrapper1}>
                       <AppText variant="heading2" style={styles.totalBalance}>
                         {formatLargeNumber(
