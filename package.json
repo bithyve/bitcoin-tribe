@@ -68,7 +68,7 @@
     "lottie-react-native": "^7.3.4",
     "moment": "^2.30.1",
     "node-rsa": "1.1.1",
-    "orbis1-sdk-rn": "0.0.4",
+    "orbis1-sdk-rn": "0.0.6",
     "patch-package": "^8.0.0",
     "path-browserify": "0.0.0",
     "process": "0.11.0",

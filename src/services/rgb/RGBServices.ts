@@ -16,6 +16,7 @@ import {
   RefreshFilter, 
   restoreBackup,
   LogLevel,
+  Environment,
   type FeeQuote,
   type GasFreeTransferRequest,
   type GasFreeTransferResult,
@@ -106,23 +107,26 @@ export default class RGBServices {
       
       // Determine environment based on network
       const network = this.getBitcoinNetwork();
+      const environment = network === BitcoinNetwork.MAINNET 
+        ? Environment.MAINNET 
+        : Environment.TESTNET;
       
-      // Create SDK instance
+      // Create SDK instance with simplified feature configuration
       RGBServices.sdk = new Orbis1SDK({
         apiKey: config.ORBIS1_API_KEY,
+        environment,
         wallet: {
           enabled: true,
           keys,
-          network,
           supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA, AssetSchema.IFA],
           maxAllocationsPerUtxo: 1,
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { name: 'gasFree', enabled: true },
-          watchTower: { name: 'watchTower', enabled: true },
+          gasFree: { enabled: true },
+          watchTower: { enabled: true },
         },
-        logging: { level: LogLevel.ERROR },
+        logging: { level: LogLevel.DEBUG },
       });
       
       // Initialize SDK
