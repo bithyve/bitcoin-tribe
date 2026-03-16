@@ -87,7 +87,6 @@ import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinkin
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
-import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -1302,8 +1301,15 @@ export class ApiHandler {
           };
           dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
         }
-        if(useWatchTower){
-          await addToWatchTower(response.invoice);
+        if (useWatchTower && response.invoice) {
+          const watchtowerResult = await RGBServices.addInvoiceToWatchTower(
+            response.invoice,
+          );
+          if (!watchtowerResult.success) {
+            throw new Error(
+              watchtowerResult.error || 'Failed to register with watchtower',
+            );
+          }
         }
       }
       ApiHandler.viewUtxos();
@@ -2451,14 +2457,21 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      if (token === Storage.get(Keys.FCM_TOKEN)) {
+      const existingToken = Storage.get(Keys.FCM_TOKEN);
+
+      if (token === existingToken) {
+        // Token unchanged locally; ensure WatchTower has it if enabled.
+        await RGBServices.setWatchTowerFcmToken(token);
         return true;
       }
+
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
+        await RGBServices.setWatchTowerFcmToken(token);
         return true;
       }
+
       return false;
     } catch (error) {
       console.log('fcm update error:', error?.message || error);
@@ -3536,25 +3549,3 @@ export class ApiHandler {
     }
   }
 }
-
-
-
-
-export const addToWatchTower = async (invoice: string) => {
-  try {
-    const response = await axios.post(
-      'https://watchtower.orbis1.io/addToWatchTower',
-      { invoice, fcmToken: Storage.get(Keys.FCM_TOKEN) }, // json body
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: config.ORBIS1_API_KEY,
-        },
-      },
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error calling watch tower:', error.message);
-    throw error;
-  }
-};
