@@ -2,18 +2,18 @@ import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
 import config from 'src/utils/config';
-import { 
+import {
   Orbis1SDK,
-  BitcoinNetwork, 
-  AssetSchema, 
-  BtcBalance, 
-  decodeInvoice, 
-  InvoiceData, 
-  Transaction, 
-  Recipient, 
-  Assignment, 
-  Transfer, 
-  RefreshFilter, 
+  BitcoinNetwork,
+  AssetSchema,
+  BtcBalance,
+  decodeInvoice,
+  InvoiceData,
+  Transaction,
+  Recipient,
+  Assignment,
+  Transfer,
+  RefreshFilter,
   restoreBackup,
   LogLevel,
   Environment,
@@ -24,6 +24,7 @@ import {
 } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
+import { Keys, Storage } from 'src/storage';
 
 export default class RGBServices {
   private static sdk: Orbis1SDK | null = null;
@@ -104,13 +105,13 @@ export default class RGBServices {
         accountXpubColored: accountXpubColored,
         masterFingerprint: masterFingerprint,
       };
-      
+
       // Determine environment based on network
       const network = this.getBitcoinNetwork();
-      const environment = network === BitcoinNetwork.MAINNET 
-        ? Environment.MAINNET 
+      const environment = network === BitcoinNetwork.MAINNET
+        ? Environment.MAINNET
         : Environment.TESTNET;
-      
+
       // Create SDK instance with simplified feature configuration
       RGBServices.sdk = new Orbis1SDK({
         apiKey: config.ORBIS1_API_KEY,
@@ -128,19 +129,19 @@ export default class RGBServices {
         },
         logging: { level: LogLevel.DEBUG },
       });
-      
+
       // Initialize SDK
       await RGBServices.sdk.initialize();
-      
+
       // Get wallet instance once and store it
       RGBServices.RGBWallet = RGBServices.sdk.getWallet();
       if (!RGBServices.RGBWallet) {
         throw new Error('Failed to get wallet from SDK');
       }
-      
+
       // Connect wallet to Electrum
       await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), false);
-      
+
       return {
         status: true,
         error: '',
@@ -200,7 +201,7 @@ export default class RGBServices {
     }
   };
 
-  static refresh = async ( appType: AppType, api: RLNNodeApiServices, assetId: string, filter: RefreshFilter[] ) => {
+  static refresh = async (appType: AppType, api: RLNNodeApiServices, assetId: string, filter: RefreshFilter[]) => {
     if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
       await api.refreshtransfers({ skip_sync: false });
     } else {
@@ -295,15 +296,15 @@ export default class RGBServices {
         return {
           ...transfer,
           requestedAssignment: transfer?.requestedAssignment ? {
-            amount: transfer.requestedAssignment.amount !== undefined 
-              ? transfer.requestedAssignment.amount.toString() 
+            amount: transfer.requestedAssignment.amount !== undefined
+              ? transfer.requestedAssignment.amount.toString()
               : undefined,
             type: transfer.requestedAssignment.type,
           } : undefined,
           assignments: transfer?.assignments?.map((assignment: Assignment) => {
             return {
-              amount: assignment?.amount !== undefined 
-                ? assignment.amount.toString() 
+              amount: assignment?.amount !== undefined
+                ? assignment.amount.toString()
                 : undefined,
               type: assignment.type,
             };
@@ -614,5 +615,34 @@ export default class RGBServices {
     const gasFree = RGBServices.sdk.gasFree();
     const result = await gasFree.confirmTransfer(request, feeQuote);
     return result;
+  };
+
+  static setWatchTowerFcmToken = async (token: string): Promise<void> => {
+    if (!RGBServices.sdk) {
+      return;
+    }
+    const watchTower = RGBServices.sdk.watchTower();
+    watchTower.setFcmToken(token);
+  };
+
+  static addInvoiceToWatchTower = async (invoice: string): Promise<{
+    success: boolean;
+    error?: string;
+    [key: string]: any;
+  }> => {
+    if (!RGBServices.sdk) {
+      return {
+        success: false,
+        error: 'SDK not initialized',
+      };
+    }
+
+    const watchTower = RGBServices.sdk.watchTower();
+    const result = await watchTower.addToWatchTower(invoice);
+    if (result && typeof result === 'object' && 'success' in result) {
+      // @ts-ignore
+      return { success: result.success as boolean, error: result.error ? result.error as string : undefined };
+    }
+    return { success: true, error: undefined };
   };
 }
