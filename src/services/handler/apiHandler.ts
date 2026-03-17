@@ -86,7 +86,8 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork, Wallet as NativeRGBWallet, AssetSchema as NativeAssetSchema } from 'orbis1-sdk-rn';
+import { restoreKeys, BitcoinNetwork } from 'orbis1-sdk-rn';
+import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -95,7 +96,6 @@ export class ApiHandler {
   private static appType: AppType;
   private static api: RLNNodeApiServices;
   private static authToken: string;
-  private static nativeRGBWallet: NativeRGBWallet;
   constructor(app: RGBWallet, appType: AppType, authToken: string) {
     if (!ApiHandler.app) {
       ApiHandler.app = app;
@@ -3509,6 +3509,11 @@ export class ApiHandler {
     // disabled first app image backup, since already restored from backup
     if (settingsObject || roomsObject || tnxMetaObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+  }
+
+  // Gas-Free Feature Availability
+  static isGasFreeAvailable(): boolean {
+    return RGBServices.isGasFreeAvailable();
   }
 
   // Gas-Free Transfer Methods
