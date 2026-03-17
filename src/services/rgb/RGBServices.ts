@@ -25,10 +25,12 @@ import {
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import { Keys, Storage } from 'src/storage';
+import { Wallet } from 'orbis1-sdk-rn/lib/typescript/src/core/Wallet';
 
 export default class RGBServices {
+  private static environment: Environment = null;
   private static sdk: Orbis1SDK | null = null;
-  private static RGBWallet: any = null; // Will be the Wallet instance from SDK
+  private static RGBWallet: Wallet = null; // Will be the Wallet instance from SDK
 
   static getBitcoinNetwork = (): BitcoinNetwork => {
     switch (config.NETWORK_TYPE) {
@@ -108,14 +110,12 @@ export default class RGBServices {
 
       // Determine environment based on network
       const network = this.getBitcoinNetwork();
-      const environment = network === BitcoinNetwork.MAINNET
-        ? Environment.MAINNET
-        : Environment.TESTNET;
+      RGBServices.environment = network === BitcoinNetwork.MAINNET ? Environment.MAINNET : network === BitcoinNetwork.REGTEST ? Environment.REGTEST : Environment.TESTNET4;
 
       // Create SDK instance with simplified feature configuration
       RGBServices.sdk = new Orbis1SDK({
         apiKey: config.ORBIS1_API_KEY,
-        environment,
+        environment: RGBServices.environment,
         wallet: {
           enabled: true,
           keys,
@@ -124,7 +124,7 @@ export default class RGBServices {
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { enabled: true },
+          gasFree: { enabled: RGBServices.environment === Environment.REGTEST? false: true }, // TODO: Remove this once gas free transfers are supported on REGTEST
           watchTower: { enabled: true },
         },
         logging: { level: LogLevel.DEBUG },
@@ -140,7 +140,7 @@ export default class RGBServices {
       }
 
       // Connect wallet to Electrum
-      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), false);
+      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(RGBServices.environment), false);
 
       return {
         status: true,
@@ -165,7 +165,7 @@ export default class RGBServices {
     skipSync: boolean = false,
   ): Promise<{ status: boolean; error?: string }> => {
     try {
-      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(this.getBitcoinNetwork()), skipSync);
+      await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(RGBServices.environment), skipSync);
       return { status: true };
     } catch (error) {
       return { status: false, error: `${error}` };
