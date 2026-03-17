@@ -239,6 +239,12 @@ const SendAssetScreen = () => {
   const [gasFreeQuote, setGasFreeQuote] = useState<FeeQuote | null>(null);
   const [quoteExpiration, setQuoteExpiration] = useState<number | null>(null);
   const [requestingQuote, setRequestingQuote] = useState(false);
+  
+  // Check if gas-free feature is available
+  const isGasFreeAvailable = useMemo(() => {
+    return ApiHandler.isGasFreeAvailable();
+  }, []);
+  
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
@@ -677,6 +683,7 @@ const SendAssetScreen = () => {
           <PaymentMethodButton
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
+            disableDollars={!isGasFreeAvailable}
           />
         </View>
 
