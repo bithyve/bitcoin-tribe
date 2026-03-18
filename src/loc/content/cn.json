@@ -780,7 +780,7 @@
     "issueIFASubtitle": "发行可膨胀同质化资产",
     "noOfAmendmentsLabel": "修正次数",
     "enterMaxAmendmentsPlaceholder": "请输入最大修正次数",
-    "enterReplaceRightsNum": "请输入置换权数量",
+    "enterNoOfAmendments": "请输入修正次数",
     "replaceRightsNum": "置换权数量",
     "replaceRightsNumPlaceholder": "输入置换权数量",
     "replaceRightsNumValidationError": "请输入置换权数量",

@@ -783,7 +783,7 @@
     "issueIFASubtitle": "Issue Inflatable Fungible Asset",
     "noOfAmendmentsLabel": "No of Amendments",
     "enterMaxAmendmentsPlaceholder": "Enter max number of amendments",
-    "enterReplaceRightsNum": "Please enter replace rights number",
+    "enterNoOfAmendments": "Please enter the number of amendments",
     "replaceRightsNum": "Replace Rights Number",
     "replaceRightsNumPlaceholder": "Enter replace rights number",
     "replaceRightsNumValidationError": "Please enter replace rights number",

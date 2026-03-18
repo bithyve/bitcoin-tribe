@@ -780,7 +780,7 @@
     "issueIFASubtitle": "インフレータブル・ファンジブル・アセットを発行",
     "noOfAmendmentsLabel": "改正回数",
     "enterMaxAmendmentsPlaceholder": "最大改正回数を入力",
-    "enterReplaceRightsNum": "置換権数を入力してください",
+    "enterNoOfAmendments": "改正回数を入力してください",
     "replaceRightsNum": "置換権数",
     "replaceRightsNumPlaceholder": "置換権数を入力",
     "replaceRightsNumValidationError": "置換権数を入力してください",

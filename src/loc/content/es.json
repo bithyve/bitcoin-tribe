@@ -780,7 +780,7 @@
     "issueIFASubtitle": "Emitir Activo Fungible Inflable",
     "noOfAmendmentsLabel": "N.º de enmiendas",
     "enterMaxAmendmentsPlaceholder": "Introduzca el número máximo de enmiendas",
-    "enterReplaceRightsNum": "Por favor ingrese el número de derechos de reemplazo",
+    "enterNoOfAmendments": "Introduzca el número de enmiendas",
     "replaceRightsNum": "Número de derechos de reemplazo",
     "replaceRightsNumPlaceholder": "Ingrese el número de derechos de reemplazo",
     "replaceRightsNumValidationError": "Por favor ingrese el número de derechos de reemplazo",

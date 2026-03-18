@@ -266,6 +266,18 @@ function IssueIfa() {
     }
   };
 
+
+  const handleAmendsChange = (text: string) => {
+    const sanitizedText = text.replace(/[^0-9]/g, '');
+    if (!sanitizedText) {
+      setReplaceRightsNum('');
+      setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
+      return;
+    }
+    setReplaceRightsNum(sanitizedText);
+    setReplaceRightsNumValidationError(null);
+  };
+
   return (
     <ScreenContainer>
       <AppHeader title={assets.issueIFA} />
@@ -374,17 +386,7 @@ function IssueIfa() {
           <TextField
             ref={replaceRightsNumInputRef}
             value={formatNumber(replaceRightsNum)}
-            onChangeText={text => {
-              if (!text.trim()) {
-                setReplaceRightsNum('');
-                setReplaceRightsNumValidationError(
-                  assets.enterReplaceRightsNum,
-                );
-              } else {
-                setReplaceRightsNum(text);
-                setReplaceRightsNumValidationError(null);
-              }
-            }}
+            onChangeText={handleAmendsChange}
             placeholder={assets.enterMaxAmendmentsPlaceholder}
             keyboardType="numeric"
             style={styles.input}

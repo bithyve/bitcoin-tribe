@@ -780,7 +780,7 @@
     "issueIFASubtitle": "इन्फ्लेटेबल फंगिबल एसेट जारी करें",
     "noOfAmendmentsLabel": "संशोधनों की संख्या",
     "enterMaxAmendmentsPlaceholder": "अधिकतम संशोधनों की संख्या दर्ज करें",
-    "enterReplaceRightsNum": "कृपया प्रतिस्थापन अधिकार संख्या दर्ज करें",
+    "enterNoOfAmendments": "कृपया संशोधनों की संख्या दर्ज करें",
     "replaceRightsNum": "प्रतिस्थापन अधिकार संख्या",
     "replaceRightsNumPlaceholder": "प्रतिस्थापन अधिकार संख्या दर्ज करें",
     "replaceRightsNumValidationError": "कृपया प्रतिस्थापन अधिकार संख्या दर्ज करें",
