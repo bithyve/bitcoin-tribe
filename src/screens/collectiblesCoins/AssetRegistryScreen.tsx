@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import moment from 'moment';
-import { CommonActions, useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMutation } from 'react-query';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -80,14 +80,15 @@ function AssetRegistryScreen() {
     const route = getRoute();
     if (!route) return;
 
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 1,
-        routes: [
-          { name: route, params: { assetId, askReview: true, askVerify, isAddedToRegistry } },
-        ],
-      })
-    );
+    // @ts-ignore
+    navigation.pop(1);
+    // @ts-ignore
+    navigation.replace(route, {
+      assetId,
+      askReview: true,
+      askVerify,
+      isAddedToRegistry,
+    });
     setDisabledCTA(false);
   };
 

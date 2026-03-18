@@ -9,6 +9,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 type PaymentMethodButtonProps = {
   paymentMethod: PaymentMethodType;
   setPaymentMethod: (paymentMethod: PaymentMethodType) => void;
+  disableDollars?: boolean;
 };
 
 export enum PaymentMethodType {
@@ -19,6 +20,7 @@ export enum PaymentMethodType {
 const PaymentMethodButton = ({
   paymentMethod,
   setPaymentMethod,
+  disableDollars = false,
 }: PaymentMethodButtonProps) => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
@@ -43,7 +45,8 @@ const PaymentMethodButton = ({
         </AppText>
       </AppTouchable>
       <AppTouchable
-        onPress={() => setPaymentMethod(PaymentMethodType.DOLLARS)}
+        disabled={disableDollars}
+        onPress={() => !disableDollars && setPaymentMethod(PaymentMethodType.DOLLARS)}
         style={[
           styles.feeWrapper,
           {
@@ -51,10 +54,14 @@ const PaymentMethodButton = ({
               paymentMethod === PaymentMethodType.DOLLARS
                 ? theme.colors.accent1
                 : theme.colors.borderColor,
+            opacity: disableDollars ? 0.5 : 1,
           },
         ]}
       >
-        <AppText variant="body1Bold" style={styles.priorityValue}>
+        <AppText variant="body1Bold" style={[
+          styles.priorityValue,
+          disableDollars && { color: theme.colors.secondaryHeadingColor }
+        ]}>
           {sendScreen.payInDollars}
         </AppText>
       </AppTouchable>

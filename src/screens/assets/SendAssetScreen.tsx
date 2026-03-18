@@ -37,6 +37,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  InflatableFungibleAsset,
   InvoiceMode,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
@@ -197,7 +198,8 @@ const SendAssetScreen = () => {
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
-  const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
+  const ifas = useQuery<InflatableFungibleAsset[]>(RealmSchema.IFA);
+  const allAssets: Asset[] = [...coins, ...collectibles, ...udas, ...ifas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
   const precision = assetData?.precision || assetData?.metaData?.precision || 0;
@@ -239,6 +241,12 @@ const SendAssetScreen = () => {
   const [gasFreeQuote, setGasFreeQuote] = useState<FeeQuote | null>(null);
   const [quoteExpiration, setQuoteExpiration] = useState<number | null>(null);
   const [requestingQuote, setRequestingQuote] = useState(false);
+  
+  // Check if gas-free feature is available
+  const isGasFreeAvailable = useMemo(() => {
+    return ApiHandler.isGasFreeAvailable();
+  }, []);
+  
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
@@ -565,11 +573,11 @@ const SendAssetScreen = () => {
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
-                android: `file://${assetData.media?.filePath || assetData?.token.media.filePath
+                android: `file://${assetData?.media?.filePath || assetData?.token?.media.filePath
                   }`,
                 ios:
-                  assetData.media?.filePath ||
-                  assetData?.token.media.filePath,
+                  assetData?.media?.filePath ||
+                  assetData?.token?.media?.filePath,
               })
               : null
           }
@@ -585,7 +593,7 @@ const SendAssetScreen = () => {
               : Number(assetData?.balance.spendable) / 10 ** precision
           }
           verified={assetData?.issuer?.verified}
-          iconUrl={assetData.iconUrl}
+          iconUrl={assetData?.iconUrl}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.recipientInvoice}
@@ -629,7 +637,7 @@ const SendAssetScreen = () => {
           onRightTextPress={setMaxAmount}
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
-          disabled={assetData.assetSchema.toUpperCase() === AssetType.UDA}
+          disabled={assetData?.assetSchema.toUpperCase() === AssetType.UDA}
           error={amountValidationError}
           errorInfo={Number(assetData?.balance.spendable) === 0}
           onPressErrorInfo={() => openTooltip()}
@@ -677,6 +685,7 @@ const SendAssetScreen = () => {
           <PaymentMethodButton
             paymentMethod={paymentMethod}
             setPaymentMethod={setPaymentMethod}
+            disableDollars={!isGasFreeAvailable}
           />
         </View>
 
