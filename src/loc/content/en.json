@@ -569,6 +569,7 @@
     "sendAssetTitle": "Send Asset",
     "coin": "Coin",
     "collectible": "Collectible",
+    "ifa": "IFA",
     "invoice": "Invoice",
     "amount": "Amount",
     "feeRate": "Fee Rate:",
