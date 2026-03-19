@@ -372,7 +372,7 @@ function HomeScreen() {
         <HomeHeader showBalance={false} showScanner={true} />
       </View>
       <ScrollView showsVerticalScrollIndicator={false} bounces={false}>
-        <DefaultCoin presetAssets={presetAssets} />
+        <DefaultCoin presetAssets={presetAssets} refreshingStatus={refreshing} onRefresh={handleRefresh} />
       </ScrollView>
       <AppUpdateModal />
     </ScreenContainer>
