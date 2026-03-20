@@ -12,6 +12,7 @@ import PrimaryCTA from 'src/components/PrimaryCTA';
 type sendAssetSuccessProps = {
   assetName: string;
   amount: string;
+  ticker?: string;
   feeRate: string;
   onPress: () => void;
   onSuccessStatus: boolean;
@@ -28,6 +29,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
   const {
     assetName,
     amount,
+    ticker,
     onPress,
     feeRate,
     onSuccessStatus,
@@ -124,7 +126,7 @@ function SendAssetSuccess(props: sendAssetSuccessProps) {
         </View>
         <View style={styles.valueWrapper}>
           <AppText variant="body1" style={styles.valueText}>
-            {amount}
+            {amount} {ticker || ''}
           </AppText>
         </View>
       </View>
