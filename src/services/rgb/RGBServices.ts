@@ -111,7 +111,7 @@ export default class RGBServices {
       // Determine environment based on network
       const network = this.getBitcoinNetwork();
       RGBServices.environment = network === BitcoinNetwork.MAINNET ? Environment.MAINNET : network === BitcoinNetwork.REGTEST ? Environment.REGTEST : Environment.TESTNET4;
-      
+
       // Create SDK instance with simplified feature configuration
       RGBServices.sdk = new Orbis1SDK({
         apiKey: config.ORBIS1_API_KEY,
@@ -124,7 +124,7 @@ export default class RGBServices {
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { enabled: RGBServices.environment === Environment.REGTEST? false: true }, // TODO: Remove this once gas free transfers are supported on REGTEST
+          gasFree: { enabled: RGBServices.environment === Environment.REGTEST ? false : true }, // TODO: Remove this once gas free transfers are supported on REGTEST
           watchTower: { enabled: true },
         },
         logging: { level: LogLevel.DEBUG },
@@ -141,7 +141,7 @@ export default class RGBServices {
 
       // Connect wallet to Electrum
       await RGBServices.RGBWallet.goOnline(this.getElectrumUrl(RGBServices.environment), false);
-      
+
       return {
         status: true,
         error: '',
@@ -553,7 +553,7 @@ export default class RGBServices {
   };
 
   static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
-    const data = await restoreBackup(mnemonic, filePath);
+    const data = await restoreBackup(filePath, mnemonic);
     return {};
   };
 
@@ -584,7 +584,7 @@ export default class RGBServices {
   // Gas-Free Feature Availability
   static isGasFreeAvailable = (): boolean => {
     if (!RGBServices.sdk) return false;
-    
+
     try {
       RGBServices.sdk.gasFree();
       return true;
