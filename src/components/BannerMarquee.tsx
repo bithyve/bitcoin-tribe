@@ -10,7 +10,6 @@ import Colors from 'src/theme/Colors';
 import { hp, windowWidth } from 'src/constants/responsive';
 import { useNetInfo } from '@react-native-community/netinfo';
 import Carousel from 'react-native-reanimated-carousel';
-import { CommunityServerBanner } from './CommunityServerBanner';
 import { AppContext } from 'src/contexts/AppContext';
 import BackupDoneBanner from './BackupDoneBanner';
 import BackupAlertBanner from './BackupAlertBanner';
@@ -31,7 +30,6 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
   const { isConnected } = useNetInfo();
   const [modalVisible, setModalVisible] = useState(false);
   const {
-    communityStatus,
     isBackupDone,
     setBackupDone,
     isBackupInProgress,
@@ -93,16 +91,6 @@ export const BannerMarquee = (props: BannerMarqueeProps) => {
       id: 'appImageBackup',
       element: (
         <AppImageBackupBanner
-          modalVisible={modalVisible}
-          setModalVisible={setModalVisible}
-        />
-      ),
-    },
-
-    communityStatus != null && {
-      id: 'communityServer',
-      element: (
-        <CommunityServerBanner
           modalVisible={modalVisible}
           setModalVisible={setModalVisible}
         />

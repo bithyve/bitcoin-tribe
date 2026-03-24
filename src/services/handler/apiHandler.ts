@@ -537,6 +537,7 @@ export class ApiHandler {
           settingsObject: data?.settingsObject,
           roomsObject: data?.roomsObject,
           tnxMetaObject: data?.tnxMetaObject,
+          invoicesObject: data?.invoicesObject,
         });
       }
     } catch (error) {
@@ -600,6 +601,7 @@ export class ApiHandler {
           settingsObject: backup.app?.settingsObject,
           roomsObject: backup.app?.roomsObject,
           tnxMetaObject: backup.app?.tnxMetaObject,
+          invoicesObject: backup.app?.invoicesObject,
         });
         // await ApiHandler.manageFcmVersionTopics();
       } else {
@@ -1282,6 +1284,7 @@ export class ApiHandler {
           rgbWallet.mnemonic,
           { receiveData: response, invoices: invoices },
         );
+        ApiHandler.scheduleInvoicesCloudBackup();
 
         if (linkedAsset && linkedAmount !== 0) {
           const {
@@ -1317,6 +1320,13 @@ export class ApiHandler {
       console.log('errors', error);
       throw error;
     }
+  }
+
+  /** Fire-and-forget sync of Realm invoices to Relay app-image backup. */
+  private static scheduleInvoicesCloudBackup() {
+    ApiHandler.backupAppImage({ invoices: true }).catch(e =>
+      console.log('backupAppImage invoices', e),
+    );
   }
 
   static async receiveAssetOnLN({
@@ -3371,6 +3381,7 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         { receiveData: receiveData, invoices: invoices },
       );
+      ApiHandler.scheduleInvoicesCloudBackup();
       const response = await Relay.claimCampaign(
         app.authToken,
         campaignId,
@@ -3386,11 +3397,13 @@ export class ApiHandler {
     room = null,
     all = false,
     tnxMeta = null,
+    invoices = false,
   }: {
     settings?: boolean;
     room?: null | any;
     all?: boolean;
     tnxMeta?: null | { txid: string; metaData: object };
+    invoices?: boolean;
   }) {
     Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, false);
     try {
@@ -3399,6 +3412,7 @@ export class ApiHandler {
       let settingsObject = '';
       let roomsObject = {};
       let tnxMetaObject = {};
+      let invoicesObject: string | undefined;
 
       if (all || settings) {
         const keys = [Keys.APP_CURRENCY, Keys.APP_LANGUAGE, Keys.CURRENCY_MODE];
@@ -3447,11 +3461,22 @@ export class ApiHandler {
         }
       }
 
+      if (all || invoices) {
+        const rgbWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        ) as RGBWallet;
+        invoicesObject = encrypt(
+          encryptionKey,
+          JSON.stringify(rgbWallet?.invoices ?? []),
+        );
+      }
+
       await Relay.createAppImageBackup(
         app.authToken,
         roomsObject,
         settingsObject,
         tnxMetaObject,
+        invoicesObject,
       );
       return {
         status: true,
@@ -3472,6 +3497,13 @@ export class ApiHandler {
     settingsObject,
     roomsObject,
     tnxMetaObject,
+    invoicesObject,
+  }: {
+    mnemonic: string;
+    settingsObject?: string;
+    roomsObject?: object;
+    tnxMetaObject?: object;
+    invoicesObject?: string;
   }) {
     const encryptionKey = generateEncryptionKey(mnemonic);
     try {
@@ -3503,11 +3535,30 @@ export class ApiHandler {
           metaData: decryptedData,
         });
       }
+      if (invoicesObject) {
+        const decryptedInvoices = JSON.parse(
+          decrypt(encryptionKey, invoicesObject),
+        );
+        if (!Array.isArray(decryptedInvoices)) {
+          throw new Error('Invalid invoices backup payload');
+        }
+        const rgbWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        ) as RGBWallet;
+        if (rgbWallet?.mnemonic) {
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.RgbWallet,
+            'mnemonic',
+            rgbWallet.mnemonic,
+            { invoices: decryptedInvoices },
+          );
+        }
+      }
     } catch (error) {
       console.log('🚀 AppRestoreFailed: ', error);
     }
     // disabled first app image backup, since already restored from backup
-    if (settingsObject || roomsObject || tnxMetaObject)
+    if (settingsObject || roomsObject || tnxMetaObject || invoicesObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
   }
 

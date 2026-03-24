@@ -877,7 +877,8 @@ export default class Relay {
       imageUrl: string;
       roomsObject?: string;
       settingsObject?: string;
-      tnxMetaObject?:Object;
+      tnxMetaObject?: Object;
+      invoicesObject?: string;
     };
   }> => {
     try {
@@ -1071,6 +1072,7 @@ export default class Relay {
     roomsObject: Object,
     settingsObject: string,
     tnxMetaObject: Object,
+    invoicesObject?: string,
   ) => {
     try {
       const res = await RestClient.post(
@@ -1079,6 +1081,9 @@ export default class Relay {
           roomsObject,
           settingsObject,
           tnxMetaObject,
+          ...(typeof invoicesObject === 'string' && invoicesObject.length > 0
+            ? { invoicesObject }
+            : {}),
         },
         {
           Authorization: `Bearer ${authToken}`,

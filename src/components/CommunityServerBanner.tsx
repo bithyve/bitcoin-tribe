@@ -7,11 +7,11 @@ import AppText from './AppText';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Colors from 'src/theme/Colors';
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
+import { hp, windowHeight, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
 
-export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
+export const CommunityServerBanner = ({ modalVisible, setModalVisible }) => {
   const { communityStatus, setCommunityStatus } = useContext(AppContext);
    const { translations } = useContext(LocalizationContext);
   const { common } = translations;
@@ -69,7 +69,7 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
   }, [common.tapToInfo]);
 
   return (
-    <View>
+    <View style={styles.root}>
       {communityStatus && status ? (
         status.type == 'error' ? (
           <AppTouchable style={[styles.errorContainer]} onPress={onPress}>
@@ -102,31 +102,35 @@ export const CommunityServerBanner = ({modalVisible,setModalVisible}) => {
 
 const getStyles = (theme: AppTheme, hasNotch) =>
   StyleSheet.create({
+    root: {
+      width: '100%',
+      alignSelf: 'stretch',
+    },
     successContainer: {
       alignItems: 'flex-start',
       paddingHorizontal: wp(16),
       backgroundColor: Colors.GOGreen,
-      width:windowWidth,
-      height:hp(25),
-      justifyContent:"center"
+      width: '100%',
+      height: hp(25),
+      justifyContent: 'center',
     },
     errorContainer: {
       backgroundColor: Colors.FireOpal,
       zIndex: 1000,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      width: windowWidth,
+      width: '100%',
       paddingHorizontal: wp(16),
-      height:hp(25),
-      alignItems:"center"
+      height: hp(25),
+      alignItems: 'center',
     },
     warningContainer: {
       alignItems: 'flex-start',
       paddingHorizontal: wp(16),
       backgroundColor: '#FFA500', // Orange color for warning/connecting state
-      width:windowWidth,
-      height:hp(25),
-      justifyContent:"center"
+      width: '100%',
+      height: hp(25),
+      justifyContent: 'center',
     },
     text: {
       color: 'white',

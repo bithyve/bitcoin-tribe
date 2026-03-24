@@ -84,8 +84,36 @@ export default class RGBServices {
       }
       return { created: false };
     } else {
-      const response = await RGBServices.RGBWallet.createUtxos(upTo, num, size, feePerByte, false);
-      return { created: response > 0, count: response };
+      // Avoid syncing on every call; instead, retry once on "available=0" style errors.
+      const attemptCreate = async () => {
+        const response = await RGBServices.RGBWallet.createUtxos(
+          upTo,
+          num,
+          size,
+          feePerByte,
+          false,
+        );
+        return { created: response > 0, count: response };
+      };
+
+      try {
+        return await attemptCreate();
+      } catch (error) {
+        const message = `${error}`;
+        const isInsufficientBitcoins =
+          message.includes('InsufficientBitcoins') ||
+          message.includes('available=0') ||
+          message.includes('needed=');
+
+        if (!isInsufficientBitcoins) {
+          throw error;
+        }
+
+        // Fresh installs often have a stale/offline Electrum connection here; re-online + sync fixes it.
+        await RGBServices.goOnline(false);
+        await RGBServices.RGBWallet.sync();
+        return await attemptCreate();
+      }
     }
   };
 
@@ -650,7 +678,7 @@ export default class RGBServices {
     }
 
     const watchTower = RGBServices.sdk.watchTower();
-    const result = await watchTower.addToWatchTower(invoice);
+    const result = await watchTower.addToWatchTower({ invoice });
     if (result && typeof result === 'object' && 'success' in result) {
       // @ts-ignore
       return { success: result.success as boolean, error: result.error ? result.error as string : undefined };
