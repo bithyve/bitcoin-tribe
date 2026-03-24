@@ -202,6 +202,7 @@ const SendAssetScreen = () => {
   const allAssets: Asset[] = [...coins, ...collectibles, ...udas, ...ifas];
   const assetData = allAssets.find(item => item.assetId === assetId);
   const [invoice, setInvoice] = useState(rgbInvoice || '');
+  const invoiceRef = useRef(rgbInvoice || '');
   const precision = assetData?.precision || assetData?.metaData?.precision || 0;
   const [assetAmount, setAssetAmount] = useState(
     assetData?.assetSchema.toUpperCase() === AssetSchema.UDA
@@ -464,6 +465,7 @@ const SendAssetScreen = () => {
         if (!assetData || res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
+          invoiceRef.current = cleanedText;
           setInvoice(cleanedText);
           setAssetAmount(
             res?.assignment?.amount.toString() !== '0'
@@ -473,9 +475,11 @@ const SendAssetScreen = () => {
           setInvoiceValidationError('');
         }
       } else if (res.recipientId) {
+        invoiceRef.current = cleanedText;
         setInvoice(cleanedText);
         setInvoiceValidationError('');
       } else {
+        invoiceRef.current = cleanedText;
         setInvoice(cleanedText);
         setInvoiceValidationError('Invalid invoice');
       }
@@ -491,8 +495,15 @@ const SendAssetScreen = () => {
     await validateAndSetInvoice(clipboardValue, true);
   };
 
-  const handleInvoiceInputChange = async (text: string) => {
-    await validateAndSetInvoice(text, false);
+  const handleInvoiceInputChange = (text: string) => {
+    const cleaned = text.replace(/\s/g, '');
+    invoiceRef.current = cleaned;
+    setInvoice(cleaned);
+    setInvoiceValidationError('');
+  };
+
+  const handleInvoiceBlur = () => {
+    void validateAndSetInvoice(invoiceRef.current, false);
   };
 
   const setMaxAmount = () => {
@@ -534,8 +545,10 @@ const SendAssetScreen = () => {
   };
 
   const clearInvoice = () => {
+    invoiceRef.current = '';
     setInvoice('');
     setInvoiceType(null);
+    setInvoiceValidationError('');
   };
 
   return (
@@ -621,7 +634,7 @@ const SendAssetScreen = () => {
           rightCTAStyle={styles.rightCTAStyle}
           rightCTATextColor={theme.colors.accent1}
           error={invoiceValidationError}
-          onBlur={() => setInvoiceValidationError('')}
+          onBlur={handleInvoiceBlur}
         />
         <AppText variant="body2" style={styles.labelstyle}>
           {sendScreen.enterAmount}
@@ -873,6 +886,7 @@ const SendAssetScreen = () => {
             // transID={idx(sendTransactionMutation, _ => _.data.txid) || ''}
             assetName={formatTUsdt(assetData?.name)}
             amount={assetAmount && assetAmount.replace(/,/g, '')}
+            ticker={assetData?.ticker}
             feeRate={
               selectedPriority === TxPriority.CUSTOM
                 ? customFee
@@ -926,7 +940,7 @@ const SendAssetScreen = () => {
         <Buttons
           primaryTitle={requestingQuote ? 'Preparing Transaction...' : common.next}
           primaryOnPress={async () => {
-            if (Number(assetAmount) > assetData?.balance.spendable) {
+            if (Number(assetAmount) > Number(assetData?.balance.spendable)) {
               Keyboard.dismiss();
               if (Number(assetData?.balance.spendable) === 0) {
                 setAmountValidationError(
