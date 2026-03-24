@@ -27,12 +27,17 @@ import { Keys } from 'src/storage';
 import GoBack from 'src/assets/images/icon_back.svg';
 import GoBackLight from 'src/assets/images/icon_back_light.svg';
 import AppText from 'src/components/AppText';
-import { wp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { HolepunchPeer } from 'src/services/messaging/holepunch/storage/PeerStorage';
+import { CommunityServerBanner } from 'src/components/CommunityServerBanner';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  /** Matches ScreenContainer’s horizontal inset; used so the banner can sit full-bleed between padded regions. */
+  screenHorizontalPad: {
+    paddingHorizontal: hp(16),
   },
   // header
   headerCtr: { flexDirection: 'row' },
@@ -78,6 +83,8 @@ const Chat = () => {
       room?.roomId,
     ) as any) || [];
   const [messages, setMessages] = useState<HolepunchMessage[]>([]);
+  const [communityServerModalVisible, setCommunityServerModalVisible] =
+    useState(false);
 
   useEffect(() => {
     const combinedMessages = [...commitedMessages, ...sessionMessages];
@@ -144,25 +151,32 @@ const Chat = () => {
   };
 
   return (
-    <ScreenContainer>
-      <CustomHeader
-        title={room?.roomName || 'Chat'}
-        joining={isJoiningRoom && !hasJoinedRoom}
-        onBackNavigation={() => {
-          leaveRoom();
-          setMessages([]);
-          (navigation as any).navigate(NavigationRoutes.COMMUNITY);
-        }}
-        rightIcon={
-          <AppTouchable onPress={handleInfoPress}>
-            {theme.dark ? <InfoIcon /> : <InfoIconLight />}
-          </AppTouchable>
-        }
+    <ScreenContainer style={{ paddingHorizontal: 0 }}>
+      <View style={styles.screenHorizontalPad}>
+        <CustomHeader
+          title={room?.roomName || 'Chat'}
+          joining={isJoiningRoom && !hasJoinedRoom}
+          onBackNavigation={() => {
+            leaveRoom();
+            setMessages([]);
+            (navigation as any).navigate(NavigationRoutes.COMMUNITY);
+          }}
+          rightIcon={
+            <AppTouchable onPress={handleInfoPress}>
+              {theme.dark ? <InfoIcon /> : <InfoIconLight />}
+            </AppTouchable>
+          }
+        />
+      </View>
+      <CommunityServerBanner
+        modalVisible={communityServerModalVisible}
+        setModalVisible={setCommunityServerModalVisible}
       />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 10 : 0}
-        style={styles.container}>
+        style={[styles.container, styles.screenHorizontalPad]}
+      >
         <View style={styles.container}>
           <MessageList
             messages={messages}
@@ -179,7 +193,9 @@ const Chat = () => {
           <MessageInput
             message={message}
             loading={sending}
-            disabled={sending || !isRootPeerConnected || !hasJoinedRoom || isJoiningRoom}
+            disabled={
+              sending || !isRootPeerConnected || !hasJoinedRoom || isJoiningRoom
+            }
             onPressSend={onPressSend}
             setMessage={setMessage}
             onPressImage={noop}
