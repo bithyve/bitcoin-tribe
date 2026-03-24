@@ -6,7 +6,7 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@realm/react';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
@@ -53,6 +53,8 @@ const styles = StyleSheet.create({
 // No-op handlers for required props
 const noop = () => { };
 
+const JOIN_WAIT_TIMEOUT_MS = 20000;
+
 const Chat = () => {
   const theme = useTheme();
   const navigation = useNavigation();
@@ -62,6 +64,7 @@ const Chat = () => {
 
   // Use chat hook for all operations
   const {
+    isInitializing,
     isJoiningRoom,
     isRootPeerConnected,
     joinRoom,
@@ -85,6 +88,7 @@ const Chat = () => {
   const [messages, setMessages] = useState<HolepunchMessage[]>([]);
   const [communityServerModalVisible, setCommunityServerModalVisible] =
     useState(false);
+  const joinWaitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const combinedMessages = [...commitedMessages, ...sessionMessages];
@@ -103,7 +107,8 @@ const Chat = () => {
     }
   };
 
-  const loginToRoom = async () => {
+  const loginToRoom = useCallback(async () => {
+    if (!room?.roomKey) return;
     try {
       console.log('[Chat] 🔄 Joining room:', room.roomName);
       const lastSyncedIndex = commitedMessages.length;
@@ -115,12 +120,55 @@ const Chat = () => {
       Toast('Failed to join room', true);
       setHasJoinedRoom(false);
     }
-  };
-
+  }, [room?.roomKey, room?.roomName, commitedMessages.length, joinRoom]);
 
   useEffect(() => {
+    if (!room?.roomKey) return;
+    if (isInitializing || !isRootPeerConnected) return;
+    if (hasJoinedRoom) return;
+    if (isJoiningRoom) return;
     loginToRoom();
-  }, []);
+  }, [
+    isInitializing,
+    isRootPeerConnected,
+    isJoiningRoom,
+    room?.roomId,
+    room?.roomKey,
+    commitedMessages.length,
+    hasJoinedRoom,
+    loginToRoom,
+  ]);
+
+  useEffect(() => {
+    const canJoin = !isInitializing && isRootPeerConnected;
+    const waitingForServer =
+      !!room?.roomKey && !hasJoinedRoom && !canJoin;
+
+    if (!waitingForServer) {
+      if (joinWaitTimeoutRef.current) {
+        clearTimeout(joinWaitTimeoutRef.current);
+        joinWaitTimeoutRef.current = null;
+      }
+      return undefined;
+    }
+
+    joinWaitTimeoutRef.current = setTimeout(() => {
+      joinWaitTimeoutRef.current = null;
+      Toast('Initialization timed out. Try again later.', true);
+    }, JOIN_WAIT_TIMEOUT_MS);
+
+    return () => {
+      if (joinWaitTimeoutRef.current) {
+        clearTimeout(joinWaitTimeoutRef.current);
+        joinWaitTimeoutRef.current = null;
+      }
+    };
+  }, [
+    room?.roomKey,
+    hasJoinedRoom,
+    isInitializing,
+    isRootPeerConnected,
+  ]);
 
   useEffect(() => {
     loadPeers(); // Load peers for the room
@@ -150,12 +198,21 @@ const Chat = () => {
     (navigation as any).navigate(NavigationRoutes.GROUPINFO, { room, peersMap });
   };
 
+  const canJoinRoom = !isInitializing && isRootPeerConnected;
+  const showHeaderWait =
+    !!room?.roomKey &&
+    !hasJoinedRoom &&
+    (isInitializing || !isRootPeerConnected || isJoiningRoom);
+  const headerWaitLabel =
+    isJoiningRoom && canJoinRoom ? 'Joining...' : 'Connecting...';
+
   return (
     <ScreenContainer style={{ paddingHorizontal: 0 }}>
       <View style={styles.screenHorizontalPad}>
         <CustomHeader
           title={room?.roomName || 'Chat'}
-          joining={isJoiningRoom && !hasJoinedRoom}
+          joining={showHeaderWait}
+          joiningLabel={headerWaitLabel}
           onBackNavigation={() => {
             leaveRoom();
             setMessages([]);
@@ -215,6 +272,7 @@ const CustomHeader = ({
   onBackNavigation = null,
   rightIcon,
   joining,
+  joiningLabel = 'Joining...',
 }) => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
@@ -228,7 +286,7 @@ const CustomHeader = ({
             <View style={styles.headerLoadCtr}>
               <ActivityIndicator />
               <AppText variant="heading3" numberOfLines={1}>
-                Joining...
+                {joiningLabel}
               </AppText>
             </View>
           ) : (
