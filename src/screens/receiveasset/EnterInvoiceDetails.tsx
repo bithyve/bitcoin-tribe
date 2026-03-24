@@ -35,6 +35,7 @@ import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AppContext } from 'src/contexts/AppContext';
@@ -145,7 +146,7 @@ const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
   const { appType, isWalletOnline } = useContext(AppContext);
   const { invoiceAssetId, chosenAsset } = useRoute().params;
-  const { receciveScreen, common, assets, home } = translations;
+  const { receciveScreen, assets, home, sendScreen } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -239,20 +240,57 @@ const EnterInvoiceDetails = () => {
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
   ]);
 
+  const precision = selectedAsset?.precision ?? 0;
+
+  const normalizeAmountForParse = (raw: string) =>
+    raw.replace(/\s/g, '').replace(/,/g, '.');
+
+  const isAmountEntryValid = useMemo(() => {
+    if (amount === '') {
+      return true;
+    }
+    if (precision === 0) {
+      if (!/^[1-9]\d*$/.test(amount)) {
+        return false;
+      }
+    } else {
+      const fractional = new RegExp(
+        `^(0|[1-9]\\d*)([.,]\\d{0,${precision}})?$`,
+      );
+      if (!fractional.test(amount)) {
+        return false;
+      }
+    }
+    const n = Number(normalizeAmountForParse(amount));
+    return !Number.isNaN(n) && n > 0;
+  }, [amount, precision]);
+
   function validateAndNavigateToReceiveAsset() {
     if (!canProceed && invoiceType === InvoiceMode.Blinded) {
       setVisible(true);
       return;
     }
+    if (amount !== '' && !isAmountEntryValid) {
+      const n = Number(normalizeAmountForParse(amount));
+      Toast(
+        !Number.isNaN(n) && n <= 0
+          ? sendScreen.validationZeroNotAllowed
+          : sendScreen.invoiceFormatErrMsg,
+        true,
+      );
+      return;
+    }
     logCustomEvent(events.CREATED_INVOICE);
+    const normalized =
+      amount !== '' ? normalizeAmountForParse(amount) : '';
     navigation.replace(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
       amount:
-        amount !== ''
-          ? selectedAsset?.precision === 0
-            ? amount
-            : Number(amount) * 10 ** selectedAsset?.precision
+        normalized !== ''
+          ? precision === 0
+            ? normalized
+            : Number(normalized) * 10 ** precision
           : '',
       selectedType,
       invoiceExpiry,
@@ -261,16 +299,20 @@ const EnterInvoiceDetails = () => {
     });
   }
 
-  const handleAmountInputChange = text => {
-    let regex;
-    if (selectedAsset?.precision === 0) {
+  const handleAmountInputChange = (text: string) => {
+    if (text === '') {
+      setAmount('');
+      return;
+    }
+    let regex: RegExp;
+    if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
       regex = new RegExp(
-        `^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`,
+        `^(0|[1-9]\\d*)([.,]\\d{0,${precision}})?$`,
       );
     }
-    if (text === '' || regex.test(text)) {
+    if (regex.test(text)) {
       setAmount(text);
     }
   };
@@ -411,7 +453,8 @@ const EnterInvoiceDetails = () => {
               width={'100%'}
               disabled={
                 isWalletOnline === WalletOnlineStatus.Error ||
-                isWalletOnline === WalletOnlineStatus.InProgress
+                isWalletOnline === WalletOnlineStatus.InProgress ||
+                !isAmountEntryValid
               }
             />
           </View>
