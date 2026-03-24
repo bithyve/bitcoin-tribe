@@ -650,7 +650,7 @@ export default class RGBServices {
     }
 
     const watchTower = RGBServices.sdk.watchTower();
-    const result = await watchTower.addToWatchTower(invoice);
+    const result = await watchTower.addToWatchTower({ invoice });
     if (result && typeof result === 'object' && 'success' in result) {
       // @ts-ignore
       return { success: result.success as boolean, error: result.error ? result.error as string : undefined };
