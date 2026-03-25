@@ -24,7 +24,12 @@ export type AppStackParams = {
   [NavigationRoutes.NODESETTINGS]: undefined;
   [NavigationRoutes.CONNECTNODEMANUALLY]: undefined;
   [NavigationRoutes.ISSUESCREEN]: undefined;
-  [NavigationRoutes.RECEIVEASSET]: undefined;
+  [NavigationRoutes.ENTERINVOICEDETAILS]:
+    | {
+        invoiceAssetId?: string;
+        chosenAsset?: unknown;
+      }
+    | undefined;
   [NavigationRoutes.SENDTO]: undefined;
   [NavigationRoutes.SHOWXPUB]: undefined;
   [NavigationRoutes.APPINFO]: undefined;

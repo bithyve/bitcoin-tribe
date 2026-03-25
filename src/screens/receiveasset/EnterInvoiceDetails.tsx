@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { Keyboard, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme, SegmentedButtons } from 'react-native-paper';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import AppHeader from 'src/components/AppHeader';
@@ -9,11 +9,10 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp, windowHeight, windowWidth } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
-import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
 import UncheckIcon from 'src/assets/images/uncheckIcon.svg';
@@ -43,13 +42,20 @@ import { AppContext } from 'src/contexts/AppContext';
 import Fonts from 'src/constants/Fonts';
 import InsufficiantBalancePopupContainer from '../collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
+import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import useWallets from 'src/hooks/useWallets';
+import useRgbWallets from 'src/hooks/useRgbWallets';
+import {
+  useReceiveInvoiceFlow,
+  ReceiveInvoiceSelectedType,
+} from 'src/hooks/useReceiveInvoiceFlow';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { events, logCustomEvent } from 'src/services/analytics';
 import config, { APP_STAGE } from 'src/utils/config';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
 import { SizedBox } from 'src/components/SizedBox';
+import FooterNote from 'src/components/FooterNote';
 import AppTouchable from 'src/components/AppTouchable';
 import ArrowUp from 'src/assets/images/arrowUpGrey.svg';
 import ArrowDown from 'src/assets/images/arrowDownGrey.svg';
@@ -155,27 +161,51 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       marginTop: hp(20),
       marginBottom: hp(10),
     },
+    feePriorityText: {
+      color: theme.colors.headingColor,
+    },
+    invoiceErrorModalContent: {
+      paddingVertical: hp(10),
+      paddingHorizontal: hp(8),
+    },
+    invoiceErrorMessage: {
+      marginTop: hp(12),
+      marginBottom: hp(24),
+      textAlign: 'center',
+    },
   });
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
-  const { appType, isWalletOnline } = useContext(AppContext);
-  const { invoiceAssetId, chosenAsset } = useRoute().params;
-  const { receciveScreen, assets, home, sendScreen } = translations;
+  const { isWalletOnline } = useContext(AppContext);
+  const route = useRoute();
+  const params = (route.params ?? {}) as {
+    invoiceAssetId?: string;
+    chosenAsset?: Asset | null;
+  };
+  const { invoiceAssetId, chosenAsset } = params;
+  const {
+    receciveScreen,
+    assets,
+    home,
+    sendScreen,
+    common,
+    wallet: walletTranslation,
+  } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
+  const app = useQuery(RealmSchema.TribeApp)[0] as unknown as TribeApp;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const [assetId, setAssetId] = useState(invoiceAssetId || '');
   const [searchAssetInput, setSearchAssetInput] = useState('');
   const [amount, setAmount] = useState('');
-  const [inputHeight, setInputHeight] = useState(50);
+  const [inputHeight] = useState(50);
   const [invoiceExpiry, setInvoiceExpiry] = useMMKVNumber(Keys.INVOICE_EXPIRY);
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(
     chosenAsset || null,
   );
   const [assetsDropdown, setAssetsDropdown] = useState(false);
-  const [selectedType, setSelectedType] = useState(
+  const [selectedType, setSelectedType] = useState<ReceiveInvoiceSelectedType>(
     app.appType !== AppType.ON_CHAIN && assetId !== ''
       ? 'lightning'
       : 'bitcoin',
@@ -189,21 +219,28 @@ const EnterInvoiceDetails = () => {
   const [invoiceType, setInvoiceType] = useState(InvoiceMode.Blinded);
   const [visible, setVisible] = useState(false);
   const assetsData: Asset[] = useMemo(() => {
-    const combined: Asset[] = [...coins.toJSON(), ...collectibles.toJSON()];
+    const combined = [
+      ...coins.toJSON(),
+      ...collectibles.toJSON(),
+    ] as unknown as Asset[];
     return combined.sort((a, b) => a.timestamp - b.timestamp);
   }, [coins, collectibles]);
 
-  const { mutateAsync, isLoading, data, reset } = useMutation(
-    ({ query }: { query: string }) => ApiHandler.searchAssetFromRegistry(query),
+  const {
+    mutateAsync: searchRegistryMutateAsync,
+    isLoading: isRegistrySearchLoading,
+    data,
+    reset,
+  } = useMutation(({ query }: { query: string }) =>
+    ApiHandler.searchAssetFromRegistry(query),
   );
-  const wallet: Wallet = useWallets({}).wallets[0];
-  const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
-    RealmSchema.RgbWallet,
-  );
+  const mainWallet: Wallet = useWallets({}).wallets[0];
+  const rgbWallet: RGBWallet | undefined = useRgbWallets({}).wallets[0];
 
-  const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
-    JSON.parse(utxoStr),
-  );
+  const unspent: RgbUnspent[] = useMemo(() => {
+    const raw = (rgbWallet?.utxos ?? []) as unknown as string[];
+    return raw.map(utxoStr => JSON.parse(utxoStr));
+  }, [rgbWallet?.utxos]);
   const colorable = unspent.filter(
     utxo =>
       utxo.utxo.colorable === true &&
@@ -229,7 +266,7 @@ const EnterInvoiceDetails = () => {
         reset();
         return;
       }
-      await mutateAsync({ query: trimmed });
+      await searchRegistryMutateAsync({ query: trimmed });
     };
 
     searchAsset();
@@ -241,26 +278,109 @@ const EnterInvoiceDetails = () => {
       app.appType === AppType.SUPPORTED_RLN
     ) {
       return (
-        rgbWallet?.nodeBtcBalance?.vanilla?.spendable +
-          rgbWallet?.nodeBtcBalance?.vanilla?.future >
+        Number(rgbWallet?.nodeBtcBalance?.vanilla?.spendable ?? 0) +
+          Number(rgbWallet?.nodeBtcBalance?.vanilla?.future ?? 0) >
         0
       );
     }
     return (
-      wallet?.specs.balances.confirmed + wallet?.specs.balances.unconfirmed >
+      mainWallet?.specs.balances.confirmed +
+        mainWallet?.specs.balances.unconfirmed >
         0 || colorable.length > 0
     );
   }, [
     colorable.length,
-    wallet?.specs.balances.confirmed,
-    wallet?.specs.balances.unconfirmed,
+    mainWallet?.specs.balances.confirmed,
+    mainWallet?.specs.balances.unconfirmed,
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
   ]);
 
-  const precision = selectedAsset?.precision ?? 0;
+  const precision = useMemo(() => {
+    if (selectedAsset != null) {
+      return selectedAsset.precision ?? 0;
+    }
+    if (!assetId) {
+      return 0;
+    }
+    const match = assetsData.find(a => a.assetId === assetId);
+    return match?.precision ?? 0;
+  }, [selectedAsset, assetId, assetsData]);
 
   const normalizeAmountForParse = (raw: string) =>
     raw.replace(/\s/g, '').replace(/,/g, '.');
+
+  const amountBaseUnits = useMemo(() => {
+    if (amount === '') {
+      return 0;
+    }
+    const normalized = normalizeAmountForParse(amount);
+    const n = Number(normalized);
+    if (Number.isNaN(n) || n <= 0) {
+      return 0;
+    }
+    if (precision === 0) {
+      return Math.round(n);
+    }
+    return Math.round(n * 10 ** precision);
+  }, [amount, precision]);
+
+  const invoiceExpiryEffective =
+    invoiceExpiry === undefined ? 86400 : invoiceExpiry;
+
+  const formatInvoiceString = useCallback(
+    (template: string, vars: Record<string, string | number>) => {
+      const loc = translations as unknown as {
+        formatString: (t: string, v: object) => string;
+      };
+      return String(loc.formatString(template, vars));
+    },
+    [translations],
+  );
+
+  const invoiceNoteSubtitle = useMemo(
+    () =>
+      formatInvoiceString(receciveScreen.noteSubTitle, {
+        time: invoiceExpiryEffective / 3600,
+        type:
+          invoiceType === InvoiceMode.Witness ? 'witness' : 'blinded',
+      }),
+    [
+      formatInvoiceString,
+      receciveScreen.noteSubTitle,
+      invoiceExpiryEffective,
+      invoiceType,
+    ],
+  );
+
+  const {
+    runInvoiceGeneration,
+    invoiceLoading,
+    errorModal,
+    dismissErrorModal,
+    qrValue,
+    showInvoiceQr,
+    onInvoiceScreenFocused,
+  } = useReceiveInvoiceFlow({
+    appType: app.appType,
+    assetId,
+    amountBaseUnits,
+    invoiceExpiry: invoiceExpiryEffective,
+    invoiceType,
+    useWatchTower,
+    selectedType,
+    onInvoiceCreated: () => logCustomEvent(events.CREATED_INVOICE),
+    formatString: formatInvoiceString,
+    insufficientSatsTemplate: assets.insufficientSats,
+    assetProcessErrorMsg: assets.assetProcessErrorMsg,
+    failedToCreateUTXOMsg: walletTranslation.failedToCreateUTXO,
+    invoiceErrorTitle: assets.unexpectedErrorTitle,
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      onInvoiceScreenFocused();
+    }, [onInvoiceScreenFocused]),
+  );
 
   const isAmountEntryValid = useMemo(() => {
     if (amount === '') {
@@ -282,7 +402,7 @@ const EnterInvoiceDetails = () => {
     return !Number.isNaN(n) && n > 0;
   }, [amount, precision]);
 
-  function validateAndNavigateToReceiveAsset() {
+  function validateAndGenerateInvoice() {
     if (!canProceed && invoiceType === InvoiceMode.Blinded) {
       setVisible(true);
       return;
@@ -297,23 +417,7 @@ const EnterInvoiceDetails = () => {
       );
       return;
     }
-    logCustomEvent(events.CREATED_INVOICE);
-    const normalized =
-      amount !== '' ? normalizeAmountForParse(amount) : '';
-    navigation.replace(NavigationRoutes.RECEIVEASSET, {
-      refresh: true,
-      assetId: assetId ?? '',
-      amount:
-        normalized !== ''
-          ? precision === 0
-            ? normalized
-            : Number(normalized) * 10 ** precision
-          : '',
-      selectedType,
-      invoiceExpiry,
-      invoiceType,
-      useWatchTower
-    });
+    runInvoiceGeneration();
   }
 
   const handleAmountInputChange = (text: string) => {
@@ -344,6 +448,51 @@ const EnterInvoiceDetails = () => {
   return (
     <ScreenContainer>
       <AppHeader title={home.addAssets} enableBack={true} />
+      <View>
+        <ResponsePopupContainer
+          visible={invoiceLoading}
+          enableClose={true}
+          backColor={theme.colors.modalBackColor}
+          borderColor={theme.colors.modalBackColor}
+        >
+          <InProgessPopupContainer
+            title={assets.requestInvoiceProcessTitle}
+            subTitle={assets.requestInvoiceProcessSubTitle}
+            illustrationPath={
+              isThemeDark
+                ? require('src/assets/images/jsons/recieveAssetIllustrationDark.json')
+                : require('src/assets/images/jsons/recieveAssetIllustrationLight.json')
+            }
+          />
+        </ResponsePopupContainer>
+      </View>
+      <ResponsePopupContainer
+        visible={errorModal.visible}
+        enableClose={true}
+        onDismiss={dismissErrorModal}
+        backColor={theme.colors.cardGradient1}
+        borderColor={theme.colors.borderColor}
+      >
+        <View style={styles.invoiceErrorModalContent}>
+          <AppText variant="heading2" style={{ textAlign: 'center' }}>
+            {errorModal.title}
+          </AppText>
+          <AppText
+            variant="body1"
+            style={[
+              styles.invoiceErrorMessage,
+              { color: theme.colors.secondaryHeadingColor },
+            ]}
+          >
+            {errorModal.message}
+          </AppText>
+          <Buttons
+            primaryTitle={common.confirm}
+            primaryOnPress={dismissErrorModal}
+            width={windowWidth / 1.2}
+          />
+        </View>
+      </ResponsePopupContainer>
       <KeyboardAwareScrollView
         overScrollMode="never"
         bounces={false}
@@ -356,39 +505,30 @@ const EnterInvoiceDetails = () => {
           Scan this code to receive asset
         </AppText>
 
-        {/* {!loading && !error && ( */}
-        {true && (
+        {showInvoiceQr && (
           <View style={{ marginTop: hp(20) }}>
             <ShowQRCode
-              // value={qrValue || 'address'}
-              value={
-                'rgb://~/bcrt:utxob:N5DB5eMB-Wcp99_A-lq9cL07-d_EaAyg-y7_4WS2-N378RJC-30dGZ expiry=1753890243&endpoints=rpcs://proxy.iriswallet.com/0.2/json-rpc '
-              }
+              value={qrValue || 'address'}
               title={
                 selectedType === 'bitcoin'
                   ? receciveScreen.invoiceAddress
                   : receciveScreen.lightningAddress
               }
-              qrTitleColor={theme.colors.accent4}
+              qrTitleColor={
+                selectedType === 'bitcoin'
+                  ? theme.colors.btcCtaBackColor
+                  : theme.colors.accent1
+              }
             />
             <ReceiveQrClipBoard
-              qrCodeValue={
-                'rgb://~/bcrt:utxob:N5DB5eMB-Wcp99_A-lq9cL07-d_EaAyg-y7_4WS2-N378RJC-30dGZ expiry=1753890243&endpoints=rpcs://proxy.iriswallet.com/0.2/json-rpc '
-              }
+              qrCodeValue={qrValue}
               message={assets.invoiceCopiedMsg}
             />
           </View>
         )}
         <SizedBox height={hp(20)} />
 
-        {/* Note */}
-        <View style={{ marginVertical: hp(10) }}>
-          <AppText variant="heading2">Note</AppText>
-          <AppText variant="body1" style={{ color: theme.colors.mutedTab }}>
-            The blinded UTXO in this invoice will expire in 12 hours after its
-            creation.
-          </AppText>
-        </View>
+        <FooterNote title={common.note} subTitle={invoiceNoteSubtitle} />
 
         {/* Advance Options */}
         <View style={{ marginVertical: hp(10) }}>
@@ -530,12 +670,13 @@ const EnterInvoiceDetails = () => {
                 <View style={{ alignSelf: 'center' }}>
                   <Buttons
                     primaryTitle={assets.generateInvoice}
-                    primaryOnPress={() => validateAndNavigateToReceiveAsset()}
+                    primaryOnPress={() => validateAndGenerateInvoice()}
                     width={'100%'}
                     disabled={
                       isWalletOnline === WalletOnlineStatus.Error ||
                       isWalletOnline === WalletOnlineStatus.InProgress ||
-                      !isAmountEntryValid
+                      !isAmountEntryValid ||
+                      invoiceLoading
                     }
                   />
                 </View>
@@ -568,21 +709,25 @@ const EnterInvoiceDetails = () => {
             >
               <RGBAssetList
                 presentation="modal"
-                assets={data?.records ? data?.records : assetsData}
+                assets={
+                  (data as { records?: Asset[] } | undefined)?.records ??
+                  assetsData
+                }
                 callback={item => {
                   Keyboard.dismiss();
-                  setSelectedAsset(item || item?.asset);
+                  const row = item as Asset & { asset?: Asset };
+                  setSelectedAsset(row?.asset ?? row);
                   setAssetsDropdown(false);
-                  setAssetId(item?.assetId || item?.asset?.assetId);
+                  setAssetId(row?.assetId || row?.asset?.assetId);
                   setAmount('');
                 }}
                 searchAssetInput={searchAssetInput}
                 onChangeSearchInput={(text: string) => {
                   setSearchAssetInput(text);
                 }}
-                selectedAsset={selectedAsset || selectedAsset?.asset}
+                selectedAsset={selectedAsset as unknown as Asset[]}
                 onDissmiss={() => setAssetsDropdown(false)}
-                isLoading={isLoading}
+                isLoading={isRegistrySearchLoading}
               />
             </View>
           </View>
@@ -599,7 +744,11 @@ const EnterInvoiceDetails = () => {
             primaryOnPress={() => {
               setVisible(false);
               setTimeout(() => {
-                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+                (
+                  navigation as unknown as {
+                    replace: (name: string) => void;
+                  }
+                ).replace(NavigationRoutes.RECEIVESCREEN);
               }, 500);
             }}
             secondaryOnPress={() => setVisible(false)}

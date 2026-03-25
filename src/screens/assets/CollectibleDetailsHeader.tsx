@@ -56,7 +56,8 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
               fontSize:
                 collectible.balance.future.toString().length > 10 ? 24 : 39,
             },
-          ]}>
+          ]}
+        >
           {numberWithCommas(collectible.balance.future)}
         </AppText>
       </View>
@@ -70,8 +71,9 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
         }
         // onPressBuy={onPressBuy}
         onPressReceive={() =>
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-            refresh: true,
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+            invoiceAssetId: collectible.assetId,
+            chosenAsset: collectible,
           })
         }
       />
