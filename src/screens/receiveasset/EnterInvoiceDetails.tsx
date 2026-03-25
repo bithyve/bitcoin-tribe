@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
+import { Keyboard, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme, SegmentedButtons } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
@@ -9,7 +9,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';
 import TextField from 'src/components/TextField';
-import { hp } from 'src/constants/responsive';
+import { hp, windowHeight } from 'src/constants/responsive';
 import Buttons from 'src/components/Buttons';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { AppTheme } from 'src/theme';
@@ -38,6 +38,7 @@ import { ApiHandler } from 'src/services/handler/apiHandler';
 import Toast from 'src/components/Toast';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { AppContext } from 'src/contexts/AppContext';
 import Fonts from 'src/constants/Fonts';
 import InsufficiantBalancePopupContainer from '../collectiblesCoins/components/InsufficiantBalancePopupContainer';
@@ -46,6 +47,12 @@ import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { events, logCustomEvent } from 'src/services/analytics';
 import config, { APP_STAGE } from 'src/utils/config';
+import ShowQRCode from 'src/components/ShowQRCode';
+import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
+import { SizedBox } from 'src/components/SizedBox';
+import AppTouchable from 'src/components/AppTouchable';
+import ArrowUp from 'src/assets/images/arrowUpGrey.svg';
+import ArrowDown from 'src/assets/images/arrowDownGrey.svg';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -55,11 +62,6 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     bodyWrapper: {
       height: appType !== AppType.ON_CHAIN ? '43%' : '57%',
       marginTop: hp(10),
-    },
-    footerWrapper: {
-      height: '25%',
-      paddingBottom: hp(20),
-      marginTop: 40,
     },
     contentStyle: {
       borderRadius: 0,
@@ -117,9 +119,22 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
     inputStyle: {
       width: '80%',
     },
-    assetsDropdownContainer: {
-      position: 'absolute',
-      borderRadius: 20,
+    assetsModalRoot: {
+      flex: 1,
+      justifyContent: 'flex-end',
+    },
+    assetsModalBackdrop: {
+      ...StyleSheet.absoluteFillObject,
+      backgroundColor: 'rgba(0, 0, 0, 0.45)',
+    },
+    assetsModalSheet: {
+      height: windowHeight * 0.76,
+      width: '100%',
+      paddingHorizontal: hp(12),
+      paddingTop: hp(10),
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      backgroundColor: theme.colors.primaryBackground,
     },
     segmentedButtons: {
       marginVertical: hp(5),
@@ -196,8 +211,10 @@ const EnterInvoiceDetails = () => {
       utxo.pendingBlinded === 0,
   );
   const [useWatchTower, setUseWatchTower] = useState(false);
+  const [showAdvanceOptions, setShowAdvanceOptions] = useState(false);
 
   const styles = getStyles(theme, inputHeight, app.appType);
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (invoiceExpiry === undefined) {
@@ -326,159 +343,250 @@ const EnterInvoiceDetails = () => {
 
   return (
     <ScreenContainer>
-      <AppHeader
-        title={home.addAssets}
-        subTitle={`Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`}
-        enableBack={true}
-      />
+      <AppHeader title={home.addAssets} enableBack={true} />
       <KeyboardAwareScrollView
         overScrollMode="never"
         bounces={false}
         keyboardOpeningTime={0}
       >
-        {app.appType !== AppType.ON_CHAIN && (
-          <View>
-            <View>
-              <AppText variant="heading3" style={styles.chooseInvoiceType}>
-                {receciveScreen.chooseInvoiceType}
-              </AppText>
-            </View>
-            <View style={styles.wrapper}>
-              <View style={styles.radioBtnWrapper}>
-                <RadioButton.Android
-                  color={theme.colors.accent1}
-                  uncheckedColor={theme.colors.headingColor}
-                  value={'bitcoin'}
-                  status={selectedType === 'bitcoin' ? 'checked' : 'unchecked'}
-                  onPress={() => setSelectedType('bitcoin')}
-                />
-                <View style={styles.typeViewWrapper}>
-                  <AppText variant="body2" style={styles.feePriorityText}>
-                    {receciveScreen.onchain}
-                  </AppText>
-                </View>
-              </View>
-              <View style={styles.radioBtnWrapper}>
-                <RadioButton.Android
-                  color={theme.colors.accent1}
-                  uncheckedColor={theme.colors.headingColor}
-                  value={'lightning'}
-                  status={
-                    selectedType === 'lightning' ? 'checked' : 'unchecked'
-                  }
-                  onPress={() => setSelectedType('lightning')}
-                />
-                <View style={styles.typeViewWrapper}>
-                  <AppText variant="body2" style={styles.feePriorityText}>
-                    {receciveScreen.lightning}
-                  </AppText>
-                </View>
-              </View>
-            </View>
-          </View>
-        )}
-        <View style={styles.bodyWrapper}>
-          <SelectYourAsset
-            selectedAsset={selectedAsset}
-            onPress={() => {
-              setAssetsDropdown(true);
-            }}
-          />
-          <TextField
-            value={amount}
-            onChangeText={handleAmountInputChange}
-            placeholder={assets.amount}
-            style={styles.input}
-            keyboardType="numeric"
-          />
-          <InvoiceExpirySlider
-            value={invoiceExpiry}
-            onValueChange={setInvoiceExpiry}
-          />
+        <AppText
+          variant="body1"
+          style={{ color: theme.colors.mutedTab, alignSelf: 'center' }}
+        >
+          Scan this code to receive asset
+        </AppText>
 
-          <AppText variant="caption" style={styles.segmentedButtonsTitle}>
-            Invoice Type
-          </AppText>
-          <SegmentedButtons
-            value={invoiceType}
-            onValueChange={(value: InvoiceMode) => setInvoiceType(value)}
-            theme={{ colors: { primary: theme.colors.accent1 } }}
-            style={styles.segmentedButtons}
-            buttons={[
-              {
-                value: InvoiceMode.Blinded,
-                label: 'Blinded',
-                style: { borderRadius: 10 },
-              },
-              {
-                value: InvoiceMode.Witness,
-                label: 'Witness',
-                style: { borderRadius: 10 },
-              },
-            ]}
-          />
-          {config.ENVIRONMENT != APP_STAGE.PRODUCTION && (
-            <Pressable
-              onPress={() => setUseWatchTower(prev => !prev)}
-              style={styles.watchtowerCtr}
-            >
-              <View style={styles.checkIconWrapper}>{checkIcon}</View>
-              <View style={styles.reservedSatsWrapper1}>
-                <AppText variant="body2">
-                  {receciveScreen.validateUsingWatchTower}
-                </AppText>
-              </View>
-            </Pressable>
-          )}
-        </View>
-        <View style={styles.footerWrapper}>
-          {colorable.length === 0 && invoiceType === InvoiceMode.Blinded ? (
-            <View style={styles.reservedSatsWrapper}>
-              <View style={styles.checkIconWrapper}>
-                {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
-              </View>
-              <View style={styles.reservedSatsWrapper1}>
-                <AppText variant="body2" style={styles.reservedSatsText}>
-                  {assets.reservedSats}
-                </AppText>
-              </View>
-            </View>
-          ) : (
-            <View style={styles.reservedSatsWrapper} />
-          )}
-          <View style={{ alignSelf: 'center' }}>
-            <Buttons
-              primaryTitle={assets.generateInvoice}
-              primaryOnPress={() => validateAndNavigateToReceiveAsset()}
-              width={'100%'}
-              disabled={
-                isWalletOnline === WalletOnlineStatus.Error ||
-                isWalletOnline === WalletOnlineStatus.InProgress ||
-                !isAmountEntryValid
+        {/* {!loading && !error && ( */}
+        {true && (
+          <View style={{ marginTop: hp(20) }}>
+            <ShowQRCode
+              // value={qrValue || 'address'}
+              value={
+                'rgb://~/bcrt:utxob:N5DB5eMB-Wcp99_A-lq9cL07-d_EaAyg-y7_4WS2-N378RJC-30dGZ expiry=1753890243&endpoints=rpcs://proxy.iriswallet.com/0.2/json-rpc '
               }
+              title={
+                selectedType === 'bitcoin'
+                  ? receciveScreen.invoiceAddress
+                  : receciveScreen.lightningAddress
+              }
+              qrTitleColor={theme.colors.accent4}
+            />
+            <ReceiveQrClipBoard
+              qrCodeValue={
+                'rgb://~/bcrt:utxob:N5DB5eMB-Wcp99_A-lq9cL07-d_EaAyg-y7_4WS2-N378RJC-30dGZ expiry=1753890243&endpoints=rpcs://proxy.iriswallet.com/0.2/json-rpc '
+              }
+              message={assets.invoiceCopiedMsg}
             />
           </View>
-        </View>
-        {assetsDropdown && (
-          <RGBAssetList
-            style={styles.assetsDropdownContainer}
-            assets={data?.records ? data?.records : assetsData}
-            callback={item => {
-              Keyboard.dismiss();
-              setSelectedAsset(item || item?.asset);
-              setAssetsDropdown(false);
-              setAssetId(item?.assetId || item?.asset?.assetId);
-              setAmount('');
-            }}
-            searchAssetInput={searchAssetInput}
-            onChangeSearchInput={(text: string) => {
-              setSearchAssetInput(text);
-            }}
-            selectedAsset={selectedAsset || selectedAsset?.asset}
-            onDissmiss={() => setAssetsDropdown(false)}
-            isLoading={isLoading}
-          />
         )}
+        <SizedBox height={hp(20)} />
+
+        {/* Note */}
+        <View style={{ marginVertical: hp(10) }}>
+          <AppText variant="heading2">Note</AppText>
+          <AppText variant="body1" style={{ color: theme.colors.mutedTab }}>
+            The blinded UTXO in this invoice will expire in 12 hours after its
+            creation.
+          </AppText>
+        </View>
+
+        {/* Advance Options */}
+        <View style={{ marginVertical: hp(10) }}>
+          <AppTouchable
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+            onPress={() => setShowAdvanceOptions(!showAdvanceOptions)}
+          >
+            <AppText variant="body1" style={{ color: theme.colors.mutedTab }}>
+              Advance options(Optional)
+            </AppText>
+            <View>{showAdvanceOptions ? <ArrowUp /> : <ArrowDown />}</View>
+          </AppTouchable>
+          {/* Options */}
+
+          {showAdvanceOptions && (
+            <>
+              {/* Onchain option, disabled for now, to be used later */}
+              {app.appType !== AppType.ON_CHAIN && (
+                <View>
+                  <View>
+                    <AppText
+                      variant="heading3"
+                      style={styles.chooseInvoiceType}
+                    >
+                      {receciveScreen.chooseInvoiceType}
+                    </AppText>
+                  </View>
+                  <View style={styles.wrapper}>
+                    <View style={styles.radioBtnWrapper}>
+                      <RadioButton.Android
+                        color={theme.colors.accent1}
+                        uncheckedColor={theme.colors.headingColor}
+                        value={'bitcoin'}
+                        status={
+                          selectedType === 'bitcoin' ? 'checked' : 'unchecked'
+                        }
+                        onPress={() => setSelectedType('bitcoin')}
+                      />
+                      <View style={styles.typeViewWrapper}>
+                        <AppText variant="body2" style={styles.feePriorityText}>
+                          {receciveScreen.onchain}
+                        </AppText>
+                      </View>
+                    </View>
+                    <View style={styles.radioBtnWrapper}>
+                      <RadioButton.Android
+                        color={theme.colors.accent1}
+                        uncheckedColor={theme.colors.headingColor}
+                        value={'lightning'}
+                        status={
+                          selectedType === 'lightning' ? 'checked' : 'unchecked'
+                        }
+                        onPress={() => setSelectedType('lightning')}
+                      />
+                      <View style={styles.typeViewWrapper}>
+                        <AppText variant="body2" style={styles.feePriorityText}>
+                          {receciveScreen.lightning}
+                        </AppText>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              )}
+
+              <View style={styles.bodyWrapper}>
+                <SelectYourAsset
+                  selectedAsset={selectedAsset}
+                  onPress={() => {
+                    setAssetsDropdown(true);
+                  }}
+                />
+                <TextField
+                  value={amount}
+                  onChangeText={handleAmountInputChange}
+                  placeholder={assets.amount}
+                  style={styles.input}
+                  keyboardType="numeric"
+                />
+                <InvoiceExpirySlider
+                  value={invoiceExpiry}
+                  onValueChange={setInvoiceExpiry}
+                />
+
+                <AppText variant="caption" style={styles.segmentedButtonsTitle}>
+                  Invoice Type
+                </AppText>
+                <SegmentedButtons
+                  value={invoiceType}
+                  onValueChange={(value: InvoiceMode) => setInvoiceType(value)}
+                  theme={{ colors: { primary: theme.colors.accent1 } }}
+                  style={styles.segmentedButtons}
+                  buttons={[
+                    {
+                      value: InvoiceMode.Blinded,
+                      label: 'Blinded',
+                      style: { borderRadius: 10 },
+                    },
+                    {
+                      value: InvoiceMode.Witness,
+                      label: 'Witness',
+                      style: { borderRadius: 10 },
+                    },
+                  ]}
+                />
+                {config.ENVIRONMENT != APP_STAGE.PRODUCTION && (
+                  <Pressable
+                    onPress={() => setUseWatchTower(prev => !prev)}
+                    style={styles.watchtowerCtr}
+                  >
+                    <View style={styles.checkIconWrapper}>{checkIcon}</View>
+                    <View style={styles.reservedSatsWrapper1}>
+                      <AppText variant="body2">
+                        {receciveScreen.validateUsingWatchTower}
+                      </AppText>
+                    </View>
+                  </Pressable>
+                )}
+
+                {colorable.length === 0 &&
+                invoiceType === InvoiceMode.Blinded ? (
+                  <View style={styles.reservedSatsWrapper}>
+                    <View style={styles.checkIconWrapper}>
+                      {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
+                    </View>
+                    <View style={styles.reservedSatsWrapper1}>
+                      <AppText variant="body2" style={styles.reservedSatsText}>
+                        {assets.reservedSats}
+                      </AppText>
+                    </View>
+                  </View>
+                ) : (
+                  <View style={styles.reservedSatsWrapper} />
+                )}
+
+                <View style={{ alignSelf: 'center' }}>
+                  <Buttons
+                    primaryTitle={assets.generateInvoice}
+                    primaryOnPress={() => validateAndNavigateToReceiveAsset()}
+                    width={'100%'}
+                    disabled={
+                      isWalletOnline === WalletOnlineStatus.Error ||
+                      isWalletOnline === WalletOnlineStatus.InProgress ||
+                      !isAmountEntryValid
+                    }
+                  />
+                </View>
+              </View>
+            </>
+          )}
+        </View>
+
+        <Modal
+          visible={assetsDropdown}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setAssetsDropdown(false)}
+          statusBarTranslucent
+        >
+          <View style={styles.assetsModalRoot}>
+            <Pressable
+              style={styles.assetsModalBackdrop}
+              onPress={() => setAssetsDropdown(false)}
+              accessibilityRole="button"
+              accessibilityLabel="Close asset list"
+            />
+            <View
+              style={[
+                styles.assetsModalSheet,
+                {
+                  paddingBottom: Math.max(insets.bottom, hp(16)),
+                },
+              ]}
+            >
+              <RGBAssetList
+                presentation="modal"
+                assets={data?.records ? data?.records : assetsData}
+                callback={item => {
+                  Keyboard.dismiss();
+                  setSelectedAsset(item || item?.asset);
+                  setAssetsDropdown(false);
+                  setAssetId(item?.assetId || item?.asset?.assetId);
+                  setAmount('');
+                }}
+                searchAssetInput={searchAssetInput}
+                onChangeSearchInput={(text: string) => {
+                  setSearchAssetInput(text);
+                }}
+                selectedAsset={selectedAsset || selectedAsset?.asset}
+                onDissmiss={() => setAssetsDropdown(false)}
+                isLoading={isLoading}
+              />
+            </View>
+          </View>
+        </Modal>
 
         <ResponsePopupContainer
           visible={visible}

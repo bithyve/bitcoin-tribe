@@ -28,7 +28,7 @@ import IconSearch from 'src/assets/images/icon_search.svg';
 import IconSearchLight from 'src/assets/images/icon_search_light.svg';
 
 type DropdownProps = {
-  style;
+  style?;
   assets: Asset[];
   callback: (item) => void;
   onDissmiss?: () => void;
@@ -37,6 +37,8 @@ type DropdownProps = {
   onChangeSearchInput?: (text: string) => void;
   isLoading?: boolean;
   showSearch?: boolean;
+  /** Use inside a full-screen modal / bottom sheet with a bounded height */
+  presentation?: 'default' | 'modal';
 };
 
 const EmptyAssetState = () => {
@@ -62,6 +64,7 @@ function RGBAssetList(props: DropdownProps) {
     onChangeSearchInput,
     isLoading,
     showSearch = true,
+    presentation = 'default',
   } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
@@ -69,7 +72,12 @@ function RGBAssetList(props: DropdownProps) {
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   return (
-    <View style={[style, styles.container]}>
+    <View
+      style={[
+        styles.container,
+        presentation === 'modal' && styles.containerModal,
+        style,
+      ]}>
       <AppTouchable onPress={onDissmiss}>
         <GradientView
           style={styles.inputWrapper}
@@ -88,7 +96,11 @@ function RGBAssetList(props: DropdownProps) {
           </View>
         </GradientView>
       </AppTouchable>
-      <View style={styles.container2}>
+      <View
+        style={[
+          styles.container2,
+          presentation === 'modal' && styles.container2Modal,
+        ]}>
         {showSearch && (
           <TextField
             value={searchAssetInput}
@@ -119,12 +131,12 @@ function RGBAssetList(props: DropdownProps) {
         {assets && assets.length > 0 && (
           <View style={styles.labelWrapper}>
             <View>
-              <AppText variant="caption" style={style.labelTextStyle}>
+              <AppText variant="caption" style={styles.labelTextStyle}>
                 {assetsTranslations.assetName}
               </AppText>
             </View>
             <View>
-              <AppText variant="caption" style={style.labelTextStyle}>
+              <AppText variant="caption" style={styles.labelTextStyle}>
                 {sendScreen.availableBalance}
               </AppText>
             </View>
@@ -132,7 +144,10 @@ function RGBAssetList(props: DropdownProps) {
         )}
         <FlatList
           data={assets}
-          style={styles.assetListContainer}
+          style={[
+            styles.assetListContainer,
+            presentation === 'modal' && styles.assetListModal,
+          ]}
           renderItem={({ item }) => {
             const filePath = item?.media?.filePath || item?.asset?.media?.file;
             const showImage =
@@ -226,11 +241,21 @@ const getStyles = (theme: AppTheme) =>
       backgroundColor: theme.colors.primaryBackground,
       marginTop: Platform.OS === 'android' ? hp(20) : 0,
     },
+    containerModal: {
+      height: '100%',
+      flex: 1,
+      marginTop: 0,
+    },
     container2: {
       borderRadius: hp(20),
       marginTop: hp(20),
       backgroundColor: theme.colors.assetListBackColor,
       paddingTop: hp(10),
+    },
+    container2Modal: {
+      flex: 1,
+      minHeight: 0,
+      marginTop: hp(12),
     },
     inputWrapper: {
       flexDirection: 'row',
@@ -331,6 +356,10 @@ const getStyles = (theme: AppTheme) =>
     assetListContainer: {
       marginTop: hp(5),
       marginBottom: hp(10),
+    },
+    assetListModal: {
+      flex: 1,
+      minHeight: 0,
     },
     emptyAssetStateContainer: {
       alignItems: 'center',
