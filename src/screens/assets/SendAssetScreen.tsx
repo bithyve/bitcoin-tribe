@@ -50,7 +50,7 @@ import {
   AverageTxFeesByNetwork,
 } from 'src/services/wallets/interfaces';
 import { numberWithCommas } from 'src/utils/numberWithCommas';
-import config from 'src/utils/config';
+import config, { APP_STAGE } from 'src/utils/config';
 import FeePriorityButton from '../send/components/FeePriorityButton';
 import ModalContainer from 'src/components/ModalContainer';
 import SendAssetSuccess from './components/SendAssetSuccess';
@@ -615,12 +615,14 @@ const SendAssetScreen = () => {
           image={
             assetData?.assetSchema.toUpperCase() !== AssetSchema.Coin
               ? Platform.select({
-                android: `file://${assetData?.media?.filePath || assetData?.token?.media.filePath
+                  android: `file://${
+                    assetData?.media?.filePath ||
+                    assetData?.token?.media.filePath
                   }`,
-                ios:
-                  assetData?.media?.filePath ||
-                  assetData?.token?.media?.filePath,
-              })
+                  ios:
+                    assetData?.media?.filePath ||
+                    assetData?.token?.media?.filePath,
+                })
               : null
           }
           tag={
@@ -720,16 +722,18 @@ const SendAssetScreen = () => {
         {/* Select Payment Method */}
         <View style={styles.divider} />
 
-        <View>
-          <AppText variant="body2" style={styles.labelstyle}>
-            {sendScreen.selectPaymentMethod}
-          </AppText>
-          <PaymentMethodButton
-            paymentMethod={paymentMethod}
-            setPaymentMethod={setPaymentMethod}
-            disableDollars={!isGasFreeAvailable}
-          />
-        </View>
+        {config.ENVIRONMENT == APP_STAGE.PRODUCTION && (
+          <View>
+            <AppText variant="body2" style={styles.labelstyle}>
+              {sendScreen.selectPaymentMethod}
+            </AppText>
+            <PaymentMethodButton
+              paymentMethod={paymentMethod}
+              setPaymentMethod={setPaymentMethod}
+              disableDollars={!isGasFreeAvailable}
+            />
+          </View>
+        )}
 
         {paymentMethod == PaymentMethodType.SATS && (
           <>
@@ -864,7 +868,7 @@ const SendAssetScreen = () => {
               inputStyle={styles.customFeeInputStyle}
               contentStyle={styles.feeInputContentStyle}
               rightText={'sat/vB'}
-              onRightTextPress={() => { }}
+              onRightTextPress={() => {}}
               rightCTATextColor={theme.colors.headingColor}
               error={customAmtValidationError}
               onSubmitEditing={() => {
@@ -923,7 +927,13 @@ const SendAssetScreen = () => {
             }
             selectedPriority={selectedPriority}
             onSuccessStatus={successStatus}
-            gasFreeFee={gasFreeQuote ? `${gasFreeQuote.serviceFeeAmount / (10 ** precision)} ${assetData?.ticker || ''}` : "0"}
+            gasFreeFee={
+              gasFreeQuote
+                ? `${gasFreeQuote.serviceFeeAmount / 10 ** precision} ${
+                    assetData?.ticker || ''
+                  }`
+                : '0'
+            }
             isGasFree={paymentMethod === PaymentMethodType.DOLLARS}
             quoteExpiration={quoteExpiration}
             onQuoteExpired={() => {
@@ -967,7 +977,9 @@ const SendAssetScreen = () => {
       </KeyboardAvoidView>
       <View style={styles.buttonWrapper}>
         <Buttons
-          primaryTitle={requestingQuote ? 'Preparing Transaction...' : common.next}
+          primaryTitle={
+            requestingQuote ? 'Preparing Transaction...' : common.next
+          }
           primaryOnPress={async () => {
             if (Number(assetAmount) > Number(assetData?.balance.spendable)) {
               Keyboard.dismiss();
@@ -983,15 +995,18 @@ const SendAssetScreen = () => {
               return;
             }
             Keyboard.dismiss();
-            
+
             // For gas-free (DOLLARS) payment, request fee quote first
             if (paymentMethod === PaymentMethodType.DOLLARS) {
               // Check if witness invoice with gas-free
               if (invoiceType === InvoiceMode.Witness) {
-                Toast('Gas-free transfers are not supported for witness invoices. Please use "Pay in Sats" instead.', true);
+                Toast(
+                  'Gas-free transfers are not supported for witness invoices. Please use "Pay in Sats" instead.',
+                  true,
+                );
                 return;
               }
-              
+
               setRequestingQuote(true);
               try {
                 const quote = await ApiHandler.requestGasFreeQuote(
@@ -1006,11 +1021,11 @@ const SendAssetScreen = () => {
                   2, // numOutputs
                 );
                 setGasFreeQuote(quote);
-                
+
                 // Calculate expiration time
                 const expiresAt = new Date(quote.expiresAt).getTime();
                 setQuoteExpiration(expiresAt);
-                
+
                 setRequestingQuote(false);
                 setVisible(true);
               } catch (error) {
