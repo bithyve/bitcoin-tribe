@@ -58,8 +58,8 @@ class Configuration {
         ? NetworkType.TESTNET4
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
-    this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
-    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/collection' : 'https://registry.bitcointribe.app/collection';
+    this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://registry-dev.orbis1.io/asset' : 'https://registry.orbis1.io/asset';
+    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://registry-dev.orbis1.io/collection' : 'https://registry.orbis1.io/collection';
   }
 
   getBitcoinNetwork = (networkType: NetworkType) => {
