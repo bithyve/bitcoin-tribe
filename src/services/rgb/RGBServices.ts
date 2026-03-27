@@ -147,13 +147,15 @@ export default class RGBServices {
         wallet: {
           enabled: true,
           keys,
-          supportedSchemas: [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA, AssetSchema.IFA],
+          supportedSchemas: config.ENVIRONMENT === 'development'
+            ? [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA, AssetSchema.IFA]
+            : [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
           maxAllocationsPerUtxo: 1,
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { enabled: RGBServices.environment === Environment.REGTEST ? false : true }, // TODO: Remove this once gas free transfers are supported on REGTEST
-          watchTower: { enabled: true },
+          gasFree: { enabled: RGBServices.environment === Environment.TESTNET4 ? true : false }, // TODO: Remove this once gas free transfers are supported on REGTEST
+          watchTower: { enabled: config.ENVIRONMENT === 'production' ? false : true },
         },
         logging: { level: LogLevel.DEBUG },
       });
