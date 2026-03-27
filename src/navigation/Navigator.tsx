@@ -23,6 +23,7 @@ import CloudBackup from 'src/screens/settings/CloudBackup';
 import ConnectNodeManually from 'src/screens/settings/ConnectNodeManually';
 import { RealmProvider } from 'src/storage/realm/RealmProvider';
 import IssueScreen from 'src/screens/collectiblesCoins/IssueScreen';
+import ReceiveAsset from 'src/screens/receiveasset/ReceiveAssetScreen';
 import EnterInvoiceDetails from 'src/screens/receiveasset/EnterInvoiceDetails';
 import SendToScreen from 'src/screens/send/SendToScreen';
 import ShowXPub from 'src/screens/wallet/ShowXPub';
@@ -234,6 +235,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.IFAMETADATA}
           component={IfaMetaData}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.RECEIVEASSET}
+          component={ReceiveAsset}
         />
         <Stack.Screen
           name={NavigationRoutes.ENTERINVOICEDETAILS}
