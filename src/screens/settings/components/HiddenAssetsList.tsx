@@ -60,6 +60,8 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
         return assets.coin;
       case AssetSchema.UDA:
         return assets.collectible;
+      case AssetSchema.IFA:
+        return assets.ifa;
       default:
         return '';
     }
@@ -76,6 +78,9 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
         break;
       case AssetSchema.UDA:
         schemaType = RealmSchema.UniqueDigitalAsset;
+        break;
+      case AssetSchema.IFA:
+        schemaType = RealmSchema.IFA;
         break;
       default:
         return;
@@ -134,7 +139,8 @@ function HiddenAssetsList(props: HiddenAssetsListProps) {
             >
               <View style={{ flex: 1, flexDirection: 'row', gap: wp(10) }}>
                 <View style={styles.assetImageWrapper}>
-                  {item?.assetSchema.toUpperCase() === AssetSchema.Coin ? (
+                  {item?.assetSchema.toUpperCase() === AssetSchema.Coin ||
+                  item?.assetSchema.toUpperCase() === AssetSchema.IFA ? (
                     <AssetIcon
                       iconUrl={item.iconUrl}
                       assetTicker={item.ticker}

@@ -52,13 +52,21 @@ const createObjectBulk = (
     if (
       schema === RealmSchema.Collectible ||
       schema === RealmSchema.UniqueDigitalAsset ||
-      schema === RealmSchema.Coin
+      schema === RealmSchema.Coin ||
+      schema === RealmSchema.IFA
     ) {
       objects.forEach(object => {
-        if(object?.maxSupply) {
-            object.maxSupply = object.maxSupply.toString();
-        } else if(object?.issuedSupply) {
+        if (object?.maxSupply != null) {
+          object.maxSupply = object.maxSupply.toString();
+        }
+        if (object?.issuedSupply != null) {
           object.issuedSupply = object.issuedSupply.toString();
+        }
+        if (object?.initialSupply != null) {
+          object.initialSupply = object.initialSupply.toString();
+        }
+        if (object?.knownCirculatingSupply != null) {
+          object.knownCirculatingSupply = object.knownCirculatingSupply.toString();
         }
         object.balance.spendable = object.balance.spendable.toString();
         object.balance.future = object.balance.future.toString();

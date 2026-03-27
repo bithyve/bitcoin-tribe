@@ -63,6 +63,7 @@ import { CreateCollectionConfirmation } from 'src/components/CollectionConfirmat
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function IssueCollectibleScreen() {
   const { collectionId } = useRoute().params;
@@ -199,7 +200,7 @@ function IssueCollectibleScreen() {
       if (response?.assetId) {
         setLoading(false);
         Toast('Collection UDA created successfully');
-
+        logCustomEvent(events.COLLECTION_MINTED);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
         navigation.goBack();

@@ -25,6 +25,7 @@ import RibbonCard from 'src/components/RibbonCardCard';
 import AppText from 'src/components/AppText';
 import SwipeToAction from 'src/components/SwipeToAction';
 import SkipButton from 'src/components/SkipButton';
+import config, { APP_STAGE } from 'src/utils/config';
 
 export const ServiceFee = ({
   feeDetails,
@@ -52,7 +53,8 @@ export const ServiceFee = ({
           </View>
           <View style={styles.valueWrapper}>
             <AppText
-              style={styles.labelText}>{`${feeDetails.fee} sats`}</AppText>
+              style={styles.labelText}
+            >{`${feeDetails.fee} sats`}</AppText>
           </View>
         </View>
       </View>
@@ -125,19 +127,32 @@ function AddAsset() {
   const navigateToIssue = useCallback(
     (addToRegistry: boolean, issueAssetType) => {
       setTimeout(() => {
-        if(issueAssetType === AssetType.Collection) {
-          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUECOLLECTION));
+        if (issueAssetType === AssetType.Collection) {
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.ISSUECOLLECTION),
+          );
+        } else if (issueAssetType === AssetType.Coin) {
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.ISSUESCREEN, {
+              issueAssetType,
+              addToRegistry,
+            }),
+          );
         }
-        else if (issueAssetType === AssetType.Coin) {
-          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUESCREEN, {
-            issueAssetType,
-            addToRegistry,
-          }));
+        else if (issueAssetType === AssetType.IFA) {
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.ISSUEIFA, {
+              issueAssetType,
+              addToRegistry,
+            }),
+          );
         } else {
-          navigation.dispatch(CommonActions.navigate(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
-            issueAssetType,
-            addToRegistry,
-          }));
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.ISSUECOLLECTIBLESCREEN, {
+              issueAssetType,
+              addToRegistry,
+            }),
+          );
         }
       }, 500);
     },
@@ -176,7 +191,7 @@ function AddAsset() {
             }
           }}
         />
-         <RibbonCard
+        <RibbonCard
           title={assets.issueCollection}
           subTitle={assets.createNewTribeUdasCollection}
           backColor={theme.colors.inputBackground}
@@ -190,6 +205,22 @@ function AddAsset() {
           }}
           testID="issue_collection"
         />
+
+        {config.ENVIRONMENT === APP_STAGE.DEVELOPMENT && <RibbonCard
+          title={assets.issueIFA}
+          subTitle={assets.issueIFASubtitle}
+          backColor={theme.colors.inputBackground}
+          style={styles.optionStyle}
+          onPress={() => {
+            if (!canProceed) {
+              setVisible(true);
+            } else {
+              navigateToIssue(false, AssetType.IFA);
+            }
+          }}
+          testID="issue_ifa"
+        />}
+
         <RibbonCard
           title={home.addAssets}
           subTitle={home.receiveAssetsSubtitle}
@@ -198,8 +229,8 @@ function AddAsset() {
           onPress={() =>
             navigation.dispatch(
               CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-              refresh: true,
-            })
+                refresh: true,
+              }),
             )
           }
           testID="receive"
@@ -212,7 +243,8 @@ function AddAsset() {
           enableClose={true}
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}>
+          borderColor={theme.colors.borderColor}
+        >
           <InsufficiantBalancePopupContainer
             primaryOnPress={() => {
               setVisible(false);

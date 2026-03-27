@@ -53,12 +53,12 @@ const AssetCard = (props: AssetCardProps) => {
   const styles = useMemo(() => getStyles(theme), [theme]);
 
   const details = useMemo(() => {
-    if (asset.assetSchema === AssetSchema.Coin) return asset.ticker;
+    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return asset.ticker;
     return asset.details;
   }, [asset.assetSchema, asset.ticker, asset.details]);
 
   const uri = useMemo(() => {
-    if (asset.assetSchema === AssetSchema.Coin) return '';
+    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return '';
     const media = asset?.media?.filePath || asset?.token?.media?.filePath;
     if (media) {
       if (isWebUrl(media)) {
@@ -99,9 +99,10 @@ const AssetCard = (props: AssetCardProps) => {
             theme.colors.cardGradient1,
             theme.colors.cardGradient2,
             theme.colors.cardGradient3,
-          ]}>
+          ]}
+        >
           <View style={styles.assetImageWrapper}>
-            {asset.assetSchema === AssetSchema.Coin ? (
+            {asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA ? (
               <AssetIcon
                 iconUrl={asset.iconUrl}
                 assetID={asset.assetId}
@@ -109,7 +110,7 @@ const AssetCard = (props: AssetCardProps) => {
                 verified={asset?.issuer?.verified}
               />
             ) : (
-              <CustomImage uri={uri} imageStyle={styles.imageStyle}/>
+              <CustomImage uri={uri} imageStyle={styles.imageStyle} size={40} />
             )}
           </View>
           <View style={styles.contentWrapper}>
@@ -118,16 +119,18 @@ const AssetCard = (props: AssetCardProps) => {
                 <AppText
                   variant="body2"
                   numberOfLines={1}
-                  style={styles.nameText}>
+                  style={styles.nameText}
+                >
                   {asset.name}
                 </AppText>
                 {isVerified && <IconVerified width={20} height={20} />}
               </View>
-              {(asset.assetSchema !== AssetSchema.UDA)   && (
+              {asset.assetSchema !== AssetSchema.UDA && (
                 <AppText
                   variant="body2"
                   numberOfLines={1}
-                  style={styles.amountText}>
+                  style={styles.amountText}
+                >
                   {balance}
                 </AppText>
               )}
@@ -135,7 +138,8 @@ const AssetCard = (props: AssetCardProps) => {
             <AppText
               variant="body2"
               numberOfLines={1}
-              style={styles.textDetails}>
+              style={styles.textDetails}
+            >
               {detailsText}
             </AppText>
           </View>
@@ -277,7 +281,8 @@ const DummyCards = ({ styles }) => {
             width: wp(CARD_WIDTH) * 0.88,
             top: 5,
           },
-        ]}>
+        ]}
+      >
         <GradientView colors={cardColor?.outerColor} style={styles.innerCard}>
           <></>
         </GradientView>
@@ -290,7 +295,8 @@ const DummyCards = ({ styles }) => {
             width: wp(CARD_WIDTH) * 0.96,
             top: 10,
           },
-        ]}>
+        ]}
+      >
         <GradientView colors={cardColor?.innerColor} style={styles.innerCard}>
           <></>
         </GradientView>

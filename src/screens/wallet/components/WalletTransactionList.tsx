@@ -64,7 +64,6 @@ function WalletTransactionList({
     }
   }, [autoRefresh && isFocused]);
 
-
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
@@ -102,7 +101,7 @@ function WalletTransactionList({
         ListFooterComponent={FooterComponent}
         renderItem={({ item }) => (
           <WalletTransactions
-          transId={item.transactionKind || item.txid}
+            transId={item.transactionKind || item.txid}
             transDate={item.date}
             transAmount={
               app.appType === AppType.NODE_CONNECT ||
@@ -151,7 +150,7 @@ const getStyles = (theme: AppTheme) =>
       height: 100,
     },
     footer: {
-      height: windowHeight > 670 ? 100 : 50, // Adjust the height as needed
+      height: windowHeight * 0.4,
     },
   });
 export default WalletTransactionList;

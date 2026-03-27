@@ -22,7 +22,7 @@ const AssetIcon = ({ iconUrl, assetID, size, style, verified }: props) => {
   return (
     <View>
       {iconUrl ? (
-        <CustomImage uri={iconUrl} imageStyle={styles.imageStyle} size={size/2}/>
+        <CustomImage uri={iconUrl} imageStyle={styles.imageStyle} size={40} />
       ) : (
         <Identicon
           value={assetID}

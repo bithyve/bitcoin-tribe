@@ -45,7 +45,7 @@ import { RgbLibErrors } from 'orbis1-sdk-rn';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
-function IssueScreen() {
+function IssueIfa() {
   const { issueAssetType, addToRegistry } = useRoute().params;
   const { isWalletOnline } = useContext(AppContext);
   const theme: AppTheme = useTheme();
@@ -59,11 +59,14 @@ function IssueScreen() {
   const [assetTicker, setAssetTicker] = useState('');
   const [totalSupplyAmt, setTotalSupplyAmt] = useState('');
   const [precision, setPrecision] = useState(0);
+  const [replaceRightsNum, setReplaceRightsNum] = useState('');
   const [loading, setLoading] = useState(false);
   const [assetNameValidationError, setAssetNameValidationError] = useState('');
   const [assetTickerValidationError, setAssetTickerValidationError] =
     useState('');
   const [assetTotSupplyValidationError, setAssetTotSupplyValidationError] =
+    useState('');
+  const [replaceRightsNumValidationError, setReplaceRightsNumValidationError] =
     useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
@@ -82,6 +85,7 @@ function IssueScreen() {
   );
   const assetTickerInputRef = useRef(null);
   const totalSupplyInputRef = useRef(null);
+  const replaceRightsNumInputRef = useRef(null);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -103,7 +107,7 @@ function IssueScreen() {
       refreshRgbWalletMutation.mutate();
       fetchUTXOs();
       navigation.goBack();
-      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+      if (createUtxoError.toString().includes('Insufficient sats for RGB')) {
         Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
       } else {
         Toast(assets.assetProcessErrorMsg, true);
@@ -128,11 +132,13 @@ function IssueScreen() {
     Keyboard.dismiss();
     setLoading(true);
     try {
-      const response = await ApiHandler.issueNewCoin({
+      const response = await ApiHandler.issueIFA({
         name: assetName.trim(),
         ticker: assetTicker,
         supply: totalSupplyAmt.replace(/,/g, '') + '0'.repeat(precision),
         precision: Number(precision),
+        replaceRightsNum: Number(replaceRightsNum),
+        rejectListUrl: null,
       });
       if (response?.assetId) {
         setLoading(false);
@@ -146,10 +152,10 @@ function IssueScreen() {
             navigation.replace(NavigationRoutes.ASSETREGISTRYSCREEN, {
               assetId: response.assetId,
               askVerify: addToRegistry,
-              issueType: AssetType.Coin,
+              issueType: AssetType.IFA,
             });
           } else {
-            navigation.replace(NavigationRoutes.COINDETAILS, {
+            navigation.replace(NavigationRoutes.IFADETAILS, {
               assetId: response.assetId,
               askReview: true,
               askVerify: addToRegistry,
@@ -168,7 +174,7 @@ function IssueScreen() {
         Toast(`Failed: ${response?.error}`, true);
       }
     } catch (error) {
-      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+      if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
         setTimeout(() => {
           createUtxos();
         }, 500);
@@ -177,7 +183,14 @@ function IssueScreen() {
         setLoading(false);
       }
     }
-  }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
+  }, [
+    assetName,
+    assetTicker,
+    navigation,
+    totalSupplyAmt,
+    precision,
+    replaceRightsNum,
+  ]);
 
   const isButtonDisabled = useMemo(() => {
     if (
@@ -186,8 +199,8 @@ function IssueScreen() {
     ) {
       return true;
     }
-    return !assetName || !assetTicker || !totalSupplyAmt;
-  }, [assetName, assetTicker, totalSupplyAmt]);
+    return !assetName || !assetTicker || !totalSupplyAmt || !replaceRightsNum;
+  }, [assetName, assetTicker, totalSupplyAmt, replaceRightsNum]);
 
   const onPressIssue = () => {
     issueCoin();
@@ -253,15 +266,28 @@ function IssueScreen() {
     }
   };
 
+
+  const handleAmendsChange = (text: string) => {
+    const sanitizedText = text.replace(/[^0-9]/g, '');
+    if (!sanitizedText) {
+      setReplaceRightsNum('');
+      setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
+      return;
+    }
+    setReplaceRightsNum(sanitizedText);
+    setReplaceRightsNumValidationError(null);
+  };
+
   return (
     <ScreenContainer>
-      <AppHeader title={assets.issueNewCoin} />
+      <AppHeader title={assets.issueIFA} />
       <View>
         <ResponsePopupContainer
           visible={loading || createUtxos.isLoading}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
-          borderColor={theme.colors.modalBackColor}>
+          borderColor={theme.colors.modalBackColor}
+        >
           <InProgessPopupContainer
             title={assets.issueAssetLoadingTitle}
             subTitle={assets.issueAssetLoadingSubTitle}
@@ -353,6 +379,21 @@ function IssueScreen() {
               {totalSupplyWithPrecision}
             </AppText>
           </View>
+
+          <AppText variant="body2" style={styles.textInputTitle}>
+            {assets.noOfAmendmentsLabel}
+          </AppText>
+          <TextField
+            ref={replaceRightsNumInputRef}
+            value={formatNumber(replaceRightsNum)}
+            onChangeText={handleAmendsChange}
+            placeholder={assets.enterMaxAmendmentsPlaceholder}
+            keyboardType="numeric"
+            style={styles.input}
+            returnKeyType="next"
+            onSubmitEditing={Keyboard.dismiss}
+            error={replaceRightsNumValidationError}
+          />
         </View>
       </KeyboardAvoidView>
       {colorable.length === 0 && (
@@ -385,7 +426,8 @@ function IssueScreen() {
           enableClose={true}
           onDismiss={() => setVisibleFailedToCreatePopup(false)}
           backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}>
+          borderColor={theme.colors.borderColor}
+        >
           <FailedToCreatePopupContainer
             primaryOnPress={() => {
               setVisibleFailedToCreatePopup(false);
@@ -462,4 +504,4 @@ const getStyles = (theme: AppTheme, inputHeight) =>
       marginLeft: hp(10),
     },
   });
-export default IssueScreen;
+export default IssueIfa;

@@ -39,7 +39,7 @@ function AppBackupMenu({ navigation }) {
   const { settings, onBoarding, common } = translations;
   const theme: AppTheme = useTheme();
   const insets = useSafeAreaInsets();
-  const styles = getStyles(theme,insets);
+  const styles = getStyles(theme, insets);
   const [backup] = useMMKVBoolean(Keys.WALLET_BACKUP);
   const [lastRelayBackup] = useMMKVNumber(Keys.RGB_ASSET_RELAY_BACKUP);
   const [assetBackup, setAssetBackup] = useMMKVBoolean(Keys.ASSET_BACKUP);
@@ -63,7 +63,11 @@ function AppBackupMenu({ navigation }) {
   const rgbAssetsbackup = async () => {
     try {
       setIsLoading(true);
-      const backup = await RGBServices.backup('', app.primaryMnemonic);
+      const backup = await RGBServices.backup(
+        '',
+        app.primaryMnemonic,
+        app.publicId,
+      );
       setIsLoading(false);
       if (backup.file) {
         setTimeout(async () => {
@@ -89,6 +93,9 @@ function AppBackupMenu({ navigation }) {
           );
           if (response.uploaded) {
             Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
+            ApiHandler.backupAppImage({ invoices: true }).catch(e =>
+              console.log('backupAppImage invoices', e),
+            );
           }
         }, 1000);
       }
@@ -195,7 +202,10 @@ function AppBackupMenu({ navigation }) {
             <SelectOption
               title={settings.rgbAssetsbackup}
               subTitle={''}
-              disabled={isWalletOnline === WalletOnlineStatus.Error || isWalletOnline === WalletOnlineStatus.InProgress}
+              disabled={
+                isWalletOnline === WalletOnlineStatus.Error ||
+                isWalletOnline === WalletOnlineStatus.InProgress
+              }
               onPress={() => {
                 !backup
                   ? Toast(settings.appBackupStepCheck, true)
@@ -241,10 +251,12 @@ function AppBackupMenu({ navigation }) {
         )}
       </ScrollView>
       <AppText style={styles.textStepTime} variant="body2">
-          {`${settings.relayBackupTime} ${lastRelayBackup ? moment(lastRelayBackup).format(
-            'DD MMM YY  •  hh:mm A',
-          ) : 'Never'}`}
-        </AppText>
+        {`${settings.relayBackupTime} ${
+          lastRelayBackup
+            ? moment(lastRelayBackup).format('DD MMM YY  •  hh:mm A')
+            : 'Never'
+        }`}
+      </AppText>
       <ModalLoading visible={isLoading} />
       <EnterPasscodeModal
         title={settings.EnterPasscode}
