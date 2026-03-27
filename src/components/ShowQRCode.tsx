@@ -2,11 +2,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import QRCode from 'react-native-qrcode-svg';
-import { hp, windowWidth, wp } from 'src/constants/responsive';
+import { windowWidth, wp } from 'src/constants/responsive';
 import AppText from './AppText';
 import Fonts from 'src/constants/Fonts';
 import Colors from 'src/theme/Colors';
-import { AppTheme } from 'src/theme';
 
 type ShowQRCodeProps = {
   value: string;
@@ -15,7 +14,7 @@ type ShowQRCodeProps = {
 };
 
 const ShowQRCode = (props: ShowQRCodeProps) => {
-  const theme: AppTheme = useTheme();
+  const theme = useTheme();
   const { value, title, qrTitleColor = theme.colors.accent1 } = props;
   const qrSize = (windowWidth * 65) / 100;
   const styles = React.useMemo(
@@ -58,7 +57,6 @@ const getStyles = (theme, qrTitleColor) =>
       justifyContent: 'center',
     },
     qrFooterText: {
-      marginTop: hp(5),
       textAlign: 'center',
       color: qrTitleColor,
       paddingVertical: wp(10),
