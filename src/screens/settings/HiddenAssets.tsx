@@ -14,6 +14,7 @@ import {
   AssetVisibility,
   Coin,
   Collectible,
+  InflatableFungibleAsset,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -44,11 +45,17 @@ function HiddenAssets() {
     collection =>
       collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
   );
+  const ifaCoins = useQuery<InflatableFungibleAsset>(
+    RealmSchema.IFA,
+    collection =>
+      collection.filtered(`visibility == $0`, AssetVisibility.HIDDEN),
+  );
+  
   const assets: Asset[] = useMemo(() => {
-    return [...coins, ...collectibles, ...udas].sort(
+    return [...coins, ...collectibles, ...udas, ...ifaCoins].sort(
       (a, b) => b.timestamp - a.timestamp,
     );
-  }, [coins, collectibles, udas]);
+  }, [coins, collectibles, udas, ifaCoins]);
 
   const handleRefresh = () => {
     setRefreshing(true);

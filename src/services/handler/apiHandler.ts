@@ -84,8 +84,10 @@ import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { objectToUrlParams, urlParamsToObject } from 'src/utils/url';
 import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
-import  RealmDatabase  from 'src/storage/realm/realm';
+import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
+import { restoreKeys, BitcoinNetwork } from 'orbis1-sdk-rn';
+import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -111,12 +113,23 @@ export class ApiHandler {
     }
   }
 
-  static performSomeAsyncOperation() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve('Success');
-      }, 1000);
-    });
+  static getBitcoinNetwork = (): BitcoinNetwork => {
+    switch (config.NETWORK_TYPE) {
+      case NetworkType.MAINNET:
+        return BitcoinNetwork.MAINNET;
+      case NetworkType.TESTNET:
+        return BitcoinNetwork.TESTNET;
+      case NetworkType.REGTEST:
+        return BitcoinNetwork.REGTEST;
+      case NetworkType.TESTNET4:
+        return BitcoinNetwork.TESTNET4;
+      default:
+        return BitcoinNetwork.TESTNET;
+    }
+  };
+
+  static getElectrumUrl(network: BitcoinNetwork): string {
+    return network === BitcoinNetwork.TESTNET ? "ssl://electrum.iriswallet.com:50013" : network === BitcoinNetwork.TESTNET4 ? "ssl://electrum.iriswallet.com:50053" : network === BitcoinNetwork.REGTEST ? "electrum.rgbtools.org:50041" : "ssl://electrum.iriswallet.com:50003";
   }
 
   static async loadGithubReleaseNotes(fullVersion: string) {
@@ -284,12 +297,25 @@ export class ApiHandler {
           const created = dbManager.createObject(RealmSchema.TribeApp, newAPP);
           if (created) {
             await ApiHandler.createNewWallet({});
-            const rgbWallet: RGBWallet = await RGBServices.restoreKeys(
+            const keys = await restoreKeys(
+              ApiHandler.getBitcoinNetwork(),
               primaryMnemonic,
             );
+            const rgbWallet: RGBWallet = {
+              mnemonic: primaryMnemonic,
+              xpub: keys.xpub,
+              rgbDir: '',
+              accountXpubColored: keys.accountXpubColored,
+              masterFingerprint: keys.masterFingerprint,
+              accountXpubVanilla: keys.accountXpubVanilla,
+              nodeUrl: '',
+              nodeAuthentication: '',
+              peerDNS: '',
+            };
             dbManager.createObject(RealmSchema.RgbWallet, rgbWallet);
             const isWalletOnline = await RGBServices.initiate(
               rgbWallet.mnemonic,
+              rgbWallet.xpub,
               rgbWallet.accountXpubVanilla,
               rgbWallet.accountXpubColored,
               rgbWallet.masterFingerprint,
@@ -485,7 +511,7 @@ export class ApiHandler {
             isRestore = true;
           }
         } catch (error) {
-          console.log('🚀 ~ GetAppImage error:',error);
+          console.log('🚀 ~ GetAppImage error:', error);
         }
         // @ts-ignore
         await ApiHandler.setupNewApp({
@@ -511,6 +537,7 @@ export class ApiHandler {
           settingsObject: data?.settingsObject,
           roomsObject: data?.roomsObject,
           tnxMetaObject: data?.tnxMetaObject,
+          invoicesObject: data?.invoicesObject,
         });
       }
     } catch (error) {
@@ -574,6 +601,7 @@ export class ApiHandler {
           settingsObject: backup.app?.settingsObject,
           roomsObject: backup.app?.roomsObject,
           tnxMetaObject: backup.app?.tnxMetaObject,
+          invoicesObject: backup.app?.invoicesObject,
         });
         // await ApiHandler.manageFcmVersionTopics();
       } else {
@@ -611,7 +639,7 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+    if (config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
       config.NETWORK_TYPE = app.networkType;
     }
     // const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
@@ -653,7 +681,7 @@ export class ApiHandler {
       );
       const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
       const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-      if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+      if (config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
         config.NETWORK_TYPE = app.networkType;
       }
       return { key, isWalletOnline: false };
@@ -684,7 +712,7 @@ export class ApiHandler {
       RealmSchema.RgbWallet,
     );
     const apiHandler = new ApiHandler(rgbWallet, app.appType, app.authToken);
-    if(config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
+    if (config.ENVIRONMENT !== APP_STAGE.PRODUCTION) {
       config.NETWORK_TYPE = app.networkType;
     }
     return { key, isWalletOnline: false };
@@ -737,10 +765,10 @@ export class ApiHandler {
       } else {
         const isWalletOnline = await RGBServices.initiate(
           rgbWallet.mnemonic,
+          rgbWallet.xpub,
           rgbWallet.accountXpubVanilla,
           rgbWallet.accountXpubColored,
           rgbWallet.masterFingerprint,
-          timeout,
         );
         return isWalletOnline;
       }
@@ -799,10 +827,10 @@ export class ApiHandler {
       config.NETWORK_TYPE === NetworkType.TESTNET
         ? predefinedTestnetNodes
         : config.NETWORK_TYPE === NetworkType.REGTEST
-        ? predefinedRegtestNodes
-        : config.NETWORK_TYPE === NetworkType.TESTNET4
-        ? predefinedTestnet4Nodes
-        : predefinedMainnetNodes;
+          ? predefinedRegtestNodes
+          : config.NETWORK_TYPE === NetworkType.TESTNET4
+            ? predefinedTestnet4Nodes
+            : predefinedMainnetNodes;
     const privateNodes: NodeDetail[] = dbManager.getCollection(
       RealmSchema.NodeConnect,
     ) as any;
@@ -829,7 +857,7 @@ export class ApiHandler {
     });
   }
 
-  static async refreshWallets({ wallets, metaData= null }: { wallets: Wallet[], metaData:Object }) {
+  static async refreshWallets({ wallets, metaData = null }: { wallets: Wallet[], metaData: Object }) {
     try {
       if (
         ApiHandler.appType === AppType.NODE_CONNECT ||
@@ -880,10 +908,10 @@ export class ApiHandler {
               synchedWallet.specs.transactions.map(tnx =>
                 md[tnx.txid]
                   ? {
-                      ...tnx,
-                      metadata: { ...md[tnx.txid] },
-                      transactionKind: TransactionKind.SERVICE_FEE,
-                    }
+                    ...tnx,
+                    metadata: { ...md[tnx.txid] },
+                    transactionKind: TransactionKind.SERVICE_FEE,
+                  }
                   : tnx,
               );
           }
@@ -1230,9 +1258,10 @@ export class ApiHandler {
     linkedAmount,
     expiry,
     blinded = true,
+    useWatchTower = false,
   }) {
     try {
-      assetId = assetId ?? '';
+      assetId = assetId ?? null;
       amount = parseFloat(amount) ?? 0.0;
       const rgbWallet: RGBWallet = dbManager.getObjectByIndex(
         RealmSchema.RgbWallet,
@@ -1255,6 +1284,7 @@ export class ApiHandler {
           rgbWallet.mnemonic,
           { receiveData: response, invoices: invoices },
         );
+        ApiHandler.scheduleInvoicesCloudBackup();
 
         if (linkedAsset && linkedAmount !== 0) {
           const {
@@ -1274,12 +1304,29 @@ export class ApiHandler {
           };
           dbManager.createObject(RealmSchema.ReceiveUTXOData, updateData);
         }
+        if (useWatchTower && response.invoice) {
+          const watchtowerResult = await RGBServices.addInvoiceToWatchTower(
+            response.invoice,
+          );
+          if (!watchtowerResult.success) {
+            throw new Error(
+              watchtowerResult.error || 'Failed to register with watchtower',
+            );
+          }
+        }
       }
       ApiHandler.viewUtxos();
     } catch (error) {
       console.log('errors', error);
       throw error;
     }
+  }
+
+  /** Fire-and-forget sync of Realm invoices to Relay app-image backup. */
+  private static scheduleInvoicesCloudBackup() {
+    ApiHandler.backupAppImage({ invoices: true }).catch(e =>
+      console.log('backupAppImage invoices', e),
+    );
   }
 
   static async receiveAssetOnLN({
@@ -1371,6 +1418,13 @@ export class ApiHandler {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
           assets.nia,
+          Realm.UpdateMode.Modified,
+        );
+      }
+      if (assets?.ifa) {
+        dbManager.createObjectBulk(
+          RealmSchema.IFA,
+          assets.ifa,
           Realm.UpdateMode.Modified,
         );
       }
@@ -1790,8 +1844,77 @@ export class ApiHandler {
       }
       return response;
     } catch (error) {
-      console.log('error', error);
-      throw new Error(`${error}`);
+      throw error;
+    }
+  }
+
+  static async issueIFA({
+    name,
+    ticker,
+    supply,
+    precision,
+    replaceRightsNum,
+    rejectListUrl
+  }: {
+    name: string;
+    ticker: string;
+    supply: string;
+    precision: number;
+    replaceRightsNum: number;
+    rejectListUrl: string | null;
+  }) {
+    try {
+      const assetResponse = await RGBServices.issueAssetIfa(
+        ticker,
+        name,
+        Number(precision),
+        [Number(supply)],
+        [],
+        Number(replaceRightsNum),
+        rejectListUrl,
+        ApiHandler.appType,
+      );
+      console.log(assetResponse)
+      const response = ApiHandler.parseAssetResponse(assetResponse);
+      if (response?.assetId) {
+        const app: TribeApp = dbManager.getObjectByIndex(RealmSchema.TribeApp);
+        const metadata = await RGBServices.getRgbAssetMetaData(
+          response?.assetId,
+          ApiHandler.appType,
+          ApiHandler.api,
+        );
+        await Relay.registerAsset(
+          app.id,
+          { ...metadata, ...response },
+          app.authToken,
+        );
+        const wallet: Wallet = dbManager
+          .getObjectByIndex(RealmSchema.Wallet)
+          .toJSON();
+        const tx = wallet.specs.transactions.find(
+          tx =>
+            tx.transactionKind === TransactionKind.SERVICE_FEE &&
+            tx.metadata?.assetId === '',
+        );
+        if (tx) {
+          ApiHandler.updateTransaction({
+            txid: tx.txid,
+            updateProps: {
+              metadata: {
+                feeType: ServiceFeeType.REGISTER_ASSET_FEE,
+                assetId: response.assetId,
+                note: `Issued ${response.name} on ${moment().format(
+                  'DD MMM YY  •  hh:mm A',
+                )}`,
+              },
+            },
+          });
+        }
+        await ApiHandler.refreshRgbWallet();
+      }
+      return response;
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -2162,19 +2285,19 @@ export class ApiHandler {
       const response = await RGBServices.getRgbAssetMetaData(
         assetId,
         ApiHandler.appType,
-        ApiHandler.api, 
+        ApiHandler.api,
       );
       if (response) {
-        if(response.maxSupply) {
+        if (response.maxSupply) {
           response.maxSupply = response?.maxSupply.toString();
-        } 
-        if(response.issuedSupply) {
+        }
+        if (response.issuedSupply) {
           response.issuedSupply = response?.issuedSupply?.toString();
         }
-        if(response.knownCirculatingSupply) {
+        if (response.knownCirculatingSupply) {
           response.knownCirculatingSupply = response?.knownCirculatingSupply?.toString();
         }
-        if(response.initialSupply) {
+        if (response.initialSupply) {
           response.initialSupply = response?.initialSupply?.toString();
         }
         dbManager.updateObjectByPrimaryId(schema, 'assetId', assetId, {
@@ -2307,9 +2430,8 @@ export class ApiHandler {
           version: `${DeviceInfo.getVersion()}(${DeviceInfo.getBuildNumber()})`,
           releaseNote: githubReleaseNote.releaseNote,
           date: new Date().toString(),
-          title: `Upgraded from ${
-            version?.version || 'unknown'
-          } to ${currentVersion}`,
+          title: `Upgraded from ${version?.version || 'unknown'
+            } to ${currentVersion}`,
         });
         await ApiHandler.manageFcmVersionTopics(
           version?.version,
@@ -2345,14 +2467,21 @@ export class ApiHandler {
         return false;
       }
       const token = await getToken(messaging);
-      if (token === Storage.get(Keys.FCM_TOKEN)) {
+      const existingToken = Storage.get(Keys.FCM_TOKEN);
+
+      if (token === existingToken) {
+        // Token unchanged locally; ensure WatchTower has it if enabled.
+        await RGBServices.setWatchTowerFcmToken(token);
         return true;
       }
+
       const response = await Relay.syncFcmToken(ApiHandler.authToken, token);
       if (response.updated) {
         Storage.set(Keys.FCM_TOKEN, token);
+        await RGBServices.setWatchTowerFcmToken(token);
         return true;
       }
+
       return false;
     } catch (error) {
       console.log('fcm update error:', error?.message || error);
@@ -2429,7 +2558,7 @@ export class ApiHandler {
           await NativeModules.CloudBackup.setup();
           const login = JSON.parse(await NativeModules.CloudBackup.login());
           if (login.status) {
-            const backup = await RGBServices.backup('', app.primaryMnemonic);
+            const backup = await RGBServices.backup('', app.primaryMnemonic, app.publicId);
             if (backup.error) {
               dbManager.createObject(RealmSchema.CloudBackupHistory, {
                 title: CloudBackupAction.CLOUD_BACKUP_FAILED,
@@ -2454,7 +2583,7 @@ export class ApiHandler {
             });
           }
         } else {
-          const backup = await RGBServices.backup('', app.primaryMnemonic);
+          const backup = await RGBServices.backup('', app.primaryMnemonic, app.publicId);
           if (backup.error) {
             dbManager.createObject(RealmSchema.CloudBackupHistory, {
               title: CloudBackupAction.CLOUD_BACKUP_FAILED,
@@ -2867,7 +2996,7 @@ export class ApiHandler {
       ) as RGBWallet;
       const isBackupRequired = await RGBServices.isBackupRequired();
       if (isBackupRequired) {
-        const backupFile = await RGBServices.backup('', app.primaryMnemonic);
+        const backupFile = await RGBServices.backup('', app.primaryMnemonic, app.publicId);
         if (backupFile.file) {
           const response = await Relay.rgbFileBackup(
             Platform.select({
@@ -3023,8 +3152,8 @@ export class ApiHandler {
           errorJson?.title === 'UsageCapExceeded'
             ? 'Twitter API usage cap exceeded. Please try again later.'
             : errorJson?.title ||
-              errorJson?.detail ||
-              `HTTP error ${response.status}`;
+            errorJson?.detail ||
+            `HTTP error ${response.status}`;
         return { success: false, reason: message };
       }
 
@@ -3052,7 +3181,7 @@ export class ApiHandler {
         type: IssuerVerificationMethod.TWITTER_POST,
         link: tweetId,
         id: '',
-        name:  '',
+        name: '',
         username: '',
       };
 
@@ -3252,6 +3381,7 @@ export class ApiHandler {
         rgbWallet.mnemonic,
         { receiveData: receiveData, invoices: invoices },
       );
+      ApiHandler.scheduleInvoicesCloudBackup();
       const response = await Relay.claimCampaign(
         app.authToken,
         campaignId,
@@ -3267,11 +3397,13 @@ export class ApiHandler {
     room = null,
     all = false,
     tnxMeta = null,
+    invoices = false,
   }: {
     settings?: boolean;
     room?: null | any;
     all?: boolean;
     tnxMeta?: null | { txid: string; metaData: object };
+    invoices?: boolean;
   }) {
     Storage.set(Keys.IS_APP_IMAGE_BACKUP_ERROR, false);
     try {
@@ -3280,6 +3412,7 @@ export class ApiHandler {
       let settingsObject = '';
       let roomsObject = {};
       let tnxMetaObject = {};
+      let invoicesObject: string | undefined;
 
       if (all || settings) {
         const keys = [Keys.APP_CURRENCY, Keys.APP_LANGUAGE, Keys.CURRENCY_MODE];
@@ -3328,11 +3461,22 @@ export class ApiHandler {
         }
       }
 
+      if (all || invoices) {
+        const rgbWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        ) as RGBWallet;
+        invoicesObject = encrypt(
+          encryptionKey,
+          JSON.stringify(rgbWallet?.invoices ?? []),
+        );
+      }
+
       await Relay.createAppImageBackup(
         app.authToken,
         roomsObject,
         settingsObject,
         tnxMetaObject,
+        invoicesObject,
       );
       return {
         status: true,
@@ -3353,6 +3497,13 @@ export class ApiHandler {
     settingsObject,
     roomsObject,
     tnxMetaObject,
+    invoicesObject,
+  }: {
+    mnemonic: string;
+    settingsObject?: string;
+    roomsObject?: object;
+    tnxMetaObject?: object;
+    invoicesObject?: string;
   }) {
     const encryptionKey = generateEncryptionKey(mnemonic);
     try {
@@ -3384,11 +3535,73 @@ export class ApiHandler {
           metaData: decryptedData,
         });
       }
+      if (invoicesObject) {
+        const decryptedInvoices = JSON.parse(
+          decrypt(encryptionKey, invoicesObject),
+        );
+        if (!Array.isArray(decryptedInvoices)) {
+          throw new Error('Invalid invoices backup payload');
+        }
+        const rgbWallet = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        ) as RGBWallet;
+        if (rgbWallet?.mnemonic) {
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.RgbWallet,
+            'mnemonic',
+            rgbWallet.mnemonic,
+            { invoices: decryptedInvoices },
+          );
+        }
+      }
     } catch (error) {
       console.log('🚀 AppRestoreFailed: ', error);
     }
     // disabled first app image backup, since already restored from backup
-    if (settingsObject || roomsObject || tnxMetaObject)
+    if (settingsObject || roomsObject || tnxMetaObject || invoicesObject)
       Storage.set(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE, true);
+  }
+
+  // Gas-Free Feature Availability
+  static isGasFreeAvailable(): boolean {
+    return RGBServices.isGasFreeAvailable();
+  }
+
+  // Gas-Free Transfer Methods
+  static async requestGasFreeQuote(
+    userId: string,
+    assetId: string,
+    amount: string,
+    recipientInvoice: string,
+    numInputs?: number,
+    numOutputs?: number,
+  ) {
+    try {
+      const quote = await RGBServices.requestGasFreeQuote(
+        userId,
+        assetId,
+        amount,
+        recipientInvoice,
+        numInputs,
+        numOutputs,
+      );
+      return quote;
+    } catch (error) {
+      console.error('Error requesting gas-free quote:', error);
+      throw error;
+    }
+  }
+
+  static async confirmGasFreeTransfer(
+    request: any,
+    feeQuote: any,
+  ) {
+    try {
+      const result = await RGBServices.confirmGasFreeTransfer(request, feeQuote);
+      return result;
+    } catch (error) {
+      console.error('Error confirming gas-free transfer:', error);
+      throw error;
+    }
   }
 }

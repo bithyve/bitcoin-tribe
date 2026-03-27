@@ -12,8 +12,12 @@ export const numberWithCommas = (x: number | string, precision: number = 2): str
 };
 
 export const formatNumber = text => {
-  const numberValue = text.replace(/,/g, '');
-  return text ? new Intl.NumberFormat('en-US').format(numberValue) : '';
+  if (text == null || text === '') return '';
+  const numberValue = String(text).replace(/,/g, '');
+  if (numberValue === '') return '';
+  const n = Number(numberValue);
+  if (!Number.isFinite(n)) return '';
+  return new Intl.NumberFormat('en-US').format(n);
 };
 
 export const formatLargeNumber = (num: number | string = 0) => {

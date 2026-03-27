@@ -20,7 +20,7 @@ import { hp, wp } from 'src/constants/responsive';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
-import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, Collectible, InflatableFungibleAsset } from 'src/models/interfaces/RGBWallet';
 import ModalLoading from 'src/components/ModalLoading';
 import useWallets from 'src/hooks/useWallets';
 import { CommunityType, deeplinkType } from 'src/models/interfaces/Community';
@@ -37,6 +37,7 @@ import { numberWithCommas } from 'src/utils/numberWithCommas';
 import Deeplinking from 'src/utils/DeepLinking';
 import { HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
 import { useChat } from 'src/hooks/useChat';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function SendScreen({ route, navigation }) {
   const theme: AppTheme = useTheme();
@@ -53,7 +54,9 @@ function SendScreen({ route, navigation }) {
   const app: TribeApp = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
-  const allAssets: Asset[] = [...coins, ...collectibles];
+  const ifas = useQuery<InflatableFungibleAsset[]>(RealmSchema.IFA);
+  const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
+  const allAssets: Asset[] = [...coins, ...collectibles, ...ifas, ...udas];
   const [addAssetModal, setAddAssetModal] = useState(false);
   const [assetData, setAssetData] = useState<Asset | null>(null);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -138,10 +141,13 @@ function SendScreen({ route, navigation }) {
             publicKey,
             contactName,
           } = Object.fromEntries(parsedUrl.searchParams.entries());
-          if (roomType == HolepunchRoomType.GROUP)
+          if (roomType == HolepunchRoomType.GROUP){
             createRoom(roomName, roomType, roomDescription, '', roomKey);
+            logCustomEvent(events.JOIN_GROUP);
+          }
           else {
             const dmRoom = await sendDMInvitation(publicKey, contactName);
+            logCustomEvent(events.JOIN_DM);
             (navigation as any).navigate(NavigationRoutes.CHAT, {
               roomId: dmRoom.roomId,
             });

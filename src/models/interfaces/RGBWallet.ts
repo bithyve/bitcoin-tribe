@@ -88,7 +88,8 @@ export interface Assignment {
 export interface Transfer {
   batchTransferIdx: number;
   createdAt: number;
-  idx: number;
+  transferIdx: number;
+  consignmentPath: string | null;
   kind: TransferKind;
   status: TransferStatus;
   updatedAt: number;
@@ -137,6 +138,35 @@ export interface Issuer {
 }
 
 export interface Coin {
+  addedAt: number;
+  isDefault: boolean;
+  assetId: string;
+  balance: Balance;
+  issuedSupply: string;
+  maxSupply: string;
+  details?: string;
+  name: string;
+  iconUrl?: string;
+  precision: number;
+  ticker: string;
+  timestamp: number;
+  transactions: Transfer[];
+  metaData: MetaData;
+  issuer: Issuer;
+  visibility: AssetVisibility;
+  isVerifyPosted: boolean;
+  isIssuedPosted: boolean;
+  assetSchema: AssetSchema;
+  assetSource: AssetSource;
+  disclaimer?: {
+    contentLight: string;
+    contentDark: string;
+    showDisclaimer?: string;
+  };
+  campaign?: Campaign;
+}
+
+export interface InflatableFungibleAsset {
   addedAt: number;
   isDefault: boolean;
   assetId: string;
@@ -231,7 +261,7 @@ export interface UniqueDigitalAsset {
   assetSource: AssetSource;
 }
 
-export interface Asset extends Coin, Collectible, UniqueDigitalAsset, Collection {}
+export interface Asset extends Coin, Collectible, UniqueDigitalAsset, Collection, InflatableFungibleAsset {}
 export interface RgbAllocation {
   amount: number;
   assetId: string;
@@ -258,6 +288,7 @@ export enum AssetType {
   Collectible = 'Collectible',
   UDA = 'UDA', //Unique Digital Asset
   Collection = 'Collection',
+  IFA = 'IFA',
 }
 
 export enum AssetFace {
@@ -270,6 +301,7 @@ export enum AssetSchema {
   Coin = 'NIA',
   Collectible = 'CFA',
   UDA = 'UDA',
+  IFA = 'IFA',
 }
 
 export enum AssetVisibility {

@@ -29,6 +29,7 @@ import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { AppContext } from 'src/contexts/AppContext';
 import Fonts from 'src/constants/Fonts';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function AssetRegistryScreen() {
   const navigation = useNavigation();
@@ -53,47 +54,42 @@ function AssetRegistryScreen() {
         return RealmSchema.Collectible;
       case AssetType.UDA:
         return RealmSchema.UniqueDigitalAsset;
+      case AssetType.IFA:
+        return RealmSchema.IFA;
       default:
         return null;
     }
   };
 
   const routeMap = (askVerify: boolean, isAddedToRegistry: boolean = false) => {
-    switch (issueType) {
-      case AssetType.Coin:
-        navigation.pop(1);
-        navigation.replace(NavigationRoutes.COINDETAILS, {
-          assetId,
-          askReview: true,
-          askVerify,
-          isAddedToRegistry,
-        });
-        setDisabledCTA(false);
-        break;
-      case AssetType.Collectible:
-        navigation.pop(1);
-        navigation.replace(NavigationRoutes.COLLECTIBLEDETAILS, {
-          assetId,
-          askReview: true,
-          askVerify,
-          isAddedToRegistry,
-        });
-        setDisabledCTA(false);
-        break;
-      case AssetType.UDA:
-        navigation.pop(1);
-        navigation.replace(NavigationRoutes.UDADETAILS, {
-          assetId,
-          askReview: true,
-          askVerify,
-          isAddedToRegistry,
-        });
-        setDisabledCTA(false);
-        break;
+    const getRoute = () => {
+      switch (issueType) {
+        case AssetType.Coin:
+          return NavigationRoutes.COINDETAILS;
+        case AssetType.Collectible:
+          return NavigationRoutes.COLLECTIBLEDETAILS;
+        case AssetType.UDA:
+          return NavigationRoutes.UDADETAILS;
+        case AssetType.IFA:
+          return NavigationRoutes.IFADETAILS;
+        default:
+          return null;
+      }
+    };
 
-      default:
-        break;
-    }
+    const route = getRoute();
+    if (!route) return;
+
+    // @ts-ignore
+    navigation.pop(1);
+    // @ts-ignore
+    navigation.replace(route, {
+      assetId,
+      askReview: true,
+      askVerify,
+      isAddedToRegistry,
+    });
+    setDisabledCTA(false);
   };
 
   useEffect(() => {
@@ -132,6 +128,7 @@ function AssetRegistryScreen() {
     if (payServiceFeeFeeMutation.isSuccess) {
       getAssetIssuanceFeeMutation.reset();
       payServiceFeeFeeMutation.reset();
+      logCustomEvent(events.REGISTERED_ASSET);
       setTimeout(() => {
         registerAsset();
       }, 400);

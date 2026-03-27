@@ -35,6 +35,7 @@ import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 type seedWordItem = {
   id: number;
@@ -220,6 +221,7 @@ function EnterSeedContainer() {
     const key = decrypt(hash, await SecureStore.fetch(hash));
     setKey(key);
     Toast(onBoarding.appRecoveryMsg);
+    logCustomEvent(events.APP_RECOVERED);
     setTimeout(() => {
       navigation.replace(NavigationRoutes.APPSTACK);
     }, 400);

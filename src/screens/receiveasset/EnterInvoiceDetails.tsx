@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, Pressable, StyleSheet, View } from 'react-native';
 import { RadioButton, useTheme, SegmentedButtons } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVNumber } from 'react-native-mmkv';
@@ -16,6 +16,8 @@ import { AppTheme } from 'src/theme';
 import dbManager from 'src/storage/realm/dbManager';
 import { RealmSchema } from 'src/storage/enum';
 import CheckIcon from 'src/assets/images/checkIcon.svg';
+import UncheckIcon from 'src/assets/images/uncheckIcon.svg';
+import UncheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import AppText from 'src/components/AppText';
 import AppType from 'src/models/enums/AppType';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
@@ -33,6 +35,7 @@ import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
 import { ApiHandler } from 'src/services/handler/apiHandler';
+import Toast from 'src/components/Toast';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AppContext } from 'src/contexts/AppContext';
@@ -41,6 +44,8 @@ import InsufficiantBalancePopupContainer from '../collectiblesCoins/components/I
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
+import { events, logCustomEvent } from 'src/services/analytics';
+import config, { APP_STAGE } from 'src/utils/config';
 
 const getStyles = (theme: AppTheme, inputHeight, appType) =>
   StyleSheet.create({
@@ -128,13 +133,20 @@ const getStyles = (theme: AppTheme, inputHeight, appType) =>
       color: theme.colors.secondaryHeadingColor,
       fontFamily: Fonts.LufgaRegular,
     },
+    watchtowerCtr: {
+      flexDirection: 'row',
+      width: '100%',
+      alignItems: 'center',
+      marginTop: hp(20),
+      marginBottom: hp(10),
+    },
   });
 
 const EnterInvoiceDetails = () => {
   const { translations } = useContext(LocalizationContext);
   const { appType, isWalletOnline } = useContext(AppContext);
   const { invoiceAssetId, chosenAsset } = useRoute().params;
-  const { receciveScreen, common, assets, home } = translations;
+  const { receciveScreen, assets, home, sendScreen } = translations;
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
   const app: TribeApp = useQuery(RealmSchema.TribeApp)[0];
@@ -183,6 +195,7 @@ const EnterInvoiceDetails = () => {
       utxo.rgbAllocations?.length === 0 &&
       utxo.pendingBlinded === 0,
   );
+  const [useWatchTower, setUseWatchTower] = useState(false);
 
   const styles = getStyles(theme, inputHeight, app.appType);
 
@@ -227,53 +240,102 @@ const EnterInvoiceDetails = () => {
     rgbWallet?.nodeBtcBalance?.vanilla?.spendable,
   ]);
 
+  const precision = selectedAsset?.precision ?? 0;
+
+  const normalizeAmountForParse = (raw: string) =>
+    raw.replace(/\s/g, '').replace(/,/g, '.');
+
+  const isAmountEntryValid = useMemo(() => {
+    if (amount === '') {
+      return true;
+    }
+    if (precision === 0) {
+      if (!/^[1-9]\d*$/.test(amount)) {
+        return false;
+      }
+    } else {
+      const fractional = new RegExp(
+        `^(0|[1-9]\\d*)([.,]\\d{0,${precision}})?$`,
+      );
+      if (!fractional.test(amount)) {
+        return false;
+      }
+    }
+    const n = Number(normalizeAmountForParse(amount));
+    return !Number.isNaN(n) && n > 0;
+  }, [amount, precision]);
+
   function validateAndNavigateToReceiveAsset() {
     if (!canProceed && invoiceType === InvoiceMode.Blinded) {
       setVisible(true);
       return;
     }
+    if (amount !== '' && !isAmountEntryValid) {
+      const n = Number(normalizeAmountForParse(amount));
+      Toast(
+        !Number.isNaN(n) && n <= 0
+          ? sendScreen.validationZeroNotAllowed
+          : sendScreen.invoiceFormatErrMsg,
+        true,
+      );
+      return;
+    }
+    logCustomEvent(events.CREATED_INVOICE);
+    const normalized =
+      amount !== '' ? normalizeAmountForParse(amount) : '';
     navigation.replace(NavigationRoutes.RECEIVEASSET, {
       refresh: true,
       assetId: assetId ?? '',
       amount:
-        amount !== ''
-          ? selectedAsset?.precision === 0
-            ? amount
-            : Number(amount) * 10 ** selectedAsset?.precision
+        normalized !== ''
+          ? precision === 0
+            ? normalized
+            : Number(normalized) * 10 ** precision
           : '',
       selectedType,
       invoiceExpiry,
       invoiceType,
+      useWatchTower
     });
   }
 
-  const handleAmountInputChange = text => {
-    let regex;
-    if (selectedAsset?.precision === 0) {
+  const handleAmountInputChange = (text: string) => {
+    if (text === '') {
+      setAmount('');
+      return;
+    }
+    let regex: RegExp;
+    if (precision === 0) {
       regex = /^[1-9]\d*$/;
     } else {
       regex = new RegExp(
-        `^(0|[1-9]\\d*)(\\.\\d{0,${selectedAsset?.precision}})?$`,
+        `^(0|[1-9]\\d*)([.,]\\d{0,${precision}})?$`,
       );
     }
-    if (text === '' || regex.test(text)) {
+    if (regex.test(text)) {
       setAmount(text);
     }
   };
+
+  const checkIcon = useMemo(() => {
+    if (isThemeDark) {
+      return useWatchTower ? <CheckIcon /> : <UncheckIcon />;
+    }
+    return useWatchTower ? <CheckIconLight /> : <UncheckIconLight />;
+  }, [useWatchTower]);
 
   return (
     <ScreenContainer>
       <AppHeader
         title={home.addAssets}
-        subTitle={
-          `Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`
-        }
+        subTitle={`Select an asset, enter an amount, and set an expiry time—then tap '${assets.generateInvoice}' to create a RGB invoice.`}
         enableBack={true}
       />
       <KeyboardAwareScrollView
         overScrollMode="never"
         bounces={false}
-        keyboardOpeningTime={0}>
+        keyboardOpeningTime={0}
+      >
         {app.appType !== AppType.ON_CHAIN && (
           <View>
             <View>
@@ -355,6 +417,19 @@ const EnterInvoiceDetails = () => {
               },
             ]}
           />
+          {config.ENVIRONMENT != APP_STAGE.PRODUCTION && (
+            <Pressable
+              onPress={() => setUseWatchTower(prev => !prev)}
+              style={styles.watchtowerCtr}
+            >
+              <View style={styles.checkIconWrapper}>{checkIcon}</View>
+              <View style={styles.reservedSatsWrapper1}>
+                <AppText variant="body2">
+                  {receciveScreen.validateUsingWatchTower}
+                </AppText>
+              </View>
+            </Pressable>
+          )}
         </View>
         <View style={styles.footerWrapper}>
           {colorable.length === 0 && invoiceType === InvoiceMode.Blinded ? (
@@ -378,7 +453,8 @@ const EnterInvoiceDetails = () => {
               width={'100%'}
               disabled={
                 isWalletOnline === WalletOnlineStatus.Error ||
-                isWalletOnline === WalletOnlineStatus.InProgress
+                isWalletOnline === WalletOnlineStatus.InProgress ||
+                !isAmountEntryValid
               }
             />
           </View>
@@ -409,7 +485,8 @@ const EnterInvoiceDetails = () => {
           enableClose={true}
           onDismiss={() => setVisible(false)}
           backColor={theme.colors.cardGradient1}
-          borderColor={theme.colors.borderColor}>
+          borderColor={theme.colors.borderColor}
+        >
           <InsufficiantBalancePopupContainer
             primaryOnPress={() => {
               setVisible(false);

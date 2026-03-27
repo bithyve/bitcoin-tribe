@@ -18,7 +18,7 @@ import WalletUtilities from 'src/services/wallets/operations/utils';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
-import { Asset, Coin, Collectible } from 'src/models/interfaces/RGBWallet';
+import { Asset, Coin, Collectible, InflatableFungibleAsset } from 'src/models/interfaces/RGBWallet';
 
 function ScanAssetScreen({ navigation }) {
   const { assetId, rgbInvoice, isUDA } = useRoute().params;
@@ -30,7 +30,8 @@ function ScanAssetScreen({ navigation }) {
   const coins = useQuery<Coin[]>(RealmSchema.Coin);
   const collectibles = useQuery<Collectible[]>(RealmSchema.Collectible);
   const udas = useQuery<Collectible[]>(RealmSchema.UniqueDigitalAsset);
-  const allAssets: Asset[] = [...coins, ...collectibles, ...udas];
+  const ifas = useQuery<InflatableFungibleAsset[]>(RealmSchema.IFA);
+  const allAssets: Asset[] = [...coins, ...collectibles, ...udas, ...ifas];
   const [isScanning, setIsScanning] = useState(true);
 
   const handlePaymentInfo = useCallback(

@@ -57,6 +57,8 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
+import { events, logCustomEvent } from 'src/services/analytics';
+import { RgbLibErrors } from 'orbis1-sdk-rn';
 
 export const MOCK_BANNER = require('src/assets/images/mockBanner.png');
 export const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');
@@ -244,6 +246,7 @@ function IssueCollection() {
       if (response.txid) {
         // setShowSuccess(true);
         issueCollection();
+        logCustomEvent(events.CREATED_COLLECTION);
       }
     } catch (error) {
       setShowPayment(false);
@@ -298,8 +301,13 @@ function IssueCollection() {
         Toast(assets.failedToCreateCollection, true);
       }
     } catch (error) {
-      console.log(error);
-      Toast(error.message, true);
+      if(error.code === RgbLibErrors.InsufficientAllocationSlots){
+        setTimeout(() => {
+          createUtxos();
+        }, 500);
+      } else {
+        Toast(error.message, true);
+      }
     }
   }, [
     collectionName,

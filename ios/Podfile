@@ -20,6 +20,7 @@ end
 
 target 'tribe' do
   config = use_native_modules!
+  $RNFirebaseAnalyticsWithoutAdIdSupport = true
 
   use_react_native!(
     :path => config[:reactNativePath],
@@ -35,6 +36,17 @@ target 'tribe' do
       :app_path => "#{Pod::Config.instance.installation_root}/.."
     )
     end
+
+  pre_install do |installer|
+    module LinkageAnalyzerEINVALWorkaround
+      def dynamic_binary?(binary)
+        super
+      rescue Errno::EINVAL, Errno::ENOMEM
+        false
+      end
+    end
+    Pod::Xcode::LinkageAnalyzer.singleton_class.prepend(LinkageAnalyzerEINVALWorkaround)
+  end
 
   post_install do |installer|
     # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202

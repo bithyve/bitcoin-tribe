@@ -29,6 +29,7 @@ import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 import { useQuery, useRealm } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { events, logCustomEvent } from 'src/services/analytics';
 
 function Community() {
   const theme: AppTheme = useTheme();
@@ -256,6 +257,7 @@ function Community() {
       console.log('[Community] Starting DM with:', publicKey.substring(0, 8), 'Contact:', contactName);
 
       const dmRoom = await sendDMInvitation(publicKey, contactName);
+      logCustomEvent(events.CREATE_DM);
 
       Toast('DM invitation sent!');
       handleCloseStartDM();

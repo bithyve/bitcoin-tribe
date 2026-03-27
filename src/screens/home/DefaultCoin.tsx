@@ -12,6 +12,7 @@ import {
   Coin,
   Collectible,
   Collection,
+  InflatableFungibleAsset,
   UniqueDigitalAsset,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
@@ -526,6 +527,12 @@ const DefaultCoin = ({
   const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
+
+  const ifaCoins = useQuery<InflatableFungibleAsset>(
+    RealmSchema.IFA,
+    collection =>
+      collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
   const carouselRef = useRef(null);
   const progress = useSharedValue<number>(0);
 
@@ -546,8 +553,14 @@ const DefaultCoin = ({
   ]);
 
   const totalAssets = useMemo(() => {
-    return collectibles.length + udas.length + collections.length + coins.length;
-  }, [collectibles, udas, collections, coins]);
+    return (
+      collectibles.length +
+      udas.length +
+      collections.length +
+      coins.length +
+      ifaCoins.length
+    );
+  }, [collectibles, udas, collections, coins, ifaCoins]);
   
   const currentAsset = useMemo(() => {
     const asset = presetAssets[currentIndex];
@@ -629,8 +642,11 @@ const DefaultCoin = ({
         <AppTouchable
           style={styles.balanceContainer}
           onPress={() => {
-            navigation.navigate(NavigationRoutes.WALLETDETAILS, {autoRefresh: true});
-          }}>
+            navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+              autoRefresh: true,
+            });
+          }}
+        >
           <IconBitcoin />
           <View style={{ marginVertical: hp(20) }} />
           <AppText style={styles.totalBalanceLabel} variant="body2">
@@ -644,7 +660,8 @@ const DefaultCoin = ({
           style={styles.balanceContainer}
           onPress={() => {
             navigation.navigate(NavigationRoutes.ASSETS);
-          }}>
+          }}
+        >
           <IconOtherAssets />
           <View style={{ marginVertical: hp(20) }} />
 

@@ -6,9 +6,14 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { RealmSchema } from 'src/storage/enum';
 import { useQuery } from '@realm/react';
 import {
+  AssetVisibility,
+  Collection,
+  InflatableFungibleAsset,
   InvoiceType,
-  RgbInvoice,
   RGBWallet,
+  UniqueDigitalAsset,
+  Coin,
+  Collectible
 } from 'src/models/interfaces/RGBWallet';
 import GradientView from 'src/components/GradientView';
 import { hp } from 'src/constants/responsive';
@@ -27,15 +32,16 @@ import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
+import DeepLinking from 'src/utils/DeepLinking';
 
 const ListItem = ({
   invoice,
   onCancel,
   onCopy,
 }: {
-  invoice: RgbInvoice;
-  onCancel: (invoice: RgbInvoice) => void;
-  onCopy: (invoice: RgbInvoice) => void;
+  invoice: any;
+  onCancel: (invoice: any) => void;
+  onCopy: (invoice: any) => void;
 }) => {
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -121,14 +127,37 @@ const InvoicesScreen = () => {
   const { wallet } = translations;
   const rgbWallet: RGBWallet = useQuery(RealmSchema.RgbWallet)[0];
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const udas = useQuery<UniqueDigitalAsset>(
+    RealmSchema.UniqueDigitalAsset, 
+    collection =>
+      collection.filtered(`visibility != $0 && NOT details CONTAINS '${DeepLinking.appLinkScheme}'`, AssetVisibility.HIDDEN),
+  );
+  const collections = useQuery<Collection>(RealmSchema.Collection, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const coinsResult = useQuery<Coin>(RealmSchema.Coin, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const collectiblesResult = useQuery<Collectible>(RealmSchema.Collectible, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const ifasResult = useQuery<InflatableFungibleAsset>(RealmSchema.IFA, collection =>
+    collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
+  );
+  const allTransfersInvoices = useMemo(() => {
+    return [...udas, ...collections, ...coinsResult, ...collectiblesResult, ...ifasResult]
+      .flatMap(asset => asset.transactions.map(transfer => transfer.invoiceString))
+      .filter(Boolean);
+  }, [udas, collections, coinsResult, collectiblesResult, ifasResult]);
+
   const invoices = useMemo(() => {
     return rgbWallet.invoices.filter(invoice =>
-      moment(invoice.expirationTimestamp * 1000).isAfter(moment()),
+      moment(invoice.expirationTimestamp * 1000).isAfter(moment()) && !allTransfersInvoices.includes(invoice.invoice),
     );
-  }, [rgbWallet.invoices]);
-  const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-
-  const handleCancel = async (invoice: RgbInvoice) => {
+  }, [rgbWallet.invoices, allTransfersInvoices]);
+  const handleCancel = async (invoice: any) => {
     try {
       setIsLoading(true);
       const result = await ApiHandler.handleTransferFailure(
@@ -157,7 +186,7 @@ const InvoicesScreen = () => {
     }
   };
 
-  const handleCopy = (invoice: RgbInvoice) => {
+  const handleCopy = (invoice: any) => {
     Clipboard.setString(invoice.invoice);
     Toast(wallet.invoiceCopiedToClipboard, false);
   };

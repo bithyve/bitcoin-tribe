@@ -2126,6 +2126,13 @@
   resolved "https://registry.yarnpkg.com/@react-native-documents/picker/-/picker-10.1.7.tgz#3c2890d89d5c76f375cb94149e90d07128324012"
   integrity sha512-Tb8SPU+pHxrSJmDHBozSUStIPeyFHTHLrU3MW0N3sUAioLd5z+nmUdypfg5fs+Yzp7KTxVW06APe2HLB1ysLww==
 
+"@react-native-firebase/analytics@21.11.0":
+  version "21.11.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-21.11.0.tgz#0b70c8b1f5914a5e48036794e4429893cc45fd62"
+  integrity sha512-hz94N41mTCtX/won3gCZW3rEG9l3+WqgRu/bbG8B3QRg0WOPIMCTc7Krj2KH5DGUtDP1rnjmUvrqMnrzrxuD7A==
+  dependencies:
+    superstruct "^2.0.2"
+
 "@react-native-firebase/app@21.11.0":
   version "21.11.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-21.11.0.tgz#a01b0cb738a8b9ca7bb7ab7dd461c5a9744cb68a"
@@ -3159,6 +3166,15 @@ axios@^1.7.7:
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
+    proxy-from-env "^1.1.0"
+
+axios@^1.7.9:
+  version "1.13.6"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.6.tgz#c3f92da917dc209a15dd29936d20d5089b6b6c98"
+  integrity sha512-ChTCHMouEe2kn713WHbQGcuYrr6fXTBiu460OTwWrWob16g1bXn4vtz07Ope7ewMozJAnEquLk5lWQWtBig9DQ==
+  dependencies:
+    follow-redirects "^1.15.11"
+    form-data "^4.0.5"
     proxy-from-env "^1.1.0"
 
 b4a@1.6.7:
@@ -4272,6 +4288,11 @@ crypto-js@4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-4.2.0.tgz#4d931639ecdfd12ff80e8186dba6af2c2e856631"
   integrity sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==
+
+crypto-js@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/crypto-js/-/crypto-js-3.3.0.tgz#846dd1cce2f68aacfa156c8578f926a609b7976b"
+  integrity sha512-DIT51nX0dCfKltpRiXV+/TVZq+Qq2NgF4644+K7Ttnla7zEzqc+kjJyiB96BHNyUTBxyjzRcZYpUdZa+QAqi6Q==
 
 crypto@1.0.1:
   version "1.0.1"
@@ -5390,7 +5411,7 @@ flow-enums-runtime@^0.0.6:
   resolved "https://registry.yarnpkg.com/flow-enums-runtime/-/flow-enums-runtime-0.0.6.tgz#5bb0cd1b0a3e471330f4d109039b7eba5cb3e787"
   integrity sha512-3PYnM29RFXwvAN6Pc/scUfkI7RwhQ/xqyLUyPNlXUp9S40zI8nup9tUSrTLSVnWGBN38FNiGWbwZOB6uR4OGdw==
 
-follow-redirects@^1.15.6:
+follow-redirects@^1.15.11, follow-redirects@^1.15.6:
   version "1.15.11"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.11.tgz#777d73d72a92f8ec4d2e410eb47352a56b8e8340"
   integrity sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==
@@ -5402,7 +5423,7 @@ for-each@^0.3.3, for-each@^0.3.5:
   dependencies:
     is-callable "^1.2.7"
 
-form-data@^4.0.4:
+form-data@^4.0.4, form-data@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.5.tgz#b49e48858045ff4cbf6b03e1805cebcad3679053"
   integrity sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==
@@ -6915,7 +6936,7 @@ loose-envify@^1.0.0, loose-envify@^1.4.0:
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
 
-lottie-react-native@^7.3.4:
+lottie-react-native@7.3.4:
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-7.3.4.tgz#774bc028e2b93dd88cd87ab84ac51a1c3e015cad"
   integrity sha512-XUh7eGFb7ID8JRdU6U4N4cYQeYmjtdQRvd8ZXJ6xrdSsn5gZD0c79ITOREPcwJg4YupBFHgyV1GXdAHQP+KYUQ==
@@ -7631,6 +7652,15 @@ ora@^5.4.1:
     log-symbols "^4.1.0"
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
+
+orbis1-sdk-rn@0.0.9:
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/orbis1-sdk-rn/-/orbis1-sdk-rn-0.0.9.tgz#1f829f04cc766aaefac0e301477de5dda2053ef8"
+  integrity sha512-qiUdxCx7F2n1OJyrZB5b7PzW1KMHet2GpUHNPDoAxbV7PER9xnXQ/kkSrSzbtTG/1uHLDN7ru5J5cwwCimbOHQ==
+  dependencies:
+    axios "^1.7.9"
+    crypto-js "^3.3.0"
+    zod "^3.22.0"
 
 own-keys@^1.0.1:
   version "1.0.1"
@@ -9458,6 +9488,11 @@ strnum@^1.1.1:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.1.2.tgz#57bca4fbaa6f271081715dbc9ed7cee5493e28e4"
   integrity sha512-vrN+B7DBIoTTZjnPNewwhx6cBA/H+IS7rfW68n7XxC1y7uoiGQBxaKzqucGUgavX15dJgiGztLJ8vxuEzwqBdA==
 
+superstruct@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/superstruct/-/superstruct-2.0.2.tgz#3f6d32fbdc11c357deff127d591a39b996300c54"
+  integrity sha512-uV+TFRZdXsqXTL2pRvujROjdZQ4RAlBUS5BTh9IGm+jTqQntYThciG/qu57Gs69yjnVUSqdxF9YLmSnpupBW9A==
+
 supports-color@^7.1.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-7.2.0.tgz#1b7dcdcb32b8138801b3e478ba6a51caa89648da"
@@ -10163,3 +10198,8 @@ z32@^1.0.0:
   integrity sha512-1WUHy+VS6d0HPNspDxvLssBbeQjXMjSnpv0vH82vRAUfg847NmX3OXozp/hRP5jPhxBbrVzrgvAt+UsGNzRFQQ==
   dependencies:
     b4a "^1.5.3"
+
+zod@^3.22.0:
+  version "3.25.76"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
+  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
