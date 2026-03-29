@@ -1,7 +1,7 @@
 import AppType from 'src/models/enums/AppType';
 import { snakeCaseToCamelCaseCase } from 'src/utils/snakeCaseToCamelCaseCase';
 import { RLNNodeApiServices } from '../rgbnode/RLNNodeApi';
-import config from 'src/utils/config';
+import config, { APP_STAGE } from 'src/utils/config';
 import {
   Orbis1SDK,
   BitcoinNetwork,
@@ -147,7 +147,7 @@ export default class RGBServices {
         wallet: {
           enabled: true,
           keys,
-          supportedSchemas: config.ENVIRONMENT === 'development'
+          supportedSchemas: config.ENVIRONMENT === APP_STAGE.DEVELOPMENT
             ? [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA, AssetSchema.IFA]
             : [AssetSchema.CFA, AssetSchema.NIA, AssetSchema.UDA],
           maxAllocationsPerUtxo: 1,
@@ -155,7 +155,7 @@ export default class RGBServices {
         },
         features: {
           gasFree: { enabled: RGBServices.environment === Environment.TESTNET4 ? true : false }, // TODO: Remove this once gas free transfers are supported on REGTEST
-          watchTower: { enabled: config.ENVIRONMENT === 'production' ? false : true },
+          watchTower: { enabled: config.ENVIRONMENT === APP_STAGE.PRODUCTION ? false : true },
         },
         logging: { level: LogLevel.DEBUG },
       });
