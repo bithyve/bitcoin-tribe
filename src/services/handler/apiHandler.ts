@@ -569,7 +569,7 @@ export class ApiHandler {
           rgbNodeInfo: backup.nodeInfo,
         });
       } else if (backup.file) {
-        var path = RNFS.DocumentDirectoryPath + `/${appID}.rgb_backup`;
+        var path = RNFS.TemporaryDirectoryPath + `/${appID}.rgb_backup`;
         const file = await ApiHandler.downloadFile({
           fromUrl: backup.file,
           toFile: path,
