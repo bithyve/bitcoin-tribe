@@ -722,7 +722,7 @@ const SendAssetScreen = () => {
         {/* Select Payment Method */}
         <View style={styles.divider} />
 
-        {config.ENVIRONMENT == APP_STAGE.PRODUCTION && (
+        {config.ENVIRONMENT !== APP_STAGE.PRODUCTION && (
           <View>
             <AppText variant="body2" style={styles.labelstyle}>
               {sendScreen.selectPaymentMethod}
