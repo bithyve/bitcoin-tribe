@@ -154,7 +154,7 @@ export default class RGBServices {
           vanillaKeychain: 0,
         },
         features: {
-          gasFree: { enabled: RGBServices.environment === Environment.TESTNET4 ? true : false }, // TODO: Remove this once gas free transfers are supported on REGTEST
+          gasFree: { enabled: RGBServices.environment === Environment.TESTNET4 ? true : false, timeout: 60_000 }, // TODO: Remove this once gas free transfers are supported on REGTEST
           watchTower: { enabled: config.ENVIRONMENT === APP_STAGE.PRODUCTION ? false : true },
         },
         logging: { level: LogLevel.DEBUG },
