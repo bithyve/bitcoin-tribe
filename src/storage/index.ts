@@ -1,6 +1,6 @@
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 
-const MMKVStorage = new MMKV();
+const MMKVStorage = createMMKV();
 
 export enum Keys {
   APPID = 'APPID',
@@ -99,7 +99,7 @@ export class Storage {
     try {
       MMKVStorage.set('__init_test__', 'ok');
       const test = MMKVStorage.getString('__init_test__');
-      MMKVStorage.delete('__init_test__');
+      MMKVStorage.remove('__init_test__');
       return test === 'ok';
     } catch (e) {
       console.error('Storage initialization check failed:', e);

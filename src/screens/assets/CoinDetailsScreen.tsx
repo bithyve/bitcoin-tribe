@@ -194,8 +194,8 @@ const CoinDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData =
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
+  const transactionsData = useMemo(() => {
+    return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...coin?.transactions,
@@ -205,12 +205,13 @@ const CoinDetailsScreen = () => {
           return dateA - dateB;
         })
       : coin?.transactions.slice(0, 4);
+  }, [filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark
     : coin?.disclaimer?.contentLight;
 
-  const disclaimerHtml = rawHtml;
+  const disclaimerHtml = useMemo(() => rawHtml, [rawHtml]);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {
