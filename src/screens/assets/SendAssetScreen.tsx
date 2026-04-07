@@ -478,30 +478,20 @@ const SendAssetScreen = () => {
         : InvoiceMode.Blinded;
       
       setInvoiceType(detectedInvoiceType);
-      
-      if (res.assetId) {
-        const assetData = allAssets.find(item => item.assetId === res.assetId);
-        if (!assetData || res.assetId !== assetId) {
+        if (res.assetId && res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
           invoiceRef.current = cleanedText;
           setInvoice(cleanedText);
-          setAssetAmount(
-            res?.assignment?.amount.toString() !== '0'
-              ? Number(res?.assignment?.amount / 10 ** precision).toString()
-              : '',
-          );
           setInvoiceValidationError('');
+          if(res.assignment?.amount){
+            setAssetAmount(
+              res?.assignment?.amount.toString() !== '0'
+                ? Number(res?.assignment?.amount / 10 ** precision).toString()
+                : '',
+            );
+          }
         }
-      } else if (res.recipientId) {
-        invoiceRef.current = cleanedText;
-        setInvoice(cleanedText);
-        setInvoiceValidationError('');
-      } else {
-        invoiceRef.current = cleanedText;
-        setInvoice(cleanedText);
-        setInvoiceValidationError('Invalid invoice');
-      }
     } catch (error) {
       setInvoiceValidationError('Invalid invoice');
     } finally {
@@ -722,7 +712,7 @@ const SendAssetScreen = () => {
         {/* Select Payment Method */}
         <View style={styles.divider} />
 
-        {config.ENVIRONMENT == APP_STAGE.PRODUCTION && (
+        {config.ENVIRONMENT !== APP_STAGE.PRODUCTION && (
           <View>
             <AppText variant="body2" style={styles.labelstyle}>
               {sendScreen.selectPaymentMethod}
