@@ -14,7 +14,7 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-import { MMKV, useMMKVBoolean } from 'react-native-mmkv';
+import { createMMKV, useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 import {
   TransferKind,
@@ -66,7 +66,7 @@ export const Item = ({ title, value, width = '100%' }) => {
 };
 
 const IfaMetaDataScreen = () => {
-  const storage = new MMKV();
+  const storage = createMMKV();
   const theme: AppTheme = useTheme();
   const navigation = useNavigation();
   const popAction = StackActions.pop(2);
