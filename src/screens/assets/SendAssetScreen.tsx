@@ -447,7 +447,7 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else {
-        Toast(error.message, true);
+        Toast(error.message || error.code || `${error}` || 'An unknown error occurred', true);
         setLoading(false);
         setVisible(false);
       }
