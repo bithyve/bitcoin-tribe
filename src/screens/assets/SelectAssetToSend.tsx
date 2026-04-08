@@ -18,7 +18,7 @@ import { useRoute } from '@react-navigation/native';
 
 function SelectAssetToSend() {
   const theme: AppTheme = useTheme();
-  const { wallet, rgbInvoice, assetID, transactionAmount } = useRoute().params;
+  const { wallet, rgbInvoice, assetID, amount } = useRoute().params;
   const { translations } = useContext(LocalizationContext);
   const { assets } = translations;
 
@@ -55,7 +55,7 @@ function SelectAssetToSend() {
         assetsData={filteredData}
         wallet={wallet}
         rgbInvoice={rgbInvoice}
-        transactionAmount={transactionAmount}
+        amount={amount}
       />
     </ScreenContainer>
   );

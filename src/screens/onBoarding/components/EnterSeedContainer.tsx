@@ -79,10 +79,11 @@ function EnterSeedContainer() {
 
   const generateSeedWordsArray = useCallback(() => {
     const seedArray = [];
+    const s = 'worth sign track guide invest invite leave soul jazz never science warrior'.split(' ');
     for (let i = 1; i <= 12; i++) {
       seedArray.push({
         id: i,
-        name: '',
+        name: s[i - 1],
         invalid: false,
       });
     }
