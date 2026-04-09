@@ -72,8 +72,7 @@ import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
 import type { FeeQuote, GasFreeTransferRequest } from 'orbis1-sdk-rn';
 import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
-
-const DUST_LIMIT = 330;
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 const ESTIMATED_GAS_FREE_FEE_USD = 1; // Estimated gas-free service fee shown to users before they request a quote (TODO: fetch this via SDK)
 
 type ItemProps = {
@@ -188,6 +187,7 @@ const SendAssetScreen = () => {
     wallet: walletTranslation,
   } = translations;
   const iconRef = useRef(null);
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0] as TribeApp;
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
@@ -336,9 +336,9 @@ const SendAssetScreen = () => {
         try {
           // Calculate recipient amount once
           const recipientAmount = parseFloat(assetAmount && assetAmount.replace(/,/g, '')) * 10 ** precision;
-          
+
           const request: GasFreeTransferRequest = {
-            userId: config.HEXA_ID,
+            userId: app.publicId,
             assetId,
             amount: recipientAmount.toString(),
             recipientInvoice: invoice,
@@ -986,24 +986,17 @@ const SendAssetScreen = () => {
             
             // For gas-free (DOLLARS) payment, request fee quote first
             if (paymentMethod === PaymentMethodType.DOLLARS) {
-              // Check if witness invoice with gas-free
-              if (invoiceType === InvoiceMode.Witness) {
-                Toast('Gas-free transfers are not supported for witness invoices. Please use "Pay in Sats" instead.', true);
-                return;
-              }
-              
               setRequestingQuote(true);
               try {
+                const recipientAmount = (
+                  parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+                  10 ** precision
+                ).toString();
                 const quote = await ApiHandler.requestGasFreeQuote(
-                  config.HEXA_ID,
+                  app.publicId,
                   assetId,
-                  (
-                    parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
-                    10 ** precision
-                  ).toString(),
+                  recipientAmount,
                   invoice,
-                  1, // numInputs
-                  2, // numOutputs
                 );
                 setGasFreeQuote(quote);
                 

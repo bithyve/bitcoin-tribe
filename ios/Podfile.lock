@@ -152,7 +152,7 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - Orbis1Sdk (0.0.7):
+  - Orbis1Sdk (0.2.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -1925,7 +1925,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+1faa67)":
+  - "react-native-bare-kit (0.9.3+30ba5b)":
     - boost
     - DoubleConversion
     - fast_float
@@ -3852,7 +3852,7 @@ SPEC CHECKSUMS:
   lottie-ios: a881093fab623c467d3bce374367755c272bdd59
   lottie-react-native: 86fa7488b1476563f41071244aa73d5b738faf19
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  Orbis1Sdk: 9c1c6beafb8649e6c0cd2b1e3dbe8fca01a30c4e
+  Orbis1Sdk: 44ddfed7f47399fa507be88a97d612568b162a92
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
@@ -3889,7 +3889,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: dd922c1d675137dcfec86deb4d90c1b6c8d46b1f
+  react-native-bare-kit: 26d74a5bff3f23a6e096389ffec42430b0a8ef28
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
