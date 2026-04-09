@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Slider from '@react-native-community/slider';
 import Fonts from 'src/constants/Fonts';
 import AppText from 'src/components/AppText';
-import { hp } from 'src/constants/responsive';
+import { hp, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -31,10 +31,6 @@ const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
 
   return (
     <View style={styles.container}>
-      <AppText variant="caption" style={styles.title}>
-        {assets.invoiceExpiryTitle}
-      </AppText>
-
       <Slider
         style={styles.slider}
         minimumValue={0}
@@ -46,7 +42,6 @@ const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
         maximumTrackTintColor={theme.colors.borderColor}
         thumbTintColor={theme.colors.accent1}
       />
-
       <View style={styles.labelRow}>
         {LABELS.map((label, index) => (
           <AppText
@@ -54,7 +49,8 @@ const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
             style={[
               styles.label,
               index === getLabelIndex() && styles.activeLabel,
-            ]}>
+            ]}
+          >
             {label}
           </AppText>
         ))}
@@ -66,13 +62,13 @@ const InvoiceExpirySlider = ({ value, onValueChange }: Props) => {
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
-      marginVertical: hp(15),
-    },
-    title: {
-      marginBottom: 10,
-      fontSize: 15,
-      color: theme.colors.secondaryHeadingColor,
-      fontFamily: Fonts.LufgaRegular,
+      marginTop: hp(5),
+      backgroundColor: theme.dark
+        ? theme.colors.modalBackColor
+        : 'rgba(233, 233, 233, 1)',
+      borderRadius: 15,
+      paddingVertical: hp(20),
+      paddingHorizontal: wp(10),
     },
     slider: {
       width: '100%',
