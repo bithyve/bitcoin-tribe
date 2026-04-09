@@ -83,11 +83,6 @@ export function useReceiveAssetInvoiceFlow({
 
   const requestInvoice = useCallback(() => {
     reqSeqRef.current += 1;
-    // Clear the currently displayed QR immediately so stale invoices never show
-    // while a new invoice is being generated (or if generation fails).
-    setDisplayedInvoice('');
-    awaitingInvoiceRef.current = true;
-
     const normalizedAssetId = assetId ?? '';
     const normalizedAmount = amount ?? 0;
 
@@ -105,6 +100,11 @@ export function useReceiveAssetInvoiceFlow({
       return;
     }
     lastRequestKeyRef.current = key;
+
+    // Clear the currently displayed QR immediately so stale invoices never show
+    // while a new invoice is being generated (or if generation fails).
+    setDisplayedInvoice('');
+    awaitingInvoiceRef.current = true;
 
     const blinded = invoiceType === InvoiceMode.Blinded;
 
@@ -158,6 +158,15 @@ export function useReceiveAssetInvoiceFlow({
     if (!inv) return;
     setDisplayedInvoice(inv);
     awaitingInvoiceRef.current = false;
+  }, [rgbWallet?.receiveData?.invoice]);
+
+  useEffect(() => {
+    // Keep UI in sync with Realm updates, but avoid resurfacing a stale invoice
+    // while we are actively awaiting a newly requested invoice.
+    if (awaitingInvoiceRef.current) return;
+    const inv = rgbWallet?.receiveData?.invoice ?? '';
+    if (!inv) return;
+    setDisplayedInvoice(inv);
   }, [rgbWallet?.receiveData?.invoice]);
 
   useEffect(() => {
@@ -255,6 +264,11 @@ export function useReceiveAssetInvoiceFlow({
     setDisplayedInvoice('');
   }, []);
 
+  const setLocalInvoice = useCallback((invoice: string) => {
+    awaitingInvoiceRef.current = false;
+    setDisplayedInvoice(invoice ?? '');
+  }, []);
+
   return {
     rgbWallet,
     app,
@@ -263,6 +277,7 @@ export function useReceiveAssetInvoiceFlow({
     qrValue,
     requestInvoice,
     clearInvoice,
+    setLocalInvoice,
     error: receiveError || createUtxoError,
   };
 }

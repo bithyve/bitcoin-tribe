@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Keyboard,
   Pressable,
@@ -63,11 +63,16 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import useWallets from 'src/hooks/useWallets';
 import dbManager from 'src/storage/realm/dbManager';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
-import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import { AppStackParams } from 'src/navigation/types';
 import RGBServices from 'src/services/rgb/RGBServices';
 import InfoGold from 'src/assets/images/infoGold.svg';
 import InfoBlue from 'src/assets/images/infoBlue.svg';
+import {
+  decimalStringToSmallestUnits,
+  updateRgbInvoiceAmount,
+} from 'src/utils/rgb-invoice';
+import { events, logCustomEvent } from 'src/services/analytics';
+import InsufficientBalanceReceive from '../collectiblesCoins/components/InsufficiantBalanceReceive';
 
 type ReceiveAssetRouteProp = RouteProp<
   AppStackParams,
@@ -223,23 +228,50 @@ function ReceiveAssetScreen() {
     }
   };
 
-  const { loading, qrValue, requestInvoice, clearInvoice, error } =
-    useReceiveAssetInvoiceFlow({
-      assetId,
-      amount: amountCommittedSmallest === '' ? 0 : amountCommittedSmallest,
-      invoiceExpiry: invoiceExpiry ?? 43200,
-      invoiceType,
-      useWatchTower,
-      onFatalErrorGoBack: () => {},
-      strings: {
-        assetsInsufficientSats: assets.insufficientSats,
-        assetsAssetProcessErrorMsg: assets.assetProcessErrorMsg,
-        walletFailedToCreateUTXO: walletTranslation.failedToCreateUTXO,
-      },
-      formatString: formatString as any,
-    });
+  const {
+    loading,
+    qrValue,
+    requestInvoice,
+    clearInvoice,
+    setLocalInvoice,
+    error,
+  } = useReceiveAssetInvoiceFlow({
+    assetId,
+    amount: amountCommittedSmallest === '' ? 0 : amountCommittedSmallest,
+    invoiceExpiry: invoiceExpiry ?? 43200,
+    invoiceType,
+    useWatchTower,
+    onFatalErrorGoBack: () => {},
+    strings: {
+      assetsInsufficientSats: assets.insufficientSats,
+      assetsAssetProcessErrorMsg: assets.assetProcessErrorMsg,
+      walletFailedToCreateUTXO: walletTranslation.failedToCreateUTXO,
+    },
+    formatString: formatString as any,
+  });
 
   useEffect(() => clearInvoice, [clearInvoice]);
+
+  const invoiceParamsKey = useMemo(
+    () =>
+      JSON.stringify({
+        assetId,
+        invoiceExpiry: invoiceExpiry ?? 43200,
+        invoiceType,
+      }),
+    [assetId, invoiceExpiry, invoiceType],
+  );
+  const expectingBaseInvoiceRef = useRef(false);
+  const baseInvoiceRef = useRef<string>('');
+  const lastBaseParamsKeyRef = useRef<string>('');
+
+  useEffect(() => {
+    if (expectingBaseInvoiceRef.current && qrValue) {
+      baseInvoiceRef.current = qrValue;
+      lastBaseParamsKeyRef.current = invoiceParamsKey;
+      expectingBaseInvoiceRef.current = false;
+    }
+  }, [invoiceParamsKey, qrValue]);
 
   const wallet = useWallets({}).wallets[0];
   const rgbWallet = dbManager.getObjectByIndex(
@@ -283,11 +315,17 @@ function ReceiveAssetScreen() {
     }
 
     const t = setTimeout(() => {
+      expectingBaseInvoiceRef.current = true;
+      // Reset the stored base invoice when params change.
+      if (lastBaseParamsKeyRef.current !== invoiceParamsKey) {
+        baseInvoiceRef.current = '';
+      }
       requestInvoice();
+      logCustomEvent(events.CREATED_INVOICE);
     }, 350);
 
     return () => clearTimeout(t);
-  }, [assetId, amountCommittedSmallest, invoiceExpiry, invoiceType]);
+  }, [assetId, invoiceExpiry, invoiceParamsKey, invoiceType]);
 
   const saveAmount = () => {
     if (amountDraft !== '' && !isAmountEntryValid) {
@@ -312,6 +350,102 @@ function ReceiveAssetScreen() {
           : Number(normalized) * 10 ** precision;
       setAmountCommittedSmallest(v);
     }
+    const currentBase = baseInvoiceRef.current || qrValue;
+
+    // If invoice isn't ready yet, just save draft/committed display.
+    if (!currentBase) {
+      setExpanded(null);
+      Keyboard.dismiss();
+      return;
+    }
+
+    const persistInvoiceToRealm = (nextInvoice: string) => {
+      try {
+        const walletObj = dbManager.getObjectByIndex(
+          RealmSchema.RgbWallet,
+        ) as RGBWallet;
+        const receiveData: any = walletObj?.receiveData;
+        if (!receiveData?.recipientId) return;
+
+        const nextReceiveData = { ...receiveData, invoice: nextInvoice };
+        const recipientId = receiveData.recipientId;
+
+        const existingInvoices = (walletObj as any)?.invoices;
+        if (existingInvoices && Array.isArray(existingInvoices)) {
+          const invoices: any[] = [...existingInvoices];
+          const idx = invoices
+            .map(i => i?.recipientId)
+            .lastIndexOf(recipientId);
+          if (idx >= 0) {
+            invoices[idx] = { ...invoices[idx], invoice: nextInvoice };
+          }
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.RgbWallet,
+            'mnemonic',
+            walletObj.mnemonic,
+            {
+              receiveData: nextReceiveData,
+              invoices,
+            },
+          );
+        } else {
+          // Avoid overwriting invoices history when it's not loaded/available.
+          dbManager.updateObjectByPrimaryId(
+            RealmSchema.RgbWallet,
+            'mnemonic',
+            walletObj.mnemonic,
+            { receiveData: nextReceiveData },
+          );
+        }
+      } catch (e: any) {
+        // Persistence failure shouldn't block UX; the UI still updates via local invoice.
+        console.log('persistInvoiceToRealm error', e?.message || e);
+      }
+    };
+
+    // Clear amount => restore base invoice (amountless) and persist.
+    if (amountDraft === '') {
+      const restored = baseInvoiceRef.current || currentBase;
+      persistInvoiceToRealm(restored);
+      setLocalInvoice(restored);
+      if (useWatchTower) {
+        RGBServices.addInvoiceToWatchTower(restored)
+          .then(result => {
+            if (!result?.success) {
+              Toast('Failed to register with watchtower', true);
+            }
+          })
+          .catch((e: any) =>
+            Toast(e?.message || 'Failed to register with watchtower', true),
+          );
+      }
+
+      setExpanded(null);
+      Keyboard.dismiss();
+      return;
+    }
+
+    try {
+      const rawSmallest = decimalStringToSmallestUnits(amountDraft, precision);
+      const updated = updateRgbInvoiceAmount(currentBase, rawSmallest);
+      persistInvoiceToRealm(updated);
+      setLocalInvoice(updated);
+
+      if (useWatchTower) {
+        RGBServices.addInvoiceToWatchTower(updated)
+          .then(result => {
+            if (!result?.success) {
+              Toast('Failed to register with watchtower', true);
+            }
+          })
+          .catch((e: any) =>
+            Toast(e?.message || 'Failed to register with watchtower', true),
+          );
+      }
+    } catch (e: any) {
+      Toast(e?.message || 'Failed to update invoice amount', true);
+    }
+
     setExpanded(null);
     Keyboard.dismiss();
   };
@@ -373,18 +507,17 @@ function ReceiveAssetScreen() {
           backColor={theme.colors.cardGradient1}
           borderColor={theme.colors.borderColor}
         >
-          <InsufficiantBalancePopupContainer
+          <InsufficientBalanceReceive
             primaryOnPress={() => {
               setInsufficientVisible(false);
               setTimeout(() => {
-                navigation.replace(NavigationRoutes.RECEIVESCREEN);
+                setInvoiceType(InvoiceMode.Witness);
               }, 500);
             }}
-            secondaryOnPress={() => setInsufficientVisible(false)}
           />
         </ResponsePopupContainer>
       </View>
-      {!loading && !error && (
+      {!loading && (
         <View style={styles.body}>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -394,8 +527,8 @@ function ReceiveAssetScreen() {
             <View style={styles.toggleRow}>
               <ReceiveInvoiceTypeToggle
                 value={invoiceType}
-                privateLabel={receciveScreen.privateLabel ?? 'Private'}
-                prepaidLabel={receciveScreen.prepaidLabel ?? 'Pre-paid'}
+                privateLabel={receciveScreen.privateLabel}
+                prepaidLabel={receciveScreen.prepaidLabel}
                 onChange={(value: InvoiceMode) => {
                   setInvoiceType(value);
                   if (value === InvoiceMode.Blinded && !canProceed) {
@@ -601,9 +734,6 @@ function ReceiveAssetScreen() {
                     '',
                 );
                 setSearchAssetInput('');
-                setAmountDraft('');
-                setAmountCommittedDisplay('');
-                setAmountCommittedSmallest('');
               }}
               searchAssetInput={searchAssetInput}
               onChangeSearchInput={(text: string) => setSearchAssetInput(text)}
