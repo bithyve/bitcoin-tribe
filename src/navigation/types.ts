@@ -1,4 +1,5 @@
 import { NavigationRoutes } from './NavigationRoutes';
+import { Asset } from 'src/models/interfaces/RGBWallet';
 
 export type AppStackParams = {
   [NavigationRoutes.LOGINSTACK]: undefined;
@@ -24,7 +25,13 @@ export type AppStackParams = {
   [NavigationRoutes.NODESETTINGS]: undefined;
   [NavigationRoutes.CONNECTNODEMANUALLY]: undefined;
   [NavigationRoutes.ISSUESCREEN]: undefined;
-  [NavigationRoutes.RECEIVEASSET]: undefined;
+  [NavigationRoutes.RECEIVEASSET]:
+    | undefined
+    | {
+        invoiceAssetId?: string;
+        chosenAsset?: Asset;
+        lockAssetSelection?: boolean;
+      };
   [NavigationRoutes.SENDTO]: undefined;
   [NavigationRoutes.SHOWXPUB]: undefined;
   [NavigationRoutes.APPINFO]: undefined;
