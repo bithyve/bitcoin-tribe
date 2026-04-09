@@ -65,6 +65,7 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import { AppStackParams } from 'src/navigation/types';
+import RGBServices from 'src/services/rgb/RGBServices';
 import InfoGold from 'src/assets/images/infoGold.svg';
 import InfoBlue from 'src/assets/images/infoBlue.svg';
 
@@ -286,13 +287,7 @@ function ReceiveAssetScreen() {
     }, 350);
 
     return () => clearTimeout(t);
-  }, [
-    assetId,
-    amountCommittedSmallest,
-    invoiceExpiry,
-    invoiceType,
-    useWatchTower,
-  ]);
+  }, [assetId, amountCommittedSmallest, invoiceExpiry, invoiceType]);
 
   const saveAmount = () => {
     if (amountDraft !== '' && !isAmountEntryValid) {
@@ -325,6 +320,24 @@ function ReceiveAssetScreen() {
     setAmountDraft(amountCommittedDisplay);
     setExpanded(null);
     Keyboard.dismiss();
+  };
+
+  const handleWatchtowerPress = async () => {
+    // Disabling is allowed immediately.
+    setUseWatchTower(!useWatchTower);
+    if (useWatchTower) return;
+    RGBServices.addInvoiceToWatchTower(qrValue)
+      .then(result => {
+        if (!result?.success) {
+          Toast('Failed to register with watchtower', true);
+          setUseWatchTower(false);
+        }
+        setUseWatchTower(true);
+      })
+      .catch((e: any) => {
+        Toast(e?.message || 'Failed to register with watchtower', true);
+        setUseWatchTower(false);
+      });
   };
 
   return (
@@ -521,9 +534,7 @@ function ReceiveAssetScreen() {
 
               {config.ENVIRONMENT != APP_STAGE.PRODUCTION && (
                 <Pressable
-                  onPress={() => {
-                    setUseWatchTower(prev => !prev);
-                  }}
+                  onPress={handleWatchtowerPress}
                   style={styles.watchtowerCtr}
                 >
                   <View style={styles.checkIconWrapper}>{checkIcon}</View>
