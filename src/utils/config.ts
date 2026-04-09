@@ -49,7 +49,7 @@ class Configuration {
   public REGISTRY_URL: string;
   public COLLECTION_URL: string;
   public PROXY_CONSIGNMENT_ENDPOINT: string = "rpcs://proxy.iriswallet.com/0.2/json-rpc";
-  public ORBIS1_API_KEY:string = config.ORBIS1_API_KEY;
+  public ORBIS1_API_KEY: string = config?.ORBIS1_API_KEY ?? "";
 
   constructor() {
     this.ENVIRONMENT = config.ENVIRONMENT?.trim();
@@ -58,8 +58,8 @@ class Configuration {
         ? NetworkType.TESTNET4
         : NetworkType.MAINNET;
     this.NETWORK = this.getBitcoinNetwork(this.NETWORK_TYPE);
-    this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/asset' : 'https://registry.bitcointribe.app/asset';
-    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://bithyve.github.io/bitcoin-tribe-registry/collection' : 'https://registry.bitcointribe.app/collection';
+    this.REGISTRY_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://registry-dev.orbis1.io/asset' : 'https://registry.orbis1.io/asset';
+    this.COLLECTION_URL = this.ENVIRONMENT === APP_STAGE.DEVELOPMENT ? 'https://registry-dev.orbis1.io/collection' : 'https://registry.orbis1.io/collection';
   }
 
   getBitcoinNetwork = (networkType: NetworkType) => {

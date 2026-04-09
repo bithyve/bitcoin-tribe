@@ -33,9 +33,8 @@ function CoinAllTransaction() {
   const asset = useObject<Asset>(schema, assetId);
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
-  // Filter out duplicate transfers from gas-free transactions
   const filteredTransactions = React.useMemo(() => {
-    return asset?.transactions ? filterGasFreeTransfers(asset.transactions) : [];
+    return asset?.transactions ? filterGasFreeTransfers(asset.transactions).reverse() : [];
   }, [asset?.transactions]);
 
   return (

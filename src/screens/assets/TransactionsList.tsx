@@ -57,7 +57,7 @@ function TransactionsList({
 
   // Filter out duplicate transfers from gas-free transactions
   const filteredTransactions = React.useMemo(() => {
-    return filterGasFreeTransfers(transactions);
+    return filterGasFreeTransfers(transactions).reverse();
   }, [transactions]);
 
   return (
