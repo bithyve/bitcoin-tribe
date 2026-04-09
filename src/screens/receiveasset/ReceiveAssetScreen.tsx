@@ -65,6 +65,8 @@ import dbManager from 'src/storage/realm/dbManager';
 import { RgbUnspent, RGBWallet } from 'src/models/interfaces/RGBWallet';
 import InsufficiantBalancePopupContainer from 'src/screens/collectiblesCoins/components/InsufficiantBalancePopupContainer';
 import { AppStackParams } from 'src/navigation/types';
+import InfoGold from 'src/assets/images/infoGold.svg';
+import InfoBlue from 'src/assets/images/infoBlue.svg';
 
 type ReceiveAssetRouteProp = RouteProp<
   AppStackParams,
@@ -432,9 +434,20 @@ function ReceiveAssetScreen() {
                     }
                     style={styles.accordionHeader}
                   >
-                    <AppText variant="body3" style={styles.rowTitle}>
-                      {receciveScreen.addAmountOptional}
-                    </AppText>
+                    <View
+                      style={{ flexDirection: 'row', alignItems: 'center' }}
+                    >
+                      <AppText variant="body3" style={styles.rowTitle}>
+                        Add Amount{' '}
+                      </AppText>
+                      <AppText
+                        variant="body3"
+                        style={{ color: theme.colors.mutedTab }}
+                      >
+                        (optional)
+                      </AppText>
+                    </View>
+
                     <View>{chevronAmount}</View>
                   </Pressable>
                 </View>
@@ -524,19 +537,33 @@ function ReceiveAssetScreen() {
 
               {invoiceType === InvoiceMode.Witness && (
                 <View style={styles.prepaidCard}>
+                  <View style={styles.noteCtr}>
+                    {theme.dark ? (
+                      <InfoGold height={18} width={18} />
+                    ) : (
+                      <InfoBlue height={18} width={18} />
+                    )}
+                    <AppText
+                      variant="body1"
+                      style={[
+                        styles.prepaidText,
+                        { color: theme.colors.accent1 },
+                      ]}
+                    >
+                      {'Note'}
+                    </AppText>
+                  </View>
                   <AppText variant="caption" style={styles.prepaidText}>
                     {receciveScreen.prepaidExplainer}
                   </AppText>
                   <View style={{ flexDirection: 'row', marginTop: hp(10) }}>
                     <AppText variant="caption" style={styles.prepaidText}>
-                      Currently supported app:
+                      {receciveScreen.supportedAppsLabel}
                     </AppText>
                     <AppText
                       variant="body5"
                       style={{
-                        color: isThemeDark
-                          ? Colors.Golden
-                          : Colors.BrandeisBlue,
+                        color: theme.colors.accent1,
                       }}
                     >
                       {' Bitcoin Tribe'}
@@ -611,10 +638,11 @@ const getStyles = (theme: AppTheme, insets: EdgeInsets) =>
     },
     optionCard: {
       marginTop: hp(10),
-      experimental_backgroundImage: `linear-gradient(45deg,#1A1A1A,#0B0B0B, #121212)`,
+      experimental_backgroundImage: `linear-gradient(45deg, ${theme.colors.cardGradient1}, ${theme.colors.cardGradient2}, ${theme.colors.cardGradient3})`,
       borderRadius: 15,
     },
     accordionCard: { marginTop: hp(10) },
+
     accordionHeader: {
       paddingVertical: hp(14),
       paddingHorizontal: wp(15),
@@ -625,20 +653,25 @@ const getStyles = (theme: AppTheme, insets: EdgeInsets) =>
     accordionBody: {
       paddingHorizontal: wp(12),
       paddingBottom: hp(12),
-      backgroundColor: theme.colors.modalBackColor,
+      backgroundColor: theme.dark
+        ? theme.colors.modalBackColor
+        : 'rgba(233, 233, 233, 1)',
       marginTop: hp(5),
       borderRadius: 15,
       padding: wp(20),
     },
     rowTitle: { color: theme.colors.text },
-    sectionLabel: { color: theme.colors.mutedTab, marginBottom: hp(10) },
+    sectionLabel: {
+      color: theme.dark ? theme.colors.mutedTab : 'rgba(97, 106, 127, 1)',
+      marginBottom: hp(10),
+    },
     amountInput: {
       marginTop: hp(4),
       backgroundColor: theme.colors.roundedCtaBg,
     },
     helperText: {
       marginTop: hp(6),
-      color: theme.colors.mutedTab,
+      color: theme.dark ? theme.colors.mutedTab : 'rgba(97, 106, 127, 1)',
       fontSize: 12,
       fontFamily: Fonts.LufgaLight,
       fontStyle: 'italic',
@@ -667,11 +700,11 @@ const getStyles = (theme: AppTheme, insets: EdgeInsets) =>
       paddingVertical: hp(12),
       borderRadius: 12,
       borderWidth: 1,
-      borderColor: Colors.Golden,
+      borderColor: theme.colors.accent1,
     },
     prepaidText: { color: theme.colors.text },
     cancelText: {
-      color: theme.colors.mutedTab,
+      color: theme.dark ? theme.colors.mutedTab : 'rgba(97, 106, 127, 1)',
       paddingVertical: hp(10),
     },
     copyIconWrapper: {
@@ -680,6 +713,12 @@ const getStyles = (theme: AppTheme, insets: EdgeInsets) =>
       gap: wp(4),
       alignSelf: 'center',
       marginTop: hp(15),
+    },
+    noteCtr: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: wp(4),
+      marginBottom: hp(10),
     },
   });
 

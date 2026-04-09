@@ -388,6 +388,7 @@
     "privateLabel": "Privato",
     "prepaidLabel": "Prepagato",
     "prepaidExplainer": "Per le fatture RGB prepagate (witness), il mittente paga in anticipo la transazione, quindi l'app di invio deve supportare questa opzione.",
+    "supportedAppsLabel": "App attualmente supportata:",
     "invoiceAddress": "Fattura RGB",
     "bitcoinAddress": "Indirizzo Bitcoin",
     "noteSubTitle": "L'UTXO {type} in questa fattura scadrà in {time} ore.",

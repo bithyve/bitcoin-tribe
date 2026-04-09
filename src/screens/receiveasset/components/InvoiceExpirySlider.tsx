@@ -63,7 +63,9 @@ const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
     container: {
       marginTop: hp(5),
-      backgroundColor: theme.colors.modalBackColor,
+      backgroundColor: theme.dark
+        ? theme.colors.modalBackColor
+        : 'rgba(233, 233, 233, 1)',
       borderRadius: 15,
       paddingVertical: hp(20),
       paddingHorizontal: wp(10),

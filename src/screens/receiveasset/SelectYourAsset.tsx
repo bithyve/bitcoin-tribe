@@ -80,9 +80,14 @@ const SelectYourAsset = (props: Props) => {
               </AppText>
             </View>
           ) : (
-            <AppText variant="body3" style={styles.titleText}>
-              {channel.selectAsset}
-            </AppText>
+            <View style={{ flexDirection: 'row' }}>
+              <AppText variant="body3" style={styles.titleText}>
+                {'Asset '}
+              </AppText>
+              <AppText variant="body3" style={{ color: theme.colors.mutedTab }}>
+                (optional)
+              </AppText>
+            </View>
           )}
         </View>
         {!selectionLocked && (

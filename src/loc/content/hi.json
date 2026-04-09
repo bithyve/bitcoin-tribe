@@ -388,6 +388,7 @@
     "privateLabel": "निजी",
     "prepaidLabel": "प्री-पेड",
     "prepaidExplainer": "प्री-पेड RGB (witness) इनवॉइस के लिए, भेजने वाला लेनदेन का शुल्क पहले से भुगतान करता है, इसलिए भेजने वाली ऐप को इस विकल्प का समर्थन करना चाहिए।",
+    "supportedAppsLabel": "वर्तमान में समर्थित ऐप:",
     "invoiceAddress": "आरजीबी इनवॉइस",
     "bitcoinAddress": "बिटकॉइन पता",
     "noteSubTitle": "इस इनवॉइस में {type} यूटीएक्सओ {time} घंटों में समाप्त हो जाएगा।",

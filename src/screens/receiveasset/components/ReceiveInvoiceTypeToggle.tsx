@@ -63,6 +63,7 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       borderRadius: 999,
       borderWidth: 1,
+      borderColor: 'transparent',
       backgroundColor: theme.colors.roundedCtaBg,
       padding: 4,
       maxWidth: '80%',

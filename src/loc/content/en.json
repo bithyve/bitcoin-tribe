@@ -388,6 +388,7 @@
     "privateLabel": "Private",
     "prepaidLabel": "Pre-paid",
     "prepaidExplainer": "For prepaid RGB (witness) invoices, the sender prepays for the transaction, so the sending app must support this option.",
+    "supportedAppsLabel": "Currently supported app:",
     "invoiceAddress": "RGB Invoice",
     "bitcoinAddress": "Bitcoin Address",
     "noteSubTitle": "The {type} UTXO in this invoice will expire in {time} hours.",

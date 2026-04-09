@@ -388,6 +388,7 @@
     "privateLabel": "プライベート",
     "prepaidLabel": "前払い",
     "prepaidExplainer": "前払いの RGB（witness）請求書では、送信者が取引手数料を事前に支払うため、送信側アプリがこのオプションに対応している必要があります。",
+    "supportedAppsLabel": "現在対応しているアプリ：",
     "invoiceAddress": "RGB請求書",
     "bitcoinAddress": "ビットコインアドレス",
     "noteSubTitle": "この請求書の{type}UTXOは{time}時間で失効します。",

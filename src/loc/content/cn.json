@@ -388,6 +388,7 @@
     "privateLabel": "私密",
     "prepaidLabel": "预付费",
     "prepaidExplainer": "对于预付的 RGB（witness）发票，发送方会预付交易费用，因此发送应用必须支持此选项。",
+    "supportedAppsLabel": "当前支持的应用：",
     "invoiceAddress": "RGB发票",
     "bitcoinAddress": "比特币地址",
     "noteSubTitle": "此发票中的{type}UTXO将在{time}小时内过期。",
