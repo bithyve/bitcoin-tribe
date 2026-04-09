@@ -10,7 +10,6 @@ import {
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { useNavigation } from '@react-navigation/native';
-
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoAssetsIllustration from 'src/assets/images/noAssets.svg';
 import NoAssetsIllustrationLight from 'src/assets/images/noAssets_light.svg';
@@ -166,7 +165,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
         }
         renderItem={({ item, index }) => (
           <View>
-            {item.assetSchema.toUpperCase() === AssetSchema.Coin ? (
+            {item.assetSchema.toUpperCase() === AssetSchema.Coin || item.assetSchema.toUpperCase() === AssetSchema.IFA ? (
               <Item
                 key={index}
                 name={item.name}
@@ -191,7 +190,7 @@ function SelectAssetToSendContainer(props: selectAssetsProps) {
                 key={index}
                 name={item.name}
                 details={item.details}
-                amount={item.balance.spendable}
+                amount={(Number(item.balance.spendable) / 10 ** item.precision).toString()}
                 tag="COLLECTIBLE"
                 onPressAsset={() =>
                   navigation.replace(NavigationRoutes.SENDASSET, {
