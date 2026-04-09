@@ -1986,7 +1986,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+30ba5b)":
+  - "react-native-bare-kit (0.9.3+1bb18a)":
     - boost
     - DoubleConversion
     - fast_float
@@ -3929,7 +3929,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 26d74a5bff3f23a6e096389ffec42430b0a8ef28
+  react-native-bare-kit: f5224253edb56c6b9c08f3bf7ad311479921e97b
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -4005,6 +4005,6 @@ SPEC CHECKSUMS:
   Yoga: 728df40394d49f3f471688747cf558158b3a3bd1
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 19ca666d54062a742a88aff48de1b751c8c5fbff
+PODFILE CHECKSUM: 1b8b8f87a492d1d56140b4f787c6dd42084a4a93
 
 COCOAPODS: 1.16.2
