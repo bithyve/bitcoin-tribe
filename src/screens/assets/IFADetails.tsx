@@ -204,7 +204,7 @@ const CoinDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
             return dateA - dateB;
           })
-        : coin?.transactions.slice(0, 4);
+        : coin?.transactions.slice(-4);
   }, [filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark

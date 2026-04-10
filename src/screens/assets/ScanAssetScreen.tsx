@@ -18,7 +18,12 @@ import WalletUtilities from 'src/services/wallets/operations/utils';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
-import { Asset, Coin, Collectible, InflatableFungibleAsset } from 'src/models/interfaces/RGBWallet';
+import {
+  Asset,
+  Coin,
+  Collectible,
+  InflatableFungibleAsset,
+} from 'src/models/interfaces/RGBWallet';
 
 function ScanAssetScreen({ navigation }) {
   const { assetId, rgbInvoice, isUDA } = useRoute().params;
@@ -69,7 +74,7 @@ function ScanAssetScreen({ navigation }) {
           navigation.replace(NavigationRoutes.SENDASSET, {
             assetId: assetId,
             rgbInvoice: value,
-            amount: 0,
+            amount: res?.assignment?.amount?.toString() || '0',
             isUDA: isUDA,
           });
         }
@@ -113,6 +118,7 @@ function ScanAssetScreen({ navigation }) {
   );
 
   const onCodeScanned = async (codes: Code[]) => {
+    console.log('🚀 ~ onCodeScanned ~ codes:', codes);
     await handlePaymentInfo({ codes });
   };
 

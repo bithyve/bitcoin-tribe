@@ -48,6 +48,7 @@ import TextField from 'src/components/TextField';
 import config, { APP_STAGE } from 'src/utils/config';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 import { useReceiveAssetInvoiceFlow } from './useReceiveAssetInvoiceFlow';
+import { useReceiveAssetInvoiceGuards } from './useReceiveAssetInvoiceGuards';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
@@ -306,11 +307,27 @@ function ReceiveAssetScreen() {
     wallet?.specs?.balances?.unconfirmed,
   ]);
 
+  const { hasAssetSelection, blocksInvoiceWithoutAsset } =
+    useReceiveAssetInvoiceGuards(assetId, amountCommittedSmallest);
+
+  useEffect(() => {
+    if (!hasAssetSelection && expanded === 'amount') {
+      setExpanded(null);
+      Keyboard.dismiss();
+    }
+  }, [expanded, hasAssetSelection]);
+
   useEffect(() => {
     // Centralized invoice creation: debounce to avoid churn and ensure params are fresh.
     if (!canProceed && invoiceType === InvoiceMode.Blinded) {
       clearInvoice?.();
       setInsufficientVisible(true);
+      return () => {};
+    }
+
+    // Amount requires an asset; asset alone (no amount) is allowed.
+    if (blocksInvoiceWithoutAsset) {
+      clearInvoice?.();
       return () => {};
     }
 
@@ -325,7 +342,17 @@ function ReceiveAssetScreen() {
     }, 350);
 
     return () => clearTimeout(t);
-  }, [assetId, invoiceExpiry, invoiceParamsKey, invoiceType]);
+  }, [
+    assetId,
+    amountCommittedSmallest,
+    blocksInvoiceWithoutAsset,
+    canProceed,
+    clearInvoice,
+    invoiceExpiry,
+    invoiceParamsKey,
+    invoiceType,
+    requestInvoice,
+  ]);
 
   const saveAmount = () => {
     if (amountDraft !== '' && !isAmountEntryValid) {
@@ -575,10 +602,14 @@ function ReceiveAssetScreen() {
               <View>
                 <View style={styles.optionCard}>
                   <Pressable
+                    disabled={!hasAssetSelection}
                     onPress={() =>
                       setExpanded(prev => (prev === 'amount' ? null : 'amount'))
                     }
-                    style={styles.accordionHeader}
+                    style={[
+                      styles.accordionHeader,
+                      !hasAssetSelection && styles.accordionHeaderDisabled,
+                    ]}
                   >
                     <View
                       style={{ flexDirection: 'row', alignItems: 'center' }}
@@ -790,6 +821,9 @@ const getStyles = (theme: AppTheme, insets: EdgeInsets) =>
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
+    },
+    accordionHeaderDisabled: {
+      opacity: 0.45,
     },
     accordionBody: {
       paddingHorizontal: wp(12),

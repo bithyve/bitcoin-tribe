@@ -38,7 +38,7 @@ function SendSuccessPopupContainer(props: sendSuccessProps) {
           }
           style={styles.loaderStyle}
           autoPlay
-          loop
+          loop={false}
         />
       </View>
       <View style={styles.detailsWrapper}>
