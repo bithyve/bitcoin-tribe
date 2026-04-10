@@ -3291,47 +3291,60 @@ export class ApiHandler {
             offchainInbound: String(b.offchainInbound ?? '0'),
           };
         };
-        results.forEach(result => {
+        const putFeaturedAsset = (
+          schema: RealmSchema,
+          result: Coin | Collectible | Collection | UniqueDigitalAsset,
+        ) => {
+          const { transactions: presetTransactions, ...rest } = result;
+          const existingIdField =
+            schema === RealmSchema.Collection ? '_id' : 'assetId';
+          const existingId =
+            schema === RealmSchema.Collection
+              ? (result as Collection)._id
+              : result.assetId;
+          const existing = dbManager.getObjectByPrimaryId(
+            schema,
+            existingIdField,
+            existingId,
+          );
+          const issuedRaw = (result as { issuedSupply?: string | number })
+            .issuedSupply;
+          const payload = {
+            ...rest,
+            addedAt: Date.now(),
+            issuedSupply:
+              issuedRaw != null ? String(issuedRaw) : '',
+            balance: balanceFromExistingOrZero(schema, result.assetId),
+          };
+          if (existing) {
+            dbManager.createObject(schema, payload, Realm.UpdateMode.Modified);
+          } else {
+            dbManager.createObject(
+              schema,
+              {
+                ...payload,
+                transactions: Array.isArray(presetTransactions)
+                  ? presetTransactions
+                  : [],
+              },
+              Realm.UpdateMode.All,
+            );
+          }
+        };
+        (
+          results as (Asset & { collectionSchema?: unknown })[]
+        ).forEach(result => {
           if (result.metaData.assetSchema === AssetSchema.Coin) {
-            dbManager.createObject(RealmSchema.Coin, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Coin,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Coin, result as Coin);
           } else if (result.metaData.assetSchema === AssetSchema.Collectible) {
-            dbManager.createObject(RealmSchema.Collectible, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Collectible,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Collectible, result as Collectible);
           } else if (result.collectionSchema) {
-            dbManager.createObject(RealmSchema.Collection, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Collection,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Collection, result as Collection);
           } else if (result.metaData.assetSchema === AssetSchema.UDA) {
-            dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.UniqueDigitalAsset,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(
+              RealmSchema.UniqueDigitalAsset,
+              result as UniqueDigitalAsset,
+            );
           }
         });
         return true;
