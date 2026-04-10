@@ -88,8 +88,8 @@ function ImportXPost() {
             setTweetUrl(savedUrl);
           }
         } else {
-          storage.delete(rateLimitKey);
-          storage.delete(rateLimitedUrlKey);
+          storage.remove(rateLimitKey);
+          storage.remove(rateLimitedUrlKey);
           setIsRateLimited(false);
         }
       }
@@ -101,8 +101,8 @@ function ImportXPost() {
       setRateLimitRemainingTime(prev => {
         if (prev <= 1000) {
           setIsRateLimited(false);
-          storage.delete(rateLimitKey);
-          storage.delete(rateLimitedUrlKey);
+          storage.remove(rateLimitKey);
+          storage.remove(rateLimitedUrlKey);
           clearInterval(interval);
           return 0;
         }
@@ -156,7 +156,7 @@ function ImportXPost() {
       const result = await mutateAsync({ tweetId: id, assetId, schema, asset });
       if (result?.success) {
         setTweetId(id);
-        storage.delete(rateLimitedUrlKey);
+        storage.remove(rateLimitedUrlKey);
         Toast('X post added successfully.');
         navigateWithDelay(() => navigation.goBack());
       } else {
@@ -196,7 +196,7 @@ function ImportXPost() {
     setTweetUrl('');
     setTweetUrlValidationError('');
     const rateLimitedUrlKey = getRateLimitedTweetUrlKey(assetId);
-    storage.delete(rateLimitedUrlKey);
+    storage.remove(rateLimitedUrlKey);
   };
 
   return (

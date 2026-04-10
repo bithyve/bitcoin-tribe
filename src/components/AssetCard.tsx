@@ -123,7 +123,7 @@ const AssetCard = (props: AssetCardProps) => {
                 >
                   {asset.name}
                 </AppText>
-                {isVerified && <IconVerified width={20} height={20} />}
+                {isVerified && <IconVerified style={{ marginRight: 5 }} width={20} height={20} />}
               </View>
               {asset.assetSchema !== AssetSchema.UDA && (
                 <AppText
@@ -178,13 +178,14 @@ const getStyles = (theme: AppTheme) =>
     nameText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
-      marginRight: hp(2),
+      marginHorizontal: wp(2),
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
-      textAlign: 'center',
-      marginRight: hp(2),
+      textAlign: 'right',
+      marginHorizontal: wp(2),
+      flex: 1
     },
     assetImageWrapper: {
       width: '100%',
@@ -198,7 +199,7 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
     },
     nameContainer: {
-      flex: 1,
+      flex: 2,
       flexDirection: 'row',
     },
     textDetails: {
