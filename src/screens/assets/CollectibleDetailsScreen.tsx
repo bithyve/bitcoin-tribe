@@ -183,7 +183,7 @@ const CollectibleDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : collectible?.transactions.slice(-4);
+      : collectible?.transactions.slice(-5);
   }, [filteredPayments, collectible?.transactions]);
 
   const navigateWithDelay = (callback: () => void) => {
@@ -247,10 +247,9 @@ const CollectibleDetailsScreen = () => {
             Toast(node.connectingNodeToastMsg, true);
             return;
           }
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
             chosenAsset: collectible,
-            lockAssetSelection: true,
           });
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}

@@ -467,10 +467,9 @@ const CoinItem = ({
                 });
               }}
               onPressReceive={() => {
-                navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+                navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
                   invoiceAssetId: asset.assetId,
                   chosenAsset: asset,
-                  lockAssetSelection: true,
                 });
               }}
               sendCtaWidth={wp(150)}
@@ -562,7 +561,7 @@ const DefaultCoin = ({
       ifaCoins.length
     );
   }, [collectibles, udas, collections, coins, ifaCoins]);
-  
+
   const currentAsset = useMemo(() => {
     const asset = presetAssets[currentIndex];
     if(asset?.metaData?.assetSchema === AssetSchema.Coin) {
@@ -681,15 +680,14 @@ const DefaultCoin = ({
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
+        limitToVisibleRows
         transactions={currentAsset?.transactions || []}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
-        wallet={wallet}
         coin={currentAsset?.name || presetAssets?.[currentIndex]?.name}
         assetId={currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId}
         precision={currentAsset?.precision || 0}
-        scrollY={0}
         schema={currentAssetSchema}
       />
     </View>

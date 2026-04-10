@@ -86,7 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork } from 'orbis1-sdk-rn';
+import { restoreKeys, BitcoinNetwork, RgbLibErrors } from 'orbis1-sdk-rn';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
@@ -1259,6 +1259,7 @@ export class ApiHandler {
     expiry,
     blinded = true,
     useWatchTower = false,
+    _retryCount = 0,
   }) {
     try {
       assetId = assetId ?? null;
@@ -1317,7 +1318,37 @@ export class ApiHandler {
       }
       ApiHandler.viewUtxos();
     } catch (error) {
-      console.log('errors', error);
+      const errorCode = (error as any)?.code;
+      if (errorCode === RgbLibErrors.InsufficientAllocationSlots) {
+        // Prevent infinite retry loops if UTXO creation doesn't resolve the underlying issue.
+        if (_retryCount >= 1) {
+          throw new Error('Unable to create new utxos for your invoice');
+        }
+
+        try {
+          const res = await ApiHandler.createUtxos();
+          if (!res) {
+            throw new Error('Unable to create new utxos for your invoice');
+          }
+
+          return await ApiHandler.receiveAsset({
+            assetId,
+            amount,
+            linkedAsset,
+            linkedAmount,
+            expiry,
+            blinded,
+            useWatchTower,
+            _retryCount: _retryCount + 1,
+          });
+        } catch (utxoError) {
+          const msg =
+            (utxoError as any)?.message ||
+            (utxoError as any)?.code ||
+            `${utxoError}`;
+          throw new Error(`Unable to create new utxos for your invoice: ${msg}`);
+        }
+      }
       throw error;
     }
   }
@@ -3260,47 +3291,60 @@ export class ApiHandler {
             offchainInbound: String(b.offchainInbound ?? '0'),
           };
         };
-        results.forEach(result => {
+        const putFeaturedAsset = (
+          schema: RealmSchema,
+          result: Coin | Collectible | Collection | UniqueDigitalAsset,
+        ) => {
+          const { transactions: presetTransactions, ...rest } = result;
+          const existingIdField =
+            schema === RealmSchema.Collection ? '_id' : 'assetId';
+          const existingId =
+            schema === RealmSchema.Collection
+              ? (result as Collection)._id
+              : result.assetId;
+          const existing = dbManager.getObjectByPrimaryId(
+            schema,
+            existingIdField,
+            existingId,
+          );
+          const issuedRaw = (result as { issuedSupply?: string | number })
+            .issuedSupply;
+          const payload = {
+            ...rest,
+            addedAt: Date.now(),
+            issuedSupply:
+              issuedRaw != null ? String(issuedRaw) : '',
+            balance: balanceFromExistingOrZero(schema, result.assetId),
+          };
+          if (existing) {
+            dbManager.createObject(schema, payload, Realm.UpdateMode.Modified);
+          } else {
+            dbManager.createObject(
+              schema,
+              {
+                ...payload,
+                transactions: Array.isArray(presetTransactions)
+                  ? presetTransactions
+                  : [],
+              },
+              Realm.UpdateMode.All,
+            );
+          }
+        };
+        (
+          results as (Asset & { collectionSchema?: unknown })[]
+        ).forEach(result => {
           if (result.metaData.assetSchema === AssetSchema.Coin) {
-            dbManager.createObject(RealmSchema.Coin, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Coin,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Coin, result as Coin);
           } else if (result.metaData.assetSchema === AssetSchema.Collectible) {
-            dbManager.createObject(RealmSchema.Collectible, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Collectible,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Collectible, result as Collectible);
           } else if (result.collectionSchema) {
-            dbManager.createObject(RealmSchema.Collection, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.Collection,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(RealmSchema.Collection, result as Collection);
           } else if (result.metaData.assetSchema === AssetSchema.UDA) {
-            dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
-              ...result,
-              addedAt: Date.now(),
-              issuedSupply: result.issuedSupply.toString(),
-              balance: balanceFromExistingOrZero(
-                RealmSchema.UniqueDigitalAsset,
-                result.assetId,
-              ),
-            });
+            putFeaturedAsset(
+              RealmSchema.UniqueDigitalAsset,
+              result as UniqueDigitalAsset,
+            );
           }
         });
         return true;
@@ -3586,7 +3630,7 @@ export class ApiHandler {
   static async requestGasFreeQuote(
     userId: string,
     assetId: string,
-    amount: string,
+    transferAmount: number,
     recipientInvoice: string,
     numInputs?: number,
     numOutputs?: number,
@@ -3595,7 +3639,7 @@ export class ApiHandler {
       const quote = await RGBServices.requestGasFreeQuote(
         userId,
         assetId,
-        amount,
+        transferAmount,
         recipientInvoice,
         numInputs,
         numOutputs,

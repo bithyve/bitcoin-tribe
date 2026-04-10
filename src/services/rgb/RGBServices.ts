@@ -21,11 +21,13 @@ import {
   type GasFreeTransferRequest,
   type GasFreeTransferResult,
   type AssetIfa,
+  restoreKeys,
 } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
 import { Keys, Storage } from 'src/storage';
 import { Wallet } from 'orbis1-sdk-rn/lib/typescript/src/core/Wallet';
+import { ApiHandler } from '../handler/apiHandler';
 
 export default class RGBServices {
   private static environment: Environment = null;
@@ -292,6 +294,7 @@ export default class RGBServices {
     invoice?: string;
     recipientId?: string;
     error?: string;
+    errorCode?: unknown;
   }> => {
     try {
       if (
@@ -345,6 +348,7 @@ export default class RGBServices {
     } catch (error) {
       return {
         error: `${error}`,
+        errorCode: (error as any)?.code,
       };
     }
   };
@@ -668,8 +672,9 @@ export default class RGBServices {
     return data;
   };
 
-  static restore = async (mnemonic: string, filePath: string): Promise<{}> => {
-    const data = await restoreBackup(filePath, mnemonic);
+  static restore = async (mnemonic: string, filePath: string,): Promise<{}> => {
+    const keys = await restoreKeys(ApiHandler.getBitcoinNetwork(), mnemonic);
+    const data = await restoreBackup(filePath, mnemonic, keys.masterFingerprint);
     return {};
   };
 
@@ -712,7 +717,7 @@ export default class RGBServices {
   static requestGasFreeQuote = async (
     userId: string,
     assetId: string,
-    amount: string,
+    transferAmount: number,
     recipientInvoice: string,
     numInputs?: number,
     numOutputs?: number,
@@ -724,7 +729,7 @@ export default class RGBServices {
     const quote = await gasFree.requestFeeQuote({
       userId,
       assetId,
-      amount,
+      transferAmount,
       recipientInvoice,
       numInputs,
       numOutputs,

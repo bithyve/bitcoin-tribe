@@ -5,7 +5,8 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { AppTheme } from 'src/theme';
 import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import GradientView from 'src/components/GradientView';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import IconArrowDown from 'src/assets/images/icon_arrowd.svg';
 import IconArrowDownLight from 'src/assets/images/icon_arrowd_light.svg';
@@ -17,11 +18,10 @@ import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 type Props = {
   selectedAsset: Asset;
   onPress: () => void;
-  selectionLocked?: boolean;
 };
 
 const SelectYourAsset = (props: Props) => {
-  const { selectedAsset, onPress, selectionLocked = false } = props;
+  const { selectedAsset, onPress } = props;
   const theme: AppTheme = useTheme();
   const { translations } = React.useContext(LocalizationContext);
   const { channel } = translations;
@@ -37,27 +37,27 @@ const SelectYourAsset = (props: Props) => {
   });
 
   return (
-    <AppTouchable
-      onPress={selectionLocked ? () => {} : onPress}
-      disabled={selectionLocked}
-      style={styles.container}
-    >
-      <View style={styles.container1}>
+    <AppTouchable onPress={onPress} style={styles.container}>
+      <GradientView
+        style={[styles.container1]}
+        colors={[
+          theme.colors.cardGradient1,
+          theme.colors.cardGradient2,
+          theme.colors.cardGradient3,
+        ]}>
         <View>
           {selectedAsset ? (
             <View style={styles.assetWrapper}>
               <View>
                 {selectedAsset?.assetSchema?.toUpperCase() ===
                   AssetSchema.Collectible ||
-                selectedAsset?.asset?.assetSchema === AssetSchema.Collectible ||
+                selectedAsset?.asset?.assetSchema ===
+                  AssetSchema.Collectible ||
                 selectedAsset?.iconUrl ||
                 selectedAsset?.asset?.iconUrl ? (
                   <Image
                     source={{
-                      uri:
-                        selectedAsset?.iconUrl ||
-                        selectedAsset?.asset?.iconUrl ||
-                        imageUri,
+                      uri: selectedAsset?.iconUrl || selectedAsset?.asset?.iconUrl || imageUri,
                     }}
                     style={styles.imageStyle}
                   />
@@ -75,27 +75,18 @@ const SelectYourAsset = (props: Props) => {
                   />
                 )}
               </View>
-              <AppText variant="body3" style={styles.titleText}>
+              <AppText variant="body1" style={styles.titleText}>
                 {formatTUsdt(selectedAsset?.name || selectedAsset?.asset?.name)}
               </AppText>
             </View>
           ) : (
-            <View style={{ flexDirection: 'row' }}>
-              <AppText variant="body3" style={styles.titleText}>
-                {'Asset '}
-              </AppText>
-              <AppText variant="body3" style={{ color: theme.colors.mutedTab }}>
-                (optional)
-              </AppText>
-            </View>
+            <AppText variant="body1" style={styles.titleText}>
+              {channel.selectAsset}
+            </AppText>
           )}
         </View>
-        {!selectionLocked && (
-          <View>
-            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
-          </View>
-        )}
-      </View>
+        <View>{isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}</View>
+      </GradientView>
     </AppTouchable>
   );
 };
@@ -106,15 +97,18 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
   StyleSheet.create({
     container: {
       width: '99%',
+      minHeight: hp(60),
     },
     container1: {
-      paddingVertical: hp(14),
-      paddingHorizontal: wp(15),
+      minHeight: hp(60),
+      paddingHorizontal: windowHeight > 670 ? hp(17) : hp(10),
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      borderRadius: 15,
-      experimental_backgroundImage: `linear-gradient(45deg, ${theme.colors.cardGradient1}, ${theme.colors.cardGradient2}, ${theme.colors.cardGradient3})`,
+      borderRadius: 10,
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
+      marginVertical: hp(5),
     },
     assetWrapper: {
       flexDirection: 'row',
@@ -133,7 +127,7 @@ const getStyles = (theme: AppTheme, backColor, selectedAsset) =>
       marginRight: hp(10),
     },
     titleText: {
-      color: theme.colors.text,
+      color: theme.colors.headingColor,
       marginLeft: hp(5),
     },
   });
