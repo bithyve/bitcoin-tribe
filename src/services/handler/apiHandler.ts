@@ -3586,7 +3586,7 @@ export class ApiHandler {
   static async requestGasFreeQuote(
     userId: string,
     assetId: string,
-    amount: string,
+    transferAmount: number,
     recipientInvoice: string,
     numInputs?: number,
     numOutputs?: number,
@@ -3595,7 +3595,7 @@ export class ApiHandler {
       const quote = await RGBServices.requestGasFreeQuote(
         userId,
         assetId,
-        amount,
+        transferAmount,
         recipientInvoice,
         numInputs,
         numOutputs,

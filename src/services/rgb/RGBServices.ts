@@ -712,7 +712,7 @@ export default class RGBServices {
   static requestGasFreeQuote = async (
     userId: string,
     assetId: string,
-    amount: string,
+    transferAmount: number,
     recipientInvoice: string,
     numInputs?: number,
     numOutputs?: number,
@@ -724,7 +724,7 @@ export default class RGBServices {
     const quote = await gasFree.requestFeeQuote({
       userId,
       assetId,
-      amount,
+      transferAmount,
       recipientInvoice,
       numInputs,
       numOutputs,
