@@ -10,13 +10,15 @@ import {
 } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean } from 'react-native-mmkv';
-import Modal from 'react-native-modal';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { AppTheme } from 'src/theme';
-import { hp, windowHeight, wp } from 'src/constants/responsive';
+import GradientView from 'src/components/GradientView';
+import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { Keys } from 'src/storage';
+import IconArrowDown from 'src/assets/images/icon_arrowUp.svg';
+import IconArrowDownLight from 'src/assets/images/icon_arrowUp_light.svg';
 import { Asset, AssetSchema } from 'src/models/interfaces/RGBWallet';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AssetIcon from 'src/components/AssetIcon';
@@ -26,7 +28,7 @@ import IconSearch from 'src/assets/images/icon_search.svg';
 import IconSearchLight from 'src/assets/images/icon_search_light.svg';
 
 type DropdownProps = {
-  style?;
+  style;
   assets: Asset[];
   callback: (item) => void;
   onDissmiss?: () => void;
@@ -51,9 +53,11 @@ const EmptyAssetState = () => {
 
 function RGBAssetList(props: DropdownProps) {
   const {
+    style,
     assets,
     callback,
     onDissmiss,
+    selectedAsset,
     searchAssetInput,
     onChangeSearchInput,
     isLoading,
@@ -64,220 +68,198 @@ function RGBAssetList(props: DropdownProps) {
   const { channel, assets: assetsTranslations, sendScreen } = translations;
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const insets = useSafeAreaInsets();
   return (
-    <Modal
-      isVisible={true}
-      onBackdropPress={onDissmiss}
-      onSwipeComplete={onDissmiss}
-      swipeDirection={['down']}
-      style={styles.modal}
-      backdropOpacity={0.65}
-      useNativeDriver
-      avoidKeyboard
-    >
-      <View style={[styles.sheet, { paddingBottom: hp(14) + insets.bottom }]}>
-        <View style={styles.handle} />
-        <View style={styles.content}>
-          <View style={styles.headerRow}>
-            <View style={styles.headerSpacer} />
-            <AppText variant="heading3" style={styles.headerTitle}>
+    <View style={[style, styles.container]}>
+      <AppTouchable onPress={onDissmiss}>
+        <GradientView
+          style={styles.inputWrapper}
+          colors={[
+            theme.colors.cardGradient1,
+            theme.colors.cardGradient2,
+            theme.colors.cardGradient3,
+          ]}>
+          <View style={styles.inputWrapper2}>
+            <AppText variant="body1" style={styles.titleStyle}>
               {channel.selectAsset}
             </AppText>
-            <View style={styles.headerSpacer} />
           </View>
-
-          {showSearch && (
-            <TextField
-              value={searchAssetInput}
-              onChangeText={onChangeSearchInput}
-              placeholder={assetsTranslations.searchAssetPlaceholder}
-              style={styles.input}
-              inputStyle={styles.inputStyle}
-              rightIcon={
-                isLoading ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={theme.colors.accent1}
-                  />
-                ) : isThemeDark ? (
-                  <IconSearch />
-                ) : (
-                  <IconSearchLight />
-                )
-              }
-              onRightTextPress={() => () => {}}
-              rightCTAStyle={styles.rightCTAStyle}
-              rightCTATextColor={theme.colors.accent1}
-              blurOnSubmit={false}
-              returnKeyType="done"
-              error={''}
-              keyboardType="default"
-              autoCapitalize="none"
-              onSubmitEditing={() => Keyboard.dismiss()}
-            />
-          )}
-
-          {assets && assets.length > 0 && (
-            <View style={styles.labelWrapper}>
-              <View>
-                <AppText variant="caption" style={styles.labelTextStyle}>
-                  {assetsTranslations.assetName}
-                </AppText>
-              </View>
-              <View>
-                <AppText variant="caption" style={styles.labelTextStyle}>
-                  {sendScreen.availableBalance}
-                </AppText>
-              </View>
+          <View style={styles.iconArrowWrapper}>
+            {isThemeDark ? <IconArrowDown /> : <IconArrowDownLight />}
+          </View>
+        </GradientView>
+      </AppTouchable>
+      <View style={styles.container2}>
+        {showSearch && (
+          <TextField
+            value={searchAssetInput}
+            onChangeText={onChangeSearchInput}
+            placeholder={assetsTranslations.searchAssetPlaceholder}
+            style={styles.input}
+            inputStyle={styles.inputStyle}
+            rightIcon={
+              isLoading ? (
+                <ActivityIndicator size="small" color={theme.colors.accent1} />
+              ) : isThemeDark ? (
+                <IconSearch />
+              ) : (
+                <IconSearchLight />
+              )
+            }
+            onRightTextPress={() => () => {}}
+            rightCTAStyle={styles.rightCTAStyle}
+            rightCTATextColor={theme.colors.accent1}
+            blurOnSubmit={false}
+            returnKeyType="done"
+            error={''}
+            keyboardType="default"
+            autoCapitalize="none"
+            onSubmitEditing={() => Keyboard.dismiss()}
+          />
+        )}
+        {assets && assets.length > 0 && (
+          <View style={styles.labelWrapper}>
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                {assetsTranslations.assetName}
+              </AppText>
             </View>
-          )}
-
-          <View style={styles.listWrapper}>
-            <FlatList
-              data={assets}
-              style={styles.assetListContainer}
-              keyExtractor={(item, index) => {
-                const a: any = item as any;
-                return (a?.assetId ??
-                  a?.asset?.assetId ??
-                  String(index)) as string;
-              }}
-              keyboardShouldPersistTaps="handled"
-              renderItem={({ item }) => {
-                const a: any = item as any;
-                const filePath = a?.media?.filePath || a?.asset?.media?.file;
-                const showImage =
-                  a?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
-                  a?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
-                  a?.asset?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
-                  a?.asset?.assetSchema?.toUpperCase() ===
-                    AssetSchema.Collectible ||
-                  a?.asset?.iconUrl ||
-                  a?.iconUrl;
-
-                const imageUri = (() => {
-                  if (a?.iconUrl) return a.iconUrl;
-                  if (a?.asset?.iconUrl) return a.asset.iconUrl;
-                  if (filePath && filePath.startsWith('http')) return filePath;
-                  if (filePath) {
-                    return Platform.select({
-                      android: `file://${filePath}`,
-                      ios: filePath,
-                    });
-                  }
-                  return null;
-                })();
-
-                const assetName = a?.name ?? a?.asset?.name;
-                const ticker = a?.ticker ?? a?.asset?.ticker;
-                const assetId = a?.assetId ?? a?.asset?.assetId;
-                return (
-                  <AppTouchable
-                    onPress={() => {
-                      Keyboard.dismiss();
-                      callback(a || a?.asset);
-                    }}
-                    style={styles.assetContainer}
-                  >
-                    <View style={styles.assetWrapper}>
-                      <View style={styles.assetImageWrapper}>
-                        {showImage ? (
-                          <Image
-                            source={{ uri: imageUri }}
-                            style={styles.imageStyle}
-                          />
-                        ) : (
-                          <AssetIcon
-                            assetTicker={a?.ticker || a?.asset?.ticker}
-                            assetID={a?.assetId || a?.asset?.assetId}
-                            size={windowHeight > 670 ? 40 : 25}
-                            verified={a?.issuer?.verified}
-                          />
-                        )}
-                      </View>
-                      <View style={styles.assetDetailsWrapper}>
-                        {(assetName || ticker) && (
-                          <AppText variant="body1" style={styles.assetnameText}>
-                            {assetName
-                              ? ticker
-                                ? `${assetName} (${ticker})`
-                                : assetName
-                              : ticker}
-                          </AppText>
-                        )}
-                        {assetId && (
-                          <AppText variant="caption" style={styles.assetIdText}>
-                            {assetId}
-                          </AppText>
-                        )}
-                      </View>
-                    </View>
-
-                    <View style={styles.balanceWrapper}>
-                      <AppText variant="body2" style={styles.balanceText}>
-                        {formatLargeNumber(
-                          Number(a?.balance?.spendable ?? 0) /
-                            10 ** Number(a?.precision ?? 0) ||
-                            Number(a?.asset?.issuedSupply ?? 0) /
-                              10 ** Number(a?.asset?.precision ?? 0),
-                        )}
-                      </AppText>
-                    </View>
-                  </AppTouchable>
-                );
-              }}
-              ListEmptyComponent={<EmptyAssetState />}
-            />
+            <View>
+              <AppText variant="caption" style={style.labelTextStyle}>
+                {sendScreen.availableBalance}
+              </AppText>
+            </View>
           </View>
-        </View>
+        )}
+        <FlatList
+          data={assets}
+          style={styles.assetListContainer}
+          renderItem={({ item }) => {
+            const filePath = item?.media?.filePath || item?.asset?.media?.file;
+            const showImage =
+              item?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
+              item?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
+              item?.asset?.assetSchema?.toUpperCase() === AssetSchema.UDA ||
+              item?.asset?.assetSchema?.toUpperCase() === AssetSchema.Collectible ||
+              item?.asset?.iconUrl ||
+              item?.iconUrl;
+
+            const imageUri = (() => {
+              if (item?.iconUrl) return item.iconUrl;
+              if (item?.asset?.iconUrl) return item.asset.iconUrl;
+              if (filePath && filePath.startsWith('http')) return filePath;
+              if (filePath) {
+                return Platform.select({
+                  android: `file://${filePath}`,
+                  ios: filePath,
+                });
+              }
+              return null;
+            })();
+
+            const assetName = item?.name ?? item?.asset?.name;
+            const ticker = item?.ticker ?? item?.asset?.ticker;
+            const assetId = item?.assetId ?? item?.asset?.assetId;
+            return (
+              <AppTouchable
+                onPress={() => {
+                  Keyboard.dismiss();
+                  callback(item || item?.asset);
+                }}
+                style={styles.assetContainer}>
+                <View style={styles.assetWrapper}>
+                  <View style={styles.assetImageWrapper}>
+                    {showImage ? (
+                      <Image
+                        source={{ uri: imageUri }}
+                        style={styles.imageStyle}
+                      />
+                    ) : (
+                      <AssetIcon
+                        assetTicker={item?.ticker || item?.asset?.ticker}
+                        assetID={item?.assetId || item?.asset?.assetId}
+                        size={windowHeight > 670 ? 40 : 25}
+                        verified={item?.issuer?.verified}
+                      />
+                    )}
+                  </View>
+                  <View style={styles.assetDetailsWrapper}>
+                    {(assetName || ticker) && (
+                      <AppText variant="body1" style={styles.assetnameText}>
+                        {assetName
+                          ? ticker
+                            ? `${assetName} (${ticker})`
+                            : assetName
+                          : ticker}
+                      </AppText>
+                    )}
+                    {assetId && (
+                      <AppText variant="caption" style={styles.assetIdText}>
+                        {assetId}
+                      </AppText>
+                    )}
+                  </View>
+                </View>
+
+                <View style={styles.balanceWrapper}>
+                  <AppText variant="body2" style={styles.balanceText}>
+                    {formatLargeNumber(
+                      item?.balance?.spendable / 10 ** item?.precision ||
+                        item?.asset?.issuedSupply /
+                          10 ** item?.asset?.precision,
+                    )}
+                  </AppText>
+                </View>
+              </AppTouchable>
+            );
+          }}
+          ListEmptyComponent={<EmptyAssetState />}
+        />
       </View>
-    </Modal>
+    </View>
   );
 }
 const getStyles = (theme: AppTheme) =>
   StyleSheet.create({
-    modal: {
-      justifyContent: 'flex-end',
-      margin: 0,
+    container: {
+      zIndex: 999,
+      height: '70%',
+      backgroundColor: theme.colors.primaryBackground,
+      marginTop: Platform.OS === 'android' ? hp(20) : 0,
     },
-    sheet: {
-      height: '85%',
-      width: '100%',
-      backgroundColor: theme.colors.modalBackColor,
-      borderTopLeftRadius: hp(24),
-      borderTopRightRadius: hp(24),
+    container2: {
+      borderRadius: hp(20),
+      marginTop: hp(20),
+      backgroundColor: theme.colors.assetListBackColor,
       paddingTop: hp(10),
     },
-    content: {
-      flex: 1,
-    },
-    handle: {
-      alignSelf: 'center',
-      width: wp(56),
-      height: hp(4),
-      borderRadius: 999,
-      backgroundColor: theme.colors.secondaryHeadingColor,
-      opacity: 0.35,
-      marginBottom: hp(12),
-    },
-    headerRow: {
+    inputWrapper: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: hp(16),
-      marginBottom: hp(10),
+      width: '100%',
+      padding: hp(15),
+      borderRadius: 10,
+      marginTop: hp(15),
+      borderColor: theme.colors.borderColor,
+      borderWidth: 1,
     },
-    headerSpacer: {
-      width: hp(40),
-      height: hp(40),
+    inputWrapper2: {
+      width: '90%',
+      justifyContent: 'center',
     },
-    headerTitle: {
-      color: theme.colors.headingColor,
-      textAlign: 'center',
+    seacrhInputWrapper: {
+      height: hp(60),
+      alignItems: 'center',
+      flexDirection: 'row',
+      marginHorizontal: hp(10),
+      borderRadius: hp(16),
+      backgroundColor: theme.colors.inputBackground,
+      marginVertical: hp(10),
     },
     titleStyle: {
       color: theme.colors.headingColor,
+    },
+    iconArrowWrapper: {
+      width: '10%',
     },
     imageStyle: {
       width: 40,
@@ -321,8 +303,7 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'right',
     },
     input: {
-      marginHorizontal: hp(16),
-      marginBottom: hp(10),
+      margin: hp(12),
       width: 'auto',
       borderColor: theme.colors.borderColor,
       borderWidth: 1,
@@ -341,19 +322,15 @@ const getStyles = (theme: AppTheme) =>
     labelWrapper: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginHorizontal: hp(20),
-      marginTop: hp(4),
+      marginHorizontal: hp(15),
+      marginTop: hp(5),
     },
     labelTextStyle: {
       color: theme.colors.secondaryHeadingColor,
     },
     assetListContainer: {
-      marginTop: hp(6),
-      paddingHorizontal: hp(8),
-    },
-    listWrapper: {
-      flex: 1,
-      minHeight: hp(220),
+      marginTop: hp(5),
+      marginBottom: hp(10),
     },
     emptyAssetStateContainer: {
       alignItems: 'center',

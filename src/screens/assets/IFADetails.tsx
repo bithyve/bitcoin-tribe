@@ -286,10 +286,9 @@ const CoinDetailsScreen = () => {
             Toast(node.connectingNodeToastMsg, true);
             return;
           }
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: coin?.assetId || '',
             chosenAsset: coin,
-            lockAssetSelection: true,
           });
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}
