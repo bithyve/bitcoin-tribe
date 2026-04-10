@@ -292,6 +292,7 @@ export default class RGBServices {
     invoice?: string;
     recipientId?: string;
     error?: string;
+    errorCode?: unknown;
   }> => {
     try {
       if (
@@ -345,6 +346,7 @@ export default class RGBServices {
     } catch (error) {
       return {
         error: `${error}`,
+        errorCode: (error as any)?.code,
       };
     }
   };
