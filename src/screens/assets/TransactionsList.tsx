@@ -126,7 +126,7 @@ function TransactionsList({
             precision={precision}
           />
         )}
-        keyExtractor={item => item.txid}
+        keyExtractor={(item, index) => `${item.txid}-${index}`}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyStateView title={''} subTitle={''} />}
       />
