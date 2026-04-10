@@ -86,7 +86,7 @@ import { v4 as uuidv4 } from 'uuid';
 import DeepLinking, { DeepLinkFeature, DeepLinkType } from 'src/utils/DeepLinking';
 import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
-import { restoreKeys, BitcoinNetwork } from 'orbis1-sdk-rn';
+import { restoreKeys, BitcoinNetwork, RgbLibErrors } from 'orbis1-sdk-rn';
 import axios from 'axios';
 
 const ECPair = ECPairFactory(ecc);
@@ -1259,6 +1259,7 @@ export class ApiHandler {
     expiry,
     blinded = true,
     useWatchTower = false,
+    _retryCount = 0,
   }) {
     try {
       assetId = assetId ?? null;
@@ -1317,7 +1318,37 @@ export class ApiHandler {
       }
       ApiHandler.viewUtxos();
     } catch (error) {
-      console.log('errors', error);
+      const errorCode = (error as any)?.code;
+      if (errorCode === RgbLibErrors.InsufficientAllocationSlots) {
+        // Prevent infinite retry loops if UTXO creation doesn't resolve the underlying issue.
+        if (_retryCount >= 1) {
+          throw new Error('Unable to create new utxos for your invoice');
+        }
+
+        try {
+          const res = await ApiHandler.createUtxos();
+          if (!res) {
+            throw new Error('Unable to create new utxos for your invoice');
+          }
+
+          return await ApiHandler.receiveAsset({
+            assetId,
+            amount,
+            linkedAsset,
+            linkedAmount,
+            expiry,
+            blinded,
+            useWatchTower,
+            _retryCount: _retryCount + 1,
+          });
+        } catch (utxoError) {
+          const msg =
+            (utxoError as any)?.message ||
+            (utxoError as any)?.code ||
+            `${utxoError}`;
+          throw new Error(`Unable to create new utxos for your invoice: ${msg}`);
+        }
+      }
       throw error;
     }
   }
