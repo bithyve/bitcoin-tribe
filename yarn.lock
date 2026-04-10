@@ -7653,10 +7653,10 @@ ora@^5.4.1:
     strip-ansi "^6.0.0"
     wcwidth "^1.0.1"
 
-orbis1-sdk-rn@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/orbis1-sdk-rn/-/orbis1-sdk-rn-0.2.0.tgz#03e0620a20c476d4bdd39a7fbcdeb6964a8d32b4"
-  integrity sha512-Bn/53HbEkahnddTozUmPsiyp5WdWAlbKsy+EQTs83adrOHkRvDlSR7+nV3wtTsWqnYyffYknNAo5t4U+dYT9kg==
+orbis1-sdk-rn@0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/orbis1-sdk-rn/-/orbis1-sdk-rn-0.2.1.tgz#6ae73b86753b89371452e0f5cd2fb4a3f28b1443"
+  integrity sha512-bu3LV9x9bhBGONdXIZuvzv9kxsXGexLB1TH1VJbH+ziqGIdn0qmzD66pLraaAh8ZTgz7JTcsrMATpodvVqHvgA==
   dependencies:
     axios "^1.7.9"
     crypto-js "^3.3.0"
