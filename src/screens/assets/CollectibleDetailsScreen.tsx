@@ -247,10 +247,9 @@ const CollectibleDetailsScreen = () => {
             Toast(node.connectingNodeToastMsg, true);
             return;
           }
-          navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+          navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
             invoiceAssetId: assetId,
             chosenAsset: collectible,
-            lockAssetSelection: true,
           });
         }}
         totalAssetLocalAmount={totalAssetLocalAmount}

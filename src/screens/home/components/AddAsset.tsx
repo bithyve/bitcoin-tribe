@@ -243,7 +243,9 @@ function AddAsset() {
               return;
             }
             navigation.dispatch(
-              CommonActions.navigate(NavigationRoutes.RECEIVEASSET),
+              CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+                refresh: true,
+              }),
             );
           }}
           testID="receive"
