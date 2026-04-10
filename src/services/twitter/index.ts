@@ -1,5 +1,5 @@
 import { authorize } from 'react-native-app-auth';
-import { MMKV } from 'react-native-mmkv';
+import { createMMKV } from 'react-native-mmkv';
 import Config from 'src/utils/config';
 
 const config = {
@@ -14,7 +14,7 @@ const config = {
   },
 };
 const TWITTER_API_BASE = 'https://api.twitter.com/2';
-const storage = new MMKV();
+const storage = createMMKV();
 
 export const getXProfile = async (accessToken: string) => {
   try {
