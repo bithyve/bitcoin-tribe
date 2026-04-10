@@ -71,9 +71,7 @@ function CollectibleDetailsHeader(props: CollectibleDetailsHeaderProps) {
         // onPressBuy={onPressBuy}
         onPressReceive={() =>
           navigation.navigate(NavigationRoutes.RECEIVEASSET, {
-            invoiceAssetId: collectible.assetId,
-            chosenAsset: collectible,
-            lockAssetSelection: true,
+            refresh: true,
           })
         }
       />

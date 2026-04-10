@@ -467,10 +467,9 @@ const CoinItem = ({
                 });
               }}
               onPressReceive={() => {
-                navigation.navigate(NavigationRoutes.RECEIVEASSET, {
+                navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
                   invoiceAssetId: asset.assetId,
                   chosenAsset: asset,
-                  lockAssetSelection: true,
                 });
               }}
               sendCtaWidth={wp(150)}
