@@ -10,6 +10,7 @@ type PaymentMethodButtonProps = {
   paymentMethod: PaymentMethodType;
   setPaymentMethod: (paymentMethod: PaymentMethodType) => void;
   disableDollars?: boolean;
+  onDisabledDollarsPress?: () => void;
 };
 
 export enum PaymentMethodType {
@@ -21,6 +22,7 @@ const PaymentMethodButton = ({
   paymentMethod,
   setPaymentMethod,
   disableDollars = false,
+  onDisabledDollarsPress,
 }: PaymentMethodButtonProps) => {
   const theme: AppTheme = useTheme();
   const { translations } = useContext(LocalizationContext);
@@ -45,8 +47,13 @@ const PaymentMethodButton = ({
         </AppText>
       </AppTouchable>
       <AppTouchable
-        disabled={disableDollars}
-        onPress={() => !disableDollars && setPaymentMethod(PaymentMethodType.DOLLARS)}
+        onPress={() => {
+          if (disableDollars) {
+            onDisabledDollarsPress?.();
+            return;
+          }
+          setPaymentMethod(PaymentMethodType.DOLLARS);
+        }}
         style={[
           styles.feeWrapper,
           {
