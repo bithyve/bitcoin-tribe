@@ -107,7 +107,7 @@ function ReceiveAssetScreen() {
           linkedAmount: amount,
           expiry: invoiceExpiry,
           blinded: invoiceType === InvoiceMode.Blinded,
-          useWatchTower
+          useWatchTower,
         });
       } else {
         createUtxos();
@@ -174,14 +174,14 @@ function ReceiveAssetScreen() {
         linkedAmount: 0,
         expiry: invoiceExpiry,
         blinded: invoiceType === InvoiceMode.Blinded,
-        useWatchTower
+        useWatchTower,
       });
     } else if (createUtxoError) {
       createUtxoReset();
       fetchUTXOs();
       refreshRgbWallet.mutate();
       navigation.goBack();
-      if( createUtxoError.toString().includes('Insufficient sats for RGB')){
+      if (createUtxoError.toString().includes('Insufficient sats for RGB')) {
         Toast(formatString(assets.insufficientSats, { amount: 2000 }), true);
       } else {
         Toast(assets.assetProcessErrorMsg, true);
@@ -243,13 +243,14 @@ function ReceiveAssetScreen() {
         subTitle={assets.receiveAssetSubTitle}
         enableBack={true}
         onBackNavigation={() =>
-          navigation.canGoBack? navigation.goBack() :
-          navigation.dispatch(
-            CommonActions.reset({
-              index: 1,
-              routes: [{ name: NavigationRoutes.HOME }],
-            }),
-          )
+          navigation.canGoBack
+            ? navigation.goBack()
+            : navigation.dispatch(
+                CommonActions.reset({
+                  index: 1,
+                  routes: [{ name: NavigationRoutes.HOME }],
+                }),
+              )
         }
       />
 
@@ -258,7 +259,8 @@ function ReceiveAssetScreen() {
           visible={loading}
           enableClose={true}
           backColor={theme.colors.modalBackColor}
-          borderColor={theme.colors.modalBackColor}>
+          borderColor={theme.colors.modalBackColor}
+        >
           <InProgessPopupContainer
             title={assets.requestInvoiceProcessTitle}
             subTitle={assets.requestInvoiceProcessSubTitle}

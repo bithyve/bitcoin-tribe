@@ -67,14 +67,21 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { formatTUsdt } from 'src/utils/snakeCaseToCamelCaseCase';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
-import { RgbLibErrors } from 'orbis1-sdk-rn';
+import {
+  createFeeCalculator,
+  RgbLibErrors,
+  type FeeQuote,
+  type GasFreeTransferRequest,
+} from 'orbis1-sdk-rn';
 import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
-import type { FeeQuote, GasFreeTransferRequest } from 'orbis1-sdk-rn';
 import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
+import { TribeApp } from 'src/models/interfaces/TribeApp';
 
-const DUST_LIMIT = 330;
-const ESTIMATED_GAS_FREE_FEE_USD = 1; // Estimated gas-free service fee shown to users before they request a quote (TODO: fetch this via SDK)
+const gasFreeFeeCalculator = createFeeCalculator();
+
+/** Orbis1 gas-free transfers expect 6 decimal asset precision. */
+const GAS_FREE_ASSET_PRECISION = 6;
 
 type ItemProps = {
   name: string;
@@ -188,6 +195,7 @@ const SendAssetScreen = () => {
     wallet: walletTranslation,
   } = translations;
   const iconRef = useRef(null);
+  const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0] as TribeApp;
 
   const [averageTxFeeJSON] = useMMKVString(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   const averageTxFeeByNetwork: AverageTxFeesByNetwork = averageTxFeeJSON
@@ -248,7 +256,27 @@ const SendAssetScreen = () => {
   const isGasFreeAvailable = useMemo(() => {
     return ApiHandler.isGasFreeAvailable();
   }, []);
-  
+
+  const canUseGasFree =
+    isGasFreeAvailable && precision === GAS_FREE_ASSET_PRECISION;
+
+
+  /** SDK local fee estimate (0.1% / min / max) — shown before requesting a live quote. */
+  const gasFreeServiceFeeEstimate = useMemo(() => {
+    if (
+      paymentMethod !== PaymentMethodType.DOLLARS ||
+      precision !== GAS_FREE_ASSET_PRECISION
+    ) {
+      return null;
+    }
+    const raw = parseFloat((assetAmount || '').replace(/,/g, ''));
+    if (!Number.isFinite(raw) || raw <= 0) {
+      return null;
+    }
+    const transferBase = Math.round(raw * 10 ** precision);
+    return gasFreeFeeCalculator.estimateFeeInAsset(transferBase, 1, precision);
+  }, [paymentMethod, assetAmount, precision]);
+
   const styles = getStyles(theme, inputHeight, tooltipPos);
   const { isWalletOnline } = useContext(AppContext);
   const isButtonDisabled = useMemo(() => {
@@ -306,7 +334,7 @@ const SendAssetScreen = () => {
         Keyboard.dismiss();
         Toast(
           assets.checkSpendableAmt +
-          Number(assetData?.balance.spendable) / 10 ** precision,
+            Number(assetData?.balance.spendable) / 10 ** precision,
           true,
         );
       }
@@ -327,6 +355,14 @@ const SendAssetScreen = () => {
 
       // Gas-free transfer flow
       if (paymentMethod === PaymentMethodType.DOLLARS) {
+        if (precision !== GAS_FREE_ASSET_PRECISION) {
+          Toast(
+            'Gas-free transfers are only available for assets with 6 decimal places.',
+            true,
+          );
+          setLoading(false);
+          return;
+        }
         if (!gasFreeQuote) {
           Toast('Gas-free quote not found. Please try again.', true);
           setLoading(false);
@@ -334,19 +370,21 @@ const SendAssetScreen = () => {
         }
 
         try {
-          // Calculate recipient amount once
-          const recipientAmount = parseFloat(assetAmount && assetAmount.replace(/,/g, '')) * 10 ** precision;
-          
+          const recipientAmountBase = Math.round(
+            parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+              10 ** precision,
+          );
+
           const request: GasFreeTransferRequest = {
-            userId: config.HEXA_ID,
+            userId: app.publicId,
             assetId,
-            amount: recipientAmount.toString(),
+            transferAmount: recipientAmountBase,
             recipientInvoice: invoice,
             transportEndpoints: decodedInvoice.transportEndpoints,
           };
 
           // Check if user has sufficient balance to cover recipient amount + service fee
-          const totalRequired = recipientAmount + gasFreeQuote.serviceFeeAmount;
+          const totalRequired = recipientAmountBase + gasFreeQuote.serviceFeeAmount;
           const spendable = Number(assetData?.balance.spendable);
 
           if (totalRequired > spendable) {
@@ -369,7 +407,7 @@ const SendAssetScreen = () => {
             saveGasFreeTransaction({
               txid: result.txid,
               assetId: assetId,
-              recipientAmount: recipientAmount,
+              recipientAmount: recipientAmountBase,
               recipientInvoice: invoice,
               timestamp: Date.now(),
               feeQuote: {
@@ -447,7 +485,7 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else {
-        Toast(error.message, true);
+        Toast(error.message || error.code || `${error}` || 'An unknown error occurred', true);
         setLoading(false);
         setVisible(false);
       }
@@ -478,30 +516,20 @@ const SendAssetScreen = () => {
         : InvoiceMode.Blinded;
       
       setInvoiceType(detectedInvoiceType);
-      
-      if (res.assetId) {
-        const assetData = allAssets.find(item => item.assetId === res.assetId);
-        if (!assetData || res.assetId !== assetId) {
+        if (res.assetId && res.assetId !== assetId) {
           setInvoiceValidationError(assets.invoiceMisamatchMsg);
         } else {
           invoiceRef.current = cleanedText;
           setInvoice(cleanedText);
-          setAssetAmount(
-            res?.assignment?.amount.toString() !== '0'
-              ? Number(res?.assignment?.amount / 10 ** precision).toString()
-              : '',
-          );
           setInvoiceValidationError('');
+          if(res.assignment?.amount){
+            setAssetAmount(
+              res?.assignment?.amount.toString() !== '0'
+                ? Number(res?.assignment?.amount / 10 ** precision).toString()
+                : '',
+            );
+          }
         }
-      } else if (res.recipientId) {
-        invoiceRef.current = cleanedText;
-        setInvoice(cleanedText);
-        setInvoiceValidationError('');
-      } else {
-        invoiceRef.current = cleanedText;
-        setInvoice(cleanedText);
-        setInvoiceValidationError('Invalid invoice');
-      }
     } catch (error) {
       setInvoiceValidationError('Invalid invoice');
     } finally {
@@ -529,22 +557,26 @@ const SendAssetScreen = () => {
     const spendable = Number(assetData?.balance?.spendable);
     if (isNaN(spendable)) return;
 
-    let maxAmount = spendable;
-    
-    // For gas-free (DOLLARS) payments, deduct the estimated service fee
-    // This ensures the user has enough balance to cover both the transfer amount and service fee
-    if (paymentMethod === PaymentMethodType.DOLLARS) {
-      // Convert USD fee to asset units (assuming 1 USD = 1 USDT for stablecoins)
-      const estimatedFeeInAssetUnits = ESTIMATED_GAS_FREE_FEE_USD * (10 ** precision);
-      maxAmount = Math.max(0, spendable - estimatedFeeInAssetUnits);
+    let maxAmountBaseUnits = spendable;
+
+    if (
+      paymentMethod === PaymentMethodType.DOLLARS &&
+      precision === GAS_FREE_ASSET_PRECISION
+    ) {
+      const { feeInAsset } = gasFreeFeeCalculator.estimateFeeInAsset(
+        spendable,
+        1,
+        precision,
+      );
+      maxAmountBaseUnits = Math.max(0, spendable - feeInAsset);
     }
 
     const formatted =
       precision === 0
-        ? maxAmount.toString()
-        : (maxAmount / 10 ** precision)
-          .toFixed(precision)
-          .replace(/\.?0+$/, '');
+        ? maxAmountBaseUnits.toString()
+        : (maxAmountBaseUnits / 10 ** precision)
+            .toFixed(precision)
+            .replace(/\.?0+$/, '');
 
     setAssetAmount(formatted);
   };
@@ -722,7 +754,7 @@ const SendAssetScreen = () => {
         {/* Select Payment Method */}
         <View style={styles.divider} />
 
-        {config.ENVIRONMENT == APP_STAGE.PRODUCTION && (
+        {config.ENVIRONMENT !== APP_STAGE.PRODUCTION && (
           <View>
             <AppText variant="body2" style={styles.labelstyle}>
               {sendScreen.selectPaymentMethod}
@@ -730,7 +762,17 @@ const SendAssetScreen = () => {
             <PaymentMethodButton
               paymentMethod={paymentMethod}
               setPaymentMethod={setPaymentMethod}
-              disableDollars={!isGasFreeAvailable}
+              disableDollars={!canUseGasFree}
+              onDisabledDollarsPress={() => {
+                if (!isGasFreeAvailable) {
+                  Toast('Gas-free is not available.', true);
+                  return;
+                }
+                Toast(
+                  'Gas-free transfers are only available for assets with 6 decimal places.',
+                  true,
+                );
+              }}
             />
           </View>
         )}
@@ -845,7 +887,9 @@ const SendAssetScreen = () => {
                     fontFamily: Fonts.LufgaMedium,
                   }}
                 >
-                  ${ESTIMATED_GAS_FREE_FEE_USD}
+                  {gasFreeServiceFeeEstimate != null
+                    ? `$${gasFreeServiceFeeEstimate.feeUsd.toFixed(2)}`
+                    : '—'}
                 </AppText>
               </View>
               <AppText variant="caption" style={{ color: '#787878' }}>
@@ -998,27 +1042,24 @@ const SendAssetScreen = () => {
 
             // For gas-free (DOLLARS) payment, request fee quote first
             if (paymentMethod === PaymentMethodType.DOLLARS) {
-              // Check if witness invoice with gas-free
-              if (invoiceType === InvoiceMode.Witness) {
+              if (precision !== GAS_FREE_ASSET_PRECISION) {
                 Toast(
-                  'Gas-free transfers are not supported for witness invoices. Please use "Pay in Sats" instead.',
+                  'Gas-free transfers are only available for assets with 6 decimal places.',
                   true,
                 );
                 return;
               }
-
               setRequestingQuote(true);
               try {
+                const transferAmount = Math.round(
+                  parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
+                    10 ** precision,
+                );
                 const quote = await ApiHandler.requestGasFreeQuote(
-                  config.HEXA_ID,
+                  app.publicId,
                   assetId,
-                  (
-                    parseFloat(assetAmount && assetAmount.replace(/,/g, '')) *
-                    10 ** precision
-                  ).toString(),
+                  transferAmount,
                   invoice,
-                  1, // numInputs
-                  2, // numOutputs
                 );
                 setGasFreeQuote(quote);
 

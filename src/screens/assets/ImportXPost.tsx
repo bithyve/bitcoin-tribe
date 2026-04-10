@@ -1,16 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { MMKV, useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
+import { createMMKV, useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useMutation } from 'react-query';
-
 import AppHeader from 'src/components/AppHeader';
 import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { hp, windowWidth } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
@@ -33,7 +32,7 @@ export const getRateLimitedTweetUrlKey = (assetId: string) =>
 function ImportXPost() {
   const navigation = useNavigation();
   const theme: AppTheme = useTheme();
-  const storage = new MMKV();
+  const storage = createMMKV();
   const RATE_LIMIT_DURATION = 15 * 60 * 1000;
   const { assetId, schema, asset } = useRoute().params;
   const [appId] = useMMKVString(Keys.APPID);
@@ -89,8 +88,8 @@ function ImportXPost() {
             setTweetUrl(savedUrl);
           }
         } else {
-          storage.delete(rateLimitKey);
-          storage.delete(rateLimitedUrlKey);
+          storage.remove(rateLimitKey);
+          storage.remove(rateLimitedUrlKey);
           setIsRateLimited(false);
         }
       }
@@ -102,8 +101,8 @@ function ImportXPost() {
       setRateLimitRemainingTime(prev => {
         if (prev <= 1000) {
           setIsRateLimited(false);
-          storage.delete(rateLimitKey);
-          storage.delete(rateLimitedUrlKey);
+          storage.remove(rateLimitKey);
+          storage.remove(rateLimitedUrlKey);
           clearInterval(interval);
           return 0;
         }
@@ -157,7 +156,7 @@ function ImportXPost() {
       const result = await mutateAsync({ tweetId: id, assetId, schema, asset });
       if (result?.success) {
         setTweetId(id);
-        storage.delete(rateLimitedUrlKey);
+        storage.remove(rateLimitedUrlKey);
         Toast('X post added successfully.');
         navigateWithDelay(() => navigation.goBack());
       } else {
@@ -197,7 +196,7 @@ function ImportXPost() {
     setTweetUrl('');
     setTweetUrlValidationError('');
     const rateLimitedUrlKey = getRateLimitedTweetUrlKey(assetId);
-    storage.delete(rateLimitedUrlKey);
+    storage.remove(rateLimitedUrlKey);
   };
 
   return (

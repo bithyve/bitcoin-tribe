@@ -12,6 +12,7 @@ import {
   AssetType,
   RgbUnspent,
   RGBWallet,
+  WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
@@ -26,6 +27,8 @@ import AppText from 'src/components/AppText';
 import SwipeToAction from 'src/components/SwipeToAction';
 import SkipButton from 'src/components/SkipButton';
 import config, { APP_STAGE } from 'src/utils/config';
+import Toast from 'src/components/Toast';
+import { AppContext } from 'src/contexts/AppContext';
 
 export const ServiceFee = ({
   feeDetails,
@@ -101,6 +104,7 @@ function AddAsset() {
   const colorable = unspent.filter(
     utxo => utxo.utxo.colorable === true && utxo.rgbAllocations?.length === 0,
   );
+  const { isWalletOnline } = useContext(AppContext);
 
   const canProceed = useMemo(() => {
     if (
@@ -138,8 +142,7 @@ function AddAsset() {
               addToRegistry,
             }),
           );
-        }
-        else if (issueAssetType === AssetType.IFA) {
+        } else if (issueAssetType === AssetType.IFA) {
           navigation.dispatch(
             CommonActions.navigate(NavigationRoutes.ISSUEIFA, {
               issueAssetType,
@@ -206,33 +209,45 @@ function AddAsset() {
           testID="issue_collection"
         />
 
-        {config.ENVIRONMENT === APP_STAGE.DEVELOPMENT && <RibbonCard
-          title={assets.issueIFA}
-          subTitle={assets.issueIFASubtitle}
-          backColor={theme.colors.inputBackground}
-          style={styles.optionStyle}
-          onPress={() => {
-            if (!canProceed) {
-              setVisible(true);
-            } else {
-              navigateToIssue(false, AssetType.IFA);
-            }
-          }}
-          testID="issue_ifa"
-        />}
+        {config.ENVIRONMENT === APP_STAGE.DEVELOPMENT && (
+          <RibbonCard
+            title={assets.issueIFA}
+            subTitle={assets.issueIFASubtitle}
+            backColor={theme.colors.inputBackground}
+            style={styles.optionStyle}
+            onPress={() => {
+              if (!canProceed) {
+                setVisible(true);
+              } else {
+                navigateToIssue(false, AssetType.IFA);
+              }
+            }}
+            testID="issue_ifa"
+          />
+        )}
 
         <RibbonCard
           title={home.addAssets}
           subTitle={home.receiveAssetsSubtitle}
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
-          onPress={() =>
+          onPress={() => {
+            if (
+              isWalletOnline === WalletOnlineStatus.Error ||
+              isWalletOnline === WalletOnlineStatus.InProgress
+            ) {
+              Toast(
+                translations.common.rgbWalletOffline + ' Please wait.',
+                true,
+              );
+              return;
+            }
             navigation.dispatch(
               CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
                 refresh: true,
               }),
-            )
-          }
+            );
+          }}
           testID="receive"
         />
       </View>

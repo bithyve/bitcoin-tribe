@@ -194,7 +194,7 @@ const CoinDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData =
+  const transactionsData = useMemo(() => {
     appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
@@ -202,15 +202,16 @@ const CoinDetailsScreen = () => {
         }).sort((a, b) => {
           const dateA = new Date(a.createdAt).getTime() || 0;
           const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
-      : coin?.transactions.slice(0, 4);
+            return dateA - dateB;
+          })
+        : coin?.transactions.slice(-4);
+  }, [filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark
     : coin?.disclaimer?.contentLight;
 
-  const disclaimerHtml = rawHtml;
+  const disclaimerHtml = useMemo(() => rawHtml, [rawHtml]);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {

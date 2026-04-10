@@ -12,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   Coin,
   IssuerVerificationMethod,
+  Transfer,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -93,6 +94,9 @@ const CoinDetailsScreen = () => {
   const [participatedCampaigns, setParticipatedCampaigns] = useMMKVString(
     Keys.PARTICIPATED_CAMPAIGNS,
   );
+
+  const isNodeConnectLayout =
+    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN;
 
   useEffect(() => {
     if (hasIssuedAsset) {
@@ -194,23 +198,34 @@ const CoinDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData =
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
-      ? Object.values({
-          ...filteredPayments,
-          ...coin?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
-      : coin?.transactions.slice(0, 4);
+  const sortedTransactionsFull = useMemo((): Transfer[] => {
+    if (isNodeConnectLayout) {
+      return (Object.values({
+        ...filteredPayments,
+        ...coin?.transactions,
+      }) as Transfer[]).sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime() || 0;
+        const dateB = new Date(b.createdAt).getTime() || 0;
+        return dateA - dateB;
+      });
+    }
+    const raw = (coin?.transactions || []) as Transfer[];
+    return [...raw].sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime() || 0;
+      const dateB = new Date(b.createdAt).getTime() || 0;
+      return dateA - dateB;
+    });
+  }, [
+    isNodeConnectLayout,
+    filteredPayments,
+    coin?.transactions,
+  ]);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark
     : coin?.disclaimer?.contentLight;
 
-  const disclaimerHtml = rawHtml;
+  const disclaimerHtml = useMemo(() => rawHtml, [rawHtml]);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {
@@ -347,7 +362,8 @@ const CoinDetailsScreen = () => {
             ? styles.transactionContainer1
             : styles.transactionContainer
         }
-        transactions={transactionsData}
+        limitToVisibleRows
+        transactions={sortedTransactionsFull}
         isLoading={isLoading}
         refresh={() => {
           setRefreshing(true);
@@ -452,7 +468,7 @@ export default CoinDetailsScreen;
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     transactionContainer: {
-      height: windowHeight > 820 ? '55%' : '50%',
+      height: '60%',
     },
     transactionContainer1: {
       marginTop: hp(10),

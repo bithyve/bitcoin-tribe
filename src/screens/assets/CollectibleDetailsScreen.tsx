@@ -4,7 +4,6 @@ import {
   Image,
   Platform,
   StyleSheet,
-  View,
 } from 'react-native';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -14,8 +13,6 @@ import {
 } from '@react-navigation/native';
 import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
-
-import ScreenContainer from 'src/components/ScreenContainer';
 import {
   Collectible,
   IssuerVerificationMethod,
@@ -29,7 +26,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import AssetDetailsHeader from './components/AssetDetailsHeader';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
-import { hp, windowHeight } from 'src/constants/responsive';
+import { hp } from 'src/constants/responsive';
 import { requestAppReview } from 'src/services/appreview';
 import VerifyIssuerModal from './components/VerifyIssuerModal';
 import PostOnTwitterModal from './components/PostOnTwitterModal';
@@ -39,7 +36,6 @@ import {
   updateAssetIssuedPostStatus,
   updateAssetPostStatus,
 } from 'src/utils/postStatusUtils';
-import TransactionInfoCard from './components/TransactionInfoCard';
 import Toast from 'src/components/Toast';
 import { isWebUrl } from 'src/utils/url';
 
@@ -177,8 +173,8 @@ const CollectibleDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData =
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
+  const transactionsData = useMemo(() => {
+    return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
       ? Object.values({
           ...filteredPayments,
           ...collectible?.transactions,
@@ -187,7 +183,8 @@ const CollectibleDetailsScreen = () => {
           const dateB = new Date(b.createdAt).getTime() || 0;
           return dateA - dateB;
         })
-      : collectible?.transactions.slice(0, 4);
+      : collectible?.transactions.slice(-5);
+  }, [filteredPayments, collectible?.transactions]);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {
@@ -195,30 +192,19 @@ const CollectibleDetailsScreen = () => {
     }, 1000);
   };
 
-  // const largeHeaderHeight = scrollY.interpolate({
-  //   inputRange: [0, 300],
-  //   outputRange: [350, 0],
-  //   extrapolate: 'clamp',
-  // });
-
-  // const smallHeaderOpacity = scrollY.interpolate({
-  //   inputRange: [100, 150],
-  //   outputRange: [0, 1],
-  //   extrapolate: 'clamp',
-  // });
-        const mediaPath = useMemo(() => {
-          const media = collectible?.media?.filePath;
-          if (media) {
-            if (isWebUrl(media)) {
-              return media;
-            }
-            return Platform.select({
-              android: `file://${media}`,
-              ios: media,
-            });
-          }
-          return null;
-        }, [collectible?.media?.filePath]);
+  const mediaPath = useMemo(() => {
+    const media = collectible?.media?.filePath;
+    if (media) {
+      if (isWebUrl(media)) {
+        return media;
+      }
+      return Platform.select({
+        android: `file://${media}`,
+        ios: media,
+      });
+    }
+    return null;
+  }, [collectible?.media?.filePath]);
 
   return (
     // <ScreenContainer style={styles.container}>

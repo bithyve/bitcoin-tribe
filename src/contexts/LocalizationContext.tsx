@@ -1,7 +1,7 @@
 import * as RNLocalize from 'react-native-localize';
 import { createContext, useEffect, useState } from 'react';
 import LocalizedContent from 'react-localization';
-import { MMKV, useMMKVString } from 'react-native-mmkv';
+import { createMMKV, useMMKVString } from 'react-native-mmkv';
 import en from '../loc/content/en.json';
 import es from '../loc/content/es.json';
 import hi from '../loc/content/hi.json';
@@ -10,7 +10,7 @@ import ja from '../loc/content/ja.json';
 import cn from '../loc/content/cn.json';
 import { Keys } from 'src/storage';
 
-export const Storage = new MMKV();
+export const Storage = createMMKV();
 
 export const DEFAULT_LANGUAGE = 'en';
 export const APP_LANGUAGE = 'appLanguage';
