@@ -47,11 +47,11 @@ export function LocalizationProvider({ children }) {
     let localeCode = DEFAULT_LANGUAGE;
     if (appLanguage) {
       translations.setLanguage(appLanguage);
-      // setAppLanguage(appLanguage);
+      setAppLanguage(appLanguage);
       // moment.locale(appLanguage);
     } else {
       translations.setLanguage(DEFAULT_LANGUAGE);
-      // setAppLanguage(DEFAULT_LANGUAGE);
+      setAppLanguage(DEFAULT_LANGUAGE);
       const supportedLocaleCodes = translations.getAvailableLanguages();
       const phoneLocaleCodes = RNLocalize.getLocales().map(
         locale => locale.languageCode,
