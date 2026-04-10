@@ -3233,58 +3233,73 @@ export class ApiHandler {
       const { status, results } = (await Relay.getPresetAssets()) || {};
       if (status && results) {
         Storage.set(Keys.PRESET_ASSETS, JSON.stringify(results));
+        const makeZeroBalance = () => ({
+          spendable: '0',
+          future: '0',
+          settled: '0',
+          offchainOutbound: '0',
+          offchainInbound: '0',
+        });
+        const balanceFromExistingOrZero = (
+          schema: RealmSchema,
+          assetId: string | undefined,
+        ) => {
+          if (!assetId) return makeZeroBalance();
+          const existing = dbManager.getObjectByPrimaryId(
+            schema,
+            'assetId',
+            assetId,
+          ) as { balance?: Record<string, string> } | undefined;
+          const b = existing?.balance;
+          if (!b) return makeZeroBalance();
+          return {
+            spendable: String(b.spendable ?? '0'),
+            future: String(b.future ?? '0'),
+            settled: String(b.settled ?? '0'),
+            offchainOutbound: String(b.offchainOutbound ?? '0'),
+            offchainInbound: String(b.offchainInbound ?? '0'),
+          };
+        };
         results.forEach(result => {
           if (result.metaData.assetSchema === AssetSchema.Coin) {
             dbManager.createObject(RealmSchema.Coin, {
               ...result,
               addedAt: Date.now(),
               issuedSupply: result.issuedSupply.toString(),
-              balance: {
-                spendable: '0',
-                future: '0',
-                settled: '0',
-                offchainOutbound: '0',
-                offchainInbound: '0',
-              },
+              balance: balanceFromExistingOrZero(
+                RealmSchema.Coin,
+                result.assetId,
+              ),
             });
           } else if (result.metaData.assetSchema === AssetSchema.Collectible) {
             dbManager.createObject(RealmSchema.Collectible, {
               ...result,
               addedAt: Date.now(),
               issuedSupply: result.issuedSupply.toString(),
-              balance: {
-                spendable: '0',
-                future: '0',
-                settled: '0',
-                offchainOutbound: '0',
-                offchainInbound: '0',
-              },
+              balance: balanceFromExistingOrZero(
+                RealmSchema.Collectible,
+                result.assetId,
+              ),
             });
           } else if (result.collectionSchema) {
             dbManager.createObject(RealmSchema.Collection, {
               ...result,
               addedAt: Date.now(),
               issuedSupply: result.issuedSupply.toString(),
-              balance: {
-                spendable: '0',
-                future: '0',
-                settled: '0',
-                offchainOutbound: '0',
-                offchainInbound: '0',
-              },
+              balance: balanceFromExistingOrZero(
+                RealmSchema.Collection,
+                result.assetId,
+              ),
             });
           } else if (result.metaData.assetSchema === AssetSchema.UDA) {
             dbManager.createObject(RealmSchema.UniqueDigitalAsset, {
               ...result,
               addedAt: Date.now(),
               issuedSupply: result.issuedSupply.toString(),
-              balance: {
-                spendable: '0',
-                future: '0',
-                settled: '0',
-                offchainOutbound: '0',
-                offchainInbound: '0',
-              },
+              balance: balanceFromExistingOrZero(
+                RealmSchema.UniqueDigitalAsset,
+                result.assetId,
+              ),
             });
           }
         });
