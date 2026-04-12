@@ -344,14 +344,12 @@ function ReceiveAssetScreen() {
     return () => clearTimeout(t);
   }, [
     assetId,
-    amountCommittedSmallest,
     blocksInvoiceWithoutAsset,
     canProceed,
     clearInvoice,
     invoiceExpiry,
     invoiceParamsKey,
     invoiceType,
-    requestInvoice,
   ]);
 
   const saveAmount = () => {
