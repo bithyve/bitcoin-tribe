@@ -28,9 +28,11 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
           <QRCode value={value} size={qrSize} />
         </View>
       </View>
-      <AppText variant="heading3" style={styles.qrFooterText}>
-        {title}
-      </AppText>
+      {title && (
+        <AppText variant="heading3" style={styles.qrFooterText}>
+          {title}
+        </AppText>
+      )}
     </>
   );
 };
