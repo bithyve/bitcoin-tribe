@@ -584,7 +584,10 @@ export class ApiHandler {
           mnemonic: mnemonic,
           isRestore: true,
         });
-        await ApiHandler.makeWalletOnline();
+        const { status, error } = await ApiHandler.makeWalletOnline();
+        if (!status) {
+          throw new Error(error);
+        }
         await ApiHandler.refreshRgbWallet();
         await ApiHandler.fetchPresetAssets();
         await ApiHandler.viewUtxos();
