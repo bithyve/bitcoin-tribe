@@ -232,16 +232,6 @@ function AddAsset() {
           backColor={theme.colors.inputBackground}
           style={styles.optionStyle}
           onPress={() => {
-            if (
-              isWalletOnline === WalletOnlineStatus.Error ||
-              isWalletOnline === WalletOnlineStatus.InProgress
-            ) {
-              Toast(
-                translations.common.rgbWalletOffline + ' Please wait.',
-                true,
-              );
-              return;
-            }
             navigation.dispatch(
               CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
                 refresh: true,
