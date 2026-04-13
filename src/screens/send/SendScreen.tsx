@@ -196,7 +196,7 @@ function SendScreen({ route, navigation }) {
                 wallet,
                 rgbInvoice: value,
                 assetID: '',
-                amount: res?.assignment?.amount.toString() || '',
+                amount: res?.assignment?.amount?.toString() || '',
               });
             });
           }
