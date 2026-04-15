@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import AppType from 'src/models/enums/AppType';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import { Keys } from 'src/storage';
 import { AppImageBackupStatusType } from 'src/components/AppImageBackupBanner';
+import {
+  registerBackupUiHandlers,
+  unregisterBackupUiHandlers,
+} from 'src/services/backup/backupUiBridge';
 
 export const AppContext = React.createContext({
   key: null,
@@ -71,6 +75,18 @@ export function AppProvider({ children }) {
   const isVerifyDomainInfoVisible = isVerifyDomainInfoVisibleMMKV ?? true;
   const [communityStatus, setCommunityStatus] = useState(null);
   const [walletWentOnline, setWalletWentOnline] = useState(false);
+
+  useEffect(() => {
+    registerBackupUiHandlers({
+      setBackupInProgress: setBackupProcess,
+      setBackupDone,
+      setManualAssetBackupStatus,
+    });
+    return () => {
+      unregisterBackupUiHandlers();
+    };
+  }, []);
+
   return (
     <AppContext.Provider
       value={{

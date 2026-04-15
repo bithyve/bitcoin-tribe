@@ -114,6 +114,7 @@ function IssueCollectibleScreen() {
   const assetTickerInputRef = useRef(null);
   const totalSupplyInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -178,6 +179,7 @@ function IssueCollectibleScreen() {
       });
       if (response?.assetId) {
         setLoading(false);
+        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
@@ -262,6 +264,7 @@ function IssueCollectibleScreen() {
       });
       if (response?.assetId) {
         setLoading(false);
+        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();

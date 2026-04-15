@@ -67,6 +67,7 @@ function IssueScreen() {
     useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+    const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const {
     mutate: createUtxos,
@@ -135,6 +136,7 @@ function IssueScreen() {
         precision: Number(precision),
       });
       if (response?.assetId) {
+        backupMutate();
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();

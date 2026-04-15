@@ -70,6 +70,7 @@ function IssueIfa() {
     useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+    const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const {
     mutate: createUtxos,
@@ -142,6 +143,7 @@ function IssueIfa() {
       });
       if (response?.assetId) {
         setLoading(false);
+        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();

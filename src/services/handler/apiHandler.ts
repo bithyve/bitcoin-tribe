@@ -88,6 +88,7 @@ import RealmDatabase from 'src/storage/realm/realm';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import { restoreKeys, BitcoinNetwork, RgbLibErrors } from 'orbis1-sdk-rn';
 import axios from 'axios';
+import { backupRgbOnCloudWithBanners } from 'src/services/backup/rgbCloudBackup';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -3021,33 +3022,7 @@ export class ApiHandler {
   }
 
   static async backup() {
-    try {
-      const app: TribeApp = dbManager.getObjectByIndex<TribeApp>(
-        RealmSchema.TribeApp,
-      ) as TribeApp;
-      const wallet: RGBWallet = dbManager.getObjectByIndex<RGBWallet>(
-        RealmSchema.RgbWallet,
-      ) as RGBWallet;
-      const isBackupRequired = await RGBServices.isBackupRequired();
-      if (isBackupRequired) {
-        const backupFile = await RGBServices.backup('', app.primaryMnemonic, app.publicId);
-        if (backupFile.file) {
-          const response = await Relay.rgbFileBackup(
-            Platform.select({
-              android: `file://${backupFile.file}`,
-              ios: backupFile.file,
-            }),
-            app.id,
-            wallet.masterFingerprint,
-          );
-          if (response.uploaded) {
-            Storage.set(Keys.RGB_ASSET_RELAY_BACKUP, Date.now());
-          }
-        }
-      }
-    } catch (error) {
-      console.log('backup error', error);
-    }
+    await backupRgbOnCloudWithBanners();
   }
 
   static async isBackupRequired() {
