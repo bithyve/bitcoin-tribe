@@ -1466,7 +1466,50 @@ export class ApiHandler {
         shouldBackup = true;
         return;
       }
-      if (balanceKey((existing as any).balance) !== balanceKey(asset.balance)) {
+      const existingKey = balanceKey((existing as any).balance);
+      const incomingKey = balanceKey(asset.balance);
+      if (existingKey !== incomingKey) {
+        shouldBackup = true;
+      }
+    };
+
+    const getCollectionIdFromUdaDetails = (uda: any): string | undefined => {
+      if (shouldBackup) return;
+      const details = uda?.details;
+      if (typeof details !== 'string') return;
+      if (!details.includes(DeepLinking.appLinkScheme)) return;
+
+      const deepLinking = DeepLinking.processDeepLink(
+        DeepLinking.appLinkScheme +
+          details.split(DeepLinking.appLinkScheme)[1],
+      );
+      if (!deepLinking?.isValid) return;
+
+      if (deepLinking.feature === DeepLinkFeature.COLLECTION) {
+        return deepLinking.params?.id;
+      }
+      if (deepLinking.feature === DeepLinkFeature.COLLECTION_ITEM) {
+        return deepLinking.params?.collectionId;
+      }
+      return;
+    };
+
+    const checkCollectionForBackup = (collectionId: string, uda: any) => {
+      if (shouldBackup) return;
+      if (!collectionId) return;
+
+      const existingCollection = dbManager.getObjectByPrimaryId(
+        RealmSchema.Collection,
+        '_id',
+        collectionId,
+      );
+      if (!existingCollection) {
+        shouldBackup = true;
+        return;
+      }
+      const existingKey = balanceKey((existingCollection as any).balance);
+      const incomingKey = balanceKey(uda?.balance);
+      if (existingKey !== incomingKey) {
         shouldBackup = true;
       }
     };
@@ -1491,7 +1534,18 @@ export class ApiHandler {
     }
     if (assets?.uda && Array.isArray(assets.uda)) {
       for (const uda of assets.uda) {
-        checkAssetForBackup(RealmSchema.UniqueDigitalAsset, uda);
+        const collectionId = getCollectionIdFromUdaDetails(uda);
+        // For collection-type UDAs, the corresponding Realm entry may live under Collection schema (not UDA).
+        // So treat it as existing if it exists in either place; but prefer Collection checks when a collectionId is present.
+        if (collectionId) {
+          checkCollectionForBackup(collectionId, uda);
+          if (shouldBackup) return true;
+          // Also check UDA existence as a fallback, since wallet may send both collection + item UDAs.
+          // If it exists in UDA already, balance changes there should also trigger backup.
+          // checkAssetForBackup(RealmSchema.UniqueDigitalAsset, uda);
+        } else {
+          checkAssetForBackup(RealmSchema.UniqueDigitalAsset, uda);
+        }
         if (shouldBackup) return true;
       }
     }
