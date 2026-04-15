@@ -71,9 +71,6 @@ function HomeScreen() {
   const navigation = useNavigation();
   const {
     key,
-    setBackupProcess,
-    setBackupDone,
-    setManualAssetBackupStatus,
     isBackupInProgress,
     isBackupDone,
     setAppType,
@@ -82,21 +79,14 @@ function HomeScreen() {
     setNodeConnected,
     setIsWalletOnline,
     isWalletOnline,
-    setWalletWentOnline
+    setWalletWentOnline,
   } = useContext(AppContext);
   const presetAssets: Asset[] = JSON.parse(Storage.get(Keys.PRESET_ASSETS) as string || '[]');
   const [isFirstAppImageBackupCompleted, setIsFirstAppImageBackupCompleted]=useMMKVBoolean(Keys.FIRST_APP_IMAGE_BACKUP_COMPLETE)
   const [isTopicSubscribed,_]=useMMKVBoolean(Keys.IS_TOPIC_SUBSCRIBED);
   const {checkAndInitiateAndroidUpdate} =useAppVersion();
 
-  const { mutate: backupMutate, isLoading } = useMutation(ApiHandler.backup, {
-    onSuccess: () => {
-      setBackupDone(true);
-      setTimeout(() => {
-        setManualAssetBackupStatus(true);
-      }, 1500);
-    },
-  });
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
   const { mutate: checkBackupRequired, data: isBackupRequired } = useMutation(
     ApiHandler.isBackupRequired,
   );
@@ -256,10 +246,6 @@ function HomeScreen() {
       };
     }, []),
   );
-
-  useEffect(() => {
-    setBackupProcess(isLoading);
-  }, [isLoading]);
 
   useEffect(() => {
     if (isBackupRequired) {

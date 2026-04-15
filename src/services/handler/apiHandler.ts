@@ -1443,12 +1443,69 @@ export class ApiHandler {
     }
   }
 
+  private static shouldBackupAfterAssetSync(assets: any): boolean {
+    let shouldBackup = false;
+    const balanceKey = (b?: any) =>
+      b
+        ? `${b.settled ?? ''}|${b.spendable ?? ''}|${b.future ?? ''}|${b.offchainOutbound ?? ''
+        }|${b.offchainInbound ?? ''}`
+        : '';
+
+    const checkAssetForBackup = (
+      schema: RealmSchema,
+      asset: { assetId: string; balance?: any },
+    ) => {
+      if (shouldBackup) return;
+      if (!asset?.assetId) return;
+      const existing = dbManager.getObjectByPrimaryId(
+        schema,
+        'assetId',
+        asset.assetId,
+      );
+      if (!existing) {
+        shouldBackup = true;
+        return;
+      }
+      if (balanceKey((existing as any).balance) !== balanceKey(asset.balance)) {
+        shouldBackup = true;
+      }
+    };
+
+    if (assets?.nia && Array.isArray(assets.nia)) {
+      for (const coin of assets.nia) {
+        checkAssetForBackup(RealmSchema.Coin, coin);
+        if (shouldBackup) return true;
+      }
+    }
+    if (assets?.ifa && Array.isArray(assets.ifa)) {
+      for (const ifa of assets.ifa) {
+        checkAssetForBackup(RealmSchema.IFA, ifa);
+        if (shouldBackup) return true;
+      }
+    }
+    if (assets?.cfa && Array.isArray(assets.cfa)) {
+      for (const cfa of assets.cfa) {
+        checkAssetForBackup(RealmSchema.Collectible, cfa);
+        if (shouldBackup) return true;
+      }
+    }
+    if (assets?.uda && Array.isArray(assets.uda)) {
+      for (const uda of assets.uda) {
+        checkAssetForBackup(RealmSchema.UniqueDigitalAsset, uda);
+        if (shouldBackup) return true;
+      }
+    }
+
+    return false;
+  }
+
   static async refreshRgbWallet() {
     try {
       let assets = await RGBServices.syncRgbAssets(
         ApiHandler.appType,
         ApiHandler.api,
       );
+      const shouldBackup = ApiHandler.shouldBackupAfterAssetSync(assets);
       if (assets?.nia) {
         dbManager.createObjectBulk(
           RealmSchema.Coin,
@@ -1782,6 +1839,7 @@ export class ApiHandler {
         }
       }
       ApiHandler.updateAssetVerificationStatus();
+      if (shouldBackup) await ApiHandler.backup();
     } catch (error) {
       console.log('error', error);
     }
