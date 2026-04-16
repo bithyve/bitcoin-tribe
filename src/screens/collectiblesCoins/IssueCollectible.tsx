@@ -179,7 +179,6 @@ function IssueCollectibleScreen() {
       });
       if (response?.assetId) {
         setLoading(false);
-        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
@@ -199,6 +198,7 @@ function IssueCollectibleScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -264,7 +264,6 @@ function IssueCollectibleScreen() {
       });
       if (response?.assetId) {
         setLoading(false);
-        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
@@ -284,6 +283,7 @@ function IssueCollectibleScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

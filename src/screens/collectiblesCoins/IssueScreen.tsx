@@ -136,7 +136,6 @@ function IssueScreen() {
         precision: Number(precision),
       });
       if (response?.assetId) {
-        backupMutate();
         setLoading(false);
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
@@ -157,6 +156,7 @@ function IssueScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

@@ -291,7 +291,6 @@ function IssueCollection() {
       });
       if (collection?.assetId) {
         setLoading(false);
-        backupMutate();
         setCollection(collection);
         setTimeout(() => {
           setShowSuccess(true);
@@ -550,6 +549,7 @@ function IssueCollection() {
                   collectionId: collection._id,
                 });
               }
+              backupMutate();
             }, 300);
           }}
         />

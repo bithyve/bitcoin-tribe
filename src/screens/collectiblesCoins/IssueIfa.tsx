@@ -143,7 +143,6 @@ function IssueIfa() {
       });
       if (response?.assetId) {
         setLoading(false);
-        backupMutate();
         Toast(assets.assetCreateMsg);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
@@ -163,6 +162,7 @@ function IssueIfa() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

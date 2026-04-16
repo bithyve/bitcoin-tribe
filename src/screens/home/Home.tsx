@@ -247,11 +247,6 @@ function HomeScreen() {
     }, []),
   );
 
-  useEffect(() => {
-    if (isBackupRequired) {
-      backupMutate();
-    }
-  }, [isBackupRequired]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {

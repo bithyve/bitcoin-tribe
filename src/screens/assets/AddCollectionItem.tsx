@@ -198,12 +198,13 @@ function IssueCollectibleScreen() {
       setPaying(false);
       setShowPayment(false);
       if (response?.assetId) {
-        backupMutate();
+        
         setLoading(false);
         Toast('Collection UDA created successfully');
         logCustomEvent(events.COLLECTION_MINTED);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
+        backupMutate();
         navigation.goBack();
         // navigation.dispatch(popAction);
       } else if (
