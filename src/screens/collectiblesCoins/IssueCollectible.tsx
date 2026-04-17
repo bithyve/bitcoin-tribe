@@ -114,6 +114,7 @@ function IssueCollectibleScreen() {
   const assetTickerInputRef = useRef(null);
   const totalSupplyInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
@@ -197,6 +198,7 @@ function IssueCollectibleScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||
@@ -281,6 +283,7 @@ function IssueCollectibleScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 700);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

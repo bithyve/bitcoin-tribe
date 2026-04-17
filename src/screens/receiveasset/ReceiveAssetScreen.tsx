@@ -52,7 +52,12 @@ function ReceiveAssetScreen() {
   const invoiceType = route.params.invoiceType || InvoiceMode.Blinded;
   const useWatchTower = route.params.useWatchTower || false;
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
+  const { mutate, isLoading, error } = useMutation(ApiHandler.receiveAsset, {
+    onSuccess: () => {
+      backupMutate();
+    },
+  });
   const generateLNInvoiceMutation = useMutation(ApiHandler.receiveAssetOnLN);
   const {
     mutate: createUtxos,

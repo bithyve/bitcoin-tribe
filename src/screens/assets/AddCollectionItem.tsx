@@ -111,7 +111,7 @@ function IssueCollectibleScreen() {
   );
   const assetTickerInputRef = useRef(null);
   const descriptionInputRef = useRef(null);
-
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
   const unspent: RgbUnspent[] = rgbWallet.utxos.map(utxoStr =>
     JSON.parse(utxoStr),
   );
@@ -198,11 +198,13 @@ function IssueCollectibleScreen() {
       setPaying(false);
       setShowPayment(false);
       if (response?.assetId) {
+        
         setLoading(false);
         Toast('Collection UDA created successfully');
         logCustomEvent(events.COLLECTION_MINTED);
         viewUtxos.mutate();
         refreshRgbWalletMutation.mutate();
+        backupMutate();
         navigation.goBack();
         // navigation.dispatch(popAction);
       } else if (

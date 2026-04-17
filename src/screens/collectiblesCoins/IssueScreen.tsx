@@ -67,6 +67,7 @@ function IssueScreen() {
     useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+    const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const {
     mutate: createUtxos,
@@ -155,6 +156,7 @@ function IssueScreen() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

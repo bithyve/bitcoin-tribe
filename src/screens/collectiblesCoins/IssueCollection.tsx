@@ -114,6 +114,7 @@ function IssueCollection() {
       utxo.pendingBlinded === 0,
   );
   const [paying, setPaying] = useState(false);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   useEffect(() => {
     viewUtxos.mutate();
@@ -548,6 +549,7 @@ function IssueCollection() {
                   collectionId: collection._id,
                 });
               }
+              backupMutate();
             }, 300);
           }}
         />
