@@ -198,7 +198,7 @@ const CoinDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const sortedTransactionsFull = useMemo((): Transfer[] => {
+  const transactionsData = useMemo((): Transfer[] => {
     if (isNodeConnectLayout) {
       const merged = [
         ...filteredPayments,
@@ -355,7 +355,7 @@ const CoinDetailsScreen = () => {
             : styles.transactionContainer
         }
         limitToVisibleRows
-        transactions={sortedTransactionsFull}
+        transactions={transactionsData}
         isLoading={isLoading}
         refresh={() => {
           setRefreshing(true);

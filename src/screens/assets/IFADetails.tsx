@@ -204,7 +204,7 @@ const CoinDetailsScreen = () => {
       return merged;
     }
     return [...((coin?.transactions as Transfer[]) || [])];
-  }, [filteredPayments, coin?.transactions]);
+  }, [appType, filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark
     ? coin?.disclaimer?.contentDark

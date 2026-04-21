@@ -183,7 +183,7 @@ const CollectibleDetailsScreen = () => {
       return merged;
     }
     return [...((collectible?.transactions as Transfer[]) || [])];
-  }, [filteredPayments, collectible?.transactions]);
+  }, [appType, filteredPayments, collectible?.transactions]);
 
   const navigateWithDelay = (callback: () => void) => {
     setTimeout(() => {
