@@ -142,7 +142,9 @@ function TransactionsList({
   }, [limitToVisibleRows, lockedRowCap, fallbackMaxRows]);
 
   const filteredTransactions = useMemo(() => {
-    const list = filterGasFreeTransfers(transactions).reverse();
+    const list = filterGasFreeTransfers(transactions).sort(
+      (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
+    );
     if (limitToVisibleRows && visibleRowCap != null) {
       return list.slice(0, visibleRowCap);
     }

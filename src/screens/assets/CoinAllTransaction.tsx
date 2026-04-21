@@ -34,7 +34,11 @@ function CoinAllTransaction() {
   const { mutate, isLoading } = useMutation(ApiHandler.getAssetTransactions);
 
   const filteredTransactions = React.useMemo(() => {
-    return asset?.transactions ? filterGasFreeTransfers(asset.transactions).reverse() : [];
+    return asset?.transactions
+      ? filterGasFreeTransfers(asset.transactions).sort(
+          (a, b) => (b.createdAt || 0) - (a.createdAt || 0),
+        )
+      : [];
   }, [asset?.transactions]);
 
   return (

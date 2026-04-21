@@ -200,21 +200,13 @@ const CoinDetailsScreen = () => {
 
   const sortedTransactionsFull = useMemo((): Transfer[] => {
     if (isNodeConnectLayout) {
-      return (Object.values({
+      const merged = [
         ...filteredPayments,
-        ...coin?.transactions,
-      }) as Transfer[]).sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime() || 0;
-        const dateB = new Date(b.createdAt).getTime() || 0;
-        return dateA - dateB;
-      });
+        ...((coin?.transactions as Transfer[]) || []),
+      ];
+      return merged;
     }
-    const raw = (coin?.transactions || []) as Transfer[];
-    return [...raw].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime() || 0;
-      const dateB = new Date(b.createdAt).getTime() || 0;
-      return dateA - dateB;
-    });
+    return [...((coin?.transactions as Transfer[]) || [])];
   }, [
     isNodeConnectLayout,
     filteredPayments,

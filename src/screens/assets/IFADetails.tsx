@@ -12,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   InflatableFungibleAsset,
   IssuerVerificationMethod,
+  Transfer,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -194,17 +195,15 @@ const CoinDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData = useMemo(() => {
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
-      ? Object.values({
-          ...filteredPayments,
-          ...coin?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-            return dateA - dateB;
-          })
-        : coin?.transactions.slice(-4);
+  const transactionsData = useMemo((): Transfer[] => {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
+      const merged = [
+        ...filteredPayments,
+        ...((coin?.transactions as Transfer[]) || []),
+      ];
+      return merged;
+    }
+    return [...((coin?.transactions as Transfer[]) || [])];
   }, [filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark

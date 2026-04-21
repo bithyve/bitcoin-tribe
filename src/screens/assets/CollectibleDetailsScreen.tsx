@@ -16,6 +16,7 @@ import { useMutation } from 'react-query';
 import {
   Collectible,
   IssuerVerificationMethod,
+  Transfer,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 import { ApiHandler } from 'src/services/handler/apiHandler';
@@ -173,17 +174,15 @@ const CollectibleDetailsScreen = () => {
     payment => payment.asset_id === assetId,
   );
 
-  const transactionsData = useMemo(() => {
-    return appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
-      ? Object.values({
-          ...filteredPayments,
-          ...collectible?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-          return dateA - dateB;
-        })
-      : collectible?.transactions.slice(-5);
+  const transactionsData = useMemo((): Transfer[] => {
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
+      const merged = [
+        ...filteredPayments,
+        ...((collectible?.transactions as Transfer[]) || []),
+      ];
+      return merged;
+    }
+    return [...((collectible?.transactions as Transfer[]) || [])];
   }, [filteredPayments, collectible?.transactions]);
 
   const navigateWithDelay = (callback: () => void) => {
