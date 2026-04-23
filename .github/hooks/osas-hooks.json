@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": ".github/scripts/enforce-sdd.sh \"$TOOL_INPUT_JSON\"",
+        "timeoutSec": 5
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "echo \"[OSAS] Session ended: $(date)\" >> .osas/agent-log.txt",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}
