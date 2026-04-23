@@ -1,5 +1,5 @@
 ---
-name: review-agent
+name: reviewer
 description: >
   Second-pass code reviewer for OSAS pull requests.
   Validates implementation against spec artifacts and constitution.
