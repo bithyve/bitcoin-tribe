@@ -691,6 +691,8 @@
     "issuedPostSubTitle": "已成功在 Bitcoin Tribe 上发行。",
     "issuedSuccessSubTitle": "您的资产已创建。点击分享按钮与社区分享。",
     "registerAssetMsg": "您的资产已添加到 Bitcoin Tribe 注册表中",
+    "assetNotFoundInRegistry": "在注册表中未找到资产。",
+    "fetchAssetFromRegistryFailed": "从注册表获取资产失败。",
     "assetRegistryTitle": "为什么注册很重要？",
     "assetRegistrySubTitle": "注册您的资产会将其添加到 Bitcoin Tribe 的官方注册表中，证明它是真实且归您所有。",
     "assetRegistrySubTitle2": "一次性服务成本为 ",

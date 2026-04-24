@@ -691,6 +691,8 @@
     "issuedPostSubTitle": "was successfully issued on Bitcoin Tribe.",
     "issuedSuccessSubTitle": "Your asset is created. Share with your community by pressing the share button.",
     "registerAssetMsg": "Your asset has been added to the Bitcoin Tribe registry",
+    "assetNotFoundInRegistry": "Asset not found in registry.",
+    "fetchAssetFromRegistryFailed": "Failed to fetch asset from registry.",
     "assetRegistryTitle": "Why Registry is important?",
     "assetRegistrySubTitle": "Registering your asset adds it to the official Bitcoin Tribe registry - proving it's genuine, owned by you.",
     "assetRegistrySubTitle2": "A one-time service cost of ",

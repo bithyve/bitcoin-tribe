@@ -50,7 +50,8 @@ import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage,onNotificationOpenedApp,getInitialNotification } from '@react-native-firebase/messaging';
 import DefaultCoin from './DefaultCoin';
 import { Keys, Storage } from 'src/storage';
-import Deeplinking from 'src/utils/DeepLinking';
+import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
+import Relay from 'src/services/relay';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { AppUpdateModal } from './components/AppUpdateModal';
 import { useAppVersion } from 'src/hooks/useAppVersion';
@@ -61,7 +62,7 @@ function HomeScreen() {
   const prevStatusRef = useRef<string | null>(null);
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { node } = translations;
+  const { node, assets } = translations;
   const [walletOnline, setWalletOnline] = useState(false);
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const latestVersion = useQuery<VersionHistory>(
@@ -315,16 +316,37 @@ function HomeScreen() {
     };
   }, []);
 
-  const handleDeepLink = event => {
+  const handleDeepLink = async event => {
     try {
       const url = event.url;
-      const parsedUrl = new URL(url);
-      const category = url.split('?')[0].replace(Deeplinking.scheme + '/', '');
-      const params = Object.fromEntries(parsedUrl.searchParams.entries());
-      if (category === 'community') {
+      const deepLink = Deeplinking.processDeepLink(url);
+
+      if (!deepLink.isValid) return;
+
+      const { feature, params } = deepLink;
+
+      if (feature === DeepLinkFeature.COMMUNITY) {
         navigation.dispatch(
           CommonActions.navigate(NavigationRoutes.CREATEGROUP, params),
         );
+      } else if (feature === DeepLinkFeature.REGISTRY) {
+        const assetId = params?.assetId;
+        if (!assetId) return;
+        try {
+          const result = await Relay.lookupAsset(assetId);
+          if (result?.status === true && result?.asset) {
+            navigation.dispatch(
+              CommonActions.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+                invoiceAssetId: result.asset.assetId,
+                chosenAsset: result.asset,
+              }),
+            );
+          } else {
+            Toast(assets.assetNotFoundInRegistry, true);
+          }
+        } catch (error) {
+          Toast(assets.fetchAssetFromRegistryFailed, true);
+        }
       }
     } catch (error) {
       console.log('Error parsing deep link:', error);

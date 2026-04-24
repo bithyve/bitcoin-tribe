@@ -691,6 +691,8 @@
     "issuedPostSubTitle": "सफलतापूर्वक Bitcoin Tribe पर जारी किया गया था।",
     "issuedSuccessSubTitle": "आपकी संपत्ति बनाई गई है। शेयर बटन दबाकर इसे अपने समुदाय के साथ साझा करें।",
     "registerAssetMsg": "आपकी संपत्ति को Bitcoin Tribe रजिस्ट्री में जोड़ दिया गया है",
+    "assetNotFoundInRegistry": "रजिस्ट्री में संपत्ति नहीं मिली।",
+    "fetchAssetFromRegistryFailed": "रजिस्ट्री से संपत्ति प्राप्त करने में विफल।",
     "assetRegistryTitle": "रजिस्ट्री क्यों महत्वपूर्ण है?",
     "assetRegistrySubTitle": "आपकी संपत्ति को पंजीकृत करने से यह Bitcoin Tribe की आधिकारिक रजिस्ट्री में जुड़ जाती है, जिससे यह प्रमाणित होता है कि यह असली है और आपकी है।",
     "assetRegistrySubTitle2": "एक बार की सेवा लागत ",

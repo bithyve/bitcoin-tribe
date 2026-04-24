@@ -691,6 +691,8 @@
     "issuedPostSubTitle": "è stato emesso con successo su Bitcoin Tribe.",
     "issuedSuccessSubTitle": "Il tuo asset è stato creato. Condividilo con la tua community premendo il pulsante di condivisione.",
     "registerAssetMsg": "Il tuo asset è stato aggiunto al registro di Bitcoin Tribe",
+    "assetNotFoundInRegistry": "Asset non trovato nel registro.",
+    "fetchAssetFromRegistryFailed": "Impossibile recuperare l'asset dal registro.",
     "assetRegistryTitle": "Perché il registro è importante?",
     "assetRegistrySubTitle": "Registrando il tuo asset lo aggiungi al registro ufficiale di Bitcoin Tribe, dimostrando che è autentico e di tua proprietà.",
     "assetRegistrySubTitle2": "È previsto un costo di servizio una tantum di ",
