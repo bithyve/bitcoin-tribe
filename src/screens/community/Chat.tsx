@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@realm/react';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
+import { useRoute, RouteProp, useNavigation, useIsFocused } from '@react-navigation/native';
 import MessageList from './components/MessageList';
 import MessageInput from './components/MessageInput';
 import Toast from 'src/components/Toast';
@@ -58,6 +58,8 @@ const JOIN_WAIT_TIMEOUT_MS = 20000;
 const Chat = () => {
   const theme = useTheme();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
+  const isFocusedRef = React.useRef(isFocused);
   const route = useRoute<RouteProp<{ params: { roomId: string } }>>();
   const { roomId } = route.params;
   const [peersMap, setPeersMap] = useState<Map<string, HolepunchPeer>>(new Map());
@@ -91,6 +93,10 @@ const Chat = () => {
   const joinWaitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    isFocusedRef.current = isFocused;
+  }, [isFocused]);
+
+  useEffect(() => {
     const combinedMessages = [...commitedMessages, ...sessionMessages];
     setMessages(combinedMessages);
   }, [commitedMessages.length, sessionMessages])
@@ -103,7 +109,7 @@ const Chat = () => {
       setPeersMap(peersMap);
     } catch (err) {
       console.error('[Chat] ❌ Failed to load peers:', err);
-      Toast('Failed to load peers', true);
+      if (isFocusedRef.current) Toast('Failed to load peers', true);
     }
   };
 
@@ -117,7 +123,7 @@ const Chat = () => {
       setHasJoinedRoom(true);
     } catch (error) {
       console.error('[Chat] ❌ Failed to join room:', error);
-      Toast('Failed to join room', true);
+      if (isFocusedRef.current) Toast('Failed to join room', true);
       setHasJoinedRoom(false);
     }
   }, [room?.roomKey, room?.roomName, commitedMessages.length, joinRoom]);
@@ -154,7 +160,7 @@ const Chat = () => {
 
     joinWaitTimeoutRef.current = setTimeout(() => {
       joinWaitTimeoutRef.current = null;
-      Toast('Initialization timed out. Try again later.', true);
+      if (isFocusedRef.current) Toast('Initialization timed out. Try again later.', true);
     }, JOIN_WAIT_TIMEOUT_MS);
 
     return () => {
