@@ -100,6 +100,74 @@
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
 
+## Screen Design *(include if feature adds or changes UI)*
+
+<!--
+  Describe each screen or modal introduced by this feature.
+  Reference the actual screen domain path in src/screens/<domain>/.
+-->
+
+### Screens / Modals
+
+| Screen | Path | Purpose |
+|--------|------|---------|
+| [ScreenName] | `src/screens/<domain>/[ScreenName].tsx` | [What the user does here] |
+
+### Navigation
+
+- Entry point(s): [Which screen(s) or tab(s) navigate to this feature]
+- Route name(s): [New constant(s) to add in `src/navigation/NavigationRoutes.ts`]
+- Back / exit behaviour: [Expected back-press handling]
+
+### UI State
+
+- Loading state: [How loading is communicated — skeleton, spinner, etc.]
+- Error state: [How errors are surfaced — flash message, inline, modal]
+- Empty state: [What is shown when there is no data]
+
+---
+
+## Service Layer *(include if feature adds or changes business logic)*
+
+<!--
+  Identify which services are created or modified.
+  Reference src/services/<domain>/ paths.
+-->
+
+- **New service(s)**: `src/services/<domain>/[ServiceName].ts` — [what it does]
+- **Modified service(s)**: `src/services/<domain>/[existing].ts` — [what changes]
+- **External calls**: [Electrum node / RGB node / relay / REST API — endpoint and method]
+- **Error handling**: [How network/service errors are propagated to the UI layer]
+
+---
+
+## Storage Requirements *(include if feature reads/writes persistent data)*
+
+<!--
+  Describe any Realm schema changes or secure-store additions.
+-->
+
+### Realm Schema Changes
+
+- **New schema(s)**: [Schema class name in `src/storage/realm/schema/`] — [fields]
+- **Modified schema(s)**: [Existing class] — [fields added/removed] — migration required: yes/no
+- **Migration**: [Describe the migration strategy if schema version bumps]
+
+### Secure Storage
+
+- [Any new keychain entries — key name and what is stored]
+
+---
+
+## Platform Considerations *(include if behaviour differs by platform or flavour)*
+
+- **iOS-specific**: [Any iOS-only native module, permission, or entitlement]
+- **Android-specific**: [Any Android-only permission, manifest entry, or flavour config]
+- **Dev vs Production**: [Any behaviour that differs between dev/prod ENVFILE flavours]
+- **Permissions**: [Camera, MediaLibrary, etc. — list any new permissions required]
+
+---
+
 ## Success Criteria *(mandatory)*
 
 <!--

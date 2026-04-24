@@ -17,15 +17,15 @@
   the iteration process.
 -->
 
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript 5.x / React Native 0.81 / React 19
+**Primary Dependencies**: React Navigation v6, Realm 12, react-query v3, MMKV, Reanimated 4
+**Storage**: Realm (on-device ORM at `src/storage/realm/`), react-native-keychain (`src/storage/secure-store.ts`)
+**Testing**: Jest 29 with react-native preset — `npm test` — test files in `__tests__/`
+**Target Platform**: iOS 15+ and Android 8+ — both flavours (dev / production)
+**Project Type**: Self-custodial Bitcoin + RGB asset mobile wallet
+**Performance Goals**: Screen transitions < 300 ms; crypto operations non-blocking (worker/service layer)
+**Constraints**: Offline-capable; no secrets in logs; private keys only via keychain
+**Scale/Scope**: Single-codebase RN app — ~535 TypeScript source files across 14 screen domains
 
 ## Constitution Check
 
@@ -55,44 +55,28 @@ specs/[###-feature]/
   not include Option labels.
 -->
 
+### Source Code (repository root)
+
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
+├── screens/<domain>/          # UI screens for this feature (PascalCase .tsx)
+├── components/                # Any new reusable UI components (PascalCase .tsx)
+├── hooks/                     # New custom hooks (camelCase, use-prefix .tsx)
+├── services/<domain>/         # Business logic / crypto / network (camelCase .ts)
+├── storage/
+│   ├── realm/schema/          # New or modified Realm schemas
+│   └── secure-store.ts        # Keychain additions (if any)
 ├── models/
-├── services/
-├── cli/
-└── lib/
+│   ├── enums/                 # New TypeScript enums
+│   └── interfaces/            # New TypeScript interfaces
+├── navigation/
+│   └── NavigationRoutes.ts    # New route name constants
+└── utils/                     # Pure helper functions (camelCase .ts)
 
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+__tests__/                     # Jest test files (<Subject>.test.ts / .tsx)
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Single React Native project. All feature code lives under `src/` following the domain slice pattern. Tests live in `__tests__/`. No separate backend — all network calls go through `src/services/`.
 
 ## Complexity Tracking
 

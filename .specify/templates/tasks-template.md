@@ -18,12 +18,18 @@ description: "Task list template for feature implementation"
 - **[Story]**: Which user story this task belongs to (e.g., US1, US2, US3)
 - Include exact file paths in descriptions
 
-## Path Conventions
+## Path Conventions (Bitcoin Tribe)
 
-- **Single project**: `src/`, `tests/` at repository root
-- **Web app**: `backend/src/`, `frontend/src/`
-- **Mobile**: `api/src/`, `ios/src/` or `android/src/`
-- Paths shown below assume single project - adjust based on plan.md structure
+- **Screens**: `src/screens/<domain>/<ScreenName>.tsx` (PascalCase)
+- **Components**: `src/components/<ComponentName>.tsx` (PascalCase)
+- **Hooks**: `src/hooks/use<Name>.tsx` (camelCase, use-prefix)
+- **Services**: `src/services/<domain>/<ServiceName>.ts` (camelCase)
+- **Realm schemas**: `src/storage/realm/schema/<SchemaName>.ts`
+- **Models / interfaces**: `src/models/interfaces/<Name>.ts`
+- **Models / enums**: `src/models/enums/<Name>.ts`
+- **Navigation routes**: `src/navigation/NavigationRoutes.ts`
+- **Tests**: `__tests__/<Subject>.test.ts` or `__tests__/<Subject>.test.tsx`
+- **Test command**: `npm test`
 
 <!-- 
   ============================================================================
@@ -46,11 +52,11 @@ description: "Task list template for feature implementation"
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Navigation wiring, new route constants, shared types
 
-- [ ] T001 Create project structure per implementation plan
-- [ ] T002 Initialize [language] project with [framework] dependencies
-- [ ] T003 [P] Configure linting and formatting tools
+- [ ] T001 Add new route constant(s) to `src/navigation/NavigationRoutes.ts`
+- [ ] T002 [P] Add new TypeScript interfaces to `src/models/interfaces/`
+- [ ] T003 [P] Add new TypeScript enums to `src/models/enums/`
 
 ---
 
@@ -60,16 +66,13 @@ description: "Task list template for feature implementation"
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-Examples of foundational tasks (adjust based on your project):
+- [ ] T004 Define/update Realm schema in `src/storage/realm/schema/` (bump schema version if needed)
+- [ ] T005 [P] Implement core service in `src/services/<domain>/` with typed interfaces
+- [ ] T006 [P] Add secure-store entry in `src/storage/secure-store.ts` (if new keychain key required)
+- [ ] T007 Wire service into AppContext or react-query if shared state is needed
+- [ ] T008 Add error handling types/utilities in `src/utils/` for this domain
 
-- [ ] T004 Setup database schema and migrations framework
-- [ ] T005 [P] Implement authentication/authorization framework
-- [ ] T006 [P] Setup API routing and middleware structure
-- [ ] T007 Create base models/entities that all stories depend on
-- [ ] T008 Configure error handling and logging infrastructure
-- [ ] T009 Setup environment configuration management
-
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+**Checkpoint**: Foundation ready — Realm schema migrated, service layer callable, shared state wired
 
 ---
 
@@ -81,21 +84,21 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 1 (OPTIONAL - only if tests requested) ⚠️
 
-> **NOTE: Write these tests FIRST, ensure they FAIL before implementation**
+> **NOTE: Write these tests FIRST, ensure they FAIL before implementation (`npm test`)**
 
-- [ ] T010 [P] [US1] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T011 [P] [US1] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T010 [P] [US1] Unit test for [ServiceName] in `__tests__/[ServiceName].test.ts`
+- [ ] T011 [P] [US1] Unit test for Realm schema migration in `__tests__/[SchemaName].test.ts`
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Create [Entity1] model in src/models/[entity1].py
-- [ ] T013 [P] [US1] Create [Entity2] model in src/models/[entity2].py
-- [ ] T014 [US1] Implement [Service] in src/services/[service].py (depends on T012, T013)
-- [ ] T015 [US1] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T016 [US1] Add validation and error handling
-- [ ] T017 [US1] Add logging for user story 1 operations
+- [ ] T012 [P] [US1] Create screen `src/screens/<domain>/[ScreenName].tsx`
+- [ ] T013 [P] [US1] Create hook `src/hooks/use[Name].tsx` for screen ↔ service bridge
+- [ ] T014 [US1] Implement service method in `src/services/<domain>/[ServiceName].ts` (depends on T004–T008)
+- [ ] T015 [US1] Wire screen into Navigator in `src/navigation/Navigator.tsx`
+- [ ] T016 [US1] Add loading / error / empty states to screen
+- [ ] T017 [US1] Verify on iOS simulator and Android emulator
 
-**Checkpoint**: At this point, User Story 1 should be fully functional and testable independently
+**Checkpoint**: User Story 1 screen is reachable, service is called, data renders — testable independently
 
 ---
 
@@ -107,17 +110,17 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 2 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T018 [P] [US2] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T019 [P] [US2] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T018 [P] [US2] Unit test in `__tests__/[Subject].test.ts`
+- [ ] T019 [P] [US2] Edge-case test for [scenario] in `__tests__/[Subject].test.ts`
 
 ### Implementation for User Story 2
 
-- [ ] T020 [P] [US2] Create [Entity] model in src/models/[entity].py
-- [ ] T021 [US2] Implement [Service] in src/services/[service].py
-- [ ] T022 [US2] Implement [endpoint/feature] in src/[location]/[file].py
-- [ ] T023 [US2] Integrate with User Story 1 components (if needed)
+- [ ] T020 [P] [US2] Create screen or component `src/screens/<domain>/[ScreenName].tsx`
+- [ ] T021 [US2] Extend service in `src/services/<domain>/[ServiceName].ts`
+- [ ] T022 [US2] Update hook `src/hooks/use[Name].tsx` with new data/actions
+- [ ] T023 [US2] Integrate with User Story 1 screen / components (if needed)
 
-**Checkpoint**: At this point, User Stories 1 AND 2 should both work independently
+**Checkpoint**: User Stories 1 AND 2 both work independently — verify on device/simulator
 
 ---
 
@@ -129,16 +132,16 @@ Examples of foundational tasks (adjust based on your project):
 
 ### Tests for User Story 3 (OPTIONAL - only if tests requested) ⚠️
 
-- [ ] T024 [P] [US3] Contract test for [endpoint] in tests/contract/test_[name].py
-- [ ] T025 [P] [US3] Integration test for [user journey] in tests/integration/test_[name].py
+- [ ] T024 [P] [US3] Unit test in `__tests__/[Subject].test.ts`
+- [ ] T025 [P] [US3] Edge-case / error-path test in `__tests__/[Subject].test.ts`
 
 ### Implementation for User Story 3
 
-- [ ] T026 [P] [US3] Create [Entity] model in src/models/[entity].py
-- [ ] T027 [US3] Implement [Service] in src/services/[service].py
-- [ ] T028 [US3] Implement [endpoint/feature] in src/[location]/[file].py
+- [ ] T026 [P] [US3] Create screen or component `src/screens/<domain>/[ScreenName].tsx`
+- [ ] T027 [US3] Extend service in `src/services/<domain>/[ServiceName].ts`
+- [ ] T028 [US3] Wire into Navigator and verify navigation flow
 
-**Checkpoint**: All user stories should now be independently functional
+**Checkpoint**: All user stories independently functional — run `npm test` and smoke test on both platforms
 
 ---
 
@@ -150,11 +153,13 @@ Examples of foundational tasks (adjust based on your project):
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] TXXX [P] Documentation updates in docs/
-- [ ] TXXX Code cleanup and refactoring
-- [ ] TXXX Performance optimization across all stories
-- [ ] TXXX [P] Additional unit tests (if requested) in tests/unit/
-- [ ] TXXX Security hardening
+- [ ] TXXX [P] Run `npm run lint` — fix any ESLint errors introduced
+- [ ] TXXX [P] Run `npm test` — ensure all tests pass
+- [ ] TXXX Run `tsc --noEmit` — zero TypeScript errors
+- [ ] TXXX Smoke test all affected screens on iOS simulator
+- [ ] TXXX Smoke test all affected screens on Android emulator
+- [ ] TXXX Review for hardcoded secrets or sensitive data in logs
+- [ ] TXXX Update `src/loc/` i18n strings for any new user-facing text
 - [ ] TXXX Run quickstart.md validation
 
 ---
@@ -198,13 +203,23 @@ Examples of foundational tasks (adjust based on your project):
 ## Parallel Example: User Story 1
 
 ```bash
-# Launch all tests for User Story 1 together (if tests requested):
-Task: "Contract test for [endpoint] in tests/contract/test_[name].py"
-Task: "Integration test for [user journey] in tests/integration/test_[name].py"
+# Run all tests:
+npm test
 
-# Launch all models for User Story 1 together:
-Task: "Create [Entity1] model in src/models/[entity1].py"
-Task: "Create [Entity2] model in src/models/[entity2].py"
+# Run a single test file:
+npm test -- __tests__/[Subject].test.ts
+
+# TypeScript check:
+npx tsc --noEmit
+
+# Lint:
+npm run lint
+
+# Launch dev app on iOS simulator:
+npm run ios
+
+# Launch dev app on Android emulator:
+npm run android
 ```
 
 ---
