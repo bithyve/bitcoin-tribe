@@ -179,6 +179,7 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      flex: 1,
       flexShrink: 1,
     },
     verifiedIcon: {
@@ -190,7 +191,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flexShrink: 0,
+      flexShrink: 1,
     },
     assetImageWrapper: {
       width: '100%',
