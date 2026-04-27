@@ -13,10 +13,10 @@ hooks:
   before_specify:
   - extension: git
     command: speckit.git.feature
-    enabled: true
+    enabled: false
     optional: false
     prompt: Execute speckit.git.feature?
-    description: Create feature branch before specification
+    description: Create feature branch before specification (disabled - cloud agent handles branch creation)
     condition: null
   before_clarify:
   - extension: git

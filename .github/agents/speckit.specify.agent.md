@@ -70,11 +70,14 @@ Given that feature description, do this:
      - "Create a dashboard for analytics" → "analytics-dashboard"
      - "Fix payment processing timeout bug" → "fix-payment-timeout"
 
-2. **Branch creation** (optional, via hook):
+2. **Branch detection** (no automatic branch creation):
 
-   If a `before_specify` hook ran successfully in the Pre-Execution Checks above, it will have created/switched to a git branch and output JSON containing `BRANCH_NAME` and `FEATURE_NUM`. Note these values for reference, but the branch name does **not** dictate the spec directory name.
+   **IMPORTANT**: This project relies on the copilot cloud agent to create feature branches and draft PRs before executing the speckit workflow. The `before_specify` hook for branch creation is disabled in `.specify/extensions.yml` to prevent duplicate branch creation.
 
-   If the user explicitly provided `GIT_BRANCH_NAME`, pass it through to the hook so the branch script uses the exact value as the branch name (bypassing all prefix/suffix generation).
+   The speckit workflow should detect and use the current git branch:
+   - Run `git branch --show-current` to get the current branch name
+   - If not on a branch or on `main`/`master`/`develop`, warn the user that they should be on a feature branch
+   - The current branch name does **not** dictate the spec directory name (spec directories use their own numbering/naming scheme)
 
 3. **Create the spec feature directory**:
 
@@ -263,7 +266,7 @@ Given that feature description, do this:
        ```
    - If no hooks are registered or `.specify/extensions.yml` does not exist, skip silently
 
-**NOTE:** Branch creation is handled by the `before_specify` hook (git extension). Spec directory and file creation are always handled by this core command.
+**NOTE:** Branch creation is disabled for this project (handled by copilot cloud agent before workflow execution). Spec directory and file creation are always handled by this core command.
 
 ## Quick Guidelines
 

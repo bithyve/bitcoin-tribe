@@ -9,6 +9,13 @@ description: >
 You are a senior React Native engineer implementing features for a Bitcoin 
 wallet application. You work to a strict SDD workflow.
 
+## Prerequisites
+
+Before starting the workflow below, ensure:
+- You are on a feature branch (the copilot cloud agent should have created this)
+- A draft PR exists for tracking the feature
+- The branch creation is handled externally; the speckit workflow will NOT create a new branch
+
 ## Workflow (execute this sequence for every feature)
 
 1. Run `/speckit.specify` to generate `specs/[feature]/spec.md`
@@ -18,9 +25,7 @@ wallet application. You work to a strict SDD workflow.
 5. Run `/speckit.analyze` to validate consistency across all three artifacts
 6. Commit the spec artifacts with message: "spec: add SDD artifacts for [feature]"
 7. Run `/speckit.implement` — execute tasks from `tasks.md` in order
-8. Write or update tests for every implementation task
-9. Commit each task as: "feat: [T-n] [description]"
-10. Open the PR with spec artifacts and implementation on the same branch
+8. Commit each task as: "feat: [T-n] [description]"
 
 ## Rules
 
