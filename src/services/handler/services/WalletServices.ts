@@ -33,13 +33,56 @@ import { refreshRgbWallet } from './RgbWalletServices';
 import { getNodeOnchainBtcAddress } from './RLNServices';
 import { backupAppImage } from './backupService';
 
+type WalletServicesDeps = {
+  config: typeof config;
+  dbManager: typeof dbManager;
+  storage: typeof Storage;
+  walletOperations: typeof WalletOperations;
+  electrumClient: typeof ElectrumClient;
+  electrumClientState: typeof ELECTRUM_CLIENT;
+  relay: typeof Relay;
+  rgbServices: typeof RGBServices;
+  refreshRgbWallet: typeof refreshRgbWallet;
+  getNodeOnchainBtcAddress: typeof getNodeOnchainBtcAddress;
+  backupAppImage: typeof backupAppImage;
+};
+
+function createDefaultDeps(): WalletServicesDeps {
+  return {
+    config,
+    dbManager,
+    storage: Storage,
+    walletOperations: WalletOperations,
+    electrumClient: ElectrumClient,
+    electrumClientState: ELECTRUM_CLIENT,
+    relay: Relay,
+    rgbServices: RGBServices,
+    refreshRgbWallet,
+    getNodeOnchainBtcAddress,
+    backupAppImage,
+  };
+}
+
+let deps: WalletServicesDeps = createDefaultDeps();
+
+export function setWalletServicesTestDeps(overrides: Partial<WalletServicesDeps>) {
+  deps = {
+    ...deps,
+    ...overrides,
+  };
+}
+
+export function resetWalletServicesTestDeps() {
+  deps = createDefaultDeps();
+}
+
 function getTribeAppType(): AppType {
-  const app = dbManager.getObjectByIndex(RealmSchema.TribeApp) as any;
+  const app = deps.dbManager.getObjectByIndex(RealmSchema.TribeApp) as any;
   return app?.appType;
 }
 
 function getNodeApi(): RLNNodeApiServices {
-  const rgbWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
+  const rgbWallet = deps.dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
   return new RLNNodeApiServices({
     baseUrl: rgbWallet.nodeUrl,
     apiKey: rgbWallet.nodeAuthentication,
@@ -52,24 +95,24 @@ function isNodeMode(appType: AppType): boolean {
 
 export async function connectToNode() {
   const defaultNodes =
-    config.NETWORK_TYPE === NetworkType.TESTNET
+    deps.config.NETWORK_TYPE === NetworkType.TESTNET
       ? predefinedTestnetNodes
-      : config.NETWORK_TYPE === NetworkType.REGTEST
+      : deps.config.NETWORK_TYPE === NetworkType.REGTEST
         ? predefinedRegtestNodes
-        : config.NETWORK_TYPE === NetworkType.TESTNET4
+        : deps.config.NETWORK_TYPE === NetworkType.TESTNET4
           ? predefinedTestnet4Nodes
           : predefinedMainnetNodes;
 
-  const privateNodes: NodeDetail[] = dbManager.getCollection(
+  const privateNodes: NodeDetail[] = deps.dbManager.getCollection(
     RealmSchema.NodeConnect,
   ) as any;
 
-  ElectrumClient.setActivePeer(defaultNodes, privateNodes);
-  const { connected, connectedTo, error } = await ElectrumClient.connect();
+  deps.electrumClient.setActivePeer(defaultNodes, privateNodes);
+  const { connected, connectedTo, error } = await deps.electrumClient.connect();
 
   if (connected) {
-    WalletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
-      Storage.set(
+    deps.walletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
+      deps.storage.set(
         Keys.AVERAGE_TX_FEE_BY_NETWORK,
         JSON.stringify(averageTxFeeByNetwork),
       );
@@ -80,8 +123,8 @@ export async function connectToNode() {
 }
 
 export async function getTxRates() {
-  WalletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
-    Storage.set(
+  deps.walletOperations.calculateAverageTxFee().then(averageTxFeeByNetwork => {
+    deps.storage.set(
       Keys.AVERAGE_TX_FEE_BY_NETWORK,
       JSON.stringify(averageTxFeeByNetwork),
     );
@@ -102,8 +145,8 @@ export async function refreshWallets({
         skip_sync: false,
       });
       if (balances?.vanilla) {
-        const rgbWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
-        dbManager.updateObjectByPrimaryId(
+        const rgbWallet = deps.dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
+        deps.dbManager.updateObjectByPrimaryId(
           RealmSchema.RgbWallet,
           'mnemonic',
           rgbWallet.mnemonic,
@@ -116,8 +159,8 @@ export async function refreshWallets({
       return;
     }
 
-    if (!ELECTRUM_CLIENT.isClientConnected) {
-      ElectrumClient.resetCurrentPeerIndex();
+    if (!deps.electrumClientState.isClientConnected) {
+      deps.electrumClient.resetCurrentPeerIndex();
       const { connected, connectedTo, error } = await connectToNode();
       if (connected) {
         console.log('Connected to: ', connectedTo);
@@ -134,7 +177,7 @@ export async function refreshWallets({
 
     const network = WalletUtilities.getNetworkByType(wallets[0].networkType);
     const { synchedWallets }: { synchedWallets: Wallet[] } =
-      await WalletOperations.syncWalletsViaElectrumClient(wallets, network);
+      await deps.walletOperations.syncWalletsViaElectrumClient(wallets, network);
 
     for (const synchedWallet of synchedWallets) {
       if (metaData) {
@@ -149,7 +192,7 @@ export async function refreshWallets({
         );
       }
 
-      dbManager.updateObjectById(RealmSchema.Wallet, synchedWallet.id, {
+      deps.dbManager.updateObjectById(RealmSchema.Wallet, synchedWallet.id, {
         specs: synchedWallet.specs,
       });
     }
@@ -172,7 +215,7 @@ export async function sendPhaseOne({
   selectedPriority: TxPriority;
 }): Promise<TransactionPrerequisite> {
   const recipients = [recipient];
-  const { txPrerequisites } = await WalletOperations.transferST1(
+  const { txPrerequisites } = await deps.walletOperations.transferST1(
     sender,
     recipients,
     averageTxFee,
@@ -193,7 +236,7 @@ export async function sendPhaseTwo({
   txPrerequisites: TransactionPrerequisite;
   txPriority: TxPriority;
 }): Promise<{ txid: string }> {
-  const { txid } = await WalletOperations.transferST2(
+  const { txid } = await deps.walletOperations.transferST2(
     sender,
     txPrerequisites,
     txPriority,
@@ -201,7 +244,7 @@ export async function sendPhaseTwo({
   );
 
   if (txid) {
-    dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
+    deps.dbManager.updateObjectById(RealmSchema.Wallet, sender.id, {
       specs: sender.specs,
     });
     return { txid };
@@ -219,10 +262,10 @@ export async function payServiceFee({
   feeType?: ServiceFeeType;
   collectionId?: string;
 }): Promise<{ txid: string }> {
-  const wallet: Wallet = (dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
+  const wallet: Wallet = (deps.dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
   await refreshWallets({ wallets: [wallet] });
 
-  const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const averageTxFeeJSON = deps.storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   if (!averageTxFeeJSON || typeof averageTxFeeJSON !== 'string') {
     throw new Error('Transaction fee data not found. Please try again later.');
   }
@@ -234,7 +277,7 @@ export async function payServiceFee({
     throw new Error('Invalid transaction fee data. Please refresh and try again.');
   }
 
-  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[config.NETWORK_TYPE];
+  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[deps.config.NETWORK_TYPE];
   const { low } = await sendPhaseOne({
     sender: wallet,
     recipient: {
@@ -280,7 +323,7 @@ export async function updateTransaction({
   updateProps: Record<string, any>;
 }): Promise<boolean> {
   try {
-    const wallet: Wallet = (dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
+    const wallet: Wallet = (deps.dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
     const transactions = wallet.specs.transactions;
     const index = transactions.findIndex((tx: any) => tx.txid === txid);
     if (index < 0) return false;
@@ -290,14 +333,14 @@ export async function updateTransaction({
       ...updateProps,
     };
 
-    dbManager.updateObjectByPrimaryId(RealmSchema.Wallet, 'id', wallet.id, {
+    deps.dbManager.updateObjectByPrimaryId(RealmSchema.Wallet, 'id', wallet.id, {
       specs: {
         transactions,
         ...wallet.specs,
       },
     });
 
-    backupAppImage({
+    deps.backupAppImage({
       tnxMeta: {
         txid,
         metaData: (transactions[index] as any).metadata,
@@ -318,14 +361,14 @@ export async function sendToAddress({
   recipient: { address: string; amount: number };
   skipSync: boolean;
 }): Promise<{ txid: string }> {
-  const wallet: Wallet = (dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
-  const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+  const wallet: Wallet = (deps.dbManager.getObjectByIndex(RealmSchema.Wallet) as any).toJSON();
+  const averageTxFeeJSON = deps.storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
   if (!averageTxFeeJSON || typeof averageTxFeeJSON !== 'string') {
     throw new Error('Transaction fee data not found. Please try again later.');
   }
 
   const averageTxFeeByNetwork: AverageTxFeesByNetwork = JSON.parse(averageTxFeeJSON);
-  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[config.NETWORK_TYPE];
+  const averageTxFee: AverageTxFees = averageTxFeeByNetwork[deps.config.NETWORK_TYPE];
 
   const txPrerequisites = await sendPhaseOne({
     sender: wallet,
@@ -407,12 +450,12 @@ export async function receiveTestSats() {
   try {
     const appType = getTribeAppType();
     if (isNodeMode(appType)) {
-      const response: any = await getNodeOnchainBtcAddress();
+      const response: any = await deps.getNodeOnchainBtcAddress();
       if (!response?.address) {
         throw new Error('Failed to get test coins');
       }
 
-      const { funded } = await Relay.getTestcoins(response.address, config.NETWORK_TYPE);
+      const { funded } = await deps.relay.getTestcoins(response.address, deps.config.NETWORK_TYPE);
       if (!funded) {
         throw new Error('Failed to get test coins');
       }
@@ -421,9 +464,9 @@ export async function receiveTestSats() {
       return;
     }
 
-    const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet) as Wallet;
-    const { receivingAddress } = WalletOperations.getNextFreeExternalAddress(wallet);
-    const { funded } = await Relay.getTestcoins(receivingAddress, wallet.networkType);
+    const wallet: Wallet = deps.dbManager.getObjectByIndex(RealmSchema.Wallet) as Wallet;
+    const { receivingAddress } = deps.walletOperations.getNextFreeExternalAddress(wallet);
+    const { funded } = await deps.relay.getTestcoins(receivingAddress, wallet.networkType);
     if (!funded) {
       throw new Error('Failed to get test coins');
     }
@@ -440,12 +483,12 @@ export async function createUtxos() {
     const appType = getTribeAppType();
     const nodeApi = isNodeMode(appType) ? getNodeApi() : undefined;
     if (isNodeMode(appType)) {
-      const utxos = await RGBServices.createUtxos(5, appType, nodeApi as any);
+      const utxos = await deps.rgbServices.createUtxos(5, appType, nodeApi as any);
       return utxos.created;
     }
 
-    const wallet: Wallet = dbManager.getObjectByIndex(RealmSchema.Wallet) as Wallet;
-    const averageTxFeeJSON = Storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
+    const wallet: Wallet = deps.dbManager.getObjectByIndex(RealmSchema.Wallet) as Wallet;
+    const averageTxFeeJSON = deps.storage.get(Keys.AVERAGE_TX_FEE_BY_NETWORK);
     if (!averageTxFeeJSON || typeof averageTxFeeJSON !== 'string') {
       throw new Error('Transaction fee data not found. Please try again later.');
     }
@@ -453,13 +496,13 @@ export async function createUtxos() {
     const averageTxFeeByNetwork: AverageTxFeesByNetwork = JSON.parse(averageTxFeeJSON);
     const averageTxFee = averageTxFeeByNetwork[wallet.networkType];
 
-    const utxos = await RGBServices.createUtxos(
+    const utxos = await deps.rgbServices.createUtxos(
       averageTxFee.low.feePerByte,
       appType,
       nodeApi as any,
     );
 
-    await refreshRgbWallet();
+    await deps.refreshRgbWallet();
     await refreshWallets({
       wallets: [(wallet as any).toJSON ? (wallet as any).toJSON() : wallet],
     });
@@ -481,7 +524,7 @@ export async function viewUtxos() {
   try {
     const appType = getTribeAppType();
     const nodeApi = isNodeMode(appType) ? getNodeApi() : undefined;
-    const response = await RGBServices.getUnspents(appType, nodeApi as any);
+    const response = await deps.rgbServices.getUnspents(appType, nodeApi as any);
 
     if (!Array.isArray(response)) {
       throw new Error(
@@ -493,9 +536,9 @@ export async function viewUtxos() {
       return [];
     }
 
-    const rgbWallet = dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
+    const rgbWallet = deps.dbManager.getObjectByIndex(RealmSchema.RgbWallet) as RGBWallet;
     const utxosData = response.map(utxo => JSON.stringify(utxo));
-    dbManager.updateObjectByPrimaryId(
+    deps.dbManager.updateObjectByPrimaryId(
       RealmSchema.RgbWallet,
       'mnemonic',
       rgbWallet.mnemonic,
@@ -512,10 +555,10 @@ export async function viewUtxos() {
 }
 
 export async function getFeeAndExchangeRates() {
-  const { exchangeRates, serviceFee } = await Relay.fetchFeeAndExchangeRates();
-  Storage.set(Keys.EXCHANGE_RATES, JSON.stringify(exchangeRates.exchangeRates));
+  const { exchangeRates, serviceFee } = await deps.relay.fetchFeeAndExchangeRates();
+  deps.storage.set(Keys.EXCHANGE_RATES, JSON.stringify(exchangeRates.exchangeRates));
   if (serviceFee) {
-    Storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
+    deps.storage.set(Keys.SERVICE_FEE, JSON.stringify(serviceFee));
   }
   await getTxRates();
 }

@@ -35,8 +35,48 @@ import DeepLinking, {
 import { fetchAndVerifyTweet } from 'src/services/twitter';
 import Toast from 'src/components/Toast';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
-import { createUtxos, updateTransaction, viewUtxos } from './WalletServices';
-import { backup, backupAppImage } from './backupService';
+import {
+  createUtxos as createUtxosService,
+  updateTransaction as updateTransactionService,
+  viewUtxos as viewUtxosService,
+} from './WalletServices';
+import {
+  backup as backupService,
+  backupAppImage as backupAppImageService,
+} from './backupService';
+
+type RgbWalletServiceDeps = {
+  createUtxos: typeof createUtxosService;
+  updateTransaction: typeof updateTransactionService;
+  viewUtxos: typeof viewUtxosService;
+  backup: typeof backupService;
+  backupAppImage: typeof backupAppImageService;
+};
+
+function createRgbWalletServiceDeps(): RgbWalletServiceDeps {
+  return {
+    createUtxos: createUtxosService,
+    updateTransaction: updateTransactionService,
+    viewUtxos: viewUtxosService,
+    backup: backupService,
+    backupAppImage: backupAppImageService,
+  };
+}
+
+let rgbWalletServiceDeps: RgbWalletServiceDeps = createRgbWalletServiceDeps();
+
+export function setRgbWalletServicesTestDeps(
+  overrides: Partial<RgbWalletServiceDeps>,
+) {
+  rgbWalletServiceDeps = {
+    ...rgbWalletServiceDeps,
+    ...overrides,
+  };
+}
+
+export function resetRgbWalletServicesTestDeps() {
+  rgbWalletServiceDeps = createRgbWalletServiceDeps();
+}
 
 function getTribeApp(): TribeApp {
   return dbManager.getObjectByIndex(RealmSchema.TribeApp) as TribeApp;
@@ -67,7 +107,7 @@ function getRgbContext(): { appType: AppType; api?: RLNNodeApiServices } {
 }
 
 function scheduleInvoicesCloudBackup() {
-  backupAppImage({ invoices: true }).catch(e =>
+  rgbWalletServiceDeps.backupAppImage({ invoices: true }).catch(e =>
     console.log('backupAppImage invoices', e),
   );
 }
@@ -223,7 +263,7 @@ export async function receiveAsset({
       }
     }
 
-    viewUtxos();
+    rgbWalletServiceDeps.viewUtxos();
     return response;
   } catch (error: any) {
     const errorCode = error?.code;
@@ -233,7 +273,7 @@ export async function receiveAsset({
       }
 
       try {
-        const res = await createUtxos();
+        const res = await rgbWalletServiceDeps.createUtxos();
         if (!res) {
           throw new Error('Unable to create new utxos for your invoice');
         }
@@ -629,7 +669,7 @@ export async function refreshRgbWallet() {
 
     await updateAssetVerificationStatus();
     if (shouldBackup) {
-      await backup();
+      await rgbWalletServiceDeps.backup();
     }
   } catch (error) {
     console.log('error', error);
@@ -704,7 +744,7 @@ export async function issueNewCoin({
           t.metadata?.assetId === '',
       );
       if (tx) {
-        updateTransaction({
+        rgbWalletServiceDeps.updateTransaction({
           txid: tx.txid,
           updateProps: {
             metadata: {
@@ -767,7 +807,7 @@ export async function issueIFA({
           t.metadata?.assetId === '',
       );
       if (tx) {
-        updateTransaction({
+        rgbWalletServiceDeps.updateTransaction({
           txid: tx.txid,
           updateProps: {
             metadata: {
@@ -827,7 +867,7 @@ export async function issueNewCollectible({
           t.metadata?.assetId === '',
       );
       if (tx) {
-        updateTransaction({
+        rgbWalletServiceDeps.updateTransaction({
           txid: tx.txid,
           updateProps: {
             metadata: {
@@ -886,7 +926,7 @@ export async function issueAssetUda({
           t.metadata?.assetId === '',
       );
       if (tx) {
-        updateTransaction({
+        rgbWalletServiceDeps.updateTransaction({
           txid: tx.txid,
           updateProps: {
             metadata: {
@@ -987,7 +1027,7 @@ export async function issueNewCollection({
 }): Promise<Collection | null> {
   try {
     if (createUtxos) {
-      await createUtxos();
+      await rgbWalletServiceDeps.createUtxos();
     }
     const collectionId = uuidv4().split('-')[0];
     const slug = DeepLinking.buildUrl(
@@ -1481,7 +1521,7 @@ export async function claimCampaign(campaignId: string, mode: 'WITNESS' | 'BLIND
     if (invoice.claimed) return invoice;
 
     if (invoice.error === 'Insufficient sats for RGB') {
-      const utxos = await createUtxos();
+      const utxos = await rgbWalletServiceDeps.createUtxos();
       if (utxos) {
         await refreshRgbWallet();
         await Promise.resolve(new Promise(resolve => setTimeout(resolve, 1000)));

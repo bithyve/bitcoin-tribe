@@ -283,25 +283,75 @@ export class BackupService {
   }
 }
 
+type BackupServiceWrapperDeps = {
+  restoreRgbFromCloud: (refreshRgbWallet: () => Promise<void>) => Promise<any>;
+  backupRgbOnCloud: () => Promise<any>;
+  createBackup: (confirmed: boolean) => Promise<any>;
+  backup: () => Promise<any>;
+  isBackupRequired: () => Promise<any>;
+  backupAppImage: (args: {
+    settings?: boolean;
+    room?: null | any;
+    all?: boolean;
+    tnxMeta?: null | { txid: string; metaData: object };
+    invoices?: boolean;
+  }) => Promise<any>;
+  restoreAppImage: (args: {
+    mnemonic: string;
+    settingsObject?: string;
+    roomsObject?: object;
+    tnxMetaObject?: object;
+    invoicesObject?: string;
+    refreshWallets: (args: { wallets: any; metaData: object }) => Promise<any>;
+  }) => Promise<any>;
+};
+
+function createBackupWrapperDeps(): BackupServiceWrapperDeps {
+  return {
+    restoreRgbFromCloud: BackupService.restoreRgbFromCloud,
+    backupRgbOnCloud: BackupService.backupRgbOnCloud,
+    createBackup: BackupService.createBackup,
+    backup: BackupService.backup,
+    isBackupRequired: BackupService.isBackupRequired,
+    backupAppImage: BackupService.backupAppImage,
+    restoreAppImage: BackupService.restoreAppImage,
+  };
+}
+
+let backupWrapperDeps: BackupServiceWrapperDeps = createBackupWrapperDeps();
+
+export function setBackupServiceTestDeps(
+  overrides: Partial<BackupServiceWrapperDeps>,
+) {
+  backupWrapperDeps = {
+    ...backupWrapperDeps,
+    ...overrides,
+  };
+}
+
+export function resetBackupServiceTestDeps() {
+  backupWrapperDeps = createBackupWrapperDeps();
+}
+
 export async function restoreRgbFromCloud() {
   const { refreshRgbWallet } = await import('./RgbWalletServices');
-  return BackupService.restoreRgbFromCloud(refreshRgbWallet);
+  return backupWrapperDeps.restoreRgbFromCloud(refreshRgbWallet);
 }
 
 export async function backupRgbOnCloud() {
-  return BackupService.backupRgbOnCloud();
+  return backupWrapperDeps.backupRgbOnCloud();
 }
 
 export async function createBackup(confirmed: boolean) {
-  return BackupService.createBackup(confirmed);
+  return backupWrapperDeps.createBackup(confirmed);
 }
 
 export async function backup() {
-  return BackupService.backup();
+  return backupWrapperDeps.backup();
 }
 
 export async function isBackupRequired() {
-  return BackupService.isBackupRequired();
+  return backupWrapperDeps.isBackupRequired();
 }
 
 export async function backupAppImage({
@@ -317,7 +367,7 @@ export async function backupAppImage({
   tnxMeta?: null | { txid: string; metaData: object };
   invoices?: boolean;
 }) {
-  return BackupService.backupAppImage({
+  return backupWrapperDeps.backupAppImage({
     settings,
     room,
     all,
@@ -340,7 +390,7 @@ export async function restoreAppImage({
   invoicesObject?: string;
 }) {
   const { refreshWallets } = await import('./WalletServices');
-  return BackupService.restoreAppImage({
+  return backupWrapperDeps.restoreAppImage({
     mnemonic,
     settingsObject,
     roomsObject,

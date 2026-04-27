@@ -9,6 +9,7 @@
     "check-clean": "git diff-index --quiet HEAD -- || (echo 'Uncommitted changes detected. Please commit or stash your changes.' && exit 1)",
     "postinstall": "patch-package && husky install && chmod +x setup.sh && sh ./setup.sh",
     "test": "jest",
+    "test:coverage": "jest --coverage --runInBand",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "npm run lint -- --fix",
     "bare-pack": "npx bare-pack --host ios --host android --linked --out src/services/messaging/holepunch/network/worklet/app.bundle.mjs src/services/messaging/holepunch/network/worklet/hyperswarm-worklet.mjs",
