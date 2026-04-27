@@ -115,16 +115,16 @@ const AssetCard = (props: AssetCardProps) => {
           </View>
           <View style={styles.contentWrapper}>
             <View style={styles.row}>
-              <View style={styles.nameContainer}>
-                <AppText
-                  variant="body2"
-                  numberOfLines={1}
-                  style={styles.nameText}
-                >
-                  {asset.name}
-                </AppText>
-                {isVerified && <IconVerified style={{ marginRight: 5 }} width={20} height={20} />}
-              </View>
+              <AppText
+                variant="body2"
+                numberOfLines={1}
+                style={styles.nameText}
+              >
+                {asset.name}
+              </AppText>
+              {isVerified && (
+                <IconVerified style={styles.verifiedIcon} width={20} height={20} />
+              )}
               {asset.assetSchema !== AssetSchema.UDA && (
                 <AppText
                   variant="body2"
@@ -179,13 +179,18 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      flexShrink: 1,
+    },
+    verifiedIcon: {
+      marginHorizontal: wp(4),
+      flexShrink: 0,
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flex: 1
+      flexShrink: 0,
     },
     assetImageWrapper: {
       width: '100%',
@@ -197,10 +202,7 @@ const getStyles = (theme: AppTheme) =>
     row: {
       flexDirection: 'row',
       flex: 1,
-    },
-    nameContainer: {
-      flex: 2,
-      flexDirection: 'row',
+      alignItems: 'center',
     },
     textDetails: {
       fontWeight: '300',
