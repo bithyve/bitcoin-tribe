@@ -179,6 +179,7 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      flex: 1,
     },
     amountText: {
       fontWeight: '300',
@@ -201,6 +202,7 @@ const getStyles = (theme: AppTheme) =>
     nameContainer: {
       flex: 2,
       flexDirection: 'row',
+      alignItems: 'center',
     },
     textDetails: {
       fontWeight: '300',
