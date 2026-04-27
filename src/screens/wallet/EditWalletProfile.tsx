@@ -8,7 +8,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import EditProfileDetails from '../profile/EditProfileDetails';

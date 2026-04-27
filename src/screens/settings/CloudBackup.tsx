@@ -11,7 +11,7 @@ import { AppTheme } from 'src/theme';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import Buttons from 'src/components/Buttons';
 import { wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { RealmSchema } from 'src/storage/enum';
 import { getJSONFromRealmObject } from 'src/storage/realm/utils';
 import VersionHistoryItem from './components/VersionHistoryItem';

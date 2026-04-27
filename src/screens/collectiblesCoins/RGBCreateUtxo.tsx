@@ -15,7 +15,7 @@ import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { RealmSchema } from 'src/storage/enum';
 import { AverageTxFeesByNetwork } from 'src/services/wallets/interfaces';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { useNavigation, useRoute } from '@react-navigation/native';

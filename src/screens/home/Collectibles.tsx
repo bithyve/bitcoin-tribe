@@ -10,7 +10,7 @@ import CollectibleAssetsList from './components/CollectibleAssetsList';
 import { AppTheme } from 'src/theme';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import {
   Asset,
   AssetSchema,

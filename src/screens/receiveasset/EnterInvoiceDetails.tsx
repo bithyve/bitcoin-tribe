@@ -34,7 +34,7 @@ import {
 import SelectYourAsset from './SelectYourAsset';
 import RGBAssetList from './RGBAssetList';
 import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import InvoiceExpirySlider from './components/InvoiceExpirySlider';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';

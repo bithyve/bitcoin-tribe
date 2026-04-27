@@ -25,7 +25,7 @@ import AppTouchable from 'src/components/AppTouchable';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { useMutation } from 'react-query';
 import { useTheme } from 'react-native-paper';
 import Colors from 'src/theme/Colors';

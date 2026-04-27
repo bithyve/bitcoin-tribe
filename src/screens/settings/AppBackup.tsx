@@ -16,7 +16,7 @@ import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { BackupType } from 'src/models/enums/Backup';

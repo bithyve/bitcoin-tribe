@@ -16,7 +16,7 @@ import { wp } from 'src/constants/responsive';
 import ModalContainer from 'src/components/ModalContainer';
 import ConfirmAppBackup from './components/ConfirmAppBackup';
 import { Keys } from 'src/storage';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';

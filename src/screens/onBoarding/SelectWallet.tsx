@@ -26,7 +26,7 @@ import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';

@@ -24,7 +24,7 @@ import Colors from 'src/theme/Colors';
 import AppTouchable from 'src/components/AppTouchable';
 import Toast from 'src/components/Toast';
 import Clipboard from '@react-native-clipboard/clipboard';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import dbManager from 'src/storage/realm/dbManager';
 import ModalLoading from 'src/components/ModalLoading';
 import EmptyStateView from 'src/components/EmptyStateView';

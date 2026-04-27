@@ -7,7 +7,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import AppText from 'src/components/AppText';
 import AppTouchable from 'src/components/AppTouchable';
 import { hp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { AppTheme } from 'src/theme';
 import IconArrowUp from 'src/assets/images/icon_arrowUp.svg';
 import IconArrowUpLight from 'src/assets/images/icon_arrowUp_light.svg';

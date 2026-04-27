@@ -15,7 +15,7 @@ import AssetRegisterIllustration from 'src/assets/images/assetRegisterIllustrati
 import SkipButton from 'src/components/SkipButton';
 import SwipeToAction from 'src/components/SwipeToAction';
 import Relay from 'src/services/relay';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import Toast from 'src/components/Toast';

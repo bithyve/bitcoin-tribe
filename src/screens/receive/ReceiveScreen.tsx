@@ -21,7 +21,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import AppType from 'src/models/enums/AppType';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { hp, windowHeight, wp } from 'src/constants/responsive';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';

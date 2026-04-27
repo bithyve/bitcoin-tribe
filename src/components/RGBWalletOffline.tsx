@@ -10,7 +10,7 @@ import AppType from 'src/models/enums/AppType';
 import { AppTheme } from 'src/theme';
 import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useNavigation } from '@react-navigation/native';
 import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';

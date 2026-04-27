@@ -15,7 +15,7 @@ import FooterNote from 'src/components/FooterNote';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ShowQRCode from 'src/components/ShowQRCode';
 import ReceiveQrClipBoard from '../receive/components/ReceiveQrClipBoard';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import {
   InvoiceMode,
   RgbUnspent,

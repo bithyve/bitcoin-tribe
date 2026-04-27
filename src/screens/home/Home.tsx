@@ -29,7 +29,7 @@ import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
 import { RealmSchema } from 'src/storage/enum';
 import useWallets from 'src/hooks/useWallets';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { AppContext } from 'src/contexts/AppContext';
 import {
   Asset,

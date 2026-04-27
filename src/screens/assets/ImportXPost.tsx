@@ -19,7 +19,7 @@ import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import ClearIcon from 'src/assets/images/clearIcon.svg';
 import ClearIconLight from 'src/assets/images/clearIcon_light.svg';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { Asset } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
 

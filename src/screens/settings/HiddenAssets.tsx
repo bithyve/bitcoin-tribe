@@ -17,7 +17,7 @@ import {
   InflatableFungibleAsset,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { useMutation } from 'react-query';
 import useWallets from 'src/hooks/useWallets';
 import { hp } from 'src/constants/responsive';

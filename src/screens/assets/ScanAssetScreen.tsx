@@ -15,7 +15,7 @@ import Toast from 'src/components/Toast';
 import config from 'src/utils/config';
 import { PaymentInfoKind } from 'src/services/wallets/enums';
 import WalletUtilities from 'src/services/wallets/operations/utils';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import {

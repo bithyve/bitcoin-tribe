@@ -59,7 +59,7 @@ import AppType from 'src/models/enums/AppType';
 import { hp, windowWidth } from 'src/constants/responsive';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
 import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { SettingMenuProps } from 'src/models/interfaces/Settings';
 import BiometricUnlockModal from './components/BiometricUnlockModal';
 import HomeHeader from '../home/components/HomeHeader';

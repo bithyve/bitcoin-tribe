@@ -22,7 +22,7 @@ import availableCurrency from 'src/loc/availableCurrency';
 import SelectOption from 'src/components/SelectOption';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
 import FooterNote from 'src/components/FooterNote';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 
 function LanguageAndCurrency() {
   const navigation = useNavigation();

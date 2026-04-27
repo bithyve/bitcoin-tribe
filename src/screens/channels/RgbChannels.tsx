@@ -11,7 +11,7 @@ import AppHeader from 'src/components/AppHeader';
 import PlusIcon from 'src/assets/images/plus.svg';
 import PlusLightIcon from 'src/assets/images/plus_light.svg';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import ChannelItem from './ChannelItem';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { Keys } from 'src/storage';

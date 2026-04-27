@@ -9,7 +9,7 @@ import { Keys } from 'src/storage';
 import { useMMKVString } from 'react-native-mmkv';
 import availableCurrency from 'src/loc/availableCurrency';
 import CurrencyKind from 'src/models/enums/CurrencyKind';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { useMutation } from 'react-query';
 
 

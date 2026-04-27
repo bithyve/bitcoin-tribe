@@ -19,7 +19,7 @@ import UnCheckIcon from 'src/assets/images/uncheckIcon.svg';
 import UnCheckIconLight from 'src/assets/images/unCheckIcon_light.svg';
 import Buttons from 'src/components/Buttons';
 import AppTouchable from 'src/components/AppTouchable';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import NodeConnectingPopupContainer from './components/NodeConnectingPopupContainer';

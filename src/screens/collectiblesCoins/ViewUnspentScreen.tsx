@@ -9,7 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import SegmentedButtons from 'src/components/SegmentedButtons';
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import {
   Asset,
   Coin,

@@ -6,7 +6,7 @@ import { useMutation } from 'react-query';
 
 import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { Keys } from 'src/storage';

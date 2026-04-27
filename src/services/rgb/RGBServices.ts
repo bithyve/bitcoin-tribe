@@ -25,9 +25,8 @@ import {
 } from 'orbis1-sdk-rn';
 import { NetworkType } from '../wallets/enums';
 import * as RNFS from '@dr.pogodin/react-native-fs';
-import { Keys, Storage } from 'src/storage';
 import { Wallet } from 'orbis1-sdk-rn/lib/typescript/src/core/Wallet';
-import { ApiHandler } from '../handler/apiHandler';
+import { NetworkService } from '../handler/services/networkService';
 
 export default class RGBServices {
   private static environment: Environment = null;
@@ -673,7 +672,7 @@ export default class RGBServices {
   };
 
   static restore = async (mnemonic: string, filePath: string,): Promise<{}> => {
-    const keys = await restoreKeys(ApiHandler.getBitcoinNetwork(), mnemonic);
+    const keys = await restoreKeys(NetworkService.getBitcoinNetwork(), mnemonic);
     const data = await restoreBackup(filePath, mnemonic, keys.masterFingerprint);
     return {};
   };

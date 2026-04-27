@@ -31,7 +31,7 @@ import {
   AssetVisibility,
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { RealmSchema } from 'src/storage/enum';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AppText from 'src/components/AppText';

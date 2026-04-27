@@ -10,7 +10,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import AddAmountModal from './components/AddAmountModal';
 import ReceiveQrDetails from './components/ReceiveQrDetails';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 

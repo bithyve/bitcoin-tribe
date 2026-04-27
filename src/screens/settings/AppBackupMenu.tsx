@@ -17,7 +17,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { hp } from 'src/constants/responsive';
 import { Keys, Storage } from 'src/storage';
 import EnterPasscodeModal from 'src/components/EnterPasscodeModal';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { AppContext } from 'src/contexts/AppContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import AppType from 'src/models/enums/AppType';

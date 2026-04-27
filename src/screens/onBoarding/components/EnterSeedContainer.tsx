@@ -23,7 +23,7 @@ import AppText from 'src/components/AppText';
 import Buttons from 'src/components/Buttons';
 import Toast from 'src/components/Toast';
 import RecoverRGBStatModal from './RecoverRGBStatModal';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import PinMethod from 'src/models/enums/PinMethod';
 import { decrypt, hash512 } from 'src/utils/encryption';
 import config from 'src/utils/config';

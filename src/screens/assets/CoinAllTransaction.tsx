@@ -8,7 +8,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import EmptyStateView from 'src/components/EmptyStateView';
 import NoTransactionIllustration from 'src/assets/images/noTransaction.svg';
 import NoTransactionIllustrationLight from 'src/assets/images/noTransaction_light.svg';

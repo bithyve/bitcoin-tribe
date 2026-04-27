@@ -4,7 +4,7 @@ import ScreenContainer from 'src/components/ScreenContainer';
 import AppHeader from 'src/components/AppHeader';
 import ModalLoading from 'src/components/ModalLoading';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { useMutation } from 'react-query';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';

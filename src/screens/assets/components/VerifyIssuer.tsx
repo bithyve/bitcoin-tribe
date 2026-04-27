@@ -19,7 +19,7 @@ import { RealmSchema } from 'src/storage/enum';
 import ModalLoading from 'src/components/ModalLoading';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import ModalContainer from 'src/components/ModalContainer';
 import { TransactionKind } from 'src/services/wallets/enums';

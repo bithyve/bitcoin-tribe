@@ -8,7 +8,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import ProfileDetails from '../profile/ProfileDetails';
 import ScreenContainer from 'src/components/ScreenContainer';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import PinMethod from 'src/models/enums/PinMethod';
 import { AppContext } from 'src/contexts/AppContext';
 import { decrypt, hash512 } from 'src/utils/encryption';

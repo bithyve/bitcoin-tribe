@@ -7,7 +7,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import { Transfer, TransferKind } from 'src/models/interfaces/RGBWallet';
 import TransferDetailsContainer from './components/TransferDetailsContainer';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import ModalContainer from 'src/components/ModalContainer';
 import { Platform, StyleSheet, View } from 'react-native';

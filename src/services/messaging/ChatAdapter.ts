@@ -17,7 +17,7 @@ import { MessageProcessorRegistry } from './holepunch/processors/MessageProcesso
 import { IdentityProcessor } from './holepunch/processors/IdentityProcessor';
 import { TextProcessor } from './holepunch/processors/TextProcessor';
 import { DMInviteProcessor } from './holepunch/processors/DMInviteProcessor';
-import { ApiHandler } from '../handler/apiHandler';
+import { ApiHandler } from '../handler/services';
 
 
 

@@ -12,7 +12,7 @@ import { useMMKVBoolean } from 'react-native-mmkv';
 import { useQuery } from '@realm/react';
 import { useNavigation } from '@react-navigation/native';
 
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import {
   Asset,
   Coin,

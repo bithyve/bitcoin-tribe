@@ -27,7 +27,7 @@ import {
   IssuerVerificationMethod,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { AppContext } from 'src/contexts/AppContext';
 import AppType from 'src/models/enums/AppType';
 import { hp, wp } from 'src/constants/responsive';

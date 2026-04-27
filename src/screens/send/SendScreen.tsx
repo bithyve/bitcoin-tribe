@@ -17,7 +17,7 @@ import Toast from 'src/components/Toast';
 import WalletUtilities from 'src/services/wallets/operations/utils';
 import config from 'src/utils/config';
 import { hp, wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import { RealmSchema } from 'src/storage/enum';
 import { Asset, Coin, Collectible, InflatableFungibleAsset } from 'src/models/interfaces/RGBWallet';

@@ -12,7 +12,7 @@ import ReactNativeBiometrics from 'react-native-biometrics';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from 'react-query';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import { AppContext } from 'src/contexts/AppContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';

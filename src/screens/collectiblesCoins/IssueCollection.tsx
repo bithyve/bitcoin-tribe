@@ -23,7 +23,7 @@ import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { AppTheme } from 'src/theme';
 import TextField from 'src/components/TextField';
 import { hp, wp } from 'src/constants/responsive';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { RadioButton } from 'react-native-paper';
 import ImagePicker from 'react-native-image-crop-picker';
 import KeyboardAvoidView from 'src/components/KeyboardAvoidView';

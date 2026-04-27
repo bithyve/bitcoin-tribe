@@ -12,7 +12,7 @@ import { AppTheme } from 'src/theme';
 import AppHeader from 'src/components/AppHeader';
 import LightningNodeDetailsContainer from './components/LightningNodeDetailsContainer';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import Toast from 'src/components/Toast';
 import AppType from 'src/models/enums/AppType';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';

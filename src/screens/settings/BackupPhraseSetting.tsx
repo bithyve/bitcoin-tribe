@@ -13,7 +13,7 @@ import { hp } from 'src/constants/responsive';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import PinMethod from 'src/models/enums/PinMethod';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { Keys } from 'src/storage';
 import { AppTheme } from 'src/theme';
 

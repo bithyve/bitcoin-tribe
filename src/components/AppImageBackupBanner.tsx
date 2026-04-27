@@ -9,7 +9,7 @@ import { AppTheme } from 'src/theme';
 import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import AppTouchable from './AppTouchable';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import { Keys } from 'src/storage';
 import { useMMKVBoolean } from 'react-native-mmkv';
 

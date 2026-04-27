@@ -7,7 +7,7 @@ import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
-import { ApiHandler } from 'src/services/handler/apiHandler';
+import { ApiHandler } from 'src/services/handler/services';
 import SelectOption from 'src/components/SelectOption';
 import { RgbUnspent } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
