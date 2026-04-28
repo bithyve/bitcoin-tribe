@@ -91,7 +91,7 @@ function RegistryAssetScreen() {
   const handleAddToWallet = useCallback(() => {
     if (!asset) return;
     if (asset.assetType && !SUPPORTED_COIN_TYPES.includes(asset.assetType as AssetType)) {
-      Toast('Only Coin, RGB20, and NIA asset types are currently supported', false);
+      Toast('Only Coin, RGB20, and NIA asset types are currently supported', true);
       return;
     }
     addMutate(asset);

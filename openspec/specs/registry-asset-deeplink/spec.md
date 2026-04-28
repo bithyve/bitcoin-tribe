@@ -42,8 +42,8 @@ The `RegistryAssetScreen` SHALL call `Relay.lookupAsset(assetId)` upon mount, di
 ### Requirement: User can add a registry asset to their wallet
 After the asset details are displayed, the user SHALL be able to add the RGB coin to their local wallet by pressing "Add to Wallet". The system SHALL call `ApiHandler.addAssetFromRegistry` which calls `addAssetToWallet` internally.
 
-#### Scenario: Asset successfully added (Coin type)
-- **GIVEN** the asset exists in the registry and has type `Coin`
+#### Scenario: Asset successfully added (Coin, RGB20, or NIA type)
+- **GIVEN** the asset exists in the registry and has type `Coin`, `RGB20`, or `NIA`
 - **WHEN** the user presses "Add to Wallet"
 - **THEN** the system SHALL call `ApiHandler.addAssetFromRegistry({ asset })`
 - **AND** on success, navigate back to Home and show a success Toast
@@ -54,9 +54,9 @@ After the asset details are displayed, the user SHALL be able to add the RGB coi
 - **THEN** the system SHALL show an informational Toast ("Asset already in wallet") and navigate back without duplicating the record
 
 #### Scenario: Asset type not supported
-- **GIVEN** the registry asset has a type other than `Coin` (e.g., `Collectible`, `UDA`)
+- **GIVEN** the registry asset has a type other than `Coin`, `RGB20`, or `NIA` (e.g., `Collectible`, `UDA`)
 - **WHEN** the asset details are displayed
-- **THEN** the "Add to Wallet" CTA SHALL be shown but SHALL show an informational Toast explaining that only Coin assets are supported in this version
+- **THEN** the "Add to Wallet" CTA SHALL be shown but SHALL show an error Toast explaining that only Coin, RGB20, and NIA asset types are currently supported
 
 ### Requirement: Deep-link handler delegates registry links correctly
 The `handleDeepLink` function in `Home.tsx` SHALL use `Deeplinking.processDeepLink` to parse all incoming URLs and delegate `DeepLinkFeature.REGISTRY` links to the new `RegistryAssetScreen`.
