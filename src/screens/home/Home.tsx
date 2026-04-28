@@ -50,7 +50,7 @@ import { getApp } from '@react-native-firebase/app';
 import { getMessaging, onMessage,onNotificationOpenedApp,getInitialNotification } from '@react-native-firebase/messaging';
 import DefaultCoin from './DefaultCoin';
 import { Keys, Storage } from 'src/storage';
-import Deeplinking from 'src/utils/DeepLinking';
+import Deeplinking, { DeepLinkFeature } from 'src/utils/DeepLinking';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import { AppUpdateModal } from './components/AppUpdateModal';
 import { useAppVersion } from 'src/hooks/useAppVersion';
@@ -315,16 +315,34 @@ function HomeScreen() {
     };
   }, []);
 
-  const handleDeepLink = event => {
+  const handleDeepLink = (event: { url: string }) => {
     try {
-      const url = event.url;
-      const parsedUrl = new URL(url);
-      const category = url.split('?')[0].replace(Deeplinking.scheme + '/', '');
-      const params = Object.fromEntries(parsedUrl.searchParams.entries());
-      if (category === 'community') {
-        navigation.dispatch(
-          CommonActions.navigate(NavigationRoutes.CREATEGROUP, params),
-        );
+      const { url } = event;
+      const parsed = Deeplinking.processDeepLink(url);
+      if (!parsed.isValid || !parsed.feature) {
+        console.warn('handleDeepLink: unrecognised or invalid deep link', url);
+        return;
+      }
+      switch (parsed.feature) {
+        case DeepLinkFeature.COMMUNITY:
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.CREATEGROUP, parsed.params),
+          );
+          break;
+        case DeepLinkFeature.REGISTRY: {
+          const assetId = parsed.params?.assetId;
+          if (!assetId) {
+            Toast('Invalid registry link: missing assetId', true);
+            return;
+          }
+          navigation.dispatch(
+            CommonActions.navigate(NavigationRoutes.REGISTRYASSET, { assetId }),
+          );
+          break;
+        }
+        default:
+          console.warn('handleDeepLink: unhandled feature', parsed.feature);
+          break;
       }
     } catch (error) {
       console.log('Error parsing deep link:', error);

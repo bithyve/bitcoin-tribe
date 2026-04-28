@@ -1932,6 +1932,23 @@ export class ApiHandler {
     }
   }
 
+  static async addAssetFromRegistry({
+    asset,
+  }: {
+    asset: Asset;
+  }): Promise<{ status: boolean; alreadyExists?: boolean }> {
+    try {
+      const coins = dbManager.getCollection(RealmSchema.Coin);
+      if (coins.find(coin => coin.assetId === asset.assetId)) {
+        return { status: true, alreadyExists: true };
+      }
+      await ApiHandler.addAssetToWallet({ asset });
+      return { status: true, alreadyExists: false };
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static async issueNewCoin({
     name,
     ticker,

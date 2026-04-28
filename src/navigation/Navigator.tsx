@@ -98,6 +98,7 @@ import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 import { BannerMarquee } from 'src/components/BannerMarquee';
 import IFADetails from 'src/screens/assets/IFADetails';
 import IfaMetaData from 'src/screens/assets/IfaMetaDataScreen';
+import RegistryAssetScreen from 'src/screens/assets/RegistryAssetScreen';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -412,6 +413,7 @@ function AppStack() {
         <Stack.Screen name={NavigationRoutes.EDITGROUP} component={EditGroup} />
         <Stack.Screen name={NavigationRoutes.COLLECTIONVERIFICATIONSCREEN} component={CollectionVerificationScreen} />
         <Stack.Screen name={NavigationRoutes.COLLECTIONUDASWIPER} component={CollectionUdaSwiper} />
+        <Stack.Screen name={NavigationRoutes.REGISTRYASSET} component={RegistryAssetScreen} />
       </Stack.Navigator>
     </RealmProvider>
   );
