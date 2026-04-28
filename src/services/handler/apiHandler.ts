@@ -1939,7 +1939,8 @@ export class ApiHandler {
   }): Promise<{ status: boolean; alreadyExists?: boolean }> {
     try {
       const coins = dbManager.getCollection(RealmSchema.Coin);
-      if (coins.find(coin => coin.assetId === asset.assetId)) {
+      const existingCoin = coins.find(coin => coin.assetId === asset.assetId);
+      if (existingCoin !== undefined) {
         return { status: true, alreadyExists: true };
       }
       await ApiHandler.addAssetToWallet({ asset });

@@ -21,6 +21,9 @@ import { Asset, AssetType } from 'src/models/interfaces/RGBWallet';
 import Relay from 'src/services/relay';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 
+/** Asset types that can be added to the wallet via the registry deep link. */
+const SUPPORTED_COIN_TYPES: string[] = [AssetType.Coin, AssetType.RGB20, AssetType.NIA];
+
 function RegistryAssetScreen() {
   const navigation = useNavigation();
   const route = useRoute();
@@ -28,7 +31,7 @@ function RegistryAssetScreen() {
   const theme: AppTheme = useTheme();
   const styles = useMemo(() => getStyles(theme), [theme]);
   const { translations } = useContext(LocalizationContext);
-  const { common, assets: assetTranslations } = translations;
+  const { common } = translations;
 
   const [asset, setAsset] = useState<Asset | null>(null);
   const [lookupError, setLookupError] = useState<string | null>(null);
@@ -85,12 +88,10 @@ function RegistryAssetScreen() {
     lookupMutate(assetId);
   }, [assetId, lookupMutate]);
 
-  const SUPPORTED_COIN_TYPES = [AssetType.Coin, AssetType.RGB20, AssetType.NIA];
-
   const handleAddToWallet = useCallback(() => {
     if (!asset) return;
     if (asset.assetType && !SUPPORTED_COIN_TYPES.includes(asset.assetType as AssetType)) {
-      Toast('This asset type is not currently supported', false);
+      Toast('Only Coin, RGB20, and NIA asset types are currently supported', false);
       return;
     }
     addMutate(asset);
@@ -189,7 +190,7 @@ const getStyles = (theme: AppTheme) =>
       color: theme.colors.secondaryHeadingColor,
     },
     errorText: {
-      color: theme.colors.error || theme.colors.secondaryHeadingColor,
+      color: theme.colors.secondaryHeadingColor,
       textAlign: 'center',
       marginBottom: hp(20),
     },
