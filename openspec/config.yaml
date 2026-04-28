@@ -1,0 +1,72 @@
+schema: spec-driven
+
+context: |
+  # Bitcoin Tribe — React Native Bitcoin Wallet
+
+  ## Tech Stack
+  - React Native 0.81.5, React 19, TypeScript
+  - State: React Context (AppContext, LocalizationContext) for global app state;
+    React Query (react-query) for server/async data — no Redux, do not reintroduce it
+  - Storage: Realm DB (encrypted via react-native-keychain), current schemaVersion: 99;
+    MMKV (react-native-mmkv) for lightweight key-value storage
+  - Navigation: React Navigation 6 — native-stack + bottom-tabs
+  - Secure secrets: react-native-keychain (ACCESSIBLE.WHEN_UNLOCKED)
+  - Styling: custom StyleSheet with src/theme/Colors.ts; no CSS-in-JS
+  - Module path alias: `src/` resolves from project root (configured in babel.config.js)
+
+  ## Key Domains
+  - On-chain Bitcoin: wallets, UTXOs, transactions (bitcoinjs-lib 6.1.5)
+  - RGB assets: coins (Coin), collectibles (Collectible), UDAs (UniqueDigitalAsset)
+    issued/transferred via src/services/rgb/ and src/services/rgbnode/
+  - P2P messaging: Hyperswarm via react-native-bare-kit; entry points are
+    src/services/messaging/ and src/bare/
+  - Community: channels, contacts, direct messages via HolepunchRoom/HolepunchMessage
+  - Lightning (LN): NodeConnect mode, LNPayments schema
+  - Backup: encrypted cloud backup + manual seed backup via src/services/backup/
+
+  ## Realm Schemas (src/storage/realm/schema/)
+  TribeApp, Wallet, WalletDerivationDetails, RgbWallet, Coin, Collectible,
+  UniqueDigitalAsset, Collection, Community, Message, Contact,
+  HolepunchRoom, HolepunchMessage, HolepunchPeer, IFA,
+  BackupHistory, CloudBackupHistory, NodeInfo, LNPayments, ElectrumTransaction
+
+  ## AppType Enum
+  ON_CHAIN | NODE_CONNECT | SUPPORTED_RLN
+
+  ## Critical Rules (non-negotiable)
+  1. `yarn bare-pack` MUST run after any change to src/services/messaging/ or src/bare/
+     Script: npx bare-pack --host ios --host android --linked ...
+  2. Realm schema changes require BOTH a schemaVersion bump (realm.ts) AND
+     a migration function in schema/migrations.ts — never bump version without a migration
+  3. Never log, transmit, or store primaryMnemonic / primarySeed / encryption keys
+     in plaintext; these fields exist in TribeApp schema and must stay encrypted
+  4. Sensitive key material is stored via react-native-keychain — use Keychain.ACCESSIBLE.WHEN_UNLOCKED
+
+  ## Conventions
+  - Conventional commits: feat:, fix:, chore:, refactor:, test:, docs:
+  - All new business logic must have Jest unit tests
+  - Use src/ path alias in all imports, never relative ../../ beyond one level
+  - React Context state: add to AppContext only if truly global; prefer local state or React Query
+  - Screen components live in src/screens/<domain>/; reusable UI in src/components/
+
+  ## Testing
+  - Runner: Jest
+  - Library: React Native Testing Library
+  - Mocks: src/__mocks__/ for native modules
+  - Run: yarn test
+
+rules:
+  proposal:
+    - State whether this change touches Realm schema (yes/no)
+    - State whether this change touches src/services/messaging/ or src/bare/ (yes/no)
+    - Include a "Non-goals" section
+    - Include a rollback plan if the change modifies persistent storage or auth
+  specs:
+    - Use Given/When/Then format for all scenarios
+    - Distinguish between on-chain and RGB/asset behavior where relevant
+  design:
+    - If yarn bare-pack is required, call it out explicitly at the top of the file
+    - If Realm schema changes, list all affected schema files and the new schemaVersion
+    - List all files to be created or modified
+  tasks:
+    - Number tasks hierarchically: 1.1, 1.2, 2.1, 2.2, etc.
