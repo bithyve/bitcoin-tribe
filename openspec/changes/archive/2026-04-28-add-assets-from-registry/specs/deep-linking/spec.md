@@ -1,4 +1,4 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Deep link handler routes to correct screen
 The deep-link handler in `Home.tsx` SHALL parse all incoming URLs via `Deeplinking.processDeepLink` and route each recognised `DeepLinkFeature` to the appropriate screen. Supported features:
