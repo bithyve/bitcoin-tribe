@@ -194,7 +194,7 @@ const getStyles = (theme: AppTheme) =>
       textAlign: 'right',
       marginHorizontal: wp(2),
       flexShrink: 0,
-      paddingLeft: 4,
+      paddingLeft: wp(4),
     },
     assetImageWrapper: {
       width: '100%',

@@ -34,7 +34,7 @@ The `row` removes the `flex: 1` to avoid unnecessary stretching; `nameContainer`
 The `row` (ticker + icon) currently has no `flex` constraint. Since `contentWrapper` has `flex: 1`, adding `flex: 1` to `row` (or applying `flexShrink: 1` to `titleText`) lets the ticker shrink rather than overflow.
 
 - `titleText` gets `flexShrink: 1` so it truncates when long
-- `row` itself doesn't need `flex: 1` since amount is in a separate sibling container
+- `row` gets `flex: 1` so it occupies available width inside `contentWrapper`, preventing overflow into the sibling amount badge
 
 ## Risks / Trade-offs
 
