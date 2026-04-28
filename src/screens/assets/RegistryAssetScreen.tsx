@@ -71,25 +71,30 @@ function RegistryAssetScreen() {
     },
   );
 
+  const { mutate: lookupMutate } = lookupMutation;
+  const { mutate: addMutate } = addMutation;
+
   useEffect(() => {
     if (assetId) {
-      lookupMutation.mutate(assetId);
+      lookupMutate(assetId);
     }
-  }, [assetId]);
+  }, [assetId, lookupMutate]);
 
   const handleRetry = useCallback(() => {
     setLookupError(null);
-    lookupMutation.mutate(assetId);
-  }, [assetId]);
+    lookupMutate(assetId);
+  }, [assetId, lookupMutate]);
+
+  const SUPPORTED_COIN_TYPES = [AssetType.Coin, AssetType.RGB20, AssetType.NIA];
 
   const handleAddToWallet = useCallback(() => {
     if (!asset) return;
-    if (asset.assetType && asset.assetType !== AssetType.Coin && asset.assetType !== AssetType.RGB20 && asset.assetType !== AssetType.NIA) {
-      Toast('Only Coin assets can be added in this version', false);
+    if (asset.assetType && !SUPPORTED_COIN_TYPES.includes(asset.assetType as AssetType)) {
+      Toast('This asset type is not currently supported', false);
       return;
     }
-    addMutation.mutate(asset);
-  }, [asset]);
+    addMutate(asset);
+  }, [asset, addMutate]);
 
   const renderContent = () => {
     if (lookupMutation.isLoading) {
