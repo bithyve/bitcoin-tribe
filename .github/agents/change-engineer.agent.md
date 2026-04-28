@@ -14,58 +14,98 @@ project's tech stack, domain map, critical rules, and per-artifact constraints
 that will be injected into every OpenSpec artifact you create. You must treat
 everything in the `context:` and `rules:` blocks as hard constraints.
 
+## Setup
+
+Before starting any step, ensure the OpenSpec CLI is available:
+
+```bash
+npm install -g @fission-ai/openspec@latest
+openspec --version
+```
+
+If `npm` is not available, fall back: read each skill file directly and follow
+its steps manually, treating every `openspec <command>` as pseudocode that
+describes the intent. Use `openspec/config.yaml` as the source of context and
+rules when the CLI cannot inject them automatically.
+
 ## Workflow
 
-Use the OpenSpec skills in `.github/skills/` to drive the full workflow. They
-contain the step-by-step CLI instructions; you do not need to infer them.
+Execute OpenSpec CLI commands directly at each step. If the CLI is unavailable,
+fall back to reading the corresponding skill file and following its instructions
+as a manual guide.
 
 ### Step 1 — Propose
-
-Follow the skill at `.github/skills/openspec-propose/SKILL.md`.
 
 Derive the change name from the issue:
 - Features: descriptive kebab-case, e.g. `add-fee-filter`
 - Bugs: `fix-` prefix, e.g. `fix-wallet-crash-on-send`
 
-The skill will call `openspec new change "<name>"`, then `openspec status --json`
-and `openspec instructions <artifact-id> --json` to generate all planning
-artifacts in dependency order. The `context:` and `rules:` from
-`openspec/config.yaml` are automatically injected into those instructions — you
-do not need to repeat them in the artifacts.
-
-After the skill completes, all `applyRequires` artifacts exist in
-`openspec/changes/<name>/`. Commit them:
-
+```bash
+openspec new change "<name>"
+openspec status --change "<name>" --json
 ```
+
+Parse the `applyRequires` and `artifacts` arrays from the status output. Then
+loop through artifacts in dependency order — for each artifact whose dependencies
+are satisfied:
+
+```bash
+openspec instructions <artifact-id> --change "<name>" --json
+```
+
+Use the returned `template` as the file structure, `outputPath` as the write
+destination, and treat `context` + `rules` as constraints (do not copy them into
+the file). Re-run `openspec status` after each artifact until every ID in
+`applyRequires` has `status: "done"`.
+
+Commit when all planning artifacts are ready:
+
+```bash
 git add openspec/changes/<name>/
 git commit -m "spec: add OpenSpec artifacts for <name>"
 ```
 
+> Fallback: `.github/skills/openspec-propose/SKILL.md`
+
 ### Step 2 — Apply
 
-Follow the skill at `.github/skills/openspec-apply-change/SKILL.md`.
+```bash
+openspec status --change "<name>" --json
+openspec instructions apply --change "<name>" --json
+```
 
-The skill will call `openspec instructions apply --change "<name>" --json` to
-get the ordered task list and context files, then work through every task,
-marking each `[x]` when done. Commit in logical groups:
+Read every file path listed under `contextFiles` in the apply instructions
+output. Work through each pending task in order, make the required code changes,
+mark the task complete (`- [ ]` → `- [x]`), and continue. Commit in logical
+groups:
 
 ```
 feat: <description>      # features
 fix: <description> closes #<N>   # bugs
 ```
 
+> Fallback: `.github/skills/openspec-apply-change/SKILL.md`
+
 ### Step 3 — Archive and open PR
 
-Once every task in `tasks.md` is marked `[x]` and the implementation is
-verified, follow the skill at `.github/skills/openspec-archive-change/SKILL.md`.
-It syncs delta specs to `openspec/specs/` and moves the change folder to
-`openspec/changes/archive/`.
+Once every task in `tasks.md` is `[x]`:
+
+```bash
+openspec archive <name> --yes
+git add openspec/
+git commit -m "chore: archive <name>"
+```
+
+`openspec archive` validates the change, merges any delta specs into
+`openspec/specs/`, and moves the change folder to
+`openspec/changes/archive/YYYY-MM-DD-<name>/`. Use `--skip-specs` only for
+infrastructure or tooling changes that have no spec impact.
 
 Then open the PR:
 - Title: `feat: <description>` or `fix: <description> (closes #<N>)`
-- Body: link to the issue + paste `openspec/changes/<name>/proposal.md` Intent
-  and Scope (or the Analysis section from `tasks.md` for bugs)
-- Every task in `tasks.md` must be `[x]` and the change must be archived
-  before requesting review
+- Body: link to the issue + paste the archived `proposal.md` Intent and Scope
+  (or the Analysis section from `tasks.md` for bugs)
+
+> Fallback: `.github/skills/openspec-archive-change/SKILL.md`
 
 ---
