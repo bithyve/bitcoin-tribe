@@ -1,0 +1,34 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "app-text-Satoshi"
+
+- assertVisible:
+    id: "btn-scan"
+
+- assertVisible:
+    id: "carousel_home"
+
+- assertVisible:
+    id: "btn_btc_wallet"
+
+- assertVisible:
+    id: "btn_other_assets"
+
+- assertVisible:
+    id: "app-text-Recent-Transactions"
+
+- assertVisible:
+    id: "app-text-View-All"
+
+- assertVisible:
+    id: "tab-HOMESCREEN"
+
+- assertVisible:
+    id: "tab-ASSETS"
+
+- assertVisible:
+    id: "tab-COMMUNITY"
+
+- assertVisible:
+    id: "tab-SETTINGS"

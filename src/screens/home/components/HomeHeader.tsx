@@ -92,6 +92,7 @@ function HomeHeader({
     <View>
       <View style={styles.container}>
         <AppTouchable
+          testID='btn-edit-profile'
           onPress={() => {
             if (isNodeInitInProgress) {
               Toast(node.connectingNodeToastMsg, true);
@@ -133,6 +134,7 @@ function HomeHeader({
         <View style={styles.iconWrapper}>
           {showRegistry && (
             <IconWrapper
+              testID='btn-registry'
               onPress={() => {
                 navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
                   url: config.REGISTRY_URL.replace('asset', ''),
@@ -144,6 +146,7 @@ function HomeHeader({
           )}
           {showScanner && (
             <IconWrapper
+              testID='btn-scan'
               onPress={() => {
                 if (isNodeInitInProgress) {
                   Toast(node.connectingNodeToastMsg, true);
@@ -159,7 +162,9 @@ function HomeHeader({
             </IconWrapper>
           )}
           {showSearch && (
-            <IconWrapper onPress={() => openLink('https://bitcointribe.app/')}>
+            <IconWrapper
+              testID='btn-info'
+              onPress={() => openLink('https://bitcointribe.app/')}>
               {isThemeDark ? <IconInfo /> : <IconInfoLight />}
             </IconWrapper>
           )}

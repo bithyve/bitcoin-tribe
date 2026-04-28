@@ -152,6 +152,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         return (
           <AppTouchable
             key={index}
+            testID={`tab-${label}`}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}

@@ -591,6 +591,7 @@ const DefaultCoin = ({
     <View style={styles.container}>
       <View style={styles.row}>
         <Carousel
+          testID='carousel_home'
           enabled={presetAssets && presetAssets.length > 1}
           ref={carouselRef}
           style={styles.list}
@@ -640,6 +641,7 @@ const DefaultCoin = ({
 
       <View style={styles.row}>
         <AppTouchable
+          testID='btn_btc_wallet'
           style={styles.balanceContainer}
           onPress={() => {
             navigation.navigate(NavigationRoutes.WALLETDETAILS, {
@@ -657,6 +659,7 @@ const DefaultCoin = ({
         <View style={{ marginHorizontal: wp(7) }} />
 
         <AppTouchable
+          testID='btn_other_assets'
           style={styles.balanceContainer}
           onPress={() => {
             navigation.navigate(NavigationRoutes.ASSETS);

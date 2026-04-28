@@ -1,0 +1,26 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "tab-HOMESCREEN"
+- assertVisible:
+    id: "app-text-Home"
+- tapOn:
+    id: "tab-HOMESCREEN"
+- assertVisible:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "tab-ASSETS"
+- assertVisible: "Assets"
+- assertVisible:
+    id: "tab-COMMUNITY"
+- tapOn:
+    id: "tab-COMMUNITY"
+- assertVisible: "Community"
+- assertVisible:
+    id: "tab-SETTINGS"
+- tapOn:
+    id: "tab-SETTINGS"
+- assertVisible: "Settings"
+- tapOn:
+    id: "tab-HOMESCREEN"
+- assertVisible: "Home"

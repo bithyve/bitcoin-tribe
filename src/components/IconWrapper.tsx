@@ -11,13 +11,15 @@ type IconWrapperProps = {
   onPress: () => void;
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 };
-const IconWrapper = ({ children, onPress, style = {} }: IconWrapperProps) => {
+const IconWrapper = ({ children, onPress, style = {}, testID }: IconWrapperProps) => {
   return (
     <TouchableOpacity
       activeOpacity={0.7}
       style={[styles.container, style]}
-      onPress={onPress}>
+      onPress={onPress}
+      testID={testID}>
       {children}
     </TouchableOpacity>
   );
