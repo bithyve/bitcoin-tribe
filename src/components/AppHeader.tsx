@@ -57,6 +57,7 @@ function AppHeader(props: AppHeaderProps) {
           <View style={styles.leftIconWrapper}>
             <AppTouchable
               disabled={disableBackCTA}
+              testID='btn_back'
               onPress={onBackNavigation ? onBackNavigation : navigation.goBack}>
               {backIcon ? backIcon : isThemeDark ? <GoBack /> : <GoBackLight />}
             </AppTouchable>

@@ -18,6 +18,7 @@ type SelectOptionProps = {
   rightIcon?: React.ReactNode;
   disabled?: boolean;
   borderColor?: string;
+  testID?: string;
 };
 const SelectWalletTypeOption = (props: SelectOptionProps) => {
   const theme: AppTheme = useTheme();
@@ -31,10 +32,11 @@ const SelectWalletTypeOption = (props: SelectOptionProps) => {
     disabled = false,
     rightIcon,
     borderColor = theme.colors.borderColor,
+    testID,
   } = props;
   const styles = getStyles(theme, backColor, borderColor);
   return (
-    <AppTouchable onPress={onPress} disabled={disabled}>
+    <AppTouchable testID={testID} onPress={onPress} disabled={disabled}>
       <GradientView
         style={[styles.container, style]}
         colors={[

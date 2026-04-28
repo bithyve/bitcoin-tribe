@@ -62,6 +62,7 @@ function WalletSetupOption({ navigation }) {
         {onBoarding.walletSetupTitle}
       </AppText>
       <OptionCard
+        testID="btn-create-wallet"
         icon={isThemeDark ? <IconWallet /> : <IconWalletLight />}
         title={onBoarding.createNew}
         subTitle={onBoarding.createNewSubTitle}
@@ -70,6 +71,7 @@ function WalletSetupOption({ navigation }) {
         style={styles.optionCardStyle}
       />
       <OptionCard
+        testID="btn-recover-wallet"
         icon={isThemeDark ? <IconRecovery /> : <IconRecoveryLight />}
         title={onBoarding.recoveryPhrase}
         subTitle={onBoarding.recoveryPhraseSubTitle}

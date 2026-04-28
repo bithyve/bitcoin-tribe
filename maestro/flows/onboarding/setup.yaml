@@ -1,0 +1,92 @@
+appId: com.bithyve.tribe.dev
+---
+- launchApp:
+    clearState: true
+
+- assertVisible:
+    id: "app-text-Welcome"
+
+- assertVisible:
+    id: "btn-create-wallet"
+
+- assertVisible:
+    id: "btn-recover-wallet"
+
+- tapOn:
+    id: "btn-create-wallet"
+
+- assertVisible: "Select Bitcoin Network"
+
+- assertVisible: "Select the network you want to use"
+
+- assertVisible: "Testnet4"
+
+- assertVisible: "Regtest"
+
+- assertVisible: "Cancel"
+
+- tapOn: "Regtest"
+
+- assertVisible:
+    id: "app-text-Create-Wallet"
+- assertVisible:
+    id: "btn_back"
+
+- assertVisible:
+    id: "btn-onchain"
+
+- assertVisible: "A secure wallet for all your Bitcoin transactions. Learn More"
+
+- tapOn:
+    id: "btn-onchain"
+
+- assertVisible:
+    id: "app-text-Wallet-Profile"
+
+- assertVisible:
+    id: "app-text-Enter-your-wallet-name-and-picture-"
+- tapOn:
+    id: "text-input-flat"
+
+- inputText: Satoshi
+
+- assertVisible: "By proceeding you accept the Terms and Conditions"
+
+- tapOn:
+    id: "primary_cta_Save"
+
+- assertVisible:
+    id: "app-text-Were-Setting-Up-Your-Wallet"
+
+- assertVisible:
+    id: "app-text-Sit-back-and-relax-as-we-get-everything-ready-for-you-Your-app-will-be-ready-in-just-a-moment"
+
+- extendedWaitUntil:
+    visible:
+        id: "app-text-Bitcoin-backed-assets"
+    timeout: 40000
+
+- assertVisible:
+    id: "app-text-RGB-protocol-allows-anyone-to-issue-send-or-receive-assets-on-the-most-secure-blockchain-using-sats-from-your-wallet-as-fuel-for-these-assets"
+
+- assertVisible:
+    id: "primary_cta_Next"
+
+- tapOn:
+    id: "primary_cta_Next"
+
+- tapOn:
+    id: "app-text-Secure-your-assets-with-a-backup"
+
+- assertVisible:
+    id: "app-text-Backing-up-your-wallet-ensures-that-your-assets-are-safe-even-if-you-lose-your-device-Take-a-moment-to-create-a-backup-now"
+
+- assertVisible:
+    id: "primary_cta_Next"
+
+- tapOn:
+    id: "primary_cta_Next"
+
+
+
+

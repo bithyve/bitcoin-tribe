@@ -154,6 +154,7 @@ function SelectWallet() {
             SetSupportedMode(false);
             navigation.navigate(NavigationRoutes.PROFILESETUP);
           }}
+          testID="btn-onchain"
         />
         <LearnMoreTextView
           title={onBoarding.onchainLearMoreInfo}

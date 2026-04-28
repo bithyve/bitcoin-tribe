@@ -23,6 +23,7 @@ type OptionCardProps = {
   showRightArrow?: React.ReactNode;
   showIcon?: boolean;
   rightIcon?: React.ReactNode;
+  testID?: string;
 };
 
 function OptionCard(props: OptionCardProps) {
@@ -34,7 +35,8 @@ function OptionCard(props: OptionCardProps) {
     onPress,
     showRightArrow = false,
     showIcon = true,
-    rightIcon
+    rightIcon,
+    testID,
   } = props;
   const theme: AppTheme = useTheme();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -43,7 +45,7 @@ function OptionCard(props: OptionCardProps) {
     [theme, showRightArrow],
   );
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable testID={testID} onPress={onPress}>
       <GradientView
         style={[styles.container, style]}
         colors={[
