@@ -15,13 +15,13 @@ but the `handleDeepLink` handler in `src/screens/home/Home.tsx` only handles the
 
 ## Tasks
 
-- [ ] 1.1 Add `lookupAssetFromRegistry` static helper to `ApiHandler` in
+- [x] 1.1 Add `lookupAssetFromRegistry` static helper to `ApiHandler` in
       `src/services/handler/apiHandler.ts`. The method accepts an `assetId`
       string, calls `Relay.lookupAsset(assetId)`, and returns
       `{ asset: Asset | null; status: boolean }`. Catches errors and returns
       `{ asset: null, status: false }` on failure.
 
-- [ ] 1.2 Extend `handleDeepLink` in `src/screens/home/Home.tsx`:
+- [x] 1.2 Extend `handleDeepLink` in `src/screens/home/Home.tsx`:
       - Import `DeepLinkFeature` from `src/utils/DeepLinking` (already imported as `Deeplinking`).
       - Make `handleDeepLink` async.
       - After the existing `community` branch, add a branch for `DeepLinkFeature.REGISTRY`:
@@ -31,12 +31,12 @@ but the `handleDeepLink` handler in `src/screens/home/Home.tsx` only handles the
         On success, navigate to `NavigationRoutes.ENTERINVOICEDETAILS` with
         `invoiceAssetId` and `chosenAsset`.
 
-- [ ] 1.3 Add localisation string `assetNotFound` to the `assets` translation
+- [x] 1.3 Add localisation string `assetNotFound` to the `assets` translation
       namespace if it does not already exist, so the Toast in task 1.2 can use a
       proper string. Check `src/contexts/LocalizationContext.tsx` and the
       relevant strings file.
 
-- [ ] 2.1 Create `src/__tests__/addAssetsFromRegistry.test.ts` with the
+- [x] 2.1 Create `src/__tests__/addAssetsFromRegistry.test.ts` with the
       following test cases:
       - `Deeplinking.processDeepLink` correctly parses
         `tribe://registry?assetId=abc123` → `{ isValid: true, feature: 'registry', params: { assetId: 'abc123' } }`

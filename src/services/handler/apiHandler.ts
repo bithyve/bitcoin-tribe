@@ -3349,6 +3349,18 @@ export class ApiHandler {
     }
   };
 
+  static lookupAssetFromRegistry = async (
+    assetId: string,
+  ): Promise<{ asset: Asset | null; status: boolean }> => {
+    try {
+      const response = await Relay.lookupAsset(assetId);
+      return { asset: response.asset ?? null, status: response.status };
+    } catch (error: any) {
+      console.error('Registry lookup error:', error.message || error);
+      return { asset: null, status: false };
+    }
+  };
+
   static fetchPresetAssets = async () => {
     try {
       const { status, results } = (await Relay.getPresetAssets()) || {};
