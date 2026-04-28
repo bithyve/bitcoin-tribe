@@ -34,7 +34,7 @@ Users browsing the Bitcoin Tribe asset registry (via a web browser or external s
 ## Non-goals
 
 - Modifying the registry enrollment flow (AssetRegistryScreen) — that is a separate publish-side concern.
-- Supporting deep links for Collectible/UDA/IFA types in this iteration; only `Coin` assets are handled in the MVP.
+- Supporting deep links for Collectible/UDA/IFA types in this iteration; only `Coin`, `RGB20`, and `NIA` asset types are supported in the MVP.
 - Offline / no-network handling beyond surfacing a user-visible error toast.
 - Changes to how assets are _issued_ or _transferred_.
 

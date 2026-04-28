@@ -22,7 +22,7 @@ import Relay from 'src/services/relay';
 import { ApiHandler } from 'src/services/handler/apiHandler';
 
 /** Asset types that can be added to the wallet via the registry deep link. */
-const SUPPORTED_COIN_TYPES: string[] = [AssetType.Coin, AssetType.RGB20, AssetType.NIA];
+const SUPPORTED_ASSET_TYPES: string[] = [AssetType.Coin, AssetType.RGB20, AssetType.NIA];
 
 function RegistryAssetScreen() {
   const navigation = useNavigation();
@@ -90,7 +90,7 @@ function RegistryAssetScreen() {
 
   const handleAddToWallet = useCallback(() => {
     if (!asset) return;
-    if (asset.assetType && !SUPPORTED_COIN_TYPES.includes(asset.assetType as AssetType)) {
+    if (asset.assetType && !SUPPORTED_ASSET_TYPES.includes(asset.assetType)) {
       Toast('Only Coin, RGB20, and NIA asset types are currently supported', true);
       return;
     }
