@@ -84,6 +84,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       fontWeight: '600',
       color: theme.colors.headingColor,
       marginRight: hp(2),
+      flexShrink: 1,
     },
     nameText: {
       fontWeight: '300',
@@ -119,6 +120,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     row: {
       flexDirection: 'row',
       alignItems: 'center',
+      flex: 1,
     },
   });
 export default CoinAssetCard;

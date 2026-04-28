@@ -123,7 +123,13 @@ const AssetCard = (props: AssetCardProps) => {
                 >
                   {asset.name}
                 </AppText>
-                {isVerified && <IconVerified style={{ marginRight: 5 }} width={20} height={20} />}
+                {isVerified && (
+                  <IconVerified
+                    style={{ marginLeft: 5, flexShrink: 0 }}
+                    width={20}
+                    height={20}
+                  />
+                )}
               </View>
               {asset.assetSchema !== AssetSchema.UDA && (
                 <AppText
@@ -179,13 +185,16 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      flex: 1,
+      flexShrink: 1,
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flex: 1
+      flexShrink: 0,
+      paddingLeft: 4,
     },
     assetImageWrapper: {
       width: '100%',
@@ -196,11 +205,13 @@ const getStyles = (theme: AppTheme) =>
     },
     row: {
       flexDirection: 'row',
-      flex: 1,
+      alignItems: 'center',
     },
     nameContainer: {
-      flex: 2,
+      flex: 1,
       flexDirection: 'row',
+      alignItems: 'center',
+      overflow: 'hidden',
     },
     textDetails: {
       fontWeight: '300',
