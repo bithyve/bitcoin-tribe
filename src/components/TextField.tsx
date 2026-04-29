@@ -50,6 +50,7 @@ type TextFieldProps = {
   errorInfo?: boolean;
   onPressErrorInfo?: () => void;
   errInfoIconRef?: React.RefObject<View>;
+  testID?: string;
 };
 
 const TextField = React.forwardRef((props: TextFieldProps, ref) => {
@@ -84,6 +85,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
     errorInfo,
     onPressErrorInfo,
     errInfoIconRef,
+    testID,
   } = props;
   const [isFocused, setIsFocused] = useState(false);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
@@ -109,6 +111,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
           // activeOutlineColor={theme.colors.accent1}
           // outlineStyle={styles.outlineStyle}
           ref={ref}
+          testID={testID}
           blurOnSubmit={blurOnSubmit}
           disabled={disabled}
           cursorColor={theme.colors.accent1}
@@ -149,6 +152,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
 
         {rightText && (
           <AppTouchable
+            testID={testID ? `${testID}_${rightText}` : undefined}
             style={[styles.rightTextWrapper, rightCTAStyle]}
             onPress={onRightTextPress}>
             <AppText variant="smallCTA" style={styles.rightTextStyle}>
@@ -158,6 +162,7 @@ const TextField = React.forwardRef((props: TextFieldProps, ref) => {
         )}
         {rightIcon && (
           <AppTouchable
+            testID={testID ? `${testID}_rightIcon` : undefined}
             style={[styles.rightTextWrapper, rightCTAStyle]}
             onPress={onRightTextPress}>
             {rightIcon}

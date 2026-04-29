@@ -66,6 +66,7 @@ function SendBTCScreen({ route, navigation }) {
         <QRScanner onCodeScanned={onCodeScanned} isScanning={isScanning} />
       </View>
       <OptionCard
+        testID='option_enter_manually'
         title={sendScreen.optionCardTitle}
         onPress={() => {
           navigation.replace(NavigationRoutes.SENDTO, { wallet, address: '' });

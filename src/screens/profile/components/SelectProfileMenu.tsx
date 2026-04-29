@@ -29,7 +29,7 @@ const SelectProfileMenu = (props: SelectMenuProps) => {
   const { settings } = translations;
   const styles = getStyles(theme, backColor, titleColor);
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} testID={`btn_select_profile_menu_${title.replace(/\s+/g, '_').toLowerCase()}`}>
       <GradientView
         style={[styles.container, style]}
         colors={[

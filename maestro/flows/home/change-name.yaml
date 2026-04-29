@@ -1,0 +1,32 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "btn-edit-profile"
+- tapOn:
+    id: "btn-edit-profile"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Wallet Profile"
+
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Enter your wallet name and add picture "
+
+- assertVisible:
+    id: "text-input-flat"  
+- assertVisible:
+    id: "btn_edit_wallet_pic"
+- assertVisible: "Satoshi"
+- assertVisible:
+    id: "primary_cta_Save"
+- tapOn:
+    id: "text-input-flat"
+- inputText: " Wallet"
+- tapOn:
+    id: "text_header_subtitle"
+- tapOn: "done"
+- tapOn:
+    id: "primary_cta_Save"
+

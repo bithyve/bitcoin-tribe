@@ -26,7 +26,7 @@ function EditProfilePic(props: addPictureProps) {
 
   return (
     <View style={styles.wrapper}>
-      <AppTouchable onPress={onPress}>
+      <AppTouchable onPress={onPress} testID='btn_edit_wallet_pic'>
         {!imageSource ? (
           <View style={styles.container}>
             <View style={styles.iconImageWrapper}>

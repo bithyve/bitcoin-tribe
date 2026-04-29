@@ -390,6 +390,7 @@ function SendToContainer({
             {sendScreen.recipientAddress}
           </AppText>
           <TextField
+            testID='input_recipient_address'
             value={recipientAddress}
             onChangeText={handleInvoiceInputChange}
             placeholder={sendScreen.recipientAddress}
@@ -431,6 +432,7 @@ function SendToContainer({
               : sendScreen.enterFiat}
           </AppText>
           <TextField
+            testID='input_amount'
             value={formatNumber(amount)}
             onChangeText={handleAmountInputChange}
             placeholder={sendScreen.enterAmount}
@@ -444,7 +446,7 @@ function SendToContainer({
           />
         </View>
         <View style={styles.availableBalanceWrapper}>
-          <AppText variant="body2" style={styles.availableBalanceLabel}>
+          <AppText testID='text_available_balance' variant="body2" style={styles.availableBalanceLabel}>
             {sendScreen.availableBalance}
           </AppText>
           <View style={styles.balanceWrapper}>
@@ -457,7 +459,7 @@ function SendToContainer({
                 )}
               </View>
             )}
-            <AppText variant="body2" style={styles.availableBalanceText}>
+            <AppText testID='text_available_balance_value' variant="body2" style={styles.availableBalanceText}>
               {getBalance(balances)}
             </AppText>
             {initialCurrencyMode === CurrencyKind.SATS && (
@@ -467,10 +469,10 @@ function SendToContainer({
             )}
           </View>
         </View>
-        <AppText variant="body2" style={styles.recipientAddressLabel}>
+        <AppText testID='text_fee' variant="body2" style={styles.recipientAddressLabel}>
           {sendScreen.fee}
         </AppText>
-        <View style={styles.feeContainer}>
+        <View style={styles.feeContainer} testID='view_fee_priority'>
           <FeePriorityButton
             title={sendScreen.low}
             priority={TxPriority.LOW}
@@ -522,6 +524,7 @@ function SendToContainer({
               {sendScreen.customFee}
             </AppText>
             <TextField
+              testID="input_custom_fee"
               value={customFee}
               onChangeText={handleCustomFeeInput}
               placeholder={sendScreen.enterCustomFee}

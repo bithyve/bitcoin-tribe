@@ -41,6 +41,7 @@ type WalletTransactionsProps = {
   transaction: Transaction;
   tranStatus?: string;
   networkType?: string;
+  testID?: string;
 };
 function WalletTransactions(props: WalletTransactionsProps) {
   const navigation = useNavigation();
@@ -53,6 +54,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     backColor,
     disabled,
     networkType,
+    testID,
   } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme, backColor), [theme]);
@@ -124,6 +126,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
     <AppTouchable
       disabled={disabled}
       style={styles.containerWrapper}
+      testID={testID}
       onPress={() =>
         navigation.navigate(NavigationRoutes.TRANSACTIONDETAILS, {txid: props.transaction.txid})
       }>
@@ -181,6 +184,7 @@ function WalletTransactions(props: WalletTransactionsProps) {
               )}
             <AppText
               variant="body1"
+              testID={`text_transaction_amount-${testID}`}
               style={[
                 transType === TransactionType.SENT
                   ? styles.amountSend

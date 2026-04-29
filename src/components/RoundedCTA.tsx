@@ -42,6 +42,7 @@ function RoundedCTA(props: RoundedCTAProps) {
     <GradientView style={styles.ctaContainerStyle} colors={colors}>
       <TapGestureHandler onActivated={onPress}>
       <Button
+        testID={`btn_${title.toLocaleLowerCase()}`}
         icon={() => icon}
         // mode="outlined"
         uppercase={false}

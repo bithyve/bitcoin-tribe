@@ -243,7 +243,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
   });
 
-const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
+const DecimalText = ({ value, unit, testIDValue, testIdUnit }: { value: number; unit?: string; testIDValue?: string; testIdUnit?: string }) => {
   const integerPart = value.toString().split('.')[0];
   const fractionalPart = value.toString().split('.')[1];
   const theme: AppTheme = useTheme();
@@ -253,6 +253,7 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
   return (
     <View style={styles.row}>
       <AppText
+        testID={testIDValue}
         variant="heading1"
         style={styles.totalBalance}
         numberOfLines={1}
@@ -270,6 +271,7 @@ const DecimalText = ({ value, unit }: { value: number; unit?: string }) => {
       )}
       {unit && (
         <AppText
+          testID={testIdUnit}
           variant="heading2"
           style={styles.textUnit}
           numberOfLines={1}
@@ -286,7 +288,7 @@ const RgbBorder = ({ styles }) => (
     height={CARD_HEIGHT / 4}
     radius={hp(20)}
     strokeWidth={2}
-    style={styles.rgbBorderCtr}/>
+    style={styles.rgbBorderCtr} />
 );
 
 const CollectionItem = ({
@@ -315,9 +317,8 @@ const CollectionItem = ({
         Number(collectible?.balance.spendable) / 10 ** collectible?.precision,
       )}`;
     } else if (isCollection) {
-      return `${assets.minted}: ${asset.items.length}/${
-        asset.itemsCount === 0 ? '∞' : asset.itemsCount
-      }`;
+      return `${assets.minted}: ${asset.items.length}/${asset.itemsCount === 0 ? '∞' : asset.itemsCount
+        }`;
     }
     return '';
   }, [isCollectible, asset.details, asset.description]);
@@ -449,6 +450,8 @@ const CoinItem = ({
                     Number(coin?.balance?.spendable) / 10 ** coin?.precision
                   }
                   unit={formatTUsdt(asset.ticker)}
+                  testIDValue='text_pinned_asset_balance'
+                  testIdUnit='text_pinned_asset_unit'
                 />
               </View>
               <AssetIcon
@@ -564,16 +567,16 @@ const DefaultCoin = ({
 
   const currentAsset = useMemo(() => {
     const asset = presetAssets[currentIndex];
-    if(asset?.metaData?.assetSchema === AssetSchema.Coin) {
+    if (asset?.metaData?.assetSchema === AssetSchema.Coin) {
       setCurrentAssetSchema(RealmSchema.Coin);
       return coins.find(coin => coin.assetId === asset.assetId);
-    } else if(asset?.metaData?.assetSchema === AssetSchema.Collectible) {
+    } else if (asset?.metaData?.assetSchema === AssetSchema.Collectible) {
       setCurrentAssetSchema(RealmSchema.Collectible);
       return collectibles.find(collectible => collectible.assetId === asset.assetId);
-    } else if(asset?.collectionSchema) {
+    } else if (asset?.collectionSchema) {
       setCurrentAssetSchema(RealmSchema.Collection);
       return collections.find(collection => collection.assetId === asset.assetId);
-    } else if(asset?.metaData?.assetSchema === AssetSchema.UDA) {
+    } else if (asset?.metaData?.assetSchema === AssetSchema.UDA) {
       setCurrentAssetSchema(RealmSchema.UniqueDigitalAsset);
       return udas.find(uda => uda.assetId === asset.assetId);
     }
@@ -654,7 +657,7 @@ const DefaultCoin = ({
           <AppText style={styles.totalBalanceLabel} variant="body2">
             {assets.bitcoinBalance}
           </AppText>
-          <DecimalText value={Number(btcBalance)} unit={'sats'} />
+          <DecimalText value={Number(btcBalance)} unit={'sats'} testIDValue='text_btc_wallet_balance' testIdUnit='text_btc_wallet_unit' />
         </AppTouchable>
         <View style={{ marginHorizontal: wp(7) }} />
 

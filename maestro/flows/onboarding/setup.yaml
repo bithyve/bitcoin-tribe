@@ -3,11 +3,10 @@ appId: com.bithyve.tribe.dev
 - launchApp:
     clearState: true
 
-- assertVisible:
-    id: "app-text-Welcome"
-
-- assertVisible:
-    id: "btn-create-wallet"
+- extendedWaitUntil:
+    visible:
+        id: "app-text-Welcome"
+    timeout: 100000
 
 - assertVisible:
     id: "btn-recover-wallet"
@@ -28,7 +27,9 @@ appId: com.bithyve.tribe.dev
 - tapOn: "Regtest"
 
 - assertVisible:
-    id: "app-text-Create-Wallet"
+    id: "text_header_title"
+    text: "Create Wallet"
+
 - assertVisible:
     id: "btn_back"
 
@@ -41,10 +42,13 @@ appId: com.bithyve.tribe.dev
     id: "btn-onchain"
 
 - assertVisible:
-    id: "app-text-Wallet-Profile"
+    id: "text_header_title"
+    text: "Wallet Profile"
+
 
 - assertVisible:
-    id: "app-text-Enter-your-wallet-name-and-picture-"
+    id: "text_header_subtitle"
+
 - tapOn:
     id: "text-input-flat"
 
@@ -64,7 +68,7 @@ appId: com.bithyve.tribe.dev
 - extendedWaitUntil:
     visible:
         id: "app-text-Bitcoin-backed-assets"
-    timeout: 40000
+    timeout: 60000
 
 - assertVisible:
     id: "app-text-RGB-protocol-allows-anyone-to-issue-send-or-receive-assets-on-the-most-secure-blockchain-using-sats-from-your-wallet-as-fuel-for-these-assets"

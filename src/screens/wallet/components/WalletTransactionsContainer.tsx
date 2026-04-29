@@ -85,8 +85,9 @@ function WalletTransactionsContainer({
           )
         }
         ListFooterComponent={FooterComponent}
-        renderItem={({ item }) => (
+        renderItem={({ item, index}) => (
           <WalletTransactions
+            testID={`transaction-item-${index + 1}`}
             transId={item.transactionKind || item.txid}
             transKind={item.transactionKind}
             tranStatus={item.status}

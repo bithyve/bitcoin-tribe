@@ -5,7 +5,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@realm/react';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
-
 import { Keys } from 'src/storage';
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
@@ -136,6 +135,7 @@ function ReceiveScreen({ route }) {
           </View>
           <ReceiveQrClipBoard qrCodeValue={qrValue} />
           <OptionCard
+            testID='btn_add_amt'
             title={receciveScreen.addAmountTitle}
             // subTitle={receciveScreen.addAmountSubTitle}
             onPress={() => setVisible(true)}

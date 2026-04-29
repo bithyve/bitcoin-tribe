@@ -12,6 +12,12 @@ appId: com.bithyve.tribe.dev
 - assertVisible:
     id: "btn_btc_wallet"
 
+- assertVisible: "Bitcoin Balance"
+
+- assertVisible:
+    id: "text_btc_wallet_balance"
+    text: "0"
+
 - assertVisible:
     id: "btn_other_assets"
 

@@ -1,0 +1,104 @@
+appId: com.bithyve.tribe.dev
+---
+
+- assertVisible:
+    id: "btn_btc_wallet"
+- tapOn:
+    id: "btn_btc_wallet"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+- assertVisible:
+    id: "app-text-Total-Balance"
+- assertVisible:
+    id: "btn_send"
+- assertVisible:
+    id: "btn_request"
+- assertVisible:
+    id: "btn_receive"
+- assertVisible:
+    id: "app-text-Recent-Transactions"
+- assertVisible:
+    id: "app-text-View-All"
+- assertVisible:
+    id: "app-text-Reserved-for-asset-transactions"
+- tapOn:
+    id: "btn_receive"
+- assertVisible:
+    id: "app-text-Backup-Phrase"
+- assertVisible:
+    id: "app-text-Carefully-write-down-the-12-word-Backup-Phrase-in-a-private-place-and-ensure-its-security"
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "primary_cta_Backup"
+- tapOn:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Receive"
+- assertVisible:
+    id: "qr_code"
+- assertVisible:
+    id: "text_qr_title"
+    text: "Bitcoin Address"
+- assertVisible:
+    id: "text_qr_code_value"
+- assertVisible:
+    id: "text_qr_code_value"
+    text: "^bcrt.*"
+- assertVisible:
+    id: "text_tap_to_copy"
+- tapOn:
+    id: "btn_copy_qr_code_value"
+- assertVisible:
+    id: "btn_add_amt"
+- tapOn:
+    id: "btn_add_amt"
+- assertVisible:
+    id: "app-text-Add-Amount"
+- assertVisible:
+    id: "app-text-Enter-Amount-you-want-to-Receive"
+- assertVisible:
+    id: "text-input-flat"
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "primary_cta_Save"
+- tapOn:
+    id: "key_1"
+- tapOn:
+    id: "key_2"
+- tapOn:
+    id: "key_5"
+- tapOn:
+    id: "key_9"
+- tapOn:
+    id: "key_0"
+- tapOn:
+    id: "key_7"
+- tapOn:
+    id: "key_9"
+- tapOn:
+    id: "btn_clear"
+- tapOn:
+    id: "primary_cta_Save"
+- assertVisible:
+    id: "text_qr_code_value"
+    text: "^bitcoin:bcrt.*\\?amount=0\\.00125907$"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_request"
+- assertVisible:
+    id: "transaction-item-1"
+- assertVisible:
+    id: "text_transaction_amount-transaction-item-1"
+- tapOn:
+    id: "btn_back"
+- assertVisible:
+    id: "text_btc_wallet_balance"
+    text: "^(?!0$).+"

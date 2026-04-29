@@ -37,6 +37,7 @@ const ReceiveQrClipBoard = ({
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
             <AppText
+              testID='text_qr_code_value'
               numberOfLines={2}
               ellipsizeMode="middle"
               style={[styles.menuCardTitle, CommonStyles.body1]}>
@@ -46,9 +47,10 @@ const ReceiveQrClipBoard = ({
         </View>
       </CardBox>
       <AppTouchable
+        testID='btn_copy_qr_code_value'
         onPress={() => handleCopyText(qrCodeValue)}
         style={styles.tapTextWrapper}>
-        <AppText variant="smallCTA" style={styles.tapToCopyText}>
+        <AppText testID='text_tap_to_copy' variant="smallCTA" style={styles.tapToCopyText}>
           {common.tapToCopy}
         </AppText>
       </AppTouchable>

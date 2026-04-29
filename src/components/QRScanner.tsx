@@ -14,7 +14,6 @@ import {
 } from 'react-native-vision-camera';
 import { useTheme } from 'react-native-paper';
 import RNQRGenerator from 'rn-qr-generator';
-
 import { wp } from 'src/constants/responsive';
 import QRBorderCard from './QRBorderCard';
 import { AppTheme } from 'src/theme';

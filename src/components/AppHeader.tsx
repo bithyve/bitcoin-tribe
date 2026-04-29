@@ -65,7 +65,7 @@ function AppHeader(props: AppHeaderProps) {
         )}
         <View style={styles.middleTitleWrapper}>
           {title && (
-            <AppText variant="heading3" style={styles.headerTitle}>
+            <AppText testID='text_header_title' variant="heading3" style={styles.headerTitle}>
               {title}
             </AppText>
           )}
@@ -73,13 +73,14 @@ function AppHeader(props: AppHeaderProps) {
         <View style={styles.rightIconWrapper}>
           {rightIcon && (
             <AppTouchable
+              testID='btn_right_icon'
               onPress={onSettingsPress}
               style={styles.rightIconWrapper}>
               {rightIcon}
             </AppTouchable>
           )}
           {rightText && (
-            <AppTouchable onPress={onRightTextPress}>
+            <AppTouchable onPress={onRightTextPress} testID='btn_right_text'>
               <AppText variant="heading2" style={styles.rightTextStyle}>
                 {rightText}
               </AppText>
@@ -90,7 +91,7 @@ function AppHeader(props: AppHeaderProps) {
       {subTitle ? (
         <View style={styles.detailsWrapper}>
           <View style={styles.contentWrapper}>
-            <AppText variant="heading3" style={styles.headerSubTitle}>
+            <AppText testID='text_header_subtitle' variant="heading3" style={styles.headerSubTitle}>
               {subTitle}
             </AppText>
           </View>

@@ -1,0 +1,100 @@
+appId: com.bithyve.tribe.dev
+---
+
+- assertVisible:
+    id: "btn_btc_wallet"
+- tapOn:
+    id: "btn_btc_wallet"
+- assertVisible:
+    id: "btn_send"
+- tapOn:
+    id: "btn_send"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Send"
+- assertVisible:
+    id: "app-text-Camera-Access-Needed"
+- assertVisible:
+    id: "primary_cta_Open Settings"
+- assertVisible:
+    id: "option_enter_manually"
+- tapOn:
+    id: "option_enter_manually"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Send"
+- assertVisible:
+    id: "input_recipient_address"
+- assertVisible:
+    id: "input_recipient_address_Paste"
+- assertVisible:
+    id: "input_amount"
+- assertVisible:
+    id: "input_amount_MAX"
+- tapOn:
+    id: "text_available_balance"
+- assertVisible:
+    id: "text_available_balance_value"
+- assertVisible:
+    id: "text_fee"
+- assertVisible:
+    id: "view_fee_priority"
+- tapOn:
+    id: "app-text-Paste"
+- assertVisible:
+    id: "input_recipient_address_rightIcon"
+- tapOn:
+    id: "input_recipient_address_rightIcon"
+- assertVisible:
+    id: "app-text-Paste"
+- tapOn:
+    id: "app-text-Paste"
+- tapOn:
+    id: "input_amount"
+- inputText: "1000"
+- tapOn:
+    id: "app-text-Recipients-address"
+- assertVisible:
+    id: "primary_cta_Next"
+- tapOn:
+    id: "primary_cta_Next"
+- assertVisible:
+    id: "app-text-Send-Confirmation"
+- assertVisible:
+    id: "app-text-Review-and-Confirm-Your-Transaction"
+- assertVisible:
+    id: "view_swipe_to_action"
+- assertVisible:
+    id: "text_swipe_to_broadcast"
+- assertVisible:
+    id: "btn_thumb"
+- swipe:
+    start: 14%, 92%
+    end: 86%, 92%
+    duration: 1000
+- assertVisible:
+    id: "app-text-Successful"
+- assertVisible:
+    id: "primary_cta_Done"
+- tapOn:
+    id: "primary_cta_Done"
+- tapOn:
+    text: "Not Now"
+    optional: true
+- assertVisible:
+    id: "transaction-item-2"
+- tapOn:
+    id: "app-text-View-All"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Transaction Details"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"

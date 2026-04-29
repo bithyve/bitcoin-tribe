@@ -1,0 +1,26 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "btn-edit-profile"
+- tapOn:
+    id: "btn-edit-profile"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "app-text-Wallet-Profile"
+- assertVisible:
+    id: "app-text-Enter-your-wallet-name-and-add-picture-"
+- assertVisible:
+    id: "text-input-flat"
+- assertVisible:
+    id: "primary_cta_Save"
+- assertVisible:
+    id: "btn_edit_wallet_pic"
+- tapOn:
+    id: "btn_edit_wallet_pic"
+- assertVisible:
+    id: "app-text-Edit-profile-picture"
+- assertVisible:
+    id: "btn_select_profile_menu_choose_photo"
+- assertVisible:
+    id: "btn_select_profile_menu_delete_photo"

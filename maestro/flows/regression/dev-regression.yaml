@@ -1,0 +1,8 @@
+appId: com.bithyve.tribe.dev
+---
+- runFlow: "../onboarding/setup.yaml"
+- runFlow: "../home/home.yaml"
+- runFlow: "../home/tabs.yaml"
+- runFlow: "../home/change-name.yaml"
+- runFlow: "../wallet/onchain-wallet.yaml"
+- runFlow: "../wallet/send.yaml"

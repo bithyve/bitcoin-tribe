@@ -25,10 +25,10 @@ const ShowQRCode = (props: ShowQRCodeProps) => {
     <>
       <View style={styles.qrViewWrapper}>
         <View style={styles.qrImageWrapper}>
-          <QRCode value={value} size={qrSize} />
+          <QRCode testID='qr_code' value={value} size={qrSize} />
         </View>
       </View>
-      <AppText variant="heading3" style={styles.qrFooterText}>
+      <AppText testID='text_qr_title' variant="heading3" style={styles.qrFooterText}>
         {title}
       </AppText>
     </>

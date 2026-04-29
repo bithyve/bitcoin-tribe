@@ -124,7 +124,7 @@ const SwipeToAction: React.FC<Props> = ({
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <GestureHandlerRootView testID='view_swipe_to_action' style={styles.container}>
       {!swiped ? (
         <Animated.View style={[styles.track, disabled && styles.disabledTrack]}>
           <View style={styles.dynamicBackgroundContainer}>
@@ -153,6 +153,7 @@ const SwipeToAction: React.FC<Props> = ({
             />
           </View>
           <Animated.Text
+            testID={`text_${title.toLowerCase().replace(/\s/g, '_')}`}
             style={[
               styles.trackText,
               disabled && styles.disabledText,
@@ -182,6 +183,7 @@ const SwipeToAction: React.FC<Props> = ({
             {title}
           </Animated.Text>
           <PanGestureHandler
+            testID='btn_thumb'
             enabled={!disabled}
             onGestureEvent={onGestureEvent}
             onHandlerStateChange={onHandlerStateChange}>
