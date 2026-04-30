@@ -1,11 +1,10 @@
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import { useMutation } from 'react-query';
 import { useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
 import { useQuery as realmUseQuery } from '@realm/react';
-
 import SelectOption from 'src/components/SelectOption';
 import { loginWithTwitter } from 'src/services/twitter';
 import Relay from 'src/services/relay';

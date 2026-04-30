@@ -55,7 +55,7 @@ const SelectOption = (props: SelectOptionProps) => {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, backColor, backup);
   return (
-    <AppTouchable onPress={onPress} disabled={disabled}>
+    <AppTouchable onPress={onPress} disabled={disabled} testID={testID}>
       <GradientView
         style={[styles.container, style]}
         colors={[

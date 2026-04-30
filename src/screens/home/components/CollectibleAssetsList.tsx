@@ -87,7 +87,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
         }
         renderItem={({ item, index }) => {
           return (
-            <View style={styles.assetWrapper}>
+            <View style={styles.assetWrapper} testID={`view_asset_${index}`}>
               <View
                 style={
                   index % 2 === 0
@@ -99,6 +99,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
                   tag={'COLLECTIBLE'}
                   onPress={() => onPressAsset(item)}
                   precision={item.precision}
+                  index={index}
                 />
               </View>
             </View>
@@ -119,6 +120,7 @@ function CollectibleAssetsList(props: AssetsListProps) {
         />
       )}
       <AppTouchable
+        testID='btn_add_asset'
         style={
           isThemeDark ? styles.addNewIconWrapper : styles.addNewIconWrapperLight
         }

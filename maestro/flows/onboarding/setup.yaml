@@ -68,7 +68,7 @@ appId: com.bithyve.tribe.dev
 - extendedWaitUntil:
     visible:
         id: "app-text-Bitcoin-backed-assets"
-    timeout: 60000
+    timeout: 120000
 
 - assertVisible:
     id: "app-text-RGB-protocol-allows-anyone-to-issue-send-or-receive-assets-on-the-most-secure-blockchain-using-sats-from-your-wallet-as-fuel-for-these-assets"

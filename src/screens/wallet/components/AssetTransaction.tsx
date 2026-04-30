@@ -42,11 +42,12 @@ type AssetTransactionProps = {
   assetFace?: string;
   precision: number;
   hidePrecision?:boolean;
+  testID?: string;
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
   const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace, precision,hidePrecision=false } = props;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision,hidePrecision=false, testID } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -145,6 +146,7 @@ function AssetTransaction(props: AssetTransactionProps) {
 
   return (
     <AppTouchable
+      testID={testID}
       disabled={disabled}
       style={
         assetFace?.toUpperCase() === AssetFace.RGB21
@@ -165,6 +167,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             <AppText
               variant="body1"
               numberOfLines={1}
+              testID={`text_transaction_kind_${testID}`}
               ellipsizeMode="middle"
               style={styles.transIdText}>
               {kindLabel}
@@ -181,6 +184,7 @@ function AssetTransaction(props: AssetTransactionProps) {
             <View style={styles.amtIconWrapper}>
               <AppText
                 variant="body1"
+                testID={`text_transaction_amount_${testID}`}
                 style={[
                   amtTextStyle,
                   {
@@ -196,9 +200,9 @@ function AssetTransaction(props: AssetTransactionProps) {
           </View>
         ) : !disabled ? (
           isThemeDark ? (
-            <IconArrow />
+            <IconArrow testID={`icon_arrow_${testID}`} />
           ) : (
-            <IconArrowLight />
+            <IconArrowLight testID={`icon_arrow_light_${testID}`} />
           )
         ) : null}
       </View>

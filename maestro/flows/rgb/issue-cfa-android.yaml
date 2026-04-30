@@ -1,0 +1,53 @@
+appId: com.bithyve.tribe.dev
+---
+- tapOn:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "btn_add_asset"
+- assertVisible:
+    id: "btn-Issue Collectible"
+- tapOn:
+    id: "btn-Issue Collectible"
+- assertVisible:
+    id: "text_header_title"
+    text: "Issue Collectible"
+- tapOn:
+    id: "input_assetname"
+- inputText: "Tribe Art"
+- tapOn: "Next"
+- inputText: "This is a test CFA asset generated for Tribe testing"
+- tapOn:
+    id: "slider_component_slider_precision"
+- tapOn:
+    id: "app-text-Set-how-divisible-each-unit-is"
+- tapOn:
+    id: "input_totalsupply"
+- inputRandomNumber:
+    length: 4
+- tapOn: "Done"
+- assertVisible:
+    id: "btn_add_mediafile"
+- tapOn:
+    id: "btn_add_mediafile"
+- tapOn:
+    text: "^Photo taken on.*"
+- scroll
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "primary_cta_Proceed"
+- tapOn:
+    id: "primary_cta_Proceed"
+- extendedWaitUntil:
+    visible:
+      id: "text_header_title"
+      text: "Registry"
+    timeout: 60000
+- tapOn:
+    id: "app-text-Skip-for-now"
+- tapOn:
+    id: "srcondary_cta_Cancel"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "tab-HOMESCREEN"

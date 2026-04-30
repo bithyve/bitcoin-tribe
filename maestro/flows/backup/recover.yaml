@@ -1,0 +1,45 @@
+appId: com.bithyve.tribe.dev
+---
+- launchApp:
+    clearState: true
+
+- extendedWaitUntil:
+    visible:
+        id: "app-text-Welcome"
+    timeout: 100000
+- assertVisible:
+    id: "btn-recover-wallet"
+- tapOn:
+    id: "btn-recover-wallet"
+- tapOn: "REGTEST"
+- assertVisible:
+    id: "text_header_title"
+    text: "Recover an existing wallet"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Enter existing 12-word recovery phrase below"
+- evalScript: ${output.seedWordIndex = 1}
+
+- repeat:
+    while:
+      true: ${output.seedWordIndex <= 12}
+    commands:
+      - tapOn:
+          id: ${"input_seed_word_" + output.seedWordIndex}
+      - inputText: ${output["W" + output.seedWordIndex] || maestro.env["W" + output.seedWordIndex]}
+      - tapOn:
+          text: "Done"
+          optional: true
+      - evalScript: ${output.seedWordIndex = output.seedWordIndex + 1}
+
+- assertVisible:
+    id: "primary_cta_Next"
+- tapOn:
+    id: "primary_cta_Next"
+- assertVisible:
+    id: "app-text-Recovering-Your-Wallet"
+
+- extendedWaitUntil:
+    visible:
+        id: "tab-HOMESCREEN"
+    timeout: 600000

@@ -1,0 +1,73 @@
+appId: com.bithyve.tribe.dev
+---
+
+- assertVisible:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "btn_add_asset"
+- tapOn:
+    id: "btn-Receive Asset"
+- tapOn:
+    id: "primary_cta_Generate Invoice"
+- tapOn:
+    id: "text_tap_to_copy"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"
+- tapOn: "Tribe Coin"
+- tapOn:
+    id: "btn_send"
+- tapOn: "Enter invoice manually"
+- assertVisible:
+    id: "text_header_title"
+    text: "Send Asset"
+- assertVisible:
+    id: "input_invoice"
+
+- assertVisible:
+    id: "input_invoice_Paste"
+- tapOn:
+    id: "input_invoice_Paste"
+- assertVisible:
+    id: "input_amount"
+- tapOn:
+    id: "input_amount"
+- inputRandomNumber:
+    length: 5
+- tapOn: "Done"
+- scroll
+- assertVisible:
+    id: "primary_cta_Next"
+- tapOn:
+    id: "primary_cta_Next"
+- assertVisible:
+    id: "app-text-Send-Confirmation"
+- assertVisible:
+    id: "app-text-Review-and-Confirm-Your-Transaction"
+- assertVisible:
+    id: "view_swipe_to_action"
+- assertVisible:
+    id: "btn_thumb"
+- swipe:
+    from:
+      id: "btn_thumb"
+    direction: RIGHT
+- waitForAnimationToEnd:
+    timeout: 40000
+- assertVisible:
+    id: "app-text-Successful"
+- assertVisible:
+    id: "primary_cta_Done"
+- tapOn:
+    id: "primary_cta_Done"
+- waitForAnimationToEnd:
+    timeout: 6000
+- assertVisible:
+    id: "transaction_1"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "tab-HOMESCREEN"

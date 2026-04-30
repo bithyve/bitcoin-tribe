@@ -169,6 +169,7 @@ function AppBackupMenu({ navigation }) {
               {settings.step1}
             </AppText>
             <SelectOption
+              testID='btn_wallet_backup'
               title={settings.walletBackup}
               subTitle={''}
               onPress={() =>
@@ -200,6 +201,7 @@ function AppBackupMenu({ navigation }) {
               {settings.step2}
             </AppText>
             <SelectOption
+              testID='btn_rgb_assets_backup'
               title={settings.rgbAssetsbackup}
               subTitle={''}
               disabled={

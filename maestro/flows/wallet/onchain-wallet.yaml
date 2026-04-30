@@ -54,6 +54,9 @@ appId: com.bithyve.tribe.dev
     id: "text_tap_to_copy"
 - tapOn:
     id: "btn_copy_qr_code_value"
+- tapOn:
+    point: "50,50"
+    optional: true
 - assertVisible:
     id: "btn_add_amt"
 - tapOn:

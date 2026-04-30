@@ -65,10 +65,10 @@ function LangDropDownListView(props: DropdownProps) {
         style={styles.container2}
         data={languages}
         renderItem={({ item }) => (
-          <AppTouchable onPress={() => callback(item)}>
+          <AppTouchable onPress={() => callback(item)} testID={`button-${item.language}`}>
             <View style={styles.wrapper}>
               <View style={styles.radioBtnWrapper}>
-                <AppText variant="body2" style={styles.languageText}>
+                <AppText variant="body2" style={styles.languageText} testID={`text-${item.language}`}>
                   {item.flag}&nbsp; {item.language + ' ' + item.country_code}
                 </AppText>
                 <RadioButton.Android

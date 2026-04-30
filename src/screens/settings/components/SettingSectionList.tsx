@@ -26,7 +26,7 @@ function SettingSectionList(props: sectionListProps) {
   const styles = getStyles(theme, isDanger, isThemeDark);
   
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container]} testID={`view_section_${sectionTitle}`}>
       <View style={styles.headerSection}>
         <AppText variant="body1" style={[styles.headerText]}>
           {sectionTitle}

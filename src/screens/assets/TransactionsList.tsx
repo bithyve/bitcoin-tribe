@@ -200,8 +200,9 @@ function TransactionsList({
             />
           )
         }
-        renderItem={({ item }) => (
+        renderItem={({ item, index }) => (
           <AssetTransaction
+            testID={`transaction_${index}`}
             transaction={item}
             coin={coin}
             onPress={() => {

@@ -278,10 +278,11 @@ function IssueScreen() {
 
       <KeyboardAvoidView style={styles.contentWrapper}>
         <View>
-          <AppText variant="body2" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle} testID='text_asset_name'>
             {home.assetName}
           </AppText>
           <TextField
+            testID='input_asset_name'
             value={assetName}
             onChangeText={handleAssetNameChange}
             placeholder={assets.enterAssetNamePlaceholder}
@@ -293,11 +294,12 @@ function IssueScreen() {
             blurOnSubmit={false}
             error={assetNameValidationError}
           />
-          <AppText variant="body2" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle} testID='text_asset_ticker'>
             {home.assetTicker}
           </AppText>
 
           <TextField
+            testID='input_asset_ticker'
             ref={assetTickerInputRef}
             value={assetTicker}
             onChangeText={handleAssetTickerInput}
@@ -312,6 +314,7 @@ function IssueScreen() {
           />
 
           <Slider
+            testID='slider_precision'
             title="Precision"
             value={precision}
             onValueChange={value => {
@@ -332,7 +335,7 @@ function IssueScreen() {
             {assets.precisionCaption}
           </AppText>
 
-          <AppText variant="body2" style={styles.textInputTitle}>
+          <AppText variant="body2" style={styles.textInputTitle} testID='text_total_supply_amount'>
             {home.totalSupplyAmount}
           </AppText>
 
@@ -345,13 +348,14 @@ function IssueScreen() {
             style={styles.input}
             returnKeyType="done"
             onSubmitEditing={Keyboard.dismiss}
+            testID='input_total_supply'
             error={assetTotSupplyValidationError}
           />
           <View style={styles.totalSupplyWrapper}>
-            <AppText variant="body2" style={styles.textInputTitle}>
+            <AppText variant="body2" style={styles.textInputTitle} testID='text_total_supply'>
               Total Supply:
             </AppText>
-            <AppText variant="body2" style={styles.textTotalSupply}>
+            <AppText variant="body2" style={styles.textTotalSupply} testID='text_total_supply_value'>
               {totalSupplyWithPrecision}
             </AppText>
           </View>
@@ -363,7 +367,7 @@ function IssueScreen() {
             {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
           </View>
           <View style={styles.reservedSatsWrapper1}>
-            <AppText variant="body2" style={styles.reservedSatsText}>
+            <AppText variant="body2" style={styles.reservedSatsText} testID='text_reserved_sats'>
               {assets.reservedSats}
             </AppText>
           </View>

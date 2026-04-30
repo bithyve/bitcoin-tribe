@@ -18,6 +18,7 @@ type Props = {
   step: number;
   onValueChange: (value: number) => void;
   title?: string;
+  testID?: string;
 };
 
 const Slider = (props: Props) => {
@@ -42,7 +43,7 @@ const Slider = (props: Props) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={props.testID}>
       {props.title && (
         <AppText style={styles.title} variant="body2">
           {props.title}
@@ -50,6 +51,7 @@ const Slider = (props: Props) => {
       )}
 
       <SliderComponent
+        testID={`slider_component_${props.testID}`}
         style={styles.slider}
         minimumValue={props.minimumValue}
         maximumValue={props.maximumValue}

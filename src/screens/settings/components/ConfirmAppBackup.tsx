@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useTheme } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
-
 import { AppTheme } from 'src/theme';
 import Buttons from 'src/components/Buttons';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -72,6 +71,7 @@ function ConfirmAppBackup(props: confirmAppBackupProps) {
   return (
     <View>
       <TextField
+        testID='input_enter_word'
         value={seedWord}
         onChangeText={text => {
           const filteredText = text?.toLocaleLowerCase().replace(/\s/g, '');

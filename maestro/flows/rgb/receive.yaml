@@ -1,0 +1,129 @@
+appId: com.bithyve.tribe.dev
+---
+- launchApp:
+    stopApp: true
+- extendedWaitUntil:
+    visible:
+        id: "tab-ASSETS"
+    timeout: 100000
+- assertVisible:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "tab-ASSETS"
+- assertVisible:
+    id: "app-text-Your-Assets"
+- assertVisible:
+    id: "app-text-Collect-More-Assets"
+- assertVisible:
+    id: "app-text-Keep-adding-more-Assets"
+- assertVisible:
+    id: "btn-registry"
+- assertVisible:
+    id: "btn_add_asset"
+- tapOn:
+    id: "btn_add_asset"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Create Assets"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Choose how to create or receive an asset."
+- assertVisible:
+    id: "btn-Issue Coin"
+- assertVisible:
+    id: "btn-Issue Collectible"
+- assertVisible:
+    id: "btn-Create Collection"
+- assertVisible:
+    id: "btn-Receive Asset"
+- assertVisible:
+    id: "text-Receive Asset"
+    text: "Receive Asset"
+- assertVisible:
+    id: "text-Receive Asset-subtitle"
+    text: "Receive coins or collectibles."
+- tapOn:
+    id: "btn-Receive Asset"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Receive Asset"
+- assertVisible:
+    id: "text_header_subtitle"
+- assertVisible: "Select asset"
+- assertVisible:
+    id: "input_amt"
+- assertVisible:
+    id: "app-text-Invoice-Expiry"
+- assertVisible:
+    id: "app-text-Invoice-Type"
+    text: "Invoice Type"
+- assertVisible:
+    id: "btn_invoice_blinded"
+- assertVisible:
+    id: "btn_invoice_witness"
+- assertVisible:
+    id: "text_reservesats"
+    text: "Sats from your wallet will be reserved to use for asset transactions"
+    optional: true
+- tapOn:
+    id: "btn_invoice_witness"
+- assertNotVisible:
+    id: "text_reservesats"
+    optional: true
+- tapOn:
+    id: "btn_invoice_blinded"
+- assertVisible:
+    id: "text_reservesats"
+    optional: true
+- assertVisible:
+    id: "primary_cta_Generate Invoice"
+- tapOn:
+    id: "btn_invoice_witness"
+- tapOn:
+    id: "primary_cta_Generate Invoice"
+- assertVisible:
+    id: "text_header_title"
+    text: "Receive Assset"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Scan or copy paste the RGB Invoice"
+- assertVisible:
+    id: "qr_code"
+- assertVisible:
+    id: "text_qr_code_value"
+    text: "^rgb:~/~/~/bcrt.wvout.*"
+- assertVisible:
+    id: "app-text-Note"
+- assertVisible:
+    id: "app-text-The-witness-UTXO-in-this-invoice-will-expire-in-24-hours"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn-Receive Asset"
+- tapOn:
+    id: "primary_cta_Generate Invoice"
+
+- extendedWaitUntil:
+    visible:
+        id: "text_qr_code_value"
+        text: "^rgb:~/~/~/bcrt.utxob.*"
+    timeout: 120000
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "tab-HOMESCREEN"
+
+
+
+
+
+
+
+
+

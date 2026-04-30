@@ -127,6 +127,7 @@ function EnterSeedContainer() {
     return (
       <View removeClippedSubviews style={styles.inputListWrapper}>
         <TextInput
+          testID={`input_seed_word_${index + 1}`}
           ref={ref => {
             if (ref) {
               inputRef.current[index] = ref as unknown as RNTextInput;

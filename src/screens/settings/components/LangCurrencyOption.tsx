@@ -37,19 +37,19 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID={`view-${title}`}>
       <View style={styles.contentContainer}>
         {icon}
         <View style={styles.contentWrapper}>
-          <AppText variant="heading3" style={styles.titleText}>
+          <AppText variant="heading3" style={styles.titleText} testID={`text-${title}`}>
             {title}
           </AppText>
-          <AppText variant="body1" style={styles.subTitleText}>
+          <AppText variant="body1" style={styles.subTitleText} testID={`text-subtitle-${title}`}>
             {subTitle}
           </AppText>
         </View>
       </View>
-      <AppTouchable onPress={onPress}>
+      <AppTouchable onPress={onPress} testID={`button-${title}`}>
         <GradientView
           style={styles.inputWrapper}
           colors={[
@@ -58,11 +58,11 @@ function LangCurrencyOption(props: LangCurrencyOptionProps) {
             theme.colors.cardGradient3,
           ]}>
           <View style={styles.langCurrencyWrapper}>
-            <AppText variant="body1" style={styles.langCurrencyStyle}>
+            <AppText variant="body1" style={styles.langCurrencyStyle} testID={`text-${title}-langCurrency`}>
               {langCurrency}
             </AppText>
           </View>
-          <AppText variant="heading3" style={styles.langCurrencyVariantStyle}>
+          <AppText variant="heading3" style={styles.langCurrencyVariantStyle} testID={`text-${title}-variant`}>
             {flag} {langCurrencyVariant}
           </AppText>
           <View style={styles.iconArrowWrapper}>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, StyleSheet, Animated, Platform, Dimensions } from 'react-native';
+import { View, StyleSheet, Animated, Platform, Dimensions, Pressable } from 'react-native';
 import {
   GestureHandlerRootView,
   PanGestureHandler,

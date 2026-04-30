@@ -3,7 +3,6 @@ import { useTheme } from 'react-native-paper';
 import { FlatList, StyleSheet, Platform } from 'react-native';
 import { useQuery } from '@realm/react';
 import { useRoute } from '@react-navigation/native';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';

@@ -1,0 +1,80 @@
+appId: com.bithyve.tribe.dev
+---
+- tapOn:
+    id: "tab-SETTINGS"
+- assertVisible:
+    id: "btn_settings_App Backup"
+- tapOn:
+    id: "btn_settings_App Backup"
+- assertVisible:
+    id: "text_header_title"
+    text: "App Backup"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Wallet Backup and Asset Backup are mandatory. Complete Step 1 before proceeding to Step 2."
+- assertVisible:
+    id: "btn_wallet_backup"
+- tapOn:
+    id: "btn_wallet_backup"
+- assertVisible:
+    id: "app-text-Backup-Phrase"
+- assertVisible:
+    id: "app-text-Carefully-write-down-the-12-word-Backup-Phrase-in-a-private-place-and-ensure-its-security"
+- assertVisible:
+    id: "primary_cta_Next"
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- tapOn:
+    id: "primary_cta_Next"
+- assertVisible:
+    id: "text_header_title"
+    text: "Wallet Backup"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Write down this Backup Phrase"
+- evalScript: ${output.seedWordIndex = 1}
+
+- repeat:
+    while:
+      true: ${output.seedWordIndex <= 12}
+    commands:
+      - tapOn:
+          id: ${"view_seed_" + output.seedWordIndex}
+      - copyTextFrom:
+          id: ${"text_seed_word_" + output.seedWordIndex}
+      - evalScript: ${output["W" + output.seedWordIndex] = maestro.copiedText}
+      - evalScript: ${output.seedWordIndex = output.seedWordIndex + 1}
+- tapOn:
+    id: "primary_cta_Next"
+- copyTextFrom:
+    id: "input_enter_word"
+- evalScript: ${output.challengeText = maestro.copiedText}
+
+- evalScript: ${output.wordIndex = output.challengeText.match(/\((\d+)\)/)[1]}
+
+- evalScript: ${output.selectedWord = output["W" + parseInt(output.wordIndex, 10)]}
+
+- tapOn:
+    id: "input_enter_word"
+- inputText: ${output.selectedWord}
+- tapOn:
+    id: "primary_cta_Confirm"
+- assertVisible:
+    id: "text_header_title"
+    text: "Wallet Backup History"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Secure Your Past, Safeguard Your Future."
+- tapOn:
+    id: "btn_back"
+- assertVisible:
+    id: "app-text-Your-wallet-has-been-successfully-backed-up"
+- assertVisible:
+    id: "btn_rgb_assets_backup"
+
+- tapOn:
+    id: "btn_back"
+
+- tapOn:
+    id: "tab-HOMESCREEN"
+

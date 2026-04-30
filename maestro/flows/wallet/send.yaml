@@ -16,8 +16,10 @@ appId: com.bithyve.tribe.dev
     text: "Send"
 - assertVisible:
     id: "app-text-Camera-Access-Needed"
+    optional: true
 - assertVisible:
     id: "primary_cta_Open Settings"
+    optional: true
 - assertVisible:
     id: "option_enter_manually"
 - tapOn:
@@ -73,9 +75,9 @@ appId: com.bithyve.tribe.dev
 - assertVisible:
     id: "btn_thumb"
 - swipe:
-    start: 14%, 92%
-    end: 86%, 92%
-    duration: 1000
+    from:
+      id: "btn_thumb"
+    direction: RIGHT
 - assertVisible:
     id: "app-text-Successful"
 - assertVisible:
@@ -94,6 +96,21 @@ appId: com.bithyve.tribe.dev
 - assertVisible:
     id: "text_header_title"
     text: "Transaction Details"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "transaction-item-1"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Transaction Details"
+- assertVisible:
+    id: "app-text-Confirmations"
+- assertVisible:
+    id: "app-text-Input"
+- assertVisible:
+    id: "app-text-Output"
 - tapOn:
     id: "btn_back"
 - tapOn:

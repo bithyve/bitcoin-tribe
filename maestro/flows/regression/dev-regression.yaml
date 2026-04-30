@@ -4,5 +4,34 @@ appId: com.bithyve.tribe.dev
 - runFlow: "../home/home.yaml"
 - runFlow: "../home/tabs.yaml"
 - runFlow: "../home/change-name.yaml"
+- runFlow:
+    when:
+      platform: Android
+    file: "../home/change-wallet-pic-android.yaml"
 - runFlow: "../wallet/onchain-wallet.yaml"
 - runFlow: "../wallet/send.yaml"
+- runFlow: "../rgb/receive.yaml"
+- runFlow: "../rgb/issue-coin.yaml"
+- runFlow: "../settings/settings.yaml"
+- runFlow: "../rgb/issue-coin-register.yaml"
+- runFlow:
+    when:
+      platform: Android
+    file: "../rgb/issue-cfa-android.yaml"
+- runFlow: "../rgb/blinded-send.yaml"
+- runFlow: "../backup/backup.yaml"
+- runFlow:
+    file: "../backup/recover.yaml"
+    env:
+      W1: ${output.W1}
+      W2: ${output.W2}
+      W3: ${output.W3}
+      W4: ${output.W4}
+      W5: ${output.W5}
+      W6: ${output.W6}
+      W7: ${output.W7}
+      W8: ${output.W8}
+      W9: ${output.W9}
+      W10: ${output.W10}
+      W11: ${output.W11}
+      W12: ${output.W12}

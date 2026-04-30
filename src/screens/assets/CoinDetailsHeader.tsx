@@ -100,6 +100,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
         <View style={styles.largeHeaderContainer}>
           <View style={styles.largeHeaderContentWrapper}>
             <AppTouchable
+              testID='btn_metadata'
               onPress={() => {
                 if (isNodeInitInProgress) {
                   Toast(node.connectingNodeToastMsg, true);
@@ -224,6 +225,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
               ) : (
                 <View style={styles.balanceContainer}>
                   <AppTouchable
+                    testID='btn_coin_metadata'
                     style={styles.onChainTotalBalanceWrapper}
                     onPress={() => {
                       if (isNodeInitInProgress) {
@@ -256,7 +258,7 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                     }}
                   >
                     <View style={styles.totalBalanceWrapper1}>
-                      <AppText variant="heading2" style={styles.totalBalance}>
+                      <AppText variant="heading2" style={styles.totalBalance} testID='text_total_balance_value'>
                         {formatLargeNumber(
                           Number(asset.balance.future) / 10 ** asset.precision +
                             Number(asset.balance?.offchainOutbound) /
@@ -264,20 +266,20 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
                         )}
                       </AppText>
                     </View>
-                    <AppText variant="body2" style={styles.totalBalanceLabel}>
+                    <AppText variant="body2" style={styles.totalBalanceLabel} testID='text_total_balance'>
                       {home.totalBalance}
                     </AppText>
                   </AppTouchable>
                   <View style={styles.onChainTotalBalanceWrapper1}>
                     <View style={styles.totalBalanceWrapper1}>
-                      <AppText variant="heading2" style={styles.totalBalance}>
+                      <AppText variant="heading2" style={styles.totalBalance} testID='text_spendable_balance_value'>
                         {formatLargeNumber(
                           Number(asset?.balance?.spendable) /
                             10 ** asset.precision,
                         )}
                       </AppText>
                     </View>
-                    <AppText variant="body2" style={styles.totalBalanceLabel}>
+                    <AppText variant="body2" style={styles.totalBalanceLabel} testID='text_spendable_balance'>
                       {assets.spendable}
                     </AppText>
                   </View>
@@ -285,13 +287,13 @@ function CoinDetailsHeader(props: assetDetailsHeaderProps) {
               )}
               <View style={styles.assetNameContainer}>
                 <View style={styles.tickerWrapper}>
-                  <AppText variant="body1" style={styles.assetTickerText}>
+                  <AppText variant="body1" style={styles.assetTickerText} testID='text_asset_ticker'>
                     {formatTUsdt(asset.ticker)}
                   </AppText>
                   {isVerified && <IconVerified width={20} height={20} />}
                 </View>
                 <View style={styles.assetNameWrapper}>
-                  <AppText variant="body2" style={styles.assetNameText}>
+                  <AppText variant="body2" style={styles.assetNameText} testID='text_asset_name'>
                     {formatTUsdt(asset.name)}
                   </AppText>
                 </View>

@@ -22,12 +22,13 @@ function SeedCard(props: seedCardProps) {
   return (
     <AppTouchable
       style={styles.container}
+      testID={`view_seed_${index+1}`}
       onPress={() => callback(index, item)}>
       <AppText variant="heading3" style={styles.indexStyle}>
         {index < 9 ? '0' : null}
         {index + 1}
       </AppText>
-      <AppText variant="heading2" style={styles.seedWordStyle}>
+      <AppText variant="heading2" style={styles.seedWordStyle} testID={`text_seed_word_${index+1}`}>
         {visible ? item : '******'}
       </AppText>
     </AppTouchable>

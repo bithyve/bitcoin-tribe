@@ -25,7 +25,6 @@ import SupportIconLight from 'src/assets/images/supportIcon_light.svg';
 import Toast from 'src/components/Toast';
 import NetworkIcon from 'src/assets/images/viewNodeInfo.svg';
 import NetworkIconLight from 'src/assets/images/viewNodeInfo_light.svg';
-import { NetworkType } from 'src/services/wallets/enums';
 import config from 'src/utils/config';
 import Capitalize from 'src/utils/capitalizeUtils';
 

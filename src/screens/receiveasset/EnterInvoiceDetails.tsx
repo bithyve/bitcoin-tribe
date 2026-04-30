@@ -385,6 +385,7 @@ const EnterInvoiceDetails = () => {
             }}
           />
           <TextField
+            testID='input_amt'
             value={amount}
             onChangeText={handleAmountInputChange}
             placeholder={assets.amount}
@@ -409,11 +410,13 @@ const EnterInvoiceDetails = () => {
                 value: InvoiceMode.Blinded,
                 label: 'Blinded',
                 style: { borderRadius: 10 },
+                testID: 'btn_invoice_blinded',
               },
               {
                 value: InvoiceMode.Witness,
                 label: 'Witness',
                 style: { borderRadius: 10 },
+                testID: 'btn_invoice_witness',
               },
             ]}
           />
@@ -438,7 +441,7 @@ const EnterInvoiceDetails = () => {
                 {isThemeDark ? <CheckIcon /> : <CheckIconLight />}
               </View>
               <View style={styles.reservedSatsWrapper1}>
-                <AppText variant="body2" style={styles.reservedSatsText}>
+                <AppText variant="body2" style={styles.reservedSatsText} testID='text_reservesats'>
                   {assets.reservedSats}
                 </AppText>
               </View>

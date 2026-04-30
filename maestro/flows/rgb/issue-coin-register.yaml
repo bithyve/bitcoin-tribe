@@ -1,0 +1,77 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "btn_add_asset"
+- tapOn:
+    id: "btn-Issue Coin"
+- tapOn:
+    id: "input_asset_name"
+- inputRandomPersonName
+- tapOn: "Next"
+- inputRandomText:
+    length: 5
+- tapOn: "Next"
+- inputRandomNumber:
+    length: 8
+- tapOn:
+    text: "Done"
+    optional: true
+- tapOn:
+    id: "slider_component_slider_precision"
+    point: "40%,50%"
+- tapOn:
+    id: "primary_cta_Proceed"
+- extendedWaitUntil:
+    visible:
+      id: "text_header_title"
+      text: "Registry"
+    timeout: 60000
+- assertVisible:
+    id: "view_swipe_to_action"
+- assertVisible:
+    id: "btn_thumb"
+
+- swipe:
+    from:
+      id: "btn_thumb"
+    direction: RIGHT
+- waitForAnimationToEnd:
+    timeout: 10000
+- assertVisible:
+    id: "app-text-Why-Verification-is-Important"
+- assertVisible:
+    id: "srcondary_cta_Domain"
+- assertVisible:
+    id: "primary_cta_X"
+- assertVisible:
+    id: "app-text-Skip-for-now"
+- tapOn:
+    id: "app-text-Skip-for-now"
+- assertVisible:
+    id: "app-text-Why-Share-Your-Issued-Asset"
+- tapOn:
+    id: "srcondary_cta_Cancel"
+- tapOn:
+    id: "btn_metadata"
+- scroll
+- assertVisible:
+    id: "app-text-VERIFICATION"
+- assertVisible:
+    id: "app-text-Verify-on-X"
+- assertVisible:
+    id: "verify-with-domain"
+- assertVisible:
+    id: "view_in_registry"
+- assertVisible:
+    id: "import_x_post"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "tab-HOMESCREEN"
+

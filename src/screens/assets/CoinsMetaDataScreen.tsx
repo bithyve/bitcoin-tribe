@@ -16,7 +16,6 @@ import { useObject } from '@realm/react';
 import { useMutation } from 'react-query';
 import { createMMKV, useMMKVBoolean } from 'react-native-mmkv';
 import moment from 'moment';
-
 import {
   Coin,
   TransferKind,

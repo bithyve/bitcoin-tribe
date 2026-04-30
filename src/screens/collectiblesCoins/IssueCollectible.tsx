@@ -506,6 +506,7 @@ function IssueCollectibleScreen() {
         <View style={styles.containerTop}>
           <AppText variant="heading3">{assets.makeCollectibleUnique}</AppText>
           <Switch
+            testID='switch_unique'
             value={assetType === AssetType.UDA}
             onValueChange={value => {
               setAssetType(value ? AssetType.UDA : AssetType.Collectible);
@@ -525,6 +526,7 @@ function IssueCollectibleScreen() {
               {home.assetName}
             </AppText>
             <TextField
+              testID='input_assetname'
               value={assetName}
               onChangeText={handleAssetNameChange}
               placeholder={assets.enterAssetNamePlaceholder}
@@ -541,6 +543,7 @@ function IssueCollectibleScreen() {
               {home.assetDescription}
             </AppText>
             <TextField
+              testID='input_assetdescription'
               ref={descriptionInputRef}
               value={description}
               onChangeText={handleAssetDescriptionChange}
@@ -560,6 +563,7 @@ function IssueCollectibleScreen() {
             />
 
             <Slider
+              testID='slider_precision'
               title={assets.precision}
               value={precision}
               onValueChange={value => setPrecision(value)}
@@ -576,6 +580,7 @@ function IssueCollectibleScreen() {
             </AppText>
 
             <TextField
+              testID='input_totalsupply'
               ref={totalSupplyInputRef}
               value={formatNumber(totalSupplyAmt)}
               onChangeText={text => handleTotalSupplyChange(text)}
@@ -611,6 +616,7 @@ function IssueCollectibleScreen() {
                   style={styles.imageStyle}
                 />
                 <AppTouchable
+                  testID='btn_remove_mediafile'
                   style={styles.closeIconWrapper}
                   onPress={() => setImage('')}>
                   {isThemeDark ? <IconClose /> : <IconCloseLight />}
@@ -618,6 +624,7 @@ function IssueCollectibleScreen() {
               </View>
             ) : (
               <AppTouchable
+                testID='btn_add_mediafile'
                 onPress={handlePickImage}
                 style={styles.addMediafileIconWrapper}>
                 {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}
@@ -634,6 +641,7 @@ function IssueCollectibleScreen() {
               {home.assetName}
             </AppText>
             <TextField
+              testID='input_assetname'
               value={assetName}
               onChangeText={handleUniqueAssetNameChange}
               placeholder={assets.enterAssetNamePlaceholder}
@@ -652,6 +660,7 @@ function IssueCollectibleScreen() {
 
             <TextField
               ref={assetTickerInputRef}
+              testID='input_assetticker'
               value={assetTicker}
               onChangeText={handleUniqueAssetTickerChange}
               placeholder={assets.enterAssetTickerPlaceholder}
@@ -668,6 +677,7 @@ function IssueCollectibleScreen() {
               {home.assetDescription}
             </AppText>
             <TextField
+              testID='input_assetdescription'
               ref={descriptionInputRef}
               value={description}
               onChangeText={handleUniqueAssetDescriptionChange}
@@ -711,6 +721,7 @@ function IssueCollectibleScreen() {
               </View>
             ) : (
               <AppTouchable
+                testID='btn_add_mediafile'
                 onPress={handlePickImage}
                 style={styles.addMediafileIconWrapper}>
                 {isThemeDark ? <AddMediaFile /> : <AddMediaFileLight />}

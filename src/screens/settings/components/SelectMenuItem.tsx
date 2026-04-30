@@ -55,16 +55,16 @@ const SelectMenuItem = (props: SelectMenuProps) => {
   const { settings } = translations;
   const styles = getStyles(theme, backColor, backup, lastIndex);
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} testID={`btn_settings_${title}`}>
       <View style={[styles.container, style]}>
         <View style={styles.iconWrapper}>
           {icon}
           <View style={styles.contentWrapper}>
-            <AppText variant="body1" style={styles.titleStyle}>
+            <AppText variant="body1" style={styles.titleStyle} testID={`text_settings_${title}`}>
               {title}
             </AppText>
             {subTitle ? (
-              <AppText variant="body2" style={styles.subTitleStyle}>
+              <AppText variant="body2" style={styles.subTitleStyle} testID={`text_subtitle_settings_${title}`}>
                 {subTitle}
               </AppText>
             ) : null}

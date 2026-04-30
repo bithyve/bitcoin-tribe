@@ -1,0 +1,168 @@
+appId: com.bithyve.tribe.dev
+---
+- tapOn:
+    id: "tab-ASSETS"
+- tapOn:
+    id: "btn_add_asset"
+- assertVisible:
+    id: "btn-Issue Coin"
+- assertVisible:
+    id: "text-Issue Coin"
+- assertVisible:
+    id: "text-Issue Coin-subtitle"
+- tapOn:
+    id: "btn-Issue Coin"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_header_title"
+    text: "Issue Coin"
+- assertVisible:
+    id: "text_asset_name"
+    text: "Asset Name"
+- assertVisible:
+    id: "input_asset_name"
+- assertVisible:
+    id: "text_asset_ticker"
+    text: "Asset Ticker"
+- assertVisible:
+    id: "input_asset_ticker"
+- assertVisible:
+    id: "app-text-Precision"
+- assertVisible:
+    id: "slider_component_slider_precision"
+- assertVisible:
+    id: "slider_component_slider_precision"
+- assertVisible:
+    id: "text_total_supply_amount"
+    text: "Total Supply"
+- assertVisible:
+    id: "input_total_supply"
+- assertVisible:
+    id: "text_total_supply"
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "primary_cta_Proceed"
+- tapOn:
+    id: "input_asset_name"
+- inputText: "Tribe Coin"
+- tapOn: "Next"
+- inputText: "TRIBE"
+- tapOn: "Next"
+- inputText: "21000000"
+- tapOn:
+    id: "slider_component_slider_precision"
+    point: "60%,50%"
+- tapOn:
+    text: "Done"
+    optional: true
+- assertVisible:
+    id: "text_total_supply_value"
+    text: "21,000,000 TRIBE"
+- tapOn:
+    id: "primary_cta_Proceed"
+
+- extendedWaitUntil:
+    visible:
+      id: "text_header_title"
+      text: "Registry"
+    timeout: 60000
+- assertVisible:
+    id: "app-text-Platform-Fee"
+- assertVisible:
+    id: "view_swipe_to_action"
+- assertVisible:
+    id: "app-text-Skip-for-now"
+- tapOn:
+    id: "app-text-Skip-for-now"
+- assertVisible:
+    id: "app-text-Why-Share-Your-Issued-Asset"
+- assertVisible:
+    id: "app-text-Sharing-boosts-visibility--but-it-doesnt-prove-ownership-Verify-yourself-to-make-it-official"
+- assertVisible:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "primary_cta_Share"
+- tapOn:
+    id: "srcondary_cta_Cancel"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "text_total_balance"
+    text: "Total Balance"
+- assertVisible:
+    id: "text_total_balance_value"
+    text: "21M"
+
+- assertVisible:
+    id: "text_spendable_balance"
+    text: "Spendable"
+- assertVisible:
+    id: "text_spendable_balance_value"
+    text: "21M"
+- assertVisible:
+    id: "text_asset_ticker"
+    text: "TRIBE"
+- assertVisible:
+    id: "text_asset_name"
+    text: "Tribe Coin"
+- assertVisible:
+    id: "btn_send"
+- assertVisible:
+    id: "btn_receive"
+- assertVisible:
+    id: "app-text-Recent-Transactions"
+- assertVisible:
+    id: "app-text-View-All"
+- tapOn:
+    id: "app-text-View-All"
+- assertVisible:
+    id: "text_header_title"
+    text: "Tribe Coin - Transactions"
+- tapOn:
+    id: "btn_back"
+
+- extendedWaitUntil:
+    visible:
+      id: "transaction_0"
+    timeout: 60000
+- assertVisible:
+    id: "text_transaction_kind_transaction_0"
+    text: "Issuance"
+- assertVisible:
+    id: "text_transaction_amount_transaction_0"
+    text: " 21,000,000"
+- tapOn:
+    id: "transaction_0"
+- assertVisible:
+    id: "text_header_title"
+    text: "Transfer Details"
+- assertVisible:
+    id: "btn_back"
+- assertVisible:
+    id: "app-text-Status"
+- assertVisible:
+    id: "app-text-Issuance"
+- tapOn:
+    id: "btn_back"
+- assertVisible:
+    id: "btn_metadata"
+- tapOn:
+    id: "btn_metadata"
+- assertVisible:
+    id: "text_header_title"
+    text: "Asset Details"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"
+- assertVisible:
+    id: "text_asset_name_0"
+    text: "Tribe Coin"
+- tapOn:
+    id: "tab-HOMESCREEN"
+
+
+
+

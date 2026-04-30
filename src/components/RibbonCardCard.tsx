@@ -39,7 +39,7 @@ const RibbonCard = (props: RibbonCardProps) => {
   };
 
   return (
-    <AppTouchable onPress={onPress}>
+    <AppTouchable onPress={onPress} testID={`btn-${title}`}>
       <View style={[styles.bgContainer, { height: cardHeight }]} />
       <View onLayout={handleLayout} style={styles.ribbon}>
         <GradientView
@@ -52,11 +52,11 @@ const RibbonCard = (props: RibbonCardProps) => {
           <View style={styles.iconWrapper}>
             {icon}
             <View style={styles.contentWrapper}>
-              <AppText variant="body1Bold" style={styles.titleStyle}>
+              <AppText variant="body1Bold" style={styles.titleStyle} testID={`text-${title}`}>
                 {title}
               </AppText>
               {subTitle ? (
-                <AppText variant="caption" style={styles.subTitleStyle}>
+                <AppText variant="caption" style={styles.subTitleStyle} testID={`text-${title}-subtitle`}>
                   {subTitle}
                 </AppText>
               ) : null}

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { useTheme } from 'react-native-paper';
 import DeviceInfo from 'react-native-device-info';
 import { useQuery } from '@realm/react';
-
 import AppHeader from 'src/components/AppHeader';
 import ScreenContainer from 'src/components/ScreenContainer';
 import { AppTheme } from 'src/theme';

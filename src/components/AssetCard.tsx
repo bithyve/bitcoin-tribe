@@ -28,12 +28,13 @@ type AssetCardProps = {
   onPress?: (event: GestureResponderEvent) => void;
   precision?: number;
   isCollectionUda?: boolean; // uda inside a collection
+  index?: number;
 };
 
 const CARD_WIDTH = 160;
 const CARD_HEIGHT = 210;
 const AssetCard = (props: AssetCardProps) => {
-  const { tag, onPress, asset, precision, isCollectionUda = false } = props;
+  const { tag, onPress, asset, precision, isCollectionUda = false, index } = props;
   const theme: AppTheme = useTheme();
   const isCollection = asset.slug ? true : false;
   const [imageLoading, setImageLoading] = useState(false);
@@ -120,6 +121,7 @@ const AssetCard = (props: AssetCardProps) => {
                   variant="body2"
                   numberOfLines={1}
                   style={styles.nameText}
+                  testID={`text_asset_name_${index}`}
                 >
                   {asset.name}
                 </AppText>

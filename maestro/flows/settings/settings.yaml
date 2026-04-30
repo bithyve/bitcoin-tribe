@@ -1,0 +1,117 @@
+appId: com.bithyve.tribe.dev
+---
+- assertVisible:
+    id: "tab-SETTINGS"
+- tapOn:
+    id: "tab-SETTINGS"
+- assertVisible:
+    id: "view_section_Personalization"
+- assertVisible:
+    id: "btn_settings_Name and Picture"
+- assertVisible:
+    id: "btn_settings_Language and Currency"
+- assertVisible:
+    id: "btn_settings_Dark Mode"
+- tapOn:
+    id: "btn_settings_Name and Picture"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_settings_Language and Currency"
+- assertVisible:
+    id: "text_header_title"
+    text: "Language and Currency"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Select your Language and Currency"
+- assertVisible:
+    id: "app-text-Sats-Mode"
+- assertVisible:
+    id: "text-Language-variant"
+- assertVisible:
+    id: "text-Language-langCurrency"
+    text: "English"
+- assertVisible:
+    id: "button-Language"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_settings_Dark Mode"
+- tapOn:
+    id: "btn_settings_Dark Mode"
+
+- assertVisible:
+    id: "view_section_App Security"
+- assertVisible:
+    id: "btn_settings_Set Passcode"
+- assertVisible:
+    id: "btn_settings_App Backup"
+- assertVisible:
+    id: "btn_settings_Biometric Unlock"
+- scroll
+- scroll
+- assertVisible:
+    id: "view_section_Wallet Management"
+- assertVisible:
+    id: "btn_settings_UTXOs, Invoices and xPUB"
+- assertVisible:
+    id: "view_section_Wallet Management"
+- assertVisible:
+    id: "view_section_About & Support"
+- assertVisible:
+    id: "view_section_About & Support"
+- tapOn:
+    id: "btn_settings_App info and Version History"
+- assertVisible:
+    id: "text_header_title"
+    text: "App Info"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "Bitcoin Tribe app details and Build version history"
+- assertVisible:
+    id: "btn_appinfo_Active Network"
+- assertVisible:
+    id: "text-Active Network"
+- assertVisible:
+    id: "text_value-Active Network"
+    text: "Regtest"
+- assertVisible:
+    id: "btn_appinfo_Wallet Type"
+- assertVisible:
+    id: "text_value-Wallet Type"
+    text: "On-Chain"
+- assertVisible:
+    id: "btn_appinfo_Wallet ID"
+- assertVisible:
+    id: "btn_appinfo_Version History"
+- tapOn:
+    id: "btn_appinfo_Version History"
+- assertVisible:
+    id: "text_header_title"
+    text: "Version History"
+- assertVisible:
+    id: "text_header_subtitle"
+    text: "View app’s current version and its history"
+- tapOn:
+    id: "btn_back"
+- tapOn:
+    id: "btn_back"
+- assertVisible:
+    id: "btn_social_Tribe Telegram"
+- assertVisible:
+    id: "btn_social_Tribe X"
+- swipe:
+    direction: DOWN
+- swipe:
+    direction: DOWN
+- tapOn:
+    id: "tab-HOMESCREEN"
+
+
+
+
+
+
+
+
+

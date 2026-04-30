@@ -20,9 +20,9 @@ const SocialButton: React.FC<SocialButtonProps> = ({
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={styles.button} onPress={onPress} testID={`btn_social_${title}`}>
       <View style={styles.iconContainer}>{icon}</View>
-      <AppText variant="body2" style={styles.titleText}>
+      <AppText variant="body2" style={styles.titleText} testID={`text_social_${title}`}>
         {title}
       </AppText>
     </TouchableOpacity>

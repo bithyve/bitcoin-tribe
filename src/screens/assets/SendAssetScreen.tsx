@@ -677,6 +677,7 @@ const SendAssetScreen = () => {
           {sendScreen.recipientInvoice}
         </AppText>
         <TextField
+          testID={`input_invoice`}
           value={invoice}
           onChangeText={handleInvoiceInputChange}
           placeholder={assets.invoice}
@@ -705,6 +706,7 @@ const SendAssetScreen = () => {
           {sendScreen.enterAmount}
         </AppText>
         <TextField
+          testID={`input_amount`}
           value={assetAmount}
           onChangeText={handleAmountInputChange}
           placeholder={assets.amount}

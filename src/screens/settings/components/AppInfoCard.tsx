@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useTheme } from 'react-native-paper';
 import { View, StyleSheet } from 'react-native';
-
 import { AppTheme } from 'src/theme';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
@@ -27,7 +26,7 @@ function AppInfoCard(props: AppInfoCardProps) {
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
   return (
-    <AppTouchable onPress={onPress} disabled={!onPress}>
+    <AppTouchable onPress={onPress} disabled={!onPress} testID={`btn_appinfo_${title}`}>
       <GradientView
         style={styles.container}
         colors={[
@@ -36,11 +35,11 @@ function AppInfoCard(props: AppInfoCardProps) {
           theme.colors.cardGradient3,
         ]}>
         <View>
-          <AppText variant="body1" style={styles.titleText}>
+          <AppText variant="body1" style={styles.titleText} testID={`text-${title}`}>
             {title}
           </AppText>
           {subTitle && (
-            <AppText variant="body2" style={styles.subTitleText}>
+            <AppText variant="body2" style={styles.subTitleText} testID={`text-subtitle-${title}`}>
               {subTitle}
             </AppText>
           )}
@@ -49,6 +48,7 @@ function AppInfoCard(props: AppInfoCardProps) {
           <View style={styles.contentWrapper2}>
             {icon}
             <AppText
+              testID={`text_value-${title}`}
               variant="body3"
               style={styles.valueText}
               numberOfLines={1}
