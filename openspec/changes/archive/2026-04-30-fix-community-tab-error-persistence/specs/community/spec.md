@@ -1,6 +1,7 @@
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: Error Feedback During Room Joining
+The system MUST only display error toasts from the Chat and CreateGroup screens while those screens are still visible (mounted). After the user navigates away, any in-flight async errors SHALL be silently discarded — they MUST NOT surface on unrelated screens.
 
 #### Scenario: Failed to join room — user still on Chat screen
 - GIVEN the user has opened a Chat room
