@@ -127,9 +127,9 @@ const Chat = () => {
       setHasJoinedRoom(true);
     } catch (error) {
       console.error('[Chat] ❌ Failed to join room:', error);
+      setHasJoinedRoom(false);
       if (isMountedRef.current) {
         Toast('Failed to join room', true);
-        setHasJoinedRoom(false);
       }
     }
   }, [room?.roomKey, room?.roomName, commitedMessages.length, joinRoom]);
