@@ -209,16 +209,12 @@ const CoinDetailsScreen = () => {
         return dateA - dateB;
       });
     }
-    const raw = (coin?.transactions || []) as Transfer[];
-    return [...raw].sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime() || 0;
-      const dateB = new Date(b.createdAt).getTime() || 0;
-      return dateA - dateB;
-    });
+    return [...(coin?.transactions || [])] as Transfer[];
   }, [
     isNodeConnectLayout,
     filteredPayments,
     coin?.transactions,
+    coin?.transactions?.length,
   ]);
 
   const rawHtml = isThemeDark

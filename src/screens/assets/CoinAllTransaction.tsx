@@ -35,7 +35,7 @@ function CoinAllTransaction() {
 
   const filteredTransactions = React.useMemo(() => {
     return asset?.transactions ? filterGasFreeTransfers(asset.transactions).reverse() : [];
-  }, [asset?.transactions]);
+  }, [asset?.transactions, asset?.transactions?.length]);
 
   return (
     <ScreenContainer>
