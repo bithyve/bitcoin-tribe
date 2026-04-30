@@ -89,6 +89,15 @@ const Chat = () => {
   const [communityServerModalVisible, setCommunityServerModalVisible] =
     useState(false);
   const joinWaitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Track whether the component is still mounted so that async callbacks
+  // do not fire Toast notifications after the user has navigated away.
+  const isMountedRef = useRef<boolean>(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     const combinedMessages = [...commitedMessages, ...sessionMessages];
@@ -103,7 +112,9 @@ const Chat = () => {
       setPeersMap(peersMap);
     } catch (err) {
       console.error('[Chat] ❌ Failed to load peers:', err);
-      Toast('Failed to load peers', true);
+      if (isMountedRef.current) {
+        Toast('Failed to load peers', true);
+      }
     }
   };
 
@@ -117,8 +128,10 @@ const Chat = () => {
       setHasJoinedRoom(true);
     } catch (error) {
       console.error('[Chat] ❌ Failed to join room:', error);
-      Toast('Failed to join room', true);
-      setHasJoinedRoom(false);
+      if (isMountedRef.current) {
+        Toast('Failed to join room', true);
+        setHasJoinedRoom(false);
+      }
     }
   }, [room?.roomKey, room?.roomName, commitedMessages.length, joinRoom]);
 
@@ -154,7 +167,9 @@ const Chat = () => {
 
     joinWaitTimeoutRef.current = setTimeout(() => {
       joinWaitTimeoutRef.current = null;
-      Toast('Initialization timed out. Try again later.', true);
+      if (isMountedRef.current) {
+        Toast('Initialization timed out. Try again later.', true);
+      }
     }, JOIN_WAIT_TIMEOUT_MS);
 
     return () => {

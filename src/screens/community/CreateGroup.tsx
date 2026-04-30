@@ -58,6 +58,15 @@ export const CreateGroup = () => {
   }, []);
   const pendingJoinRef = useRef<any | null>(null);
   const pendingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  // Track whether the component is still mounted so that async callbacks
+  // do not fire Toast notifications after the user has navigated away.
+  const isMountedRef = useRef<boolean>(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (params) joinRoomWithParams(params);
@@ -417,7 +426,9 @@ const JoinTab = ({ createRoom, isCreatingRoom, isRootPeerConnected }) => {
       logCustomEvent(events.JOIN_GROUP);
     } catch (err) {
       console.error('Failed to join room:', err);
-      Toast('Failed to join room - invalid key or connection error', true);
+      if (isMountedRef.current) {
+        Toast('Failed to join room - invalid key or connection error', true);
+      }
     }
   };
 
