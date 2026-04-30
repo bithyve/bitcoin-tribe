@@ -62,7 +62,6 @@ export const CreateGroup = () => {
   // do not fire Toast notifications after the user has navigated away.
   const isMountedRef = useRef<boolean>(true);
   useEffect(() => {
-    isMountedRef.current = true;
     return () => {
       isMountedRef.current = false;
     };
