@@ -84,3 +84,4 @@ ios/rgb/rgb_libFFI.xcframework
 ios/tmp.xcconfig
 ios/builds.xcarchive
 ios/fastlane/AuthKey.p8
+package-lock.json
