@@ -270,6 +270,7 @@ const CollectibleDetailsScreen = () => {
         navigation={navigation}
         wallet={wallet}
         coin={collectible.name}
+        ticker={collectible.metaData?.ticker}
         assetId={assetId}
         scrollY={scrollY}
         style={styles.transactionContainer}

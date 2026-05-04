@@ -360,6 +360,7 @@ const CoinDetailsScreen = () => {
         navigation={navigation}
         wallet={wallet}
         coin={coin?.name || ''}
+        ticker={coin?.ticker || coin?.metaData?.ticker}
         assetId={assetId}
         precision={coin?.precision || 0}
         scrollY={scrollY}
