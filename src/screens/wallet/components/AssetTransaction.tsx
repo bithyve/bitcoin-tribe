@@ -37,7 +37,7 @@ type AssetTransactionProps = {
   backColor?: string;
   disabled?: boolean;
   transaction: Transfer;
-  ticker?: string;
+  coin: string;
   onPress: () => void;
   assetFace?: string;
   precision: number;
@@ -45,17 +45,8 @@ type AssetTransactionProps = {
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
-  const { settings } = translations;
-  const {
-    backColor,
-    disabled,
-    transaction,
-    ticker,
-    onPress,
-    assetFace,
-    precision,
-    hidePrecision = false,
-  } = props;
+  const { assets, settings } = translations;
+  const { backColor, disabled, transaction, coin, onPress, assetFace, precision,hidePrecision=false } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -152,8 +143,6 @@ function AssetTransaction(props: AssetTransactionProps) {
       ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];
 
-  const tickerLabel = (ticker || '').toUpperCase();
-
   return (
     <AppTouchable
       disabled={disabled}
@@ -180,26 +169,11 @@ function AssetTransaction(props: AssetTransactionProps) {
               style={styles.transIdText}>
               {kindLabel}
             </AppText>
-            <View style={styles.metaRow}>
-              {!!tickerLabel && (
-                <View style={styles.tickerPill}>
-                  <AppText
-                    variant="caption"
-                    numberOfLines={1}
-                    style={styles.tickerText}>
-                    {tickerLabel}
-                  </AppText>
-                </View>
-              )}
-              <AppText
-                variant="caption"
-                numberOfLines={1}
-                style={styles.transDateText}>
-                {moment
-                  .unix(transaction.createdAt)
-                  .format('DD MMM YY  •  hh:mm A')}
-              </AppText>
-            </View>
+            <AppText variant="caption" style={styles.transDateText}>
+              {moment
+                .unix(transaction.createdAt)
+                .format('DD MMM YY  •  hh:mm A')}
+            </AppText>
           </View>
         </View>
         {!hidePrecision &&  assetFace?.toUpperCase() !== AssetFace.RGB21 ? (
@@ -261,38 +235,12 @@ const getStyles = (theme: AppTheme, backColor, assetFace) =>
     },
     contentWrapper: {
       marginLeft: 10,
-      flex: 1,
     },
     transIdText: {
       color: theme.colors.headingColor,
     },
-    metaRow: {
-      marginTop: hp(2),
-      flexDirection: 'row',
-      alignItems: 'center',
-      minWidth: 0,
-    },
-    tickerPill: {
-      maxWidth: hp(76),
-      paddingHorizontal: hp(7),
-      paddingVertical: hp(2),
-      borderRadius: hp(5),
-      borderWidth: 1,
-      borderColor: theme.colors.borderColor,
-      backgroundColor: theme.colors.inputBackground,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginRight: hp(6),
-    },
-    tickerText: {
-      color: theme.colors.accent1,
-      fontSize: 10,
-      lineHeight: 14,
-      textTransform: 'uppercase',
-    },
     transDateText: {
       color: theme.colors.secondaryHeadingColor,
-      flex: 1,
     },
     amountWrapper: {
       flexDirection: 'row',

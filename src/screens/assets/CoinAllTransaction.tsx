@@ -61,10 +61,7 @@ function CoinAllTransaction() {
         renderItem={({ item }) => (
           <AssetTransaction
             transaction={item}
-            ticker={
-              (asset as { ticker?: string; metaData?: { ticker?: string } })
-                ?.ticker || asset?.metaData?.ticker
-            }
+            coin={asset?.name}
             precision={asset?.precision}
             hidePrecision={hidePrecision}
             onPress={() => {
