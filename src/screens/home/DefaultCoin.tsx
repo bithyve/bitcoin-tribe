@@ -686,18 +686,6 @@ const DefaultCoin = ({
         refresh={onRefresh}
         refreshingStatus={false}
         coin={currentAsset?.name || presetAssets?.[currentIndex]?.name}
-        ticker={
-          (currentAsset as { ticker?: string; metaData?: { ticker?: string } })
-            ?.ticker ||
-          currentAsset?.metaData?.ticker ||
-          (
-            presetAssets?.[currentIndex] as {
-              ticker?: string;
-              metaData?: { ticker?: string };
-            }
-          )?.ticker ||
-          presetAssets?.[currentIndex]?.metaData?.ticker
-        }
         assetId={currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId}
         precision={currentAsset?.precision || 0}
         schema={currentAssetSchema}
