@@ -12,7 +12,8 @@ context: |
   - Navigation: React Navigation 6 — native-stack + bottom-tabs
   - Secure secrets: react-native-keychain (ACCESSIBLE.WHEN_UNLOCKED)
   - Styling: custom StyleSheet with src/theme/Colors.ts; no CSS-in-JS
-  - Module path alias: `src/` resolves from project root (configured in babel.config.js)
+  - Imports: use absolute src/... imports. The project also supports ~... alias via Babel,
+    but src/... is the preferred convention.
 
   ## Key Domains
   - On-chain Bitcoin: wallets, UTXOs, transactions (bitcoinjs-lib 6.1.5)
@@ -24,11 +25,18 @@ context: |
   - Lightning (LN): NodeConnect mode, LNPayments schema
   - Backup: encrypted cloud backup + manual seed backup via src/services/backup/
 
-  ## Realm Schemas (src/storage/realm/schema/)
-  TribeApp, Wallet, WalletDerivationDetails, RgbWallet, Coin, Collectible,
-  UniqueDigitalAsset, Collection, Community, Message, Contact,
-  HolepunchRoom, HolepunchMessage, HolepunchPeer, IFA,
-  BackupHistory, CloudBackupHistory, NodeInfo, LNPayments, ElectrumTransaction
+  ## E2E Automation (Maestro)
+  - E2E flows live under maestro/flows/ and cover onboarding, home, wallet,
+    RGB, settings, backup, and recovery journeys.
+  - Primary regression suite: maestro/flows/regression/dev-regression.yaml
+  - NPM command: npm run maestro:test:regression-dev
+  - Dev app id used by flows: com.bithyve.tribe.dev
+  - Some flows are platform-specific (Android-only steps exist in regression composition).
+
+  ## Realm Schemas
+  - Source of truth: src/storage/realm/schema/index.ts
+  - Do not maintain a partial static list in specs/design docs. When listing impacted
+    schemas for a change, derive names from schema/index.ts and include only affected items.
 
   ## AppType Enum
   ON_CHAIN | NODE_CONNECT | SUPPORTED_RLN
@@ -52,21 +60,29 @@ context: |
   ## Testing
   - Runner: Jest
   - Library: React Native Testing Library
-  - Mocks: src/__mocks__/ for native modules
+  - Mocks: use project-level __mocks__/ or test-local mocks aligned with current Jest setup
   - Run: yarn test
 
 rules:
   proposal:
     - State whether this change touches Realm schema (yes/no)
     - State whether this change touches src/services/messaging/ or src/bare/ (yes/no)
+    - State whether this change affects existing Maestro flows (yes/no) and list affected flow files
     - Include a "Non-goals" section
+    - Include an "Assumptions" section when behavior is inferred from code instead of directly observed
     - Include a rollback plan if the change modifies persistent storage or auth
   specs:
     - Use Given/When/Then format for all scenarios
     - Distinguish between on-chain and RGB/asset behavior where relevant
+    - Add at least one failure/edge scenario for send, backup, restore, auth, and transfer requirements
   design:
     - If yarn bare-pack is required, call it out explicitly at the top of the file
     - If Realm schema changes, list all affected schema files and the new schemaVersion
+    - For each schemaVersion bump, add a new guarded block in schema/migrations.ts
+    - For each schemaVersion bump, add or update migration tests validating upgrade behavior
+    - If user-visible flows change, list Maestro flows to update under maestro/flows/
     - List all files to be created or modified
   tasks:
     - Number tasks hierarchically: 1.1, 1.2, 2.1, 2.2, etc.
+    - Include explicit verification tasks: yarn test, and yarn bare-pack when messaging/bare changes are present
+    - Include Maestro verification tasks when UI/navigation/critical user journeys are impacted
