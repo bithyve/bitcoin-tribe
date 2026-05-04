@@ -6,6 +6,7 @@ import { CommonActions, useNavigation } from '@react-navigation/native';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import AppText from 'src/components/AppText';
 import { hp, wp } from 'src/constants/responsive';
+import Fonts from 'src/constants/Fonts';
 import IconBitcoin from 'src/assets/images/icon_btc2.svg';
 import IconBitcoinLight from 'src/assets/images/icon_btc2_light.svg';
 import IconScanner from 'src/assets/images/icon_scanner.svg';
@@ -103,6 +104,9 @@ function HomeHeader({
           <View style={styles.contentWrapper}>
             <HomeUserAvatar imageSource={image} />
             <View style={styles.userDetailsWrapper}>
+              <AppText numberOfLines={1} variant="caption" style={styles.greetingText}>
+                Welcome back
+              </AppText>
               <AppText
                 numberOfLines={1}
                 variant="heading3"
@@ -144,6 +148,7 @@ function HomeHeader({
           )}
           {showScanner && (
             <IconWrapper
+              style={styles.qrButton}
               onPress={() => {
                 if (isNodeInitInProgress) {
                   Toast(node.connectingNodeToastMsg, true);
@@ -189,20 +194,30 @@ const getStyles = (theme: AppTheme) =>
       flexDirection: 'row',
       width: '100%',
       alignItems: 'center',
+      justifyContent: 'space-between',
       marginTop: 0,
     },
     contentWrapper: {
       flexDirection: 'row',
-      width: '68%',
+      width: '72%',
       alignItems: 'center',
     },
     userDetailsWrapper: {
       marginLeft: wp(10),
+      justifyContent: 'center',
+    },
+    greetingText: {
+      color: '#707070',
+      fontFamily: Fonts.LufgaRegular,
+      fontSize: 11,
+      marginBottom: hp(1),
     },
     usernameText: {
-      color: theme.colors.headingColor,
+      color: '#FFFFFF',
+      fontFamily: Fonts.LufgaSemiBold,
+      fontSize: 16,
       width: '100%',
-      marginTop: hp(2),
+      lineHeight: 20,
     },
     balanceWrapper: {
       flexDirection: 'row',
@@ -221,8 +236,17 @@ const getStyles = (theme: AppTheme) =>
     iconWrapper: {
       flexDirection: 'row',
       justifyContent: 'flex-end',
-      width: '32%',
+      width: '28%',
       alignItems: 'flex-end',
+    },
+    qrButton: {
+      height: hp(42),
+      width: hp(42),
+      borderRadius: hp(14),
+      borderWidth: 1,
+      borderColor: '#232323',
+      backgroundColor: '#1A1A1A',
+      marginHorizontal: 0,
     },
   });
 export default HomeHeader;
