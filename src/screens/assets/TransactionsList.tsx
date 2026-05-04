@@ -54,6 +54,7 @@ function TransactionsList({
   refresh,
   refreshingStatus,
   coin,
+  ticker,
   assetId = '',
   style,
   precision,
@@ -65,6 +66,7 @@ function TransactionsList({
   refresh: () => void;
   refreshingStatus?: boolean;
   coin: string;
+  ticker?: string;
   assetId: string;
   style?: StyleProp<ViewStyle>;
   precision: number;
@@ -203,7 +205,7 @@ function TransactionsList({
         renderItem={({ item }) => (
           <AssetTransaction
             transaction={item}
-            coin={coin}
+            ticker={ticker}
             onPress={() => {
               navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
                 transaction: item,
