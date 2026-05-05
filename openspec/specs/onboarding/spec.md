@@ -41,12 +41,24 @@ an existing wallet from a seed phrase.
 
 ---
 
-### Requirement: Wallet Type Selection
-The system MUST allow the user to select between an on-chain-only wallet and advanced Lightning
-/ RGB modes. Advanced options MUST be explicitly expanded by the user and are hidden by default.
+### Requirement: Wallet Type Selection (Production)
+In production builds, the system MUST create an `ON_CHAIN` app instance and proceed directly
+to profile setup. No wallet type selection screen is shown.
+
+#### Scenario: New wallet created in production
+- GIVEN the user is on the wallet setup options screen in a production build
+- WHEN they select "Create New Wallet"
+- THEN the system navigates directly to profile setup with `appType` `ON_CHAIN`
+
+---
+
+### Requirement: Wallet Type Selection (Non-Production)
+In non-production builds, the system MUST allow the user to select between an on-chain-only
+wallet and advanced Lightning / RGB modes. Advanced options MUST be explicitly expanded by
+the user and are hidden by default.
 
 #### Scenario: User selects on-chain (Mainnet)
-- GIVEN the wallet type selection screen is visible
+- GIVEN the wallet type selection screen is visible in a non-production build
 - WHEN the user taps the Mainnet option
 - THEN the system creates an `ON_CHAIN` app instance and navigates to profile setup
 
@@ -73,8 +85,9 @@ The system MUST allow the user to select between an on-chain-only wallet and adv
 ---
 
 ### Requirement: Learn More Pages
-The system MUST provide informational detail pages for each wallet type, accessible from the
-wallet type selection screen, so users can make an informed choice before committing.
+In non-production builds, the system MUST provide informational detail pages for each wallet
+type, accessible from the wallet type selection screen, so users can make an informed choice
+before committing.
 
 #### Scenario: User opens Learn More for any wallet type
 - GIVEN the wallet type selection screen is visible
@@ -86,8 +99,8 @@ wallet type selection screen, so users can make an informed choice before commit
 ---
 
 ### Requirement: Supported Mode Terms and Conditions
-WHEN `appType` is `SUPPORTED_RLN`, the system MUST present a terms and conditions screen that
-the user must explicitly accept before a managed node is provisioned.
+In non-production builds, WHEN `appType` is `SUPPORTED_RLN`, the system MUST present a terms
+and conditions screen that the user must explicitly accept before a managed node is provisioned.
 
 #### Scenario: User reads and accepts terms
 - GIVEN the terms and conditions screen is shown
@@ -98,9 +111,9 @@ the user must explicitly accept before a managed node is provisioned.
 ---
 
 ### Requirement: RGB Lightning Node Connection
-WHEN `appType` is `NODE_CONNECT`, the system MUST allow the user to connect to a self-hosted
-RGB Lightning node by providing the node URL and authentication credentials. It MUST verify
-the connection before proceeding.
+In non-production builds, WHEN `appType` is `NODE_CONNECT`, the system MUST allow the user
+to connect to a self-hosted RGB Lightning node by providing the node URL and authentication
+credentials. It MUST verify the connection before proceeding.
 
 #### Scenario: Successful node connection with bearer token
 - GIVEN the node connection screen is shown
@@ -140,11 +153,20 @@ phrase MUST be validated before a restoration attempt is made.
 - THEN the invalid words are visually highlighted
 - AND the system displays an error toast and does not attempt a restore
 
-#### Scenario: Mnemonic valid but no backup found — redirect to RGB backup import
+#### Scenario: Mnemonic valid but no backup found — user chooses to import backup
 - GIVEN the user enters a valid 12-word mnemonic
 - WHEN the restoration attempt finds no existing backup for that seed
-- THEN the system navigates automatically to the RGB backup file import screen, passing the
-  mnemonic through, so the user can supply the backup file separately
+- THEN the system presents a confirmation dialog asking whether the user wants to recover
+  their RGB asset state
+- AND if the user confirms, the system navigates to the RGB backup file import screen with
+  the mnemonic retained
+
+#### Scenario: Mnemonic valid but no backup found — user skips import and starts fresh
+- GIVEN the system is showing the "recover RGB state" confirmation dialog
+- WHEN the user declines
+- THEN the system creates a new `ON_CHAIN` wallet using that mnemonic without importing
+  any backup file
+- AND the user is taken to the main app interface
 
 #### Scenario: Word suggestion
 - GIVEN the user is typing a seed word
@@ -154,8 +176,9 @@ phrase MUST be validated before a restoration attempt is made.
 ---
 
 ### Requirement: RGB Backup File Import
-WHEN a valid mnemonic is present but no cloud backup is found, the system MUST allow the user
-to import a `.rgb_backup` file from device storage to complete recovery.
+WHEN a valid mnemonic is present, no server backup is found, and the user has chosen to
+recover their RGB state, the system MUST allow the user to import a `.rgb_backup` file from
+device storage to complete recovery.
 
 #### Scenario: Successful RGB backup import
 - GIVEN the RGB backup import screen is shown with a valid mnemonic pre-loaded
