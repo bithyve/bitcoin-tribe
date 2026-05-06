@@ -9,6 +9,7 @@ export const ReceiveDataSchema: ObjectSchema = {
     expirationTimestamp: 'int',
     invoice: 'string',
     recipientId: 'string',
+    createdAt: 'int?',
     type: {
       type: 'string',
       default: InvoiceType.Default

@@ -59,6 +59,7 @@ function TransactionsList({
   precision,
   schema,
   limitToVisibleRows,
+  onItemPress,
 }: {
   transactions: Transfer[];
   isLoading: boolean;
@@ -75,6 +76,11 @@ function TransactionsList({
    * not change how many items show. Until that layout, a window heuristic is used.
    */
   limitToVisibleRows?: boolean;
+  /**
+   * Optional custom press handler for a transaction item.
+   * When provided, it overrides the default TRANSFERDETAILS navigation.
+   */
+  onItemPress?: (item: Transfer) => void;
 }) {
   const { translations } = useContext(LocalizationContext);
   const { wallet: walletTranslations } = translations;
@@ -205,14 +211,19 @@ function TransactionsList({
             testID={`transaction_${index}`}
             transaction={item}
             coin={coin}
+            hidePrecision={item.isGenericInvoice}
             onPress={() => {
-              navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-                transaction: item,
-                coin: coin,
-                assetId: assetId,
-                precision: precision,
-                schema,
-              });
+              if (onItemPress) {
+                onItemPress(item);
+              } else {
+                navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+                  transaction: item,
+                  coin: coin,
+                  assetId: assetId,
+                  precision: precision,
+                  schema,
+                });
+              }
             }}
             precision={precision}
           />

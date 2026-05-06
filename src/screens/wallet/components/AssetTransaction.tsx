@@ -73,11 +73,17 @@ function AssetTransaction(props: AssetTransactionProps) {
           ) : (
             <RecieveBtcIconLight />
           ),
+          receivewitness: isThemeDark ? (
+            <RecieveBtcIcon />
+          ) : (
+            <RecieveBtcIconLight />
+          ),
           issuance: isThemeDark ? <IssuanceIcon /> : <IssuanceIconLight />,
         },
         waitingcounterparty: {
           send: <WaitingCounterPartySendIcon />,
           receiveblind: <WaitingCounterPartyReceiveIcon />,
+          receivewitness: <WaitingCounterPartyReceiveIcon />,
         },
         waitingconfirmations: {
           send: isThemeDark ? (
@@ -86,10 +92,12 @@ function AssetTransaction(props: AssetTransactionProps) {
             <WaitingConfirmationIconSendLight />
           ),
           receiveblind: <WaitingConfirmationIconReceive />,
+          receivewitness: <WaitingConfirmationIconReceive />,
         },
         failed: {
           send: <FailedTxnIcon />,
           receiveblind: <FailedTxnIcon />,
+          receivewitness: <FailedTxnIcon />,
           issuance: <FailedTxnIcon />,
         },
       },
@@ -139,7 +147,8 @@ function AssetTransaction(props: AssetTransactionProps) {
       : normalizedKind === normalize(TransferKind.SEND) &&
         normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartySend
-      : normalizedKind === normalize(TransferKind.RECEIVE_BLIND) &&
+      : (normalizedKind === normalize(TransferKind.RECEIVE_BLIND) ||
+          normalizedKind === normalize(TransferKind.RECEIVE_WITNESS)) &&
         normalizedStatus === normalize(TransferStatus.WAITING_COUNTERPARTY)
       ? settings.waitingcounterpartyReceive
       : settings[transaction.status.toLowerCase().replace(/_/g, '')];

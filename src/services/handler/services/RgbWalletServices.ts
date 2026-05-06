@@ -235,7 +235,8 @@ export async function receiveAsset({
       throw new Error(response.error);
     }
 
-    const invoices = [...(rgbWallet?.invoices || []), response];
+    const createdAt = Math.floor(Date.now() / 1000);
+    const invoices = [...(rgbWallet?.invoices || []), { ...response, createdAt }];
     dbManager.updateObjectByPrimaryId(
       RealmSchema.RgbWallet,
       'mnemonic',
@@ -1489,7 +1490,8 @@ async function tryClaimWithInvoice(
 
   if (receiveData.invoice) {
     const rgbWallet = getRgbWallet();
-    const invoices = [...(rgbWallet?.invoices || []), { ...receiveData, type: InvoiceType.Campaign }];
+    const createdAt = Math.floor(Date.now() / 1000);
+    const invoices = [...(rgbWallet?.invoices || []), { ...receiveData, type: InvoiceType.Campaign, createdAt }];
     dbManager.updateObjectByPrimaryId(
       RealmSchema.RgbWallet,
       'mnemonic',

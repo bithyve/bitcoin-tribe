@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import React, { useContext, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useContext, useMemo, useRef, useState } from 'react';
 import {
   Asset,
   AssetSchema,
@@ -13,6 +13,10 @@ import {
   Collectible,
   Collection,
   InflatableFungibleAsset,
+  InvoiceType,
+  Transfer,
+  TransferKind,
+  TransferStatus,
   UniqueDigitalAsset,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
@@ -51,6 +55,7 @@ import { useSharedValue } from 'react-native-reanimated';
 import Colors from 'src/theme/Colors';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { CustomImage } from 'src/components/CustomImage';
+import moment from 'moment';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -590,6 +595,65 @@ const DefaultCoin = ({
     });
   };
 
+  const allAssetTransactionInvoices = useMemo(() => {
+    return [...coins, ...collectibles, ...udas, ...collections, ...ifaCoins]
+      .flatMap(asset => (asset.transactions || []).map((t: Transfer) => t.invoiceString))
+      .filter(Boolean);
+  }, [coins, collectibles, udas, collections, ifaCoins]);
+
+  const genericInvoiceTransfers = useMemo((): Transfer[] => {
+    const now = moment();
+    const SECONDS_PER_DAY = 86400;
+    return (rgbWallet?.invoices || [])
+      .filter(
+        invoice =>
+          invoice.type === InvoiceType.Default &&
+          moment(invoice.expirationTimestamp * 1000).isAfter(now) &&
+          !allAssetTransactionInvoices.includes(invoice.invoice),
+      )
+      .map(invoice => ({
+        batchTransferIdx: Number(invoice.batchTransferIdx) || 0,
+        createdAt: invoice.createdAt || invoice.expirationTimestamp - SECONDS_PER_DAY,
+        transferIdx: 0,
+        consignmentPath: null,
+        kind: invoice.recipientId.includes(':wvout')
+          ? TransferKind.RECEIVE_WITNESS
+          : TransferKind.RECEIVE_BLIND,
+        status: TransferStatus.WAITING_COUNTERPARTY,
+        updatedAt: invoice.createdAt || invoice.expirationTimestamp,
+        txid: null,
+        recipientId: invoice.recipientId,
+        expiration: invoice.expirationTimestamp,
+        assignments: [],
+        invoiceString: invoice.invoice,
+        isGenericInvoice: true,
+      }));
+  }, [rgbWallet?.invoices, allAssetTransactionInvoices]);
+
+  const transactionsWithInvoices = useMemo((): Transfer[] => {
+    const assetTxns: Transfer[] = [...(currentAsset?.transactions || [])];
+    const combined = [...genericInvoiceTransfers, ...assetTxns];
+    // Sort ascending by createdAt; TransactionsList will reverse this to show newest first
+    return combined.sort((a, b) => (a.createdAt ?? 0) - (b.createdAt ?? 0));
+  }, [currentAsset?.transactions, genericInvoiceTransfers]);
+
+  const handleItemPress = useCallback(
+    (item: Transfer) => {
+      if (item.isGenericInvoice) {
+        navigation.navigate(NavigationRoutes.INVOICES);
+      } else {
+        navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+          transaction: item,
+          coin: currentAsset?.name || presetAssets?.[currentIndex]?.name,
+          assetId: currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId,
+          precision: currentAsset?.precision || 0,
+          schema: currentAssetSchema,
+        });
+      }
+    },
+    [navigation, currentAsset, presetAssets, currentIndex, currentAssetSchema],
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -687,7 +751,7 @@ const DefaultCoin = ({
             : styles.transactionContainer
         }
         limitToVisibleRows
-        transactions={currentAsset?.transactions || []}
+        transactions={transactionsWithInvoices}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
@@ -695,6 +759,7 @@ const DefaultCoin = ({
         assetId={currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId}
         precision={currentAsset?.precision || 0}
         schema={currentAssetSchema}
+        onItemPress={handleItemPress}
       />
     </View>
   );

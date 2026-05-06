@@ -33,7 +33,8 @@ export interface RGBWallet {
     recipientId: string;
     expirationTimestamp: number;
     batchTransferIdx: string;
-    type: InvoiceType
+    type: InvoiceType;
+    createdAt?: number;
   }[];
 }
 
@@ -108,7 +109,8 @@ export interface Transfer {
   };
   invoiceString?: string;
   transportEndpoints?: TransferTransportEndpoint[];
-  transaction?: ElectrumTransaction
+  transaction?: ElectrumTransaction;
+  isGenericInvoice?: boolean;
 }
 
 export interface MetaData {
