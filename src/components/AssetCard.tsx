@@ -135,13 +135,16 @@ const AssetCard = (props: AssetCardProps) => {
                 </AppText>
               )}
             </View>
-            <AppText
-              variant="body2"
-              numberOfLines={1}
-              style={styles.textDetails}
-            >
-              {detailsText}
-            </AppText>
+            {asset.assetSchema !== AssetSchema.Coin &&
+              asset.assetSchema !== AssetSchema.IFA && (
+                <AppText
+                  variant="body2"
+                  numberOfLines={1}
+                  style={styles.textDetails}
+                >
+                  {detailsText}
+                </AppText>
+              )}
           </View>
         </GradientView>
       </AppTouchable>

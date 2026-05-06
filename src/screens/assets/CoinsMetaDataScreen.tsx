@@ -264,6 +264,11 @@ const CoinsMetaDataScreen = () => {
                 .format('DD MMM YY  hh:mm A')}
             />
           </View>
+          {!!coin.details && (
+            <View style={styles.wrapper}>
+              <Item title={assets.details} value={coin.details} />
+            </View>
+          )}
           <>
             <VerifyIssuer
               assetId={assetId}
