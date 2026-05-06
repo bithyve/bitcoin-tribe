@@ -785,6 +785,8 @@
     "noOfAmendmentsLabel": "No of Amendments",
     "enterMaxAmendmentsPlaceholder": "Enter max number of amendments",
     "enterNoOfAmendments": "Please enter the number of amendments",
+    "amendmentsMustBeGreaterThanZero": "Number of amendments must be greater than 0",
+    "totalSupplyMustBeGreaterThanZero": "Total supply must be greater than 0",
     "replaceRightsNum": "Replace Rights Number",
     "replaceRightsNumPlaceholder": "Enter replace rights number",
     "replaceRightsNumValidationError": "Please enter replace rights number",

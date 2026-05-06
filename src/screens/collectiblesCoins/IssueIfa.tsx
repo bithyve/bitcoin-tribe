@@ -201,7 +201,14 @@ function IssueIfa() {
     ) {
       return true;
     }
-    return !assetName || !assetTicker || !totalSupplyAmt || !replaceRightsNum;
+    return (
+      !assetName ||
+      !assetTicker ||
+      !totalSupplyAmt ||
+      Number(totalSupplyAmt) === 0 ||
+      !replaceRightsNum ||
+      Number(replaceRightsNum) === 0
+    );
   }, [assetName, assetTicker, totalSupplyAmt, replaceRightsNum]);
 
   const onPressIssue = () => {
@@ -247,20 +254,21 @@ function IssueIfa() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (
-        sanitizedText &&
+      if (!sanitizedText) {
+        setTotalSupplyAmt('');
+        setAssetTotSupplyValidationError(assets.enterTotalSupply);
+      } else if (Number(sanitizedText) === 0) {
+        setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(
+          assets.totalSupplyMustBeGreaterThanZero,
+        );
+      } else if (
         BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
+        MAX_ASSET_SUPPLY_VALUE
       ) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
-      } else if (!sanitizedText) {
-        setTotalSupplyAmt('');
-        setAssetTotSupplyValidationError(assets.enterTotalSupply);
-      } else if (
-        sanitizedText &&
-        BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
-      ) {
+      } else if (BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE) {
         setAssetTotSupplyValidationError(assets.totalSupplyAmountErrMsg);
       }
     } catch {
@@ -274,6 +282,11 @@ function IssueIfa() {
     if (!sanitizedText) {
       setReplaceRightsNum('');
       setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
+      return;
+    }
+    if (Number(sanitizedText) === 0) {
+      setReplaceRightsNum(sanitizedText);
+      setReplaceRightsNumValidationError(assets.amendmentsMustBeGreaterThanZero);
       return;
     }
     setReplaceRightsNum(sanitizedText);
