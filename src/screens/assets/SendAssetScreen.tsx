@@ -426,6 +426,7 @@ const SendAssetScreen = () => {
             
             setSuccessStatus(true);
             logCustomEvent(events.SEND_ASSET);
+            backupMutate();
           } else {
             setVisible(false);
             setTimeout(() => {

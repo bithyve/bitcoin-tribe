@@ -99,6 +99,7 @@ function SendToContainer({
     data: phaseOneTxPrerequisites,
   } = useMutation(ApiHandler.sendPhaseOne);
   const sendTransactionMutation = useMutation(ApiHandler.sendTransaction);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
   const rgbWallet: RGBWallet = useRgbWallets({}).wallets[0];
   const styles = React.useMemo(
     () => getStyles(theme, inputHeight),
@@ -135,6 +136,7 @@ function SendToContainer({
   const successTransaction = () => {
     setVisible(false);
     sendTransactionMutation.reset();
+    backupMutate();
     setTimeout(() => {
       navigation.dispatch(
         CommonActions.reset({

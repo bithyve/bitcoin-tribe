@@ -44,6 +44,7 @@ const LightningSend = () => {
   const navigation = useNavigation();
   const decodeInvoiceMutation = useMutation(ApiHandler.decodeLnInvoice);
   const sendLnPaymentMutation = useMutation(ApiHandler.sendLNPayment);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
   const [invoiceDetails, setInvoiceDetails] = useState(null);
   const theme: AppTheme = useTheme();
   const styles = getStyles(theme);
@@ -67,6 +68,7 @@ const LightningSend = () => {
       Toast(`${sendLnPaymentMutation.error}`, true);
     } else if (sendLnPaymentMutation.data) {
       if (sendLnPaymentMutation.data?.status === 'Pending') {
+        backupMutate();
         setTimeout(() => {
           setVisible(true);
         }, 500);
