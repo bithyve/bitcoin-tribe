@@ -207,33 +207,38 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
+  const clearRoomState = useCallback(() => {
+    setIsConnected(false);
+    setCurrentRoom(null);
+    setConnectedPeers([]);
+    setSessionMessages([]);
+  }, []);
+
   const leaveRoom = useCallback(async () => {
     try {
       const adapter = chatService.getAdapter();
       await adapter.leaveRoom();
-      setIsConnected(false);
-      setCurrentRoom(null);
-      setConnectedPeers([]);
-      setSessionMessages([]);
+      clearRoomState();
     } catch (err: any) {
       setError(err.message);
       throw err;
     }
-  }, []);
+  }, [clearRoomState]);
 
   const deleteRoom = useCallback(async (roomId: string) => {
     try {
       const adapter = chatService.getAdapter();
+      const isActiveRoom = adapter.getCurrentRoom()?.roomId === roomId;
       await adapter.deleteRoom(roomId);
-      setIsConnected(false);
-      setCurrentRoom(null);
-      setConnectedPeers([]);
-      setSessionMessages([]);
+      // Only clear local room state if the deleted room was the currently active room
+      if (isActiveRoom) {
+        clearRoomState();
+      }
     } catch (err: any) {
       setError(err.message);
       throw err;
     }
-  }, []);
+  }, [clearRoomState]);
 
   /**
    * Manually reconnect to root peer
