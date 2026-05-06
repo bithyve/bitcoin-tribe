@@ -98,6 +98,26 @@ export class MessageStorage {
   }
 
   /**
+   * Delete all messages for a room
+   */
+  static async deleteMessagesForRoom(roomId: string): Promise<void> {
+    try {
+      const realmMessages = RealmDatabase.get(RealmSchema.HolepunchMessage);
+      if (!realmMessages) return;
+      const roomMessages = (realmMessages as Realm.Results<any>).filtered('roomId == $0', roomId);
+      RealmDatabase.write(() => {
+        roomMessages.forEach((m: any) => {
+          RealmDatabase.delete(m);
+        });
+      });
+      console.log('[MessageStorage] Messages deleted for room:', roomId);
+    } catch (error) {
+      console.error('[MessageStorage] Failed to delete messages for room:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Clear all messages (for testing/debugging)
    */
   static async clearAllMessages(): Promise<void> {

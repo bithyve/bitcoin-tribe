@@ -5,7 +5,7 @@ import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import Toast from 'src/components/Toast';
 import ModalLoading from 'src/components/ModalLoading';
 import HomeHeader from '../home/components/HomeHeader';
-import { StyleSheet, View, FlatList, Text, Image, Modal, Share, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, FlatList, Text, Image, Modal, Share, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { hp, wp } from 'src/constants/responsive';
 import { useChat } from 'src/hooks/useChat';
 import { HolepunchRoom, HolepunchRoomType } from 'src/services/messaging/holepunch/storage/RoomStorage';
@@ -66,6 +66,7 @@ function Community() {
     getCurrentPeerPubKey,
     sendDMInvitation,
     getInboxRoom,
+    deleteRoom,
   } = useChat();
 
   // Only get public key if service is initialized
@@ -163,6 +164,30 @@ function Community() {
       roomId: room.roomId,
     });
   };
+
+  const handleDeleteRoom = useCallback((room: HolepunchRoom) => {
+    Alert.alert(
+      'Delete Chat',
+      `Are you sure you want to delete "${room.roomName}"? This will remove the chat and all its messages permanently.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteRoom(room.roomId);
+              await loadRooms();
+              Toast('Chat deleted');
+            } catch (e) {
+              Toast('Failed to delete chat', true);
+            }
+          },
+        },
+      ],
+      { cancelable: true },
+    );
+  }, [deleteRoom, loadRooms]);
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -449,6 +474,7 @@ function Community() {
       <AppTouchable
         style={styles.roomCard}
         onPress={() => handleOpenRoom(item)}
+        onLongPress={() => handleDeleteRoom(item)}
         activeOpacity={0.7}>
         <View style={styles.roomCardRow}>
           <View style={styles.roomImageContainer}>

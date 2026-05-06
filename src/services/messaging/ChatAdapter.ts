@@ -515,6 +515,26 @@ export class ChatAdapter extends EventEmitter {
   }
 
   /**
+   * Delete a room and all its messages from persistent storage
+   * If the room is currently active, it will be left first
+   */
+  async deleteRoom(roomId: string): Promise<void> {
+    // Leave the room first if it's the active one
+    if (this.currentRoom?.roomId === roomId) {
+      await this.leaveRoom();
+    }
+
+    // Delete all messages for the room
+    await MessageStorage.deleteMessagesForRoom(roomId);
+
+    // Delete the room itself
+    await RoomStorage.deleteRoom(roomId);
+
+    console.log('[ChatAdapter] Room deleted:', roomId);
+    this.emit('chat:room-deleted', roomId);
+  }
+
+  /**
    * Leave current room and disconnect
    */
   async leaveRoom(): Promise<void> {

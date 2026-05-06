@@ -27,6 +27,7 @@ interface UseChatResult {
   joinRoom: (roomKey: string, lastSyncIndex: number) => Promise<HolepunchRoom>;
   sendMessage: (text: string, messageType: HolepunchMessageType) => Promise<void>;
   leaveRoom: () => Promise<void>;
+  deleteRoom: (roomId: string) => Promise<void>;
   reconnectRootPeer: () => Promise<void>;
   sendDMInvitation: (recipientPublicKey: string, recipientName?: string, recipientImage?: string) => Promise<HolepunchRoom>;
   syncInbox: (lastSyncIndex: number) => Promise<{ synced: boolean }>;
@@ -220,6 +221,20 @@ export function useChat(): UseChatResult {
     }
   }, []);
 
+  const deleteRoom = useCallback(async (roomId: string) => {
+    try {
+      const adapter = chatService.getAdapter();
+      await adapter.deleteRoom(roomId);
+      setIsConnected(false);
+      setCurrentRoom(null);
+      setConnectedPeers([]);
+      setSessionMessages([]);
+    } catch (err: any) {
+      setError(err.message);
+      throw err;
+    }
+  }, []);
+
   /**
    * Manually reconnect to root peer
    * Useful for pull-to-refresh functionality
@@ -343,6 +358,7 @@ export function useChat(): UseChatResult {
     joinRoom,
     sendMessage,
     leaveRoom,
+    deleteRoom,
     reconnectRootPeer,
     sendDMInvitation,
     syncInbox,
