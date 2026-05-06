@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "Connected to community server",
     "communityServerOffline": "Community server offline",
     "communityServerOnline": "Community server online",
-    "connectingToCommunityServer": "Connecting to community server..."
+    "connectingToCommunityServer": "Connecting to community server...",
+    "errorInvalidIndexer": "Your wallet is currently offline. Please check your internet connection or wallet settings.",
+    "errorInsufficientBitcoins": "Insufficient bitcoin balance. Please add more sats to your wallet and try again.",
+    "errorInsufficientAllocationSlots": "No available UTXO slots. Creating new UTXOs automatically...",
+    "errorUtxoNotFound": "We encountered an issue syncing your UTXOs. Please refresh your wallet and try again.",
+    "errorAuthFailed": "Authentication failed. Please try again later.",
+    "errorGasFreeTransferFailed": "Gas-free transfer failed. Please try again.",
+    "errorUnknown": "An unexpected error occurred. Please try again.",
+    "errorFailedToProcess": "Failed to process the request. Please try again.",
+    "errorWalletSyncRequired": "Wallet sync required. Please refresh your wallet and try again.",
+    "errorRgbGeneral": "An RGB wallet error occurred. Please try again or check your settings."
   },
   "onBoarding": {
     "welcome": "Welcome",

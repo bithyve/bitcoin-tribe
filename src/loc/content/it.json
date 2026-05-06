@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "Connesso al server della comunità",
     "communityServerOffline": "Server della comunità offline",
     "communityServerOnline": "Server della comunità online",
-    "connectingToCommunityServer": "Connessione al server della comunità..."
+    "connectingToCommunityServer": "Connessione al server della comunità...",
+    "errorInvalidIndexer": "Il tuo portafoglio è attualmente offline. Controlla la connessione internet o le impostazioni del portafoglio.",
+    "errorInsufficientBitcoins": "Saldo bitcoin insufficiente. Aggiungi altri sats al tuo portafoglio e riprova.",
+    "errorInsufficientAllocationSlots": "Nessuno slot UTXO disponibile. Creazione automatica di nuovi UTXO in corso...",
+    "errorUtxoNotFound": "Abbiamo riscontrato un problema durante la sincronizzazione degli UTXO. Aggiorna il portafoglio e riprova.",
+    "errorAuthFailed": "Autenticazione fallita. Riprova più tardi.",
+    "errorGasFreeTransferFailed": "Trasferimento senza gas fallito. Riprova.",
+    "errorUnknown": "Si è verificato un errore imprevisto. Riprova.",
+    "errorFailedToProcess": "Impossibile elaborare la richiesta. Riprova.",
+    "errorWalletSyncRequired": "Sincronizzazione portafoglio richiesta. Aggiorna il portafoglio e riprova.",
+    "errorRgbGeneral": "Si è verificato un errore nel portafoglio RGB. Riprova o controlla le impostazioni."
   },
   "onBoarding": {
     "welcome": "Benvenuto",

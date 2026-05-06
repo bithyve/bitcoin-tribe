@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "コミュニティサーバーに接続済み",
     "communityServerOffline": "コミュニティサーバーオフライン",
     "communityServerOnline": "コミュニティサーバーオンライン",
-    "connectingToCommunityServer": "コミュニティサーバーに接続中..."
+    "connectingToCommunityServer": "コミュニティサーバーに接続中...",
+    "errorInvalidIndexer": "ウォレットは現在オフラインです。インターネット接続またはウォレット設定を確認してください。",
+    "errorInsufficientBitcoins": "ビットコイン残高が不足しています。ウォレットにサットを追加して再試行してください。",
+    "errorInsufficientAllocationSlots": "利用可能なUTXOスロットがありません。新しいUTXOを自動的に作成しています...",
+    "errorUtxoNotFound": "UTXOの同期中に問題が発生しました。ウォレットを更新して再試行してください。",
+    "errorAuthFailed": "認証に失敗しました。後でもう一度お試しください。",
+    "errorGasFreeTransferFailed": "ガスフリー転送に失敗しました。再試行してください。",
+    "errorUnknown": "予期しないエラーが発生しました。再試行してください。",
+    "errorFailedToProcess": "リクエストの処理に失敗しました。再試行してください。",
+    "errorWalletSyncRequired": "ウォレットの同期が必要です。ウォレットを更新して再試行してください。",
+    "errorRgbGeneral": "RGBウォレットでエラーが発生しました。再試行するか、設定を確認してください。"
   },
   "onBoarding": {
     "welcome": "ようこそ",

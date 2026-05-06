@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "已连接到社区服务器",
     "communityServerOffline": "社区服务器离线",
     "communityServerOnline": "社区服务器在线",
-    "connectingToCommunityServer": "正在连接到社区服务器..."
+    "connectingToCommunityServer": "正在连接到社区服务器...",
+    "errorInvalidIndexer": "您的钱包当前处于离线状态。请检查您的网络连接或钱包设置。",
+    "errorInsufficientBitcoins": "比特币余额不足。请向您的钱包添加更多聪并重试。",
+    "errorInsufficientAllocationSlots": "没有可用的UTXO插槽。正在自动创建新的UTXO...",
+    "errorUtxoNotFound": "同步UTXO时遇到问题。请刷新您的钱包并重试。",
+    "errorAuthFailed": "身份验证失败。请稍后重试。",
+    "errorGasFreeTransferFailed": "免gas转账失败。请重试。",
+    "errorUnknown": "发生意外错误。请重试。",
+    "errorFailedToProcess": "处理请求失败。请重试。",
+    "errorWalletSyncRequired": "需要钱包同步。请刷新您的钱包并重试。",
+    "errorRgbGeneral": "RGB钱包发生错误。请重试或检查您的设置。"
   },
   "onBoarding": {
     "welcome": "欢迎",

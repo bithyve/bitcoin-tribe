@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "Conectado al servidor de la comunidad",
     "communityServerOffline": "Servidor de la comunidad desconectado",
     "communityServerOnline": "Servidor de la comunidad en línea",
-    "connectingToCommunityServer": "Conectando al servidor de la comunidad..."
+    "connectingToCommunityServer": "Conectando al servidor de la comunidad...",
+    "errorInvalidIndexer": "Tu billetera está actualmente sin conexión. Por favor, revisa tu conexión a internet o la configuración de la billetera.",
+    "errorInsufficientBitcoins": "Saldo de bitcoin insuficiente. Por favor, agrega más sats a tu billetera e inténtalo de nuevo.",
+    "errorInsufficientAllocationSlots": "No hay ranuras UTXO disponibles. Creando nuevos UTXOs automáticamente...",
+    "errorUtxoNotFound": "Encontramos un problema sincronizando tus UTXOs. Por favor, actualiza tu billetera e inténtalo de nuevo.",
+    "errorAuthFailed": "Autenticación fallida. Por favor, inténtalo de nuevo más tarde.",
+    "errorGasFreeTransferFailed": "La transferencia sin gas falló. Por favor, inténtalo de nuevo.",
+    "errorUnknown": "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
+    "errorFailedToProcess": "No se pudo procesar la solicitud. Por favor, inténtalo de nuevo.",
+    "errorWalletSyncRequired": "Se requiere sincronización de billetera. Por favor, actualiza tu billetera e inténtalo de nuevo.",
+    "errorRgbGeneral": "Se produjo un error en la billetera RGB. Por favor, inténtalo de nuevo o revisa tu configuración."
   },
   "onBoarding": {
     "welcome": "Bienvenido",

@@ -42,6 +42,7 @@ import Slider from 'src/components/Slider';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -173,7 +174,7 @@ function IssueIfa() {
         }, 500);
       } else if (response?.error) {
         setLoading(false);
-        Toast(`Failed: ${response?.error}`, true);
+        Toast(getRgbErrorMessage(response?.error), true);
       }
     } catch (error) {
       if (error.code === RgbLibErrors.InsufficientAllocationSlots) {
@@ -181,7 +182,7 @@ function IssueIfa() {
           createUtxos();
         }, 500);
       } else {
-        Toast(error.message, true);
+        Toast(getRgbErrorMessage(error), true);
         setLoading(false);
       }
     }

@@ -28,6 +28,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import CardSkeletonLoader from 'src/components/CardSkeletonLoader';
 import { AppTheme } from 'src/theme';
 import { hp } from 'src/constants/responsive';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 import { Keys } from 'src/storage';
 import ShareOptionView from './ShareOptionView';
 import VerificationSection from './VerificationSection';
@@ -148,7 +149,7 @@ export const verifyIssuerOnTwitter = async (
       }
     }
   } catch (error) {
-    Toast(`${error}`, true);
+    Toast(getRgbErrorMessage(error), true);
     console.log(error);
   }
 };
@@ -256,7 +257,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       if (errorMessage === 'Insufficient balance') {
         Toast(assets.payServiceFeeFundError, true);
       } else {
-        Toast(errorMessage, true);
+        Toast(getRgbErrorMessage(errorMessage), true);
       }
       payServiceFeeFeeMutation.reset();
       setShowFeeModal(false);
@@ -324,7 +325,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }
     } catch (error) {
       setDisabledCTA(false);
-      Toast(`${error}`, true);
+      Toast(getRgbErrorMessage(error), true);
       console.log(error);
     }
   }, [assetId, schema]);

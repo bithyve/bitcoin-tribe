@@ -59,6 +59,7 @@ import Colors from 'src/theme/Colors';
 import { SizedBox } from 'src/components/SizedBox';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 export const MOCK_BANNER = require('src/assets/images/mockBanner.png');
 export const MOCK_BANNER_LIGHT = require('src/assets/images/mockBannerLight.png');
@@ -251,7 +252,7 @@ function IssueCollection() {
       }
     } catch (error) {
       setShowPayment(false);
-      Toast(error.message, true);
+      Toast(getRgbErrorMessage(error), true);
       console.log(error);
       setPaying(false);
     }
@@ -307,7 +308,7 @@ function IssueCollection() {
           createUtxos();
         }, 500);
       } else {
-        Toast(error.message, true);
+        Toast(getRgbErrorMessage(error), true);
       }
     }
   }, [

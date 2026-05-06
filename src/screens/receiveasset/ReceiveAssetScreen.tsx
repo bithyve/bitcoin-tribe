@@ -33,6 +33,7 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 function ReceiveAssetScreen() {
   const { translations, formatString } = useContext(LocalizationContext);
@@ -142,13 +143,13 @@ function ReceiveAssetScreen() {
           }, 100);
           return true;
         } else {
-          Toast(errorMessage, true);
+          Toast(getRgbErrorMessage(errorMessage), true);
           navigation.goBack();
         }
         return false;
       };
       if (!handleSpecificError(errorMessage)) {
-        Toast(errorMessage, true);
+        Toast(getRgbErrorMessage(errorMessage), true);
       }
     }
   }, [error]);
@@ -163,7 +164,7 @@ function ReceiveAssetScreen() {
       } else {
         errorMessage = 'An unexpected error occurred. Please try again.';
       }
-      Toast(`${errorMessage}`, true);
+      Toast(getRgbErrorMessage(errorMessage), true);
       // Toast(generateLNInvoiceMutation.error, true);
     } else if (generateLNInvoiceMutation.data) {
       setLightningInvoice(generateLNInvoiceMutation?.data?.invoice);

@@ -77,6 +77,7 @@ import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
 import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const gasFreeFeeCalculator = createFeeCalculator();
 
@@ -436,7 +437,7 @@ const SendAssetScreen = () => {
           setLoading(false);
           setVisible(false);
           setTimeout(() => {
-            Toast(`Gas-free transfer failed: ${error.message}`, true);
+            Toast(getRgbErrorMessage(error), true);
           }, 500);
         }
       } else if (paymentMethod === PaymentMethodType.SATS) {
@@ -465,17 +466,7 @@ const SendAssetScreen = () => {
       } else if (response?.error) {
         setVisible(false);
         setTimeout(() => {
-          if (
-            response?.error ===
-            'details=Error from bdk: UTXO not found in the internal database'
-          ) {
-            Toast(
-              'We encountered an issue while syncing your UTXOs. Please refresh your wallet from the Home screen and try again. Contact support on Telegram if needed.',
-              true,
-            );
-          } else {
-            Toast(`Failed: ${response?.error}`, true);
-          }
+          Toast(getRgbErrorMessage(response?.error), true);
         }, 500);
       }
       } else {
@@ -487,7 +478,7 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else {
-        Toast(error.message || error.code || `${error}` || 'An unknown error occurred', true);
+        Toast(getRgbErrorMessage(error), true);
         setLoading(false);
         setVisible(false);
       }

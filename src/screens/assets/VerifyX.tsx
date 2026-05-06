@@ -20,6 +20,7 @@ import ModalLoading from 'src/components/ModalLoading';
 import dbManager from 'src/storage/realm/dbManager';
 import { IssuerVerificationMethod } from 'src/models/interfaces/RGBWallet';
 import { loginWithTwitter } from 'src/services/twitter';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 import { AppContext } from 'src/contexts/AppContext';
 import { saveTwitterHandle } from 'src/utils/socialHandleUtils';
 import TwitterVerificationInfoModal from './components/TwitterVerificationInfoModal';
@@ -120,11 +121,7 @@ function VerifyX() {
       }
     } catch (error) {
       setIsLoading(false);
-      if(error.message.includes('The operation couldn’t be completed')) {
-        Toast(`Failed to verify X handle, please try again later.`, true);
-      } else {
-        Toast(`${error}`, true);
-      }
+      Toast(getRgbErrorMessage(error), true);
       console.log(error);
     }
   }, [assetId, schema]);

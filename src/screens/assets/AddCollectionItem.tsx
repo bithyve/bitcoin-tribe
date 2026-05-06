@@ -64,6 +64,7 @@ import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import useWallets from 'src/hooks/useWallets';
 import { Wallet } from 'src/services/wallets/interfaces/wallet';
 import { events, logCustomEvent } from 'src/services/analytics';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 function IssueCollectibleScreen() {
   const { collectionId } = useRoute().params;
@@ -216,13 +217,13 @@ function IssueCollectibleScreen() {
         }, 500);
       } else if (response?.error) {
         setLoading(false);
-        Toast(`Failed: ${response?.error}`, true);
+        Toast(getRgbErrorMessage(response?.error), true);
       }
     } catch (error) {
       setPaying(false);
       setShowPayment(false);
       setLoading(false);
-      Toast(`Unexpected error: ${error.message}`, true);
+      Toast(getRgbErrorMessage(error), true);
     }
   }, [
     assetName,
@@ -302,7 +303,7 @@ function IssueCollectibleScreen() {
       }
     } catch (error) {
       setShowPayment(false);
-      Toast(error.message, true);
+      Toast(getRgbErrorMessage(error), true);
       console.log(error);
       setPaying(false);
     }

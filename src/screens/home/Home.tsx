@@ -42,6 +42,7 @@ import { VersionHistory } from 'src/models/interfaces/VersionHistory';
 import AppType from 'src/models/enums/AppType';
 import Toast from 'src/components/Toast';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 import {
   NodeStatusType,
   PushNotificationType,
@@ -142,7 +143,7 @@ function HomeScreen() {
             : WalletOnlineStatus.Error,
         );
         if (response.error) {
-          Toast(response.error, true);
+          Toast(getRgbErrorMessage(response.error), true);
         }
         if (response.status) {
           refreshRgbWallet.mutate();

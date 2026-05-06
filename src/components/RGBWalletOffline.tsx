@@ -17,6 +17,7 @@ import { WalletOnlineStatus } from 'src/models/interfaces/RGBWallet';
 import Toast from './Toast';
 import { Modal, Portal, useTheme } from 'react-native-paper';
 import TapInfoIcon from 'src/assets/images/tapInfoIcon.svg';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
   const {
@@ -95,7 +96,7 @@ const RGBWalletStatus = ({modalVisible,setModalVisible}) => {
       if(makeWalletOnline.data?.status)
         setWalletWentOnline(true);
       if (makeWalletOnline.data?.error) {
-        Toast(makeWalletOnline.data?.error, true);
+        Toast(getRgbErrorMessage(makeWalletOnline.data?.error), true);
       }
       setIsWalletOnline(
         makeWalletOnline.data?.status

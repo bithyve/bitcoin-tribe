@@ -95,7 +95,17 @@
     "connectedToCommunityServer": "समुदाय सर्वर से जुड़ा हुआ",
     "communityServerOffline": "समुदाय सर्वर ऑफ़लाइन",
     "communityServerOnline": "समुदाय सर्वर ऑनलाइन",
-    "connectingToCommunityServer": "समुदाय सर्वर से कनेक्ट हो रहा है..."
+    "connectingToCommunityServer": "समुदाय सर्वर से कनेक्ट हो रहा है...",
+    "errorInvalidIndexer": "आपका वॉलेट वर्तमान में ऑफलाइन है। कृपया अपना इंटरनेट कनेक्शन या वॉलेट सेटिंग जांचें।",
+    "errorInsufficientBitcoins": "बिटकॉइन बैलेंस अपर्याप्त है। कृपया अपने वॉलेट में और सैट्स जोड़ें और पुनः प्रयास करें।",
+    "errorInsufficientAllocationSlots": "कोई UTXO स्लॉट उपलब्ध नहीं है। स्वचालित रूप से नए UTXO बना रहे हैं...",
+    "errorUtxoNotFound": "आपके UTXO सिंक करने में समस्या आई। कृपया अपना वॉलेट रिफ्रेश करें और पुनः प्रयास करें।",
+    "errorAuthFailed": "प्रमाणीकरण विफल हुआ। कृपया बाद में पुनः प्रयास करें।",
+    "errorGasFreeTransferFailed": "गैस-मुक्त ट्रांसफर विफल हुआ। कृपया पुनः प्रयास करें।",
+    "errorUnknown": "एक अप्रत्याशित त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "errorFailedToProcess": "अनुरोध प्रसंस्करण विफल हुआ। कृपया पुनः प्रयास करें।",
+    "errorWalletSyncRequired": "वॉलेट सिंक आवश्यक है। कृपया अपना वॉलेट रिफ्रेश करें और पुनः प्रयास करें।",
+    "errorRgbGeneral": "RGB वॉलेट में एक त्रुटि हुई। कृपया पुनः प्रयास करें या अपनी सेटिंग जांचें।"
   },
   "onBoarding": {
     "welcome": "स्वागत है",
