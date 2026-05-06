@@ -105,11 +105,7 @@ export class MessageStorage {
       const realmMessages = RealmDatabase.get(RealmSchema.HolepunchMessage);
       if (!realmMessages) return;
       const roomMessages = (realmMessages as Realm.Results<any>).filtered('roomId == $0', roomId);
-      RealmDatabase.write(() => {
-        roomMessages.forEach((m: any) => {
-          RealmDatabase.delete(m);
-        });
-      });
+      RealmDatabase.delete(roomMessages);
       console.log('[MessageStorage] Messages deleted for room:', roomId);
     } catch (error) {
       console.error('[MessageStorage] Failed to delete messages for room:', error);

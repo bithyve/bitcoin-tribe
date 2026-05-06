@@ -117,33 +117,30 @@ describe('MessageStorage.deleteMessagesForRoom', () => {
   });
 
   it('deletes all messages belonging to the given roomId', async () => {
-    const fakeMsg1 = { roomId: 'room-123' };
-    const fakeMsg2 = { roomId: 'room-123' };
+    const filteredResults = [{ roomId: 'room-123' }, { roomId: 'room-123' }];
     const fakeResults = {
-      filtered: jest.fn(() => [fakeMsg1, fakeMsg2]),
+      filtered: jest.fn().mockReturnValue(filteredResults),
     };
     mockGetMessages.mockReturnValue(fakeResults);
-
-    // write() should iterate and delete each message
-    mockWriteMessages.mockImplementation((cb: () => void) => cb());
 
     await MessageStorage.deleteMessagesForRoom('room-123');
 
     expect(fakeResults.filtered).toHaveBeenCalledWith('roomId == $0', 'room-123');
-    expect(mockDeleteMessage).toHaveBeenCalledWith(fakeMsg1);
-    expect(mockDeleteMessage).toHaveBeenCalledWith(fakeMsg2);
+    // bulk delete passes the filtered Results object directly to RealmDatabase.delete
+    expect(mockDeleteMessage).toHaveBeenCalledWith(filteredResults);
   });
 
   it('does nothing when there are no messages for the room', async () => {
-    const fakeResults = { filtered: jest.fn(() => []) };
+    const emptyResults: never[] = [];
+    const fakeResults = { filtered: jest.fn().mockReturnValue(emptyResults) };
     mockGetMessages.mockReturnValue(fakeResults);
-    mockWriteMessages.mockImplementation((cb: () => void) => cb());
 
     await expect(
       MessageStorage.deleteMessagesForRoom('room-empty'),
     ).resolves.toBeUndefined();
 
-    expect(mockDeleteMessage).not.toHaveBeenCalled();
+    // Bulk delete is still called; Realm handles empty results gracefully
+    expect(mockDeleteMessage).toHaveBeenCalledWith(emptyResults);
   });
 
   it('does nothing when Realm returns null', async () => {
