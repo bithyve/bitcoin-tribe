@@ -225,6 +225,11 @@ const CoinsMetaDataScreen = () => {
           <View style={styles.rowWrapper}>
             <Item title={home.assetTicker} value={coin.ticker} />
           </View>
+          {!!coin.details && (
+            <View style={styles.rowWrapper}>
+              <Item title={assets.details} value={coin.details} />
+            </View>
+          )}
           <View style={styles.gutter}>
             <NewAssetIdContainer assetId={assetId} />
           </View>

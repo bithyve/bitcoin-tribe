@@ -53,11 +53,6 @@ const AssetCard = (props: AssetCardProps) => {
 
   const styles = useMemo(() => getStyles(theme), [theme]);
 
-  const details = useMemo(() => {
-    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return asset.ticker;
-    return asset.details;
-  }, [asset.assetSchema, asset.ticker, asset.details]);
-
   const uri = useMemo(() => {
     if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) return '';
     const media = asset?.media?.filePath || asset?.token?.media?.filePath;
@@ -80,11 +75,14 @@ const AssetCard = (props: AssetCardProps) => {
   );
 
   const detailsText = useMemo(() => {
+    if (asset.assetSchema === AssetSchema.Coin || asset.assetSchema === AssetSchema.IFA) {
+      return null;
+    }
     if (asset?.details?.includes(`${DeepLinking.scheme}`)) {
       return asset?.details?.split(`${DeepLinking.scheme}`)[0];
     }
     return asset?.details;
-  }, [asset?.details]);
+  }, [asset.assetSchema, asset?.details]);
 
   return (
     <>
