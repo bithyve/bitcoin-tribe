@@ -782,6 +782,8 @@
     "noOfAmendmentsLabel": "改正回数",
     "enterMaxAmendmentsPlaceholder": "最大改正回数を入力",
     "enterNoOfAmendments": "改正回数を入力してください",
+    "amendmentsMustBeGreaterThanZero": "改正回数は0より大きくなければなりません",
+    "totalSupplyMustBeGreaterThanZero": "総供給量は0より大きくなければなりません",
     "replaceRightsNum": "置換権数",
     "replaceRightsNumPlaceholder": "置換権数を入力",
     "replaceRightsNumValidationError": "置換権数を入力してください",

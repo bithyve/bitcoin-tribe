@@ -782,6 +782,8 @@
     "noOfAmendmentsLabel": "संशोधनों की संख्या",
     "enterMaxAmendmentsPlaceholder": "अधिकतम संशोधनों की संख्या दर्ज करें",
     "enterNoOfAmendments": "कृपया संशोधनों की संख्या दर्ज करें",
+    "amendmentsMustBeGreaterThanZero": "संशोधनों की संख्या 0 से अधिक होनी चाहिए",
+    "totalSupplyMustBeGreaterThanZero": "कुल आपूर्ति 0 से अधिक होनी चाहिए",
     "replaceRightsNum": "प्रतिस्थापन अधिकार संख्या",
     "replaceRightsNumPlaceholder": "प्रतिस्थापन अधिकार संख्या दर्ज करें",
     "replaceRightsNumValidationError": "कृपया प्रतिस्थापन अधिकार संख्या दर्ज करें",

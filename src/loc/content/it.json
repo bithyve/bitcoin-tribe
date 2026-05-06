@@ -782,6 +782,8 @@
     "noOfAmendmentsLabel": "N. di modifiche",
     "enterMaxAmendmentsPlaceholder": "Inserisci il numero massimo di modifiche",
     "enterNoOfAmendments": "Inserisci il numero di modifiche",
+    "amendmentsMustBeGreaterThanZero": "Il numero di modifiche deve essere maggiore di 0",
+    "totalSupplyMustBeGreaterThanZero": "La fornitura totale deve essere maggiore di 0",
     "replaceRightsNum": "Numero di diritti di sostituzione",
     "replaceRightsNumPlaceholder": "Inserisci il numero di diritti di sostituzione",
     "replaceRightsNumValidationError": "Inserisci il numero di diritti di sostituzione",

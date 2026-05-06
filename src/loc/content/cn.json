@@ -782,6 +782,8 @@
     "noOfAmendmentsLabel": "修正次数",
     "enterMaxAmendmentsPlaceholder": "请输入最大修正次数",
     "enterNoOfAmendments": "请输入修正次数",
+    "amendmentsMustBeGreaterThanZero": "修正次数必须大于0",
+    "totalSupplyMustBeGreaterThanZero": "总供应量必须大于0",
     "replaceRightsNum": "置换权数量",
     "replaceRightsNumPlaceholder": "输入置换权数量",
     "replaceRightsNumValidationError": "请输入置换权数量",

@@ -782,6 +782,8 @@
     "noOfAmendmentsLabel": "N.º de enmiendas",
     "enterMaxAmendmentsPlaceholder": "Introduzca el número máximo de enmiendas",
     "enterNoOfAmendments": "Introduzca el número de enmiendas",
+    "amendmentsMustBeGreaterThanZero": "El número de enmiendas debe ser mayor que 0",
+    "totalSupplyMustBeGreaterThanZero": "El suministro total debe ser mayor que 0",
     "replaceRightsNum": "Número de derechos de reemplazo",
     "replaceRightsNumPlaceholder": "Ingrese el número de derechos de reemplazo",
     "replaceRightsNumValidationError": "Por favor ingrese el número de derechos de reemplazo",
