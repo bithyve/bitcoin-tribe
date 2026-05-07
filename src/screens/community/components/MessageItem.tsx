@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import Colors from 'src/theme/Colors';
 import React from 'react';
 import AppText from 'src/components/AppText';
 import moment from 'moment';
@@ -38,22 +39,22 @@ const getStyles = (theme: AppTheme) =>
       borderBottomRightRadius: 10,
     },
     textSenderName: {
-      color: '#808080',
+      color: theme.dark ? Colors.DarkGray : '#808080',
       textAlign: 'left',
       fontSize: 11,
     },
     textTimeSender: {
-      color: '#808080',
+      color: theme.dark ? Colors.DarkGray : '#808080',
       textAlign: 'right',
       fontSize: 11,
     },
     textTimeReceiver: {
-      color: '#808080',
+      color: theme.dark ? Colors.DarkGray : '#808080',
       textAlign: 'right',
       fontSize: 11,
     },
     textDay: {
-      color: '#808080',
+      color: theme.dark ? Colors.DarkGray : '#808080',
       textAlign: 'center',
       marginVertical: 10,
     },
@@ -124,7 +125,7 @@ const getStyles = (theme: AppTheme) =>
     },
     systemMessageText: {
       fontSize: 12,
-      color: '#808080',
+      color: theme.dark ? Colors.DarkGray : '#808080',
       fontStyle: 'italic',
     },
   });
