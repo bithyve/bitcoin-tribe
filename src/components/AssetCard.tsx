@@ -21,6 +21,11 @@ import Colors from 'src/theme/Colors';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
 import { CustomImage } from './CustomImage';
+import {
+  ASSET_CARD_AMOUNT_TEXT_LAYOUT,
+  ASSET_CARD_NAME_CONTAINER_LAYOUT,
+  ASSET_CARD_NAME_TEXT_LAYOUT,
+} from './assetCardLayout';
 
 type AssetCardProps = {
   asset: Asset;
@@ -182,16 +187,14 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
-      flex: 1,
-      flexShrink: 1,
+      ...ASSET_CARD_NAME_TEXT_LAYOUT,
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flexShrink: 0,
-      maxWidth: '45%',
+      ...ASSET_CARD_AMOUNT_TEXT_LAYOUT,
     },
     assetImageWrapper: {
       width: '100%',
@@ -207,8 +210,7 @@ const getStyles = (theme: AppTheme) =>
     nameContainer: {
       flex: 1,
       flexDirection: 'row',
-      alignItems: 'center',
-      minWidth: 0,
+      ...ASSET_CARD_NAME_CONTAINER_LAYOUT,
     },
     textDetails: {
       fontWeight: '300',
