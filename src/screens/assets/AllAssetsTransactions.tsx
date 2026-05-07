@@ -21,12 +21,11 @@ import {
   Collectible,
   Collection,
   InflatableFungibleAsset,
-  TransferWithAsset,
   UniqueDigitalAsset,
 } from 'src/models/interfaces/RGBWallet';
 import { useQuery } from '@realm/react';
 import { RealmSchema } from 'src/storage/enum';
-import { filterGasFreeTransfers } from 'src/utils/gasFreeTransactions';
+import { buildAllAssetsTransactions } from 'src/utils/allAssetsTransactions';
 import DeepLinking from 'src/utils/DeepLinking';
 
 function AllAssetsTransactions() {
@@ -64,32 +63,17 @@ function AllAssetsTransactions() {
       collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
 
-  const allTransactions = useMemo((): TransferWithAsset[] => {
-    const result: TransferWithAsset[] = [];
-    const addAssetTransactions = (
-      assets: { assetId: string; name: string; precision: number; transactions: any[] }[],
-      schema: string,
-    ) => {
-      for (const asset of assets) {
-        const filtered = filterGasFreeTransfers(asset.transactions ?? []);
-        for (const tx of filtered) {
-          result.push({
-            ...tx,
-            assetId: asset.assetId,
-            assetName: asset.name,
-            assetPrecision: asset.precision,
-            assetSchema: schema,
-          });
-        }
-      }
-    };
-    addAssetTransactions(coins as any[], RealmSchema.Coin);
-    addAssetTransactions(collectibles as any[], RealmSchema.Collectible);
-    addAssetTransactions(udas as any[], RealmSchema.UniqueDigitalAsset);
-    addAssetTransactions(collections as any[], RealmSchema.Collection);
-    addAssetTransactions(ifaCoins as any[], RealmSchema.IFA);
-    return result.sort((a, b) => b.createdAt - a.createdAt);
-  }, [coins, collectibles, udas, collections, ifaCoins]);
+  const allTransactions = useMemo(
+    () =>
+      buildAllAssetsTransactions([
+        { assets: coins, schema: RealmSchema.Coin },
+        { assets: collectibles, schema: RealmSchema.Collectible },
+        { assets: udas, schema: RealmSchema.UniqueDigitalAsset },
+        { assets: collections, schema: RealmSchema.Collection },
+        { assets: ifaCoins, schema: RealmSchema.IFA },
+      ]),
+    [coins, collectibles, udas, collections, ifaCoins],
+  );
 
   return (
     <ScreenContainer>

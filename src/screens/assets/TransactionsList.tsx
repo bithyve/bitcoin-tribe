@@ -160,7 +160,7 @@ function TransactionsList({
       return list.slice(0, visibleRowCap);
     }
     return list;
-  }, [enrichedTransactions, transactions, isAllAssetsMode, limitToVisibleRows, visibleRowCap]);
+  }, [enrichedTransactions, transactions, limitToVisibleRows, visibleRowCap]);
 
   return (
     <View style={[styles.container, style]}>

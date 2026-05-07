@@ -52,7 +52,7 @@ import Colors from 'src/theme/Colors';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { CustomImage } from 'src/components/CustomImage';
 import { TransferWithAsset } from 'src/models/interfaces/RGBWallet';
-import { filterGasFreeTransfers } from 'src/utils/gasFreeTransactions';
+import { buildAllAssetsTransactions } from 'src/utils/allAssetsTransactions';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -564,30 +564,13 @@ const DefaultCoin = ({
   }, [collectibles, udas, collections, coins, ifaCoins]);
 
   const allTransactions = useMemo((): TransferWithAsset[] => {
-    const result: TransferWithAsset[] = [];
-    const addAssetTransactions = (
-      assets: { assetId: string; name: string; precision: number; transactions: any[] }[],
-      schema: string,
-    ) => {
-      for (const asset of assets) {
-        const filtered = filterGasFreeTransfers(asset.transactions ?? []);
-        for (const tx of filtered) {
-          result.push({
-            ...tx,
-            assetId: asset.assetId,
-            assetName: asset.name,
-            assetPrecision: asset.precision,
-            assetSchema: schema,
-          });
-        }
-      }
-    };
-    addAssetTransactions(coins as any[], RealmSchema.Coin);
-    addAssetTransactions(collectibles as any[], RealmSchema.Collectible);
-    addAssetTransactions(udas as any[], RealmSchema.UniqueDigitalAsset);
-    addAssetTransactions(collections as any[], RealmSchema.Collection);
-    addAssetTransactions(ifaCoins as any[], RealmSchema.IFA);
-    return result.sort((a, b) => b.createdAt - a.createdAt);
+    return buildAllAssetsTransactions([
+      { assets: coins, schema: RealmSchema.Coin },
+      { assets: collectibles, schema: RealmSchema.Collectible },
+      { assets: udas, schema: RealmSchema.UniqueDigitalAsset },
+      { assets: collections, schema: RealmSchema.Collection },
+      { assets: ifaCoins, schema: RealmSchema.IFA },
+    ]);
   }, [coins, collectibles, udas, collections, ifaCoins]);
 
   const onPressPagination = (index: number) => {
