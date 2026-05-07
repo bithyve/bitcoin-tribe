@@ -42,6 +42,7 @@ import Slider from 'src/components/Slider';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -175,11 +176,7 @@ function IssueScreen() {
           createUtxos();
         }, 500);
       } else {
-        Toast(error.message, true);
-        setLoading(false);
-      }
-    }
-  }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
+        Toast(getRgbErrorMessage(error, common), true);
 
   const isButtonDisabled = useMemo(() => {
     if (

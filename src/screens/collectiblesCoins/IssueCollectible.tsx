@@ -63,6 +63,7 @@ import InfoScreenIcon from 'src/assets/images/infoScreenIcon.svg';
 import InfoScreenIconLight from 'src/assets/images/infoScreenIcon_light.svg';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -217,7 +218,7 @@ function IssueCollectibleScreen() {
           createUtxos();
         }, 500);
       } else {
-        Toast(error.message, true);
+        Toast(getRgbErrorMessage(error, common), true);
         setLoading(false);
       }
     }
@@ -303,7 +304,7 @@ function IssueCollectibleScreen() {
         }, 500);
       } else {
         setLoading(false);
-        Toast(error.message, true);
+        Toast(getRgbErrorMessage(error, common), true);
       }
     }
   }, [
