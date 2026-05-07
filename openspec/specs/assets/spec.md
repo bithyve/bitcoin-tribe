@@ -2,9 +2,7 @@
 
 ## Purpose
 The assets domain covers all RGB asset types held in the wallet: Coins (fungible tokens), Inflatable Fungible Assets (IFAs), Collectibles (media-bearing fungible assets), Unique Digital Assets (UDAs, non-fungible), and Collections (curated groups of UDAs). It encompasses viewing asset details and transaction history, sending and receiving assets via RGB invoices, campaign reward claims, issuer identity verification via Twitter and domain ownership, collection gallery browsing, and asset visibility management. All functionality requires `appType` to be `NODE_CONNECT` or `SUPPORTED_RLN`.
-
 ## Requirements
-
 ### Requirement: Coin and IFA Detail View
 WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST display an asset's name, ticker, icon, and balance (spendable, settled, future) when the user opens a Coin or IFA detail screen.
 
@@ -247,14 +245,23 @@ WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST allow the ass
 ---
 
 ### Requirement: Asset Visibility Management
-The system MUST allow the user to hide any RGB asset (Coin, Collectible, UDA, IFA) from main asset lists, and MUST provide a dedicated hidden-assets screen where all hidden assets can be viewed and restored.
+The system MUST allow the user to hide any RGB asset (Coin, Collectible, UDA, IFA) from main asset lists, and MUST provide a dedicated hidden-assets screen where all hidden assets can be viewed and restored. The system MUST automatically restore a hidden UDA to visible state when that same UDA is received again by the wallet through a successful transfer.
 
 #### Scenario: Restoring a hidden asset
-- GIVEN one or more assets are hidden
-- WHEN the user opens the hidden assets screen and taps an asset
-- THEN the asset is restored to the main asset lists
+- **GIVEN** one or more assets are hidden
+- **WHEN** the user opens the hidden assets screen and taps an asset
+- **THEN** the asset is restored to the main asset lists
 
----
+#### Scenario: Receiving a previously hidden UDA
+- **GIVEN** a UDA is hidden in Wallet A after it was previously sent out
+- **WHEN** Wallet A receives the same UDA again through a successful RGB transfer
+- **THEN** the system automatically restores that UDA to visible state
+- **AND** the UDA appears on the main asset screen
+
+#### Scenario: Hidden UDA not re-received yet (edge case)
+- **GIVEN** a UDA is hidden in the wallet
+- **WHEN** the wallet refresh runs without a successful transfer receiving that same UDA
+- **THEN** the UDA remains hidden
 
 ### Requirement: Asset Registry Link
 WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system SHOULD allow the user to view an asset's public registry page from the asset detail screen when a registry entry exists.
@@ -273,3 +280,4 @@ WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST block all sen
 - GIVEN the node is in the process of initializing
 - WHEN the user attempts to send or receive an asset
 - THEN the action is blocked and a "Connecting to node" notice is shown
+
