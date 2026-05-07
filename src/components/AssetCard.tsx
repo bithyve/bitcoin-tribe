@@ -120,6 +120,7 @@ const AssetCard = (props: AssetCardProps) => {
                 <AppText
                   variant="body2"
                   numberOfLines={1}
+                  ellipsizeMode="tail"
                   style={styles.nameText}
                   testID={`text_asset_name_${index}`}
                 >
@@ -181,13 +182,16 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      flex: 1,
+      flexShrink: 1,
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flex: 1
+      flexShrink: 0,
+      maxWidth: '45%',
     },
     assetImageWrapper: {
       width: '100%',
@@ -201,8 +205,10 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
     },
     nameContainer: {
-      flex: 2,
+      flex: 1,
       flexDirection: 'row',
+      alignItems: 'center',
+      minWidth: 0,
     },
     textDetails: {
       fontWeight: '300',
