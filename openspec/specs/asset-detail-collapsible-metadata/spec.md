@@ -7,12 +7,13 @@ TBD - created by archiving change improve-asset-detail-screen. Update Purpose af
 
 The UDA detail info view MUST organize metadata into collapsible sections. Users SHALL be able to expand and collapse each section independently.
 
-#### Scenario: SC-1: Sections render collapsed by default
+#### Scenario: SC-1: Sections render on initial render
 
 **Given** the user opens the UDA detail info view (imageView = false)  
 **When** the screen renders  
-**Then** all accordion sections (Issuer, Asset Info, Activity & Registry) MUST be rendered in a collapsed state  
-**And** only the section header (title row with chevron icon) SHALL be visible  
+**Then** the Issuer accordion section MUST be rendered in an expanded (open) state by default  
+**And** the Asset Info and Activity & Registry sections SHALL be rendered in a collapsed state  
+**And** only the section header (title row with chevron icon) of collapsed sections SHALL be visible  
 
 #### Scenario: SC-2: Tapping a section header expands it
 

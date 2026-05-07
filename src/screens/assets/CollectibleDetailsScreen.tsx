@@ -290,6 +290,7 @@ const CollectibleDetailsScreen = () => {
           });
         }}
         sendDisabled={collectible?.balance?.spendable < 1}
+        sendLabel={common.send}
       />
       <VerifyIssuerModal
         assetId={collectible.assetId}

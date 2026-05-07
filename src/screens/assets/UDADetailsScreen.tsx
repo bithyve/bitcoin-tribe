@@ -452,7 +452,7 @@ export const UDADetailsScreen = ({ route, data }) => {
         bounces={false}
         scrollEnabled={!imageView}
         showsVerticalScrollIndicator={!imageView}
-        contentContainerStyle={imageView ? { flex: 1 } : { paddingBottom: insets.bottom + hp(80) }}
+        contentContainerStyle={imageView ? styles.scrollImageViewContent : styles.scrollInfoViewContent}
         overScrollMode="never">
         {showHeader && (
           <AppHeader
@@ -733,6 +733,12 @@ const getStyles = (theme: AppTheme, insets) =>
     dataContainer: {
       flex: 1,
       paddingTop: insets.top,
+    },
+    scrollImageViewContent: {
+      flex: 1,
+    },
+    scrollInfoViewContent: {
+      paddingBottom: insets.bottom + hp(80),
     },
     gutter: {
       paddingHorizontal: wp(16),
