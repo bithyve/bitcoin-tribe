@@ -123,33 +123,23 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (error) {
-      const getErrorMessage = err =>
-        err?.message || err?.toString() || 'An unknown error occurred';
-      const errorMessage = getErrorMessage(error);
-      const handleSpecificError = message => {
-        if (message === 'Insufficient sats for RGB') {
-          createUtxos();
-          return true;
-        } else if (error.code === 'AssetNotFound') {
-          setTimeout(() => {
-            mutate({
-              assetId: '',
-              amount: 0,
-              linkedAsset: assetId,
-              linkedAmount: amount,
-              expiry: invoiceExpiry,
-              blinded: invoiceType === InvoiceMode.Blinded,
-            });
-          }, 100);
-          return true;
-        } else {
-          Toast(getRgbErrorMessage(error, common), true);
-          navigation.goBack();
-        }
-        return false;
-      };
-      if (!handleSpecificError(errorMessage)) {
+      const errorMessage = error?.message || error?.toString() || '';
+      if (errorMessage === 'Insufficient sats for RGB') {
+        createUtxos();
+      } else if (error.code === 'AssetNotFound') {
+        setTimeout(() => {
+          mutate({
+            assetId: '',
+            amount: 0,
+            linkedAsset: assetId,
+            linkedAmount: amount,
+            expiry: invoiceExpiry,
+            blinded: invoiceType === InvoiceMode.Blinded,
+          });
+        }, 100);
+      } else {
         Toast(getRgbErrorMessage(error, common), true);
+        navigation.goBack();
       }
     }
   }, [error]);

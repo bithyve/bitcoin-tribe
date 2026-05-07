@@ -177,6 +177,10 @@ function IssueScreen() {
         }, 500);
       } else {
         Toast(getRgbErrorMessage(error, common), true);
+        setLoading(false);
+      }
+    }
+  }, [assetName, assetTicker, navigation, totalSupplyAmt, precision]);
 
   const isButtonDisabled = useMemo(() => {
     if (
