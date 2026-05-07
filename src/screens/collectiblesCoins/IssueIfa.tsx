@@ -273,10 +273,7 @@ function IssueIfa() {
       if (!sanitizedText) {
         setTotalSupplyAmt('');
         setAssetTotSupplyValidationError(assets.enterTotalSupply);
-      } else if (
-        isIfaTotalSupplyValid(sanitizedText, precision) &&
-        BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE
-      ) {
+      } else if (isIfaTotalSupplyValid(sanitizedText, precision)) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (BigInt(sanitizedText) > 0) {
