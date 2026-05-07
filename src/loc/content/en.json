@@ -492,6 +492,8 @@
     "noUTXOYet": "No transactions yet",
     "noUTXOYetSubTitle": "Start sending and receiving Bitcoin to see your activity here!",
     "xPubNoteSubTitle": "Scan or Copy paste the Xpub Address",
+    "vanillaWallet": "Vanilla Wallet",
+    "coloredWallet": "Colored Wallet",
     "profileUpdateMsg": "Profile updated successfully!",
     "profileUpdateErrMsg": "Failed to update!",
     "rgbTransUnlockTitle": "5 RGB Transaction Unlock",
