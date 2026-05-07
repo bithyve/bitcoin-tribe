@@ -9,11 +9,11 @@ clears the key and redirects to the login screen.
 ## Tasks
 
 ### 1. Storage — add BACKGROUND_TIMESTAMP key
-- [ ] 1.1 In `src/storage/index.ts`, add `BACKGROUND_TIMESTAMP = 'BACKGROUND_TIMESTAMP'`
+- [x] 1.1 In `src/storage/index.ts`, add `BACKGROUND_TIMESTAMP = 'BACKGROUND_TIMESTAMP'`
        to the `Keys` enum.
 
 ### 2. Session utility module
-- [ ] 2.1 Create `src/utils/sessionUtils.ts` with:
+- [x] 2.1 Create `src/utils/sessionUtils.ts` with:
        - `SESSION_TIMEOUT_MS` constant set to `300_000` (5 minutes).
        - `isSessionExpired(backgroundTs: number): boolean` — returns `true` when
          `Date.now() - backgroundTs >= SESSION_TIMEOUT_MS`.
@@ -21,12 +21,12 @@ clears the key and redirects to the login screen.
          `true` when `pinMethod === PinMethod.PIN || pinMethod === PinMethod.BIOMETRIC`.
 
 ### 3. Navigator — AppState listener and session-lock logic
-- [ ] 3.1 In `src/navigation/Navigator.tsx`, import and create a
+- [x] 3.1 In `src/navigation/Navigator.tsx`, import and create a
        `navigationRef` via `createNavigationContainerRef<AppStackParams>()`.
-- [ ] 3.2 Pass `ref={navigationRef}` to `<NavigationContainer>`.
-- [ ] 3.3 In the `Navigator` component, read `pinMethod` from MMKV
+- [x] 3.2 Pass `ref={navigationRef}` to `<NavigationContainer>`.
+- [x] 3.3 In the `Navigator` component, read `pinMethod` from MMKV
        (`useMMKVString(Keys.PIN_METHOD)`) and `setKey` from `AppContext`.
-- [ ] 3.4 Add a `useEffect` in `Navigator` that:
+- [x] 3.4 Add a `useEffect` in `Navigator` that:
        a. On `AppState` change to `background` or `inactive`:
           - If `shouldEnforceSessionLock(pinMethod)`, write `Date.now()` to MMKV
             `BACKGROUND_TIMESTAMP`.
@@ -40,7 +40,7 @@ clears the key and redirects to the login screen.
        c. Remove the event listener on cleanup.
 
 ### 4. Unit tests
-- [ ] 4.1 Create `__tests__/sessionUtils.test.ts` with Jest tests covering:
+- [x] 4.1 Create `__tests__/sessionUtils.test.ts` with Jest tests covering:
        - `isSessionExpired` returns `false` when elapsed < 5 minutes.
        - `isSessionExpired` returns `true` when elapsed >= 5 minutes.
        - `shouldEnforceSessionLock` returns `false` for `PinMethod.DEFAULT` and
@@ -49,4 +49,4 @@ clears the key and redirects to the login screen.
          `PinMethod.BIOMETRIC`.
 
 ### 5. Verification
-- [ ] 5.1 Run `yarn test --runInBand` — all existing tests pass and new tests pass.
+- [x] 5.1 Run `yarn test --runInBand` — all existing tests pass and new tests pass.

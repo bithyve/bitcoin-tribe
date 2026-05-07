@@ -5,7 +5,7 @@ After the app has been in the background for a configurable inactivity period, t
 session is automatically expired and the user must re-authenticate via PIN or biometric
 before the wallet is accessible again.
 
-## Requirements
+## ADDED Requirements
 
 ### Requirement: Automatic Session Lock on Inactivity
 The system MUST lock the session when the app returns to the foreground after spending
