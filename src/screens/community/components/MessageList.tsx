@@ -42,9 +42,13 @@ const MessageList = ({
 }) => {
   const reversedMessages = React.useMemo(() => [...messages].reverse(), [messages]);
   const keyExtractor = React.useCallback(
-    (item: HolepunchMessage, index: number) =>
-      item.messageId || `${item.senderId}-${item.timestamp}-${index}`,
+    (item: HolepunchMessage) =>
+      item.messageId || `${item.roomId}-${item.senderId}-${item.timestamp}-${item.messageType}`,
     [],
+  );
+  const extraData = React.useMemo(
+    () => ({ sending, currentPeerPubKey, peersMap }),
+    [sending, currentPeerPubKey, peersMap],
   );
   const itemSeparator = React.useCallback(() => <View style={styles.divider} />, []);
 
@@ -79,7 +83,7 @@ const MessageList = ({
       ref={flatListRef}
       data={reversedMessages}
       style={styles.container}
-      extraData={sending}
+      extraData={extraData}
       contentContainerStyle={styles.list}
       inverted={true}
       showsVerticalScrollIndicator={false}

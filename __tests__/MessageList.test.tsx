@@ -3,6 +3,8 @@ import { FlatList } from 'react-native';
 import renderer from 'react-test-renderer';
 import MessageList from '../src/screens/community/components/MessageList';
 import MessageItem from '../src/screens/community/components/MessageItem';
+import type { HolepunchMessage } from '../src/services/messaging/holepunch/storage/MessageStorage';
+import type { HolepunchPeer } from '../src/services/messaging/holepunch/storage/PeerStorage';
 
 jest.mock('../src/screens/community/components/MessageItem', () => {
   const MockReact = require('react');
@@ -73,12 +75,14 @@ describe('MessageList', () => {
     expect(flatList.props.keyExtractor(baseMessages[0], 0)).toBe('msg-1');
 
     const messageWithoutId = { ...baseMessages[0], messageId: '' };
-    expect(flatList.props.keyExtractor(messageWithoutId, 4)).toBe('peer-1-1000-4');
+    expect(flatList.props.keyExtractor(messageWithoutId, 4)).toBe(
+      'room-1-peer-1-1000-TEXT',
+    );
   });
 
   it('passes the correct previousMessage and peer to MessageItem', () => {
     const flatListRef = React.createRef<FlatList>();
-    const peer = { peerId: 'peer-2', peerName: 'Alice' };
+    const peer: HolepunchPeer = { peerId: 'peer-2', peerName: 'Alice' };
     const peersMap = new Map([['peer-2', peer]]);
 
     let testRenderer: renderer.ReactTestRenderer;
@@ -115,11 +119,3 @@ describe('MessageList', () => {
     expect(renderItemProps.peer).toBe(peer);
   });
 });
-type HolepunchMessage = {
-  messageId: string;
-  roomId: string;
-  senderId: string;
-  messageType: string;
-  content: string;
-  timestamp: number;
-};
