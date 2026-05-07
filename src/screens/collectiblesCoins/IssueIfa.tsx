@@ -42,6 +42,11 @@ import Slider from 'src/components/Slider';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
+import {
+  isIfaAmendmentsValid,
+  isIfaTotalSupplyValid,
+  sanitizeNumericInput,
+} from 'src/screens/collectiblesCoins/utils/ifaValidation';
 
 const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
@@ -195,16 +200,34 @@ function IssueIfa() {
   ]);
 
   const isButtonDisabled = useMemo(() => {
+    const hasInvalidTotalSupply = !isIfaTotalSupplyValid(totalSupplyAmt, precision);
+    const hasInvalidAmendments = !isIfaAmendmentsValid(replaceRightsNum);
+
     if (
       isWalletOnline === WalletOnlineStatus.Error ||
       isWalletOnline === WalletOnlineStatus.InProgress
     ) {
       return true;
     }
-    return !assetName || !assetTicker || !totalSupplyAmt || !replaceRightsNum;
-  }, [assetName, assetTicker, totalSupplyAmt, replaceRightsNum]);
+    return (
+      !assetName ||
+      !assetTicker ||
+      !totalSupplyAmt ||
+      !replaceRightsNum ||
+      hasInvalidTotalSupply ||
+      hasInvalidAmendments
+    );
+  }, [assetName, assetTicker, isWalletOnline, precision, replaceRightsNum, totalSupplyAmt]);
 
   const onPressIssue = () => {
+    if (!isIfaTotalSupplyValid(totalSupplyAmt, precision)) {
+      setAssetTotSupplyValidationError(assets.enterTotalSupply);
+      return;
+    }
+    if (!isIfaAmendmentsValid(replaceRightsNum)) {
+      setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
+      return;
+    }
     issueCoin();
   };
 
@@ -246,31 +269,32 @@ function IssueIfa() {
 
   const handleTotalSupplyChange = text => {
     try {
-      const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (
-        sanitizedText &&
-        BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
-      ) {
-        setTotalSupplyAmt(sanitizedText);
-        setAssetTotSupplyValidationError(null);
-      } else if (!sanitizedText) {
+      const sanitizedText = sanitizeNumericInput(text);
+      if (!sanitizedText) {
         setTotalSupplyAmt('');
         setAssetTotSupplyValidationError(assets.enterTotalSupply);
       } else if (
-        sanitizedText &&
-        BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
+        isIfaTotalSupplyValid(sanitizedText, precision) &&
+        BigInt(sanitizedText) * BigInt(10 ** precision) <= MAX_ASSET_SUPPLY_VALUE
       ) {
+        setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(null);
+      } else if (BigInt(sanitizedText) > 0) {
+        setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(assets.totalSupplyAmountErrMsg);
+      } else {
+        setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(assets.enterTotalSupply);
       }
     } catch {
       setTotalSupplyAmt('');
+      setAssetTotSupplyValidationError(assets.enterTotalSupply);
     }
   };
 
 
   const handleAmendsChange = (text: string) => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = sanitizeNumericInput(text);
     if (!sanitizedText) {
       setReplaceRightsNum('');
       setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
