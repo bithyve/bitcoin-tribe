@@ -180,6 +180,11 @@ export const UDADetailsScreen = ({ route, data }) => {
     item => item.verified === true,
   );
 
+  const hasActivityOrRegistry =
+    isAddedInRegistry ||
+    hasIssuanceTransaction ||
+    uda?.transactions.length > 0;
+
   const url = domainVerification?.name?.startsWith('http')
     ? domainVerification?.name
     : `https://${domainVerification?.name}`;
@@ -547,7 +552,7 @@ export const UDADetailsScreen = ({ route, data }) => {
                   />
                 </AccordionSection>
 
-                {(isAddedInRegistry || hasIssuanceTransaction || uda?.transactions.length > 0) && (
+                {hasActivityOrRegistry && (
                   <AccordionSection title={'Activity & Registry'}>
                     <View style={styles.gutter}>
                       {uda?.transactions.length > 0 && (

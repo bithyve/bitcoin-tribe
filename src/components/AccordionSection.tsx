@@ -46,7 +46,8 @@ const AccordionSection = ({
           {title}
         </AppText>
         <Animated.Text
-          style={[styles.chevron, { transform: [{ rotate: chevronRotate }] }]}>
+          style={[styles.chevron, { transform: [{ rotate: chevronRotate }] }]}
+          accessibilityLabel={open ? 'Collapse section' : 'Expand section'}>
           {'▼'}
         </Animated.Text>
       </AppTouchable>
