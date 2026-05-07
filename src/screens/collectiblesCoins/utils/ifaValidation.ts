@@ -1,4 +1,4 @@
-const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615');
+export const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615');
 
 export const sanitizeNumericInput = (text: string): string =>
   text.replace(/[^0-9]/g, '');

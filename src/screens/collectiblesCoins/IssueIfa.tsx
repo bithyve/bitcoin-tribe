@@ -43,12 +43,11 @@ import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
 import {
+  MAX_ASSET_SUPPLY_VALUE,
   isIfaAmendmentsValid,
   isIfaTotalSupplyValid,
   sanitizeNumericInput,
 } from 'src/screens/collectiblesCoins/utils/ifaValidation';
-
-const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
 
 function IssueIfa() {
   const { issueAssetType, addToRegistry } = useRoute().params;

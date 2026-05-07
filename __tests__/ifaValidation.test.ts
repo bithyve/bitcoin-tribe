@@ -13,6 +13,10 @@ describe('ifaValidation', () => {
     expect(isIfaTotalSupplyValid('1', 0)).toBe(true);
   });
 
+  it('accepts total supply exactly at max boundary when precision is zero', () => {
+    expect(isIfaTotalSupplyValid('18446744073709551615', 0)).toBe(true);
+  });
+
   it('rejects total supply when value exceeds max after precision scaling', () => {
     expect(isIfaTotalSupplyValid('18446744073709551615', 1)).toBe(false);
   });
