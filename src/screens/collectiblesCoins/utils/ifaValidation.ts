@@ -13,6 +13,10 @@ export const isIfaTotalSupplyValid = (
     return false;
   }
 
+  if (!/^\d+$/.test(sanitizedText)) {
+    return false;
+  }
+
   const totalSupply = BigInt(sanitizedText);
 
   if (totalSupply <= 0) {

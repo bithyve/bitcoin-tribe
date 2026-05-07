@@ -13,6 +13,10 @@ describe('ifaValidation', () => {
     expect(isIfaTotalSupplyValid('1', 0)).toBe(true);
   });
 
+  it('rejects total supply when value exceeds max after precision scaling', () => {
+    expect(isIfaTotalSupplyValid('18446744073709551615', 1)).toBe(false);
+  });
+
   it('accepts zero amendments', () => {
     expect(isIfaAmendmentsValid('0')).toBe(true);
   });
@@ -23,5 +27,9 @@ describe('ifaValidation', () => {
 
   it('sanitizes numeric input', () => {
     expect(sanitizeNumericInput('a1,2-3')).toBe('123');
+  });
+
+  it('rejects comma-only supply input', () => {
+    expect(isIfaTotalSupplyValid(',,', 0)).toBe(false);
   });
 });

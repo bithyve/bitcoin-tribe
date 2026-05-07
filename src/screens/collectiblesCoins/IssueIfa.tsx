@@ -199,10 +199,17 @@ function IssueIfa() {
     replaceRightsNum,
   ]);
 
-  const isButtonDisabled = useMemo(() => {
-    const hasInvalidTotalSupply = !isIfaTotalSupplyValid(totalSupplyAmt, precision);
-    const hasInvalidAmendments = !isIfaAmendmentsValid(replaceRightsNum);
+  const hasInvalidTotalSupply = useMemo(
+    () => !isIfaTotalSupplyValid(totalSupplyAmt, precision),
+    [precision, totalSupplyAmt],
+  );
 
+  const hasInvalidAmendments = useMemo(
+    () => !isIfaAmendmentsValid(replaceRightsNum),
+    [replaceRightsNum],
+  );
+
+  const isButtonDisabled = useMemo(() => {
     if (
       isWalletOnline === WalletOnlineStatus.Error ||
       isWalletOnline === WalletOnlineStatus.InProgress
@@ -217,14 +224,22 @@ function IssueIfa() {
       hasInvalidTotalSupply ||
       hasInvalidAmendments
     );
-  }, [assetName, assetTicker, isWalletOnline, precision, replaceRightsNum, totalSupplyAmt]);
+  }, [
+    assetName,
+    assetTicker,
+    hasInvalidAmendments,
+    hasInvalidTotalSupply,
+    isWalletOnline,
+    replaceRightsNum,
+    totalSupplyAmt,
+  ]);
 
   const onPressIssue = () => {
-    if (!isIfaTotalSupplyValid(totalSupplyAmt, precision)) {
+    if (hasInvalidTotalSupply) {
       setAssetTotSupplyValidationError(assets.enterTotalSupply);
       return;
     }
-    if (!isIfaAmendmentsValid(replaceRightsNum)) {
+    if (hasInvalidAmendments) {
       setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
       return;
     }
