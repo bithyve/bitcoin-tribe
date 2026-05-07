@@ -285,10 +285,12 @@ function IssueIfa() {
   const handleTotalSupplyChange = text => {
     try {
       const sanitizedText = sanitizeNumericInput(text);
+      const isValidTotalSupply = isIfaTotalSupplyValid(sanitizedText, precision);
+
       if (!sanitizedText) {
         setTotalSupplyAmt('');
         setAssetTotSupplyValidationError(assets.enterTotalSupply);
-      } else if (isIfaTotalSupplyValid(sanitizedText, precision)) {
+      } else if (isValidTotalSupply) {
         setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(null);
       } else if (BigInt(sanitizedText) > 0) {

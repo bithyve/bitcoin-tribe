@@ -19,7 +19,7 @@ export const isIfaTotalSupplyValid = (
 
   const totalSupply = BigInt(sanitizedText);
 
-  if (totalSupply <= 0) {
+  if (totalSupply === BigInt(0)) {
     return false;
   }
 
