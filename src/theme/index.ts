@@ -268,8 +268,8 @@ const CombinedDarkTheme: AppTheme = {
     headerCardGradientColor: Colors.Black,
     borderColor: Colors.DarkCharcoal,
     headingColor: Colors.White,
-    secondaryHeadingColor: Colors.SonicSilver,
-    bodyColor: Colors.Quartz,
+    secondaryHeadingColor: Colors.QuickSilver,
+    bodyColor: Colors.QuickSilver,
     secondaryCtaTitleColor: Colors.White,
     ctaBackColor: Colors.White,
     popupCTABackColor: Colors.White,
@@ -365,7 +365,7 @@ const CombinedDarkTheme: AppTheme = {
     optionsCardGradient2: Colors.CharcoalGray,
     roundedCtaBg:Colors.CharcoalGray,
     separator:Colors.CharcoalGray,
-    mutedTab:Colors.Gray48
+    mutedTab:Colors.SpanishGray
   },
   fonts: {
     regular: {
