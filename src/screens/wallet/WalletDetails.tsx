@@ -27,6 +27,7 @@ import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
+import shouldRefreshOnFocus from './utils/shouldRefreshOnFocus';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
@@ -97,7 +98,7 @@ function WalletDetails({ navigation, route }) {
   }, [channelsData]);
 
   useEffect(() => {
-    if (autoRefresh && isFocused) {
+    if (shouldRefreshOnFocus(autoRefresh, isFocused)) {
       if (
         app?.appType === AppType.NODE_CONNECT ||
         app.appType === AppType.SUPPORTED_RLN
@@ -108,7 +109,7 @@ function WalletDetails({ navigation, route }) {
         wallets: [wallet],
       });
     }
-  }, [autoRefresh && isFocused]);
+  }, [autoRefresh, isFocused]);
 
   useEffect(() => {
     if (isError) {

@@ -29,6 +29,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import useWallets from 'src/hooks/useWallets';
+import shouldRefreshOnFocus from '../utils/shouldRefreshOnFocus';
 
 function WalletTransactionList({
   transactions,
@@ -57,12 +58,12 @@ function WalletTransactionList({
   };
 
   useEffect(() => {
-    if (autoRefresh && isFocused) {
+    if (shouldRefreshOnFocus(autoRefresh, isFocused)) {
       walletRefreshMutation.mutate({
         wallets: [wallet],
       });
     }
-  }, [autoRefresh && isFocused]);
+  }, [autoRefresh, isFocused]);
 
   useEffect(() => {
     if (walletRefreshMutation.status === 'success') {
