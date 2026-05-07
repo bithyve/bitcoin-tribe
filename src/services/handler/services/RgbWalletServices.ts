@@ -11,6 +11,7 @@ import { Keys, Storage } from 'src/storage';
 import {
   Asset,
   AssetSchema,
+  AssetVisibility,
   Coin,
   Collectible,
   Collection,
@@ -205,6 +206,37 @@ function shouldBackupAfterAssetSync(assets: any): boolean {
   }
 
   return false;
+}
+
+export function shouldRestoreHiddenUdaVisibility(
+  existingUda: Partial<UniqueDigitalAsset> | null | undefined,
+  incomingUda: Partial<UniqueDigitalAsset> | null | undefined,
+): boolean {
+  if (!existingUda || existingUda.visibility !== AssetVisibility.HIDDEN) {
+    return false;
+  }
+
+  const previousSpendable = Number(existingUda.balance?.spendable ?? 0);
+  const incomingSpendable = Number(incomingUda?.balance?.spendable ?? 0);
+
+  return previousSpendable < 1 && incomingSpendable >= 1;
+}
+
+function getUpdatedUdaPayload(uda: UniqueDigitalAsset): UniqueDigitalAsset {
+  const existingUda = dbManager.getObjectByPrimaryId(
+    RealmSchema.UniqueDigitalAsset,
+    'assetId',
+    uda.assetId,
+  ) as UniqueDigitalAsset | null;
+
+  if (shouldRestoreHiddenUdaVisibility(existingUda, uda)) {
+    return {
+      ...uda,
+      visibility: AssetVisibility.DEFAULT,
+    };
+  }
+
+  return uda;
 }
 
 export async function receiveAsset({
@@ -650,7 +682,7 @@ export async function refreshRgbWallet() {
               }
             }
           } else {
-            udas.push(uda);
+            udas.push(getUpdatedUdaPayload(uda));
           }
         }
       }

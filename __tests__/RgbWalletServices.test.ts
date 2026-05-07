@@ -120,7 +120,9 @@ import {
   receiveAsset,
   resetRgbWalletServicesTestDeps,
   setRgbWalletServicesTestDeps,
+  shouldRestoreHiddenUdaVisibility,
 } from '../src/services/handler/services/RgbWalletServices';
+import { AssetVisibility } from 'src/models/interfaces/RGBWallet';
 
 describe('RgbWalletServices', () => {
   const mockDeps = {
@@ -217,5 +219,45 @@ describe('RgbWalletServices', () => {
     expect(result.invoice).toBe('invoice-2');
     expect(mockDeps.createUtxos).toHaveBeenCalledTimes(1);
     expect(RGBServices.receiveAsset).toHaveBeenCalledTimes(2);
+  });
+
+  it('restores hidden uda visibility only after re-receive with spendable balance', () => {
+    expect(
+      shouldRestoreHiddenUdaVisibility(
+        {
+          visibility: AssetVisibility.HIDDEN,
+          balance: { spendable: '0' } as any,
+        } as any,
+        {
+          balance: { spendable: '1' } as any,
+        } as any,
+      ),
+    ).toBe(true);
+  });
+
+  it('does not restore hidden uda visibility without incoming ownership', () => {
+    expect(
+      shouldRestoreHiddenUdaVisibility(
+        {
+          visibility: AssetVisibility.HIDDEN,
+          balance: { spendable: '0' } as any,
+        } as any,
+        {
+          balance: { spendable: '0' } as any,
+        } as any,
+      ),
+    ).toBe(false);
+
+    expect(
+      shouldRestoreHiddenUdaVisibility(
+        {
+          visibility: AssetVisibility.DEFAULT,
+          balance: { spendable: '0' } as any,
+        } as any,
+        {
+          balance: { spendable: '1' } as any,
+        } as any,
+      ),
+    ).toBe(false);
   });
 });
