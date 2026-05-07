@@ -6,6 +6,6 @@ The home screen's `DefaultCoin.tsx` renders all content (BTC balance, RGB carous
 
 ## Tasks
 
-- [ ] 1. Add `pinnedAssets` and `recentActivity` translation keys to all locale files under `src/translations/`.
-- [ ] 2. Restructure `DefaultCoin.tsx` layout: promote BTC balance to a full-width hero card at the top; add "Pinned Assets" and "Recent Activity" section headers; convert the "Other Assets" tile to a horizontal row; improve container spacing.
-- [ ] 3. Update styles in `DefaultCoin.tsx`: add `btcHeroCard`, `otherAssetsRow`, `sectionHeader` style entries; remove unused `row`-wrapping style for the two-square layout; adjust `container` margins.
+- [x] 1. Add `pinnedAssets` and `recentActivity` translation keys to all locale files under `src/translations/`.
+- [x] 2. Restructure `DefaultCoin.tsx` layout: promote BTC balance to a full-width hero card at the top; add "Pinned Assets" and "Recent Activity" section headers; convert the "Other Assets" tile to a horizontal row; improve container spacing.
+- [x] 3. Update styles in `DefaultCoin.tsx`: add `btcHeroCard`, `otherAssetsRow`, `sectionHeader` style entries; remove unused `row`-wrapping style for the two-square layout; adjust `container` margins.

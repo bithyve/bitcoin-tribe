@@ -57,8 +57,9 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      marginHorizontal: wp(10),
+      marginHorizontal: wp(16),
       backgroundColor: theme.colors.primaryBackground,
+      paddingBottom: hp(20),
     },
     largeHeaderContainer: {
       borderColor: isThemeDark ? '#111' : '#fff',
@@ -77,7 +78,7 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     row: {
       flexDirection: 'row',
-      marginBottom: hp(20),
+      marginBottom: hp(16),
     },
     list: {
       height: CARD_HEIGHT,
@@ -122,6 +123,45 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
       borderRadius: hp(15),
       backgroundColor: isThemeDark ? '#111111' : '#E9EEEF',
       padding: hp(20),
+    },
+    btcHeroCard: {
+      borderRadius: hp(16),
+      backgroundColor: isThemeDark ? '#111111' : '#FFFFFF',
+      padding: hp(20),
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: hp(8),
+    },
+    btcHeroLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: wp(14),
+    },
+    btcHeroTextBlock: {
+      justifyContent: 'center',
+    },
+    otherAssetsRow: {
+      borderRadius: hp(12),
+      backgroundColor: isThemeDark ? '#1C1C1C' : '#F5F5F5',
+      padding: hp(16),
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      marginBottom: hp(8),
+    },
+    otherAssetsLeft: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: wp(10),
+    },
+    otherAssetsLabel: {
+      color: theme.colors.secondaryHeadingColor,
+    },
+    sectionHeader: {
+      color: theme.colors.secondaryHeadingColor,
+      marginBottom: hp(8),
+      marginTop: hp(16),
     },
     imageBackground: {
       width: '100%',
@@ -503,7 +543,7 @@ const DefaultCoin = ({
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
   const { translations } = useContext(LocalizationContext);
-  const { assets } = translations;
+  const { assets, home } = translations;
   const { appType, isWalletOnline } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
@@ -592,94 +632,108 @@ const DefaultCoin = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
-        <Carousel
-          testID='carousel_home'
-          enabled={presetAssets && presetAssets.length > 1}
-          ref={carouselRef}
-          style={styles.list}
-          width={windowWidth * 0.94}
-          height={CARD_HEIGHT + hp(7)}
-          data={presetAssets || []}
-          onSnapToItem={setCurrentIndex}
-          onProgressChange={progress}
-          vertical
-          renderItem={({ item: asset }) => (
-            <View>
-              {asset.collectionSchema ? (
-                <CollectionItem
-                  item={asset}
-                  isCollectible={false}
-                  isCollection={true}
-                />
-              ) : asset.metaData.assetSchema === AssetSchema.Collectible ? (
-                <CollectionItem
-                  item={asset}
-                  isCollectible={true}
-                  isCollection={false}
-                />
-              ) : asset.metaData.assetSchema === AssetSchema.UDA ? (
-                <CollectionItem
-                  item={asset}
-                  isCollectible={false}
-                  isCollection={false}
-                />
-              ) : asset.metaData.assetSchema === AssetSchema.Coin ? (
-                <CoinItem item={asset} isWalletOnline={isWalletOnline} />
-              ) : null}
-            </View>
-          )}
-        />
-        <View style={styles.containerScrollIndicator}>
-          <Pagination.Basic
-            progress={progress}
-            data={presetAssets || []}
-            dotStyle={styles.scrollIndicatorItem}
-            activeDotStyle={styles.scrollIndicatorItemCurrent}
-            onPress={onPressPagination}
-            horizontal={false}
-          />
+      {/* BTC Balance Hero Card */}
+      <AppTouchable
+        testID='btn_btc_wallet'
+        style={styles.btcHeroCard}
+        onPress={() => {
+          navigation.navigate(NavigationRoutes.WALLETDETAILS, {
+            autoRefresh: true,
+          });
+        }}
+      >
+        <View style={styles.btcHeroLeft}>
+          <IconBitcoin width={32} height={32} />
+          <View style={styles.btcHeroTextBlock}>
+            <AppText style={styles.totalBalanceLabel} variant="body2">
+              {assets.bitcoinBalance}
+            </AppText>
+            <DecimalText value={Number(btcBalance)} unit={'sats'} testIDValue='text_btc_wallet_balance' testIdUnit='text_btc_wallet_unit' />
+          </View>
         </View>
-      </View>
+      </AppTouchable>
 
-      <View style={styles.row}>
-        <AppTouchable
-          testID='btn_btc_wallet'
-          style={styles.balanceContainer}
-          onPress={() => {
-            navigation.navigate(NavigationRoutes.WALLETDETAILS, {
-              autoRefresh: true,
-            });
-          }}
-        >
-          <IconBitcoin />
-          <View style={{ marginVertical: hp(20) }} />
-          <AppText style={styles.totalBalanceLabel} variant="body2">
-            {assets.bitcoinBalance}
+      {/* Pinned Assets section */}
+      {presetAssets && presetAssets.length > 0 && (
+        <>
+          <AppText style={styles.sectionHeader} variant="body2">
+            {home.pinnedAssets}
           </AppText>
-          <DecimalText value={Number(btcBalance)} unit={'sats'} testIDValue='text_btc_wallet_balance' testIdUnit='text_btc_wallet_unit' />
-        </AppTouchable>
-        <View style={{ marginHorizontal: wp(7) }} />
+          <View style={styles.row}>
+            <Carousel
+              testID='carousel_home'
+              enabled={presetAssets.length > 1}
+              ref={carouselRef}
+              style={styles.list}
+              width={windowWidth * 0.94}
+              height={CARD_HEIGHT + hp(7)}
+              data={presetAssets}
+              onSnapToItem={setCurrentIndex}
+              onProgressChange={progress}
+              vertical
+              renderItem={({ item: asset }) => (
+                <View>
+                  {asset.collectionSchema ? (
+                    <CollectionItem
+                      item={asset}
+                      isCollectible={false}
+                      isCollection={true}
+                    />
+                  ) : asset.metaData.assetSchema === AssetSchema.Collectible ? (
+                    <CollectionItem
+                      item={asset}
+                      isCollectible={true}
+                      isCollection={false}
+                    />
+                  ) : asset.metaData.assetSchema === AssetSchema.UDA ? (
+                    <CollectionItem
+                      item={asset}
+                      isCollectible={false}
+                      isCollection={false}
+                    />
+                  ) : asset.metaData.assetSchema === AssetSchema.Coin ? (
+                    <CoinItem item={asset} isWalletOnline={isWalletOnline} />
+                  ) : null}
+                </View>
+              )}
+            />
+            <View style={styles.containerScrollIndicator}>
+              <Pagination.Basic
+                progress={progress}
+                data={presetAssets}
+                dotStyle={styles.scrollIndicatorItem}
+                activeDotStyle={styles.scrollIndicatorItemCurrent}
+                onPress={onPressPagination}
+                horizontal={false}
+              />
+            </View>
+          </View>
+        </>
+      )}
 
-        <AppTouchable
-          testID='btn_other_assets'
-          style={styles.balanceContainer}
-          onPress={() => {
-            navigation.navigate(NavigationRoutes.ASSETS);
-          }}
-        >
-          <IconOtherAssets />
-          <View style={{ marginVertical: hp(20) }} />
-
-          <AppText style={styles.totalBalanceLabel} variant="body2">
+      {/* Other Assets row */}
+      <AppTouchable
+        testID='btn_other_assets'
+        style={styles.otherAssetsRow}
+        onPress={() => {
+          navigation.navigate(NavigationRoutes.ASSETS);
+        }}
+      >
+        <View style={styles.otherAssetsLeft}>
+          <IconOtherAssets width={28} height={28} />
+          <AppText style={styles.otherAssetsLabel} variant="body2">
             {assets.otherAssets}
           </AppText>
-          <AppText style={styles.totalBalance} variant="heading1">
-            {totalAssets}
-          </AppText>
-        </AppTouchable>
-      </View>
+        </View>
+        <AppText style={styles.totalBalance} variant="heading1">
+          {totalAssets}
+        </AppText>
+      </AppTouchable>
 
+      {/* Recent Activity section */}
+      <AppText style={styles.sectionHeader} variant="body2">
+        {home.recentActivity}
+      </AppText>
       <TransactionsList
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
