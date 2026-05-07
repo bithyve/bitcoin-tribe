@@ -10,6 +10,19 @@ import RGBServices from 'src/services/rgb/RGBServices';
 import Relay from 'src/services/relay';
 
 export class AppLifecycleService {
+  static readonly SESSION_TIMEOUT_MS = 15 * 60 * 1000;
+
+  static hasSessionExpired(
+    lastBackgroundTimestamp?: number,
+    nowTimestamp: number = Date.now(),
+    timeoutMs: number = AppLifecycleService.SESSION_TIMEOUT_MS,
+  ): boolean {
+    if (!lastBackgroundTimestamp || timeoutMs <= 0) {
+      return false;
+    }
+    return nowTimestamp - lastBackgroundTimestamp >= timeoutMs;
+  }
+
   static async manageFcmVersionTopics(
     previousVersion?: string,
     currentVersion?: string,

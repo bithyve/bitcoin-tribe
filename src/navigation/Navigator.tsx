@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, createNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { AppState, AppStateStatus } from 'react-native';
 import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
 import ProfileSetup from 'src/screens/onBoarding/ProfileSetup';
@@ -63,7 +64,8 @@ import OnchainLearnMore from 'src/screens/onBoarding/OnchainLearnMore';
 import LNLearnMore from 'src/screens/onBoarding/LNLearnMore';
 import SupportLearnMore from 'src/screens/onBoarding/SupportLearnMore';
 import { Keys } from 'src/storage';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { Storage } from 'src/storage';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
@@ -98,6 +100,9 @@ import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 import { BannerMarquee } from 'src/components/BannerMarquee';
 import IFADetails from 'src/screens/assets/IFADetails';
 import IfaMetaData from 'src/screens/assets/IfaMetaDataScreen';
+import { AppContext } from 'src/contexts/AppContext';
+import PinMethod from 'src/models/enums/PinMethod';
+import { AppLifecycleService } from 'src/services/handler/services/appLifecycleService';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -419,10 +424,66 @@ function AppStack() {
 function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
+  const { setKey } = React.useContext(AppContext);
   const theme: AppTheme = useTheme();
+  const appStateRef = React.useRef<AppStateStatus>(AppState.currentState);
+  const backgroundTimestampRef = React.useRef<number | null>(null);
+  const navigationRef = React.useRef(
+    createNavigationContainerRef<AppStackParams>(),
+  ).current;
+
+  const lockSession = React.useCallback(() => {
+    if (!navigationRef.isReady()) {
+      return;
+    }
+    const appId = Storage.get(Keys.APPID);
+    if (!appId) {
+      return;
+    }
+    const currentRoute = navigationRef.getCurrentRoute();
+    if (currentRoute?.name !== NavigationRoutes.APPSTACK) {
+      return;
+    }
+    setKey(null);
+    navigationRef.resetRoot({
+      index: 0,
+      routes: [{ name: NavigationRoutes.LOGINSTACK }],
+    });
+  }, [navigationRef, setKey]);
+
+  React.useEffect(() => {
+    const subscription = AppState.addEventListener(
+      'change',
+      (nextAppState: AppStateStatus) => {
+        if (nextAppState === 'inactive' || nextAppState === 'background') {
+          backgroundTimestampRef.current = Date.now();
+        } else if (
+          appStateRef.current.match(/inactive|background/) &&
+          nextAppState === 'active'
+        ) {
+          if (
+            pinMethod &&
+            pinMethod !== PinMethod.DEFAULT &&
+            AppLifecycleService.hasSessionExpired(
+              backgroundTimestampRef.current || undefined,
+            )
+          ) {
+            lockSession();
+          }
+          backgroundTimestampRef.current = null;
+        }
+        appStateRef.current = nextAppState;
+      },
+    );
+    return () => {
+      subscription.remove();
+    };
+  }, [pinMethod, lockSession]);
 
   return (
     <NavigationContainer
+      ref={navigationRef}
       linking={{
         prefixes: ['tribe://'],
         config: {
