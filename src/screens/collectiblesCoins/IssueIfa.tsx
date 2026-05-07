@@ -42,8 +42,12 @@ import Slider from 'src/components/Slider';
 import { AppContext } from 'src/contexts/AppContext';
 import { events, logCustomEvent } from 'src/services/analytics';
 import { RgbLibErrors } from 'orbis1-sdk-rn';
-
-const MAX_ASSET_SUPPLY_VALUE = BigInt('18446744073709551615'); // 2^64 - 1 as BigInt
+import {
+  MAX_ASSET_SUPPLY_VALUE,
+  isIfaAmendmentsValid,
+  isIfaTotalSupplyValid,
+  sanitizeNumericInput,
+} from 'src/screens/collectiblesCoins/utils/ifaValidation';
 
 function IssueIfa() {
   const { issueAssetType, addToRegistry } = useRoute().params;
@@ -194,6 +198,16 @@ function IssueIfa() {
     replaceRightsNum,
   ]);
 
+  const hasInvalidTotalSupply = useMemo(
+    () => !isIfaTotalSupplyValid(totalSupplyAmt, precision),
+    [precision, totalSupplyAmt],
+  );
+
+  const hasInvalidAmendments = useMemo(
+    () => !isIfaAmendmentsValid(replaceRightsNum),
+    [replaceRightsNum],
+  );
+
   const isButtonDisabled = useMemo(() => {
     if (
       isWalletOnline === WalletOnlineStatus.Error ||
@@ -201,10 +215,33 @@ function IssueIfa() {
     ) {
       return true;
     }
-    return !assetName || !assetTicker || !totalSupplyAmt || !replaceRightsNum;
-  }, [assetName, assetTicker, totalSupplyAmt, replaceRightsNum]);
+    return (
+      !assetName ||
+      !assetTicker ||
+      !totalSupplyAmt ||
+      !replaceRightsNum ||
+      hasInvalidTotalSupply ||
+      hasInvalidAmendments
+    );
+  }, [
+    assetName,
+    assetTicker,
+    hasInvalidAmendments,
+    hasInvalidTotalSupply,
+    isWalletOnline,
+    replaceRightsNum,
+    totalSupplyAmt,
+  ]);
 
   const onPressIssue = () => {
+    if (hasInvalidTotalSupply) {
+      setAssetTotSupplyValidationError(assets.enterTotalSupply);
+      return;
+    }
+    if (hasInvalidAmendments) {
+      setReplaceRightsNumValidationError(assets.enterNoOfAmendments);
+      return;
+    }
     issueCoin();
   };
 
@@ -246,31 +283,31 @@ function IssueIfa() {
 
   const handleTotalSupplyChange = text => {
     try {
-      const sanitizedText = text.replace(/[^0-9]/g, '');
-      if (
-        sanitizedText &&
-        BigInt(sanitizedText) * BigInt(10 ** precision) <=
-          MAX_ASSET_SUPPLY_VALUE
-      ) {
-        setTotalSupplyAmt(sanitizedText);
-        setAssetTotSupplyValidationError(null);
-      } else if (!sanitizedText) {
+      const sanitizedText = sanitizeNumericInput(text);
+      const isValidTotalSupply = isIfaTotalSupplyValid(sanitizedText, precision);
+
+      if (!sanitizedText) {
         setTotalSupplyAmt('');
         setAssetTotSupplyValidationError(assets.enterTotalSupply);
-      } else if (
-        sanitizedText &&
-        BigInt(sanitizedText) > MAX_ASSET_SUPPLY_VALUE
-      ) {
+      } else if (isValidTotalSupply) {
+        setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(null);
+      } else if (BigInt(sanitizedText) > 0) {
+        setTotalSupplyAmt(sanitizedText);
         setAssetTotSupplyValidationError(assets.totalSupplyAmountErrMsg);
+      } else {
+        setTotalSupplyAmt(sanitizedText);
+        setAssetTotSupplyValidationError(assets.enterTotalSupply);
       }
     } catch {
       setTotalSupplyAmt('');
+      setAssetTotSupplyValidationError(assets.enterTotalSupply);
     }
   };
 
 
   const handleAmendsChange = (text: string) => {
-    const sanitizedText = text.replace(/[^0-9]/g, '');
+    const sanitizedText = sanitizeNumericInput(text);
     if (!sanitizedText) {
       setReplaceRightsNum('');
       setReplaceRightsNumValidationError(assets.enterNoOfAmendments);

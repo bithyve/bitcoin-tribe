@@ -4,9 +4,7 @@
 This domain is responsible for creating new RGB assets on the user's node: fungible coins (NIA), collectibles and unique digital assets (CFA / UDA), grouped collections, inflatable fungible assets (IFA), and the on-chain RGB UTXO slots required to hold those assets. It also covers the management of pending asset-receive invoices and the inspection of existing unspent outputs. All issuance functionality requires an active RGB node connection.
 
 ---
-
 ## Requirements
-
 ### Requirement: Issuance Access Control
 WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST allow the user to issue RGB assets. The issuance entry point MUST be disabled and all issuance forms MUST be inaccessible when the wallet is offline or a node synchronisation is in progress.
 
@@ -125,22 +123,35 @@ Each minted item MUST be associated with its parent collection and MUST embed a 
 ---
 
 ### Requirement: Issue Inflatable Fungible Asset (IFA)
-WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST allow the user to create a new inflatable fungible asset by providing a name, ticker, total supply, decimal precision, and a number of replace rights. The issue action MUST be disabled until all required fields are provided.
+WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST allow the user to create a new inflatable fungible asset by providing a name, ticker, total supply, decimal precision, and a number of replace rights. The issue action MUST be disabled until all required fields are provided with valid values.
+
+The IFA total supply MUST be strictly greater than zero. Replace rights (amendments) MUST accept zero or a positive integer. The system MUST show an explicit validation error message for invalid numeric values and MUST NOT show blank error states when submission is blocked.
 
 #### Scenario: Successful IFA creation
-- GIVEN the user provides a valid name, ticker, total supply, precision, and replace rights number
-- WHEN the user confirms issuance
+- GIVEN the user is online and appType is `NODE_CONNECT` or `SUPPORTED_RLN`
+- WHEN the user provides a valid name, ticker, total supply greater than zero, precision, and replace rights number (zero or greater) and confirms issuance
 - THEN the system MUST create the IFA on the RGB network
 - AND display a success notification
 - AND navigate the user to the asset registry or IFA detail screen
 - AND trigger an automatic backup
 
-#### Scenario: Insufficient RGB allocation slots
-- GIVEN no colorable UTXOs exist at the time of issuance
-- WHEN the system detects insufficient allocation slots
-- THEN the system MUST automatically create the required RGB UTXOs and retry issuance
+#### Scenario: Invalid zero total supply
+- GIVEN the user enters `0` as IFA total supply
+- WHEN the user attempts to proceed
+- THEN the system MUST prevent submission
+- AND display a non-empty inline validation error for total supply
 
----
+#### Scenario: Zero amendments accepted
+- GIVEN the user enters `0` as replace rights (amendments) and enters a valid total supply greater than zero
+- WHEN the user attempts to proceed
+- THEN the amendments field MUST be considered valid
+- AND the system MUST proceed only if all other required fields are valid
+
+#### Scenario: Invalid blank amendments
+- GIVEN the user leaves replace rights (amendments) empty
+- WHEN the user attempts to proceed
+- THEN the system MUST prevent submission
+- AND display a non-empty inline validation error for amendments
 
 ### Requirement: Create RGB UTXOs
 WHEN appType is `NODE_CONNECT` or `SUPPORTED_RLN`, the system MUST allow the user to manually create a batch of RGB-colorable UTXOs to serve as asset allocation slots. The system MUST display a confirmation screen showing the number of UTXOs to be created, the satoshi amount per UTXO, the estimated transaction fee, and the total cost before the user commits.
