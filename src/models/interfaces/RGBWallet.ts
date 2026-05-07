@@ -111,6 +111,13 @@ export interface Transfer {
   transaction?: ElectrumTransaction
 }
 
+export interface TransferWithAsset extends Transfer {
+  assetId: string;
+  assetName: string;
+  assetPrecision: number;
+  assetSchema: string;
+}
+
 export interface MetaData {
   assetSchema: string;
   initialSupply?: string;

@@ -98,6 +98,7 @@ import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 import { BannerMarquee } from 'src/components/BannerMarquee';
 import IFADetails from 'src/screens/assets/IFADetails';
 import IfaMetaData from 'src/screens/assets/IfaMetaDataScreen';
+import AllAssetsTransactions from 'src/screens/assets/AllAssetsTransactions';
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -283,6 +284,10 @@ function AppStack() {
         <Stack.Screen
           name={NavigationRoutes.COINALLTRANSACTION}
           component={CoinAllTransaction}
+        />
+        <Stack.Screen
+          name={NavigationRoutes.ALLASSETSTRANSACTION}
+          component={AllAssetsTransactions}
         />
         <Stack.Screen
           name={NavigationRoutes.VIEWUNSPENT}

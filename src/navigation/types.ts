@@ -66,6 +66,7 @@ export type AppStackParams = {
   [NavigationRoutes.GETBTCWITHRAMP]: undefined;
   [NavigationRoutes.WEBVIEWSCREEN]: undefined;
   // Add other routes as needed
+  [NavigationRoutes.ALLASSETSTRANSACTION]: undefined;
 };
 
 // Usage:

@@ -26,7 +26,7 @@ import { hp, windowHeight } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import AppTouchable from 'src/components/AppTouchable';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
-import { Transfer } from 'src/models/interfaces/RGBWallet';
+import { Transfer, TransferWithAsset } from 'src/models/interfaces/RGBWallet';
 import EmptyStateView from 'src/components/EmptyStateView';
 import AssetTransaction from '../wallet/components/AssetTransaction';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
@@ -50,6 +50,7 @@ function bottomTabReserveHeight(): number {
 
 function TransactionsList({
   transactions,
+  enrichedTransactions,
   isLoading,
   refresh,
   refreshingStatus,
@@ -60,15 +61,16 @@ function TransactionsList({
   schema,
   limitToVisibleRows,
 }: {
-  transactions: Transfer[];
+  transactions?: Transfer[];
+  enrichedTransactions?: TransferWithAsset[];
   isLoading: boolean;
   refresh: () => void;
   refreshingStatus?: boolean;
-  coin: string;
-  assetId: string;
+  coin?: string;
+  assetId?: string;
   style?: StyleProp<ViewStyle>;
-  precision: number;
-  schema: string;
+  precision?: number;
+  schema?: string;
   /**
    * When true, only the latest N rows are rendered. Row count is taken from the **first**
    * successful FlatList `onLayout` and then kept fixed so adding/removing sibling views does
@@ -141,35 +143,54 @@ function TransactionsList({
     return frozenFallbackCapRef.current ?? fallbackMaxRows;
   }, [limitToVisibleRows, lockedRowCap, fallbackMaxRows]);
 
+  const isAllAssetsMode = enrichedTransactions !== undefined;
+
   const filteredTransactions = useMemo(() => {
-    const list = filterGasFreeTransfers(transactions).reverse();
+    if (enrichedTransactions !== undefined) {
+      const list = enrichedTransactions
+        .slice()
+        .sort((a, b) => b.createdAt - a.createdAt);
+      if (limitToVisibleRows && visibleRowCap != null) {
+        return list.slice(0, visibleRowCap);
+      }
+      return list;
+    }
+    const list = filterGasFreeTransfers(transactions ?? []).reverse();
     if (limitToVisibleRows && visibleRowCap != null) {
       return list.slice(0, visibleRowCap);
     }
     return list;
-  }, [transactions, limitToVisibleRows, visibleRowCap]);
+  }, [enrichedTransactions, transactions, isAllAssetsMode, limitToVisibleRows, visibleRowCap]);
 
   return (
     <View style={[styles.container, style]}>
       <View style={styles.contentWrapper}>
         <View style={styles.contentWrapper1}>
           <AppText variant="heading3" style={styles.recentTransText}>
-            {walletTranslations.recentTransaction}
+            {isAllAssetsMode
+              ? walletTranslations.recentActivity
+              : walletTranslations.recentTransaction}
           </AppText>
-          <AppTouchable
-            onPress={() =>
-              navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
-            }>
-            {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
-          </AppTouchable>
+          {!isAllAssetsMode && (
+            <AppTouchable
+              onPress={() =>
+                navigation.navigate(NavigationRoutes.TRANSACTIONTYPEINFO)
+              }>
+              {isThemeDark ? <InfoIcon /> : <InfoIconLight />}
+            </AppTouchable>
+          )}
         </View>
         <AppTouchable
           onPress={() => {
-            navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
-              assetId: assetId,
-              schema: schema,
-              name: coin,
-            });
+            if (isAllAssetsMode) {
+              navigation.navigate(NavigationRoutes.ALLASSETSTRANSACTION);
+            } else {
+              navigation.navigate(NavigationRoutes.COINALLTRANSACTION, {
+                assetId: assetId,
+                schema: schema,
+                name: coin,
+              });
+            }
           }}>
           <AppText variant="body1" style={styles.viewAllText}>
             {walletTranslations.viewAll}
@@ -200,22 +221,36 @@ function TransactionsList({
             />
           )
         }
-        renderItem={({ item }) => (
-          <AssetTransaction
-            transaction={item}
-            coin={coin}
-            onPress={() => {
-              navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
-                transaction: item,
-                coin: coin,
-                assetId: assetId,
-                precision: precision,
-                schema,
-              });
-            }}
-            precision={precision}
-          />
-        )}
+        renderItem={({ item }) => {
+          const itemAssetId = isAllAssetsMode
+            ? (item as TransferWithAsset).assetId
+            : assetId;
+          const itemCoin = isAllAssetsMode
+            ? (item as TransferWithAsset).assetName
+            : (coin ?? '');
+          const itemPrecision = isAllAssetsMode
+            ? (item as TransferWithAsset).assetPrecision
+            : (precision ?? 0);
+          const itemSchema = isAllAssetsMode
+            ? (item as TransferWithAsset).assetSchema
+            : schema;
+          return (
+            <AssetTransaction
+              transaction={item}
+              coin={itemCoin}
+              onPress={() => {
+                navigation.navigate(NavigationRoutes.TRANSFERDETAILS, {
+                  transaction: item,
+                  coin: itemCoin,
+                  assetId: itemAssetId,
+                  precision: itemPrecision,
+                  schema: itemSchema,
+                });
+              }}
+              precision={itemPrecision}
+            />
+          );
+        }}
         keyExtractor={(item, index) => `${item.txid}-${index}`}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<EmptyStateView title={''} subTitle={''} />}

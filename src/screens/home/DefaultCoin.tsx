@@ -51,6 +51,8 @@ import { useSharedValue } from 'react-native-reanimated';
 import Colors from 'src/theme/Colors';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { CustomImage } from 'src/components/CustomImage';
+import { TransferWithAsset } from 'src/models/interfaces/RGBWallet';
+import { filterGasFreeTransfers } from 'src/utils/gasFreeTransactions';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
@@ -510,7 +512,6 @@ const DefaultCoin = ({
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentAssetSchema, setCurrentAssetSchema] = useState(null)
   const collectibles = useQuery<Collectible>(
     RealmSchema.Collectible,
     collection =>
@@ -562,23 +563,32 @@ const DefaultCoin = ({
     );
   }, [collectibles, udas, collections, coins, ifaCoins]);
 
-  const currentAsset = useMemo(() => {
-    const asset = presetAssets[currentIndex];
-    if(asset?.metaData?.assetSchema === AssetSchema.Coin) {
-      setCurrentAssetSchema(RealmSchema.Coin);
-      return coins.find(coin => coin.assetId === asset.assetId);
-    } else if(asset?.metaData?.assetSchema === AssetSchema.Collectible) {
-      setCurrentAssetSchema(RealmSchema.Collectible);
-      return collectibles.find(collectible => collectible.assetId === asset.assetId);
-    } else if(asset?.collectionSchema) {
-      setCurrentAssetSchema(RealmSchema.Collection);
-      return collections.find(collection => collection.assetId === asset.assetId);
-    } else if(asset?.metaData?.assetSchema === AssetSchema.UDA) {
-      setCurrentAssetSchema(RealmSchema.UniqueDigitalAsset);
-      return udas.find(uda => uda.assetId === asset.assetId);
-    }
-    return null;
-  }, [currentIndex, presetAssets]);
+  const allTransactions = useMemo((): TransferWithAsset[] => {
+    const result: TransferWithAsset[] = [];
+    const addAssetTransactions = (
+      assets: { assetId: string; name: string; precision: number; transactions: any[] }[],
+      schema: string,
+    ) => {
+      for (const asset of assets) {
+        const filtered = filterGasFreeTransfers(asset.transactions ?? []);
+        for (const tx of filtered) {
+          result.push({
+            ...tx,
+            assetId: asset.assetId,
+            assetName: asset.name,
+            assetPrecision: asset.precision,
+            assetSchema: schema,
+          });
+        }
+      }
+    };
+    addAssetTransactions(coins as any[], RealmSchema.Coin);
+    addAssetTransactions(collectibles as any[], RealmSchema.Collectible);
+    addAssetTransactions(udas as any[], RealmSchema.UniqueDigitalAsset);
+    addAssetTransactions(collections as any[], RealmSchema.Collection);
+    addAssetTransactions(ifaCoins as any[], RealmSchema.IFA);
+    return result.sort((a, b) => b.createdAt - a.createdAt);
+  }, [coins, collectibles, udas, collections, ifaCoins]);
 
   const onPressPagination = (index: number) => {
     carouselRef.current?.scrollTo({
@@ -681,14 +691,10 @@ const DefaultCoin = ({
             : styles.transactionContainer
         }
         limitToVisibleRows
-        transactions={currentAsset?.transactions || []}
+        enrichedTransactions={allTransactions}
         isLoading={false}
         refresh={onRefresh}
         refreshingStatus={false}
-        coin={currentAsset?.name || presetAssets?.[currentIndex]?.name}
-        assetId={currentAsset?.assetId || presetAssets?.[currentIndex]?.assetId}
-        precision={currentAsset?.precision || 0}
-        schema={currentAssetSchema}
       />
     </View>
   );
