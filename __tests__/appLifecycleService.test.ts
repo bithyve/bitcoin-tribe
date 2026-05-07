@@ -225,4 +225,30 @@ describe('AppLifecycleService', () => {
       'token failed',
     );
   });
+
+  it('returns false when inactivity does not exceed session timeout', () => {
+    const now = 1_800_000;
+    const lastBackgroundTimestamp = now - 60_000;
+
+    expect(
+      AppLifecycleService.hasSessionExpired(
+        lastBackgroundTimestamp,
+        now,
+        5 * 60 * 1000,
+      ),
+    ).toBe(false);
+  });
+
+  it('returns true when inactivity exceeds session timeout', () => {
+    const now = 1_800_000;
+    const lastBackgroundTimestamp = now - 10 * 60 * 1000;
+
+    expect(
+      AppLifecycleService.hasSessionExpired(
+        lastBackgroundTimestamp,
+        now,
+        5 * 60 * 1000,
+      ),
+    ).toBe(true);
+  });
 });
