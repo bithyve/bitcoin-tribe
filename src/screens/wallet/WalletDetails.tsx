@@ -27,6 +27,7 @@ import RequestTSatsModal from './components/RequestTSatsModal';
 import openLink from 'src/utils/OpenLink';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { Keys } from 'src/storage';
+import shouldRefreshOnFocus from './utils/shouldRefreshOnFocus';
 
 function WalletDetails({ navigation, route }) {
   const { autoRefresh } = route.params || {};
@@ -71,7 +72,11 @@ function WalletDetails({ navigation, route }) {
     isError: fetchTxnIsError,
   } = useMutation(ApiHandler.getNodeOnchainBtcTransactions);
   const { mutate: fetchUTXOs } = useMutation(ApiHandler.viewUtxos);
-  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
+  const {
+    mutate: refreshWallets,
+    isLoading: walletRefreshIsLoading,
+    status: walletRefreshStatus,
+  } = useMutation(ApiHandler.refreshWallets);
   const pullDownToRefresh = () => {
     setRefreshing(true);
     if (
@@ -80,7 +85,7 @@ function WalletDetails({ navigation, route }) {
     ) {
       fetchOnChainTransaction();
     }
-    walletRefreshMutation.mutate({
+    refreshWallets({
       wallets: [wallet],
     });
     setTimeout(() => setRefreshing(false), 2000);
@@ -97,18 +102,18 @@ function WalletDetails({ navigation, route }) {
   }, [channelsData]);
 
   useEffect(() => {
-    if (autoRefresh && isFocused) {
+    if (shouldRefreshOnFocus(autoRefresh, isFocused)) {
       if (
         app?.appType === AppType.NODE_CONNECT ||
         app.appType === AppType.SUPPORTED_RLN
       ) {
         fetchOnChainTransaction();
       }
-      walletRefreshMutation.mutate({
+      refreshWallets({
         wallets: [wallet],
       });
     }
-  }, [autoRefresh && isFocused]);
+  }, [autoRefresh, isFocused, app?.appType, wallet?.id]);
 
   useEffect(() => {
     if (isError) {
@@ -123,12 +128,12 @@ function WalletDetails({ navigation, route }) {
   }, [fetchTxnError, fetchTxnIsError]);
 
   useEffect(() => {
-    if (walletRefreshMutation.status === 'success') {
+    if (walletRefreshStatus === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
-    } else if (walletRefreshMutation.status === 'error') {
+    } else if (walletRefreshStatus === 'error') {
       Toast(walletStrings.failRefreshWallet, true);
     }
-  }, [walletRefreshMutation]);
+  }, [walletRefreshStatus]);
 
   useEffect(() => {
     fetchUTXOs();
@@ -198,7 +203,7 @@ function WalletDetails({ navigation, route }) {
         refreshing={refreshing}
         transactions={transactionsData}
         pullDownToRefresh={() => pullDownToRefresh()}
-        autoRefresh={walletRefreshMutation.isLoading}
+        autoRefresh={walletRefreshIsLoading}
       />
       <ResponsePopupContainer
         backColor={theme.colors.modalBackColor}

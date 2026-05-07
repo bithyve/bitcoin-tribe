@@ -29,6 +29,7 @@ import { RealmSchema } from 'src/storage/enum';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 import LoadingSpinner from 'src/components/LoadingSpinner';
 import useWallets from 'src/hooks/useWallets';
+import shouldRefreshOnFocus from '../utils/shouldRefreshOnFocus';
 
 function WalletTransactionList({
   transactions,
@@ -46,38 +47,42 @@ function WalletTransactionList({
   const walletStrings = translations.wallet;
   const [refreshing, setRefreshing] = useState(false);
   const wallet: Wallet = useWallets({}).wallets[0];
-  const walletRefreshMutation = useMutation(ApiHandler.refreshWallets);
+  const {
+    mutate: refreshWallets,
+    status: walletRefreshStatus,
+    isLoading: walletRefreshIsLoading,
+  } = useMutation(ApiHandler.refreshWallets);
 
   const pullDownToRefresh = () => {
     setRefreshing(true);
-    walletRefreshMutation.mutate({
+    refreshWallets({
       wallets: [wallet],
     });
     setTimeout(() => setRefreshing(false), 2000);
   };
 
   useEffect(() => {
-    if (autoRefresh && isFocused) {
-      walletRefreshMutation.mutate({
+    if (shouldRefreshOnFocus(autoRefresh, isFocused)) {
+      refreshWallets({
         wallets: [wallet],
       });
     }
-  }, [autoRefresh && isFocused]);
+  }, [autoRefresh, isFocused, wallet?.id]);
 
   useEffect(() => {
-    if (walletRefreshMutation.status === 'success') {
+    if (walletRefreshStatus === 'success') {
       // Toast(walletStrings.walletRefreshMsg, true);
-    } else if (walletRefreshMutation.status === 'error') {
+    } else if (walletRefreshStatus === 'error') {
       Toast(walletStrings.failRefreshWallet, true);
     }
-  }, [walletRefreshMutation]);
+  }, [walletRefreshStatus]);
 
   const FooterComponent = () => {
     return <View style={styles.footer} />;
   };
   return (
     <View>
-      {walletRefreshMutation.isLoading && !refreshing ? (
+      {walletRefreshIsLoading && !refreshing ? (
         <LoadingSpinner />
       ) : null}
       <FlatList
