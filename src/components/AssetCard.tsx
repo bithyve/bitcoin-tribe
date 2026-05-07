@@ -21,6 +21,11 @@ import Colors from 'src/theme/Colors';
 import DeepLinking from 'src/utils/DeepLinking';
 import { isWebUrl } from 'src/utils/url';
 import { CustomImage } from './CustomImage';
+import {
+  ASSET_CARD_AMOUNT_TEXT_LAYOUT,
+  ASSET_CARD_NAME_CONTAINER_LAYOUT,
+  ASSET_CARD_NAME_TEXT_LAYOUT,
+} from './assetCardLayout';
 
 type AssetCardProps = {
   asset: Asset;
@@ -120,6 +125,7 @@ const AssetCard = (props: AssetCardProps) => {
                 <AppText
                   variant="body2"
                   numberOfLines={1}
+                  ellipsizeMode="tail"
                   style={styles.nameText}
                   testID={`text_asset_name_${index}`}
                 >
@@ -181,13 +187,14 @@ const getStyles = (theme: AppTheme) =>
       fontWeight: '300',
       color: theme.colors.headingColor,
       marginHorizontal: wp(2),
+      ...ASSET_CARD_NAME_TEXT_LAYOUT,
     },
     amountText: {
       fontWeight: '300',
       color: theme.colors.headingColor,
       textAlign: 'right',
       marginHorizontal: wp(2),
-      flex: 1
+      ...ASSET_CARD_AMOUNT_TEXT_LAYOUT,
     },
     assetImageWrapper: {
       width: '100%',
@@ -201,8 +208,9 @@ const getStyles = (theme: AppTheme) =>
       flex: 1,
     },
     nameContainer: {
-      flex: 2,
+      flex: 1,
       flexDirection: 'row',
+      ...ASSET_CARD_NAME_CONTAINER_LAYOUT,
     },
     textDetails: {
       fontWeight: '300',
