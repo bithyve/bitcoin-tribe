@@ -466,7 +466,7 @@ function Navigator() {
             pinMethod &&
             pinMethod !== PinMethod.DEFAULT &&
             AppLifecycleService.hasSessionExpired(
-              backgroundTimestampRef.current || undefined,
+              backgroundTimestampRef.current ?? undefined,
             )
           ) {
             lockSession();

@@ -1,7 +1,7 @@
 # session-reauthentication Specification
 
 ## Purpose
-TBD - created by archiving change fix-session-not-expiring-properly. Update Purpose after archive.
+Define required wallet relocking behavior so users must re-authenticate with their configured PIN/biometric method after inactivity before accessing authenticated screens.
 ## Requirements
 ### Requirement: Re-authentication after inactivity
 The wallet application MUST require user re-authentication before entering the authenticated AppStack when the app has been inactive longer than the configured session timeout.
@@ -20,4 +20,3 @@ The wallet application MUST require user re-authentication before entering the a
 - **GIVEN** the app has expired the current session due to inactivity
 - **WHEN** the user provides an invalid PIN or biometric auth fails
 - **THEN** the app SHALL keep the wallet locked and SHALL NOT navigate to AppStack
-
