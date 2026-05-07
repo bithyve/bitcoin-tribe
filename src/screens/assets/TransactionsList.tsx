@@ -147,13 +147,10 @@ function TransactionsList({
 
   const filteredTransactions = useMemo(() => {
     if (enrichedTransactions !== undefined) {
-      const list = enrichedTransactions
-        .slice()
-        .sort((a, b) => b.createdAt - a.createdAt);
       if (limitToVisibleRows && visibleRowCap != null) {
-        return list.slice(0, visibleRowCap);
+        return enrichedTransactions.slice(0, visibleRowCap);
       }
-      return list;
+      return enrichedTransactions;
     }
     const list = filterGasFreeTransfers(transactions ?? []).reverse();
     if (limitToVisibleRows && visibleRowCap != null) {
