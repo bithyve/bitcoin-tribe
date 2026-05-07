@@ -552,8 +552,10 @@ export async function refreshRgbWallet() {
                 collectionId,
               ) as any;
 
-                if (collection) {
-                  const updatedUda = getUpdatedUdaPayload({
+              if (collection) {
+                dbManager.createObject(
+                  RealmSchema.UniqueDigitalAsset,
+                  {
                     ...uda,
                     issuedSupply: String(uda.issuedSupply),
                     balance: {
@@ -567,12 +569,9 @@ export async function refreshRgbWallet() {
                         ? String(uda.balance.offchainInbound)
                         : undefined,
                     },
-                  } as UniqueDigitalAsset);
-                  dbManager.createObject(
-                    RealmSchema.UniqueDigitalAsset,
-                    updatedUda,
-                    Realm.UpdateMode.Modified,
-                  );
+                  },
+                  Realm.UpdateMode.Modified,
+                );
 
                 const udaObject = dbManager.getObjectByPrimaryId(
                   RealmSchema.UniqueDigitalAsset,
@@ -648,14 +647,14 @@ export async function refreshRgbWallet() {
                   );
                   dbManager.createObject(
                     RealmSchema.UniqueDigitalAsset,
-                    getUpdatedUdaPayload({
+                    {
                       ...uda,
                       balance: {
                         settled: String(uda.balance.settled),
                         spendable: String(uda.balance.spendable),
                         future: String(uda.balance.future),
                       },
-                    } as UniqueDigitalAsset),
+                    },
                     Realm.UpdateMode.Modified,
                   );
 
