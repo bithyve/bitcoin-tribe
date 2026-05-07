@@ -35,8 +35,8 @@ type AccordionSectionProps = {
 ```
 
 **Behaviour**:
-- Uses `useState(initiallyOpen ?? false)` for open/closed state.
-- On toggle, uses `Animated.timing` on a height ref and `LayoutAnimation.configureNext` for smooth open/close animation.
+- Uses `useState` for open/close; animates chevron rotation with `Animated.timing` on an `Animated.Value`.
+- Content visibility is handled via conditional rendering (`{open && <View>{children}</View>}`) rather than height animation, keeping the implementation simple and performant.
 - Chevron icon (▼/▶) rotates 180° when open — driven by an `Animated.Value` interpolated to `'0deg'` / `'180deg'`.
 - Styled with `theme.colors.borderColor` bottom border on the header row.
 - Section header uses `AppText variant="body1"` styled with `theme.colors.headingColor`.
@@ -58,7 +58,7 @@ type StickyBottomCTAProps = {
 **Behaviour**:
 - Renders with `position: 'absolute'`, `bottom: insets.bottom + hp(10)`, `left: wp(16)`, `right: wp(16)`.
 - `zIndex: 1000` so it always floats above scroll content.
-- Send button: full-width, pill-shaped (`borderRadius: hp(28)`), background `theme.colors.accent1` (orange accent from AppTheme).
+- Send button: full-width, pill-shaped (`borderRadius: hp(28)`), background `theme.colors.primaryCTA` (orange from AppTheme).
 - When `sendDisabled` is true, opacity is `0.4` and `disabled` prop is set on `AppTouchable`.
 - Label: `AppText variant="body1"` bold, white.
 
