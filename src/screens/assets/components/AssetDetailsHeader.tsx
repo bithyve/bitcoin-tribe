@@ -5,6 +5,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
+import Colors from 'src/theme/Colors';
 import { useTheme } from 'react-native-paper';
 import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -234,7 +235,14 @@ function AssetDetailsHeader(props: assetDetailsHeaderProps) {
               <AppText variant="body1" style={styles.assetNameText}>
                 {assetName}
               </AppText>
-              {isVerified && <IconVerified width={20} height={20} />}
+              {isVerified && (
+                <>
+                  <IconVerified width={28} height={28} />
+                  <AppText variant="caption" style={styles.verifiedLabel}>
+                    {'Verified'}
+                  </AppText>
+                </>
+              )}
             </AppTouchable>
             <View style={styles.transCtaWrapper}>
               <TransactionButtons
@@ -291,11 +299,11 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       paddingTop: Platform.OS === 'ios' ? hp(50) : hp(10),
     },
     assetBackImageContainer: {
-      height: hp(235),
+      height: hp(300),
       width: windowWidth,
     },
     assetBackImageRadius: {
-      height: hp(235),
+      height: hp(300),
       borderBottomLeftRadius: 24,
       borderBottomRightRadius: 24,
     },
@@ -401,6 +409,11 @@ const getStyles = (theme: AppTheme, insets, lengthOfTotalBalance) =>
       justifyContent: 'center',
       marginTop: hp(10),
       width: '100%',
+    },
+    verifiedLabel: {
+      color: Colors.Eucalyptus,
+      marginLeft: 4,
+      fontWeight: '600',
     },
     lightningBalanceContainer: {
       width: '100%',

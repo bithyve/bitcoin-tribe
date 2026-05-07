@@ -38,6 +38,7 @@ import {
 } from 'src/utils/postStatusUtils';
 import Toast from 'src/components/Toast';
 import { isWebUrl } from 'src/utils/url';
+import StickyBottomCTA from 'src/components/StickyBottomCTA';
 
 const CollectibleDetailsScreen = () => {
   const navigation = useNavigation();
@@ -276,6 +277,20 @@ const CollectibleDetailsScreen = () => {
         precision={collectible.precision}
         schema={RealmSchema.Collectible}
       />
+      <StickyBottomCTA
+        onPressSend={() => {
+          if (isNodeInitInProgress) {
+            Toast(node.connectingNodeToastMsg, true);
+            return;
+          }
+          navigation.navigate(NavigationRoutes.SCANASSET, {
+            assetId: assetId,
+            rgbInvoice: '',
+            wallet: wallet,
+          });
+        }}
+        sendDisabled={collectible?.balance?.spendable < 1}
+      />
       <VerifyIssuerModal
         assetId={collectible.assetId}
         isVisible={showVerifyModal}
@@ -382,6 +397,7 @@ const getStyles = () =>
       paddingHorizontal: hp(14),
       height: Platform.OS === 'ios' ? '46%' : '42%',
       marginTop: hp(15),
+      paddingBottom: hp(80),
     },
     toolTipCotainer: {
       // top: windowHeight > 670 ? 110 : 100,

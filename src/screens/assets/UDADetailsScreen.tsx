@@ -81,6 +81,8 @@ import BackTranslucent from 'src/assets/images/backTranslucent.svg';
 import BackTranslucentLight from 'src/assets/images/backTranslucentLight.svg';
 import { ZoomableImage } from 'src/components/ZoomableImage';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import StickyBottomCTA from 'src/components/StickyBottomCTA';
+import AccordionSection from 'src/components/AccordionSection';
 const { height: screenHeight } = Dimensions.get('window');
 
 type itemProps = {
@@ -128,6 +130,7 @@ export const UDADetailsScreen = ({ route, data }) => {
     setCompleteVerification,
     hasIssuedAsset,
     setHasIssuedAsset,
+    isNodeInitInProgress,
   } = useContext(AppContext);
   const uda: UniqueDigitalAsset = useObject<UniqueDigitalAsset>(
     RealmSchema.UniqueDigitalAsset,
@@ -139,7 +142,7 @@ export const UDADetailsScreen = ({ route, data }) => {
   const refreshRgbWallet = useMutation(ApiHandler.refreshRgbWallet);
   const { translations } = useContext(LocalizationContext);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
-  const { assets, common, home } = translations;
+  const { assets, common, home, node } = translations;
   const [showVerifyModal, setShowVerifyModal] = useState(false);
   const [visiblePostOnTwitter, setVisiblePostOnTwitter] = useState(false);
   const [visibleIssuedPostOnTwitter, setVisibleIssuedPostOnTwitter] =
@@ -425,12 +428,31 @@ export const UDADetailsScreen = ({ route, data }) => {
         </View>
       )}
 
+      {!imageView && showFooter && (
+        <StickyBottomCTA
+          onPressSend={() => {
+            if (isNodeInitInProgress) {
+              Toast(node.connectingNodeToastMsg, true);
+              return;
+            }
+            // @ts-ignore
+            navigation.navigate(NavigationRoutes.SCANASSET, {
+              assetId: assetId,
+              rgbInvoice: '',
+              isUDA: true,
+            });
+          }}
+          sendDisabled={uda?.balance?.spendable < 1}
+          sendLabel={common.send}
+        />
+      )}
+
       <ScrollView
         style={styles.dataContainer}
         bounces={false}
         scrollEnabled={!imageView}
         showsVerticalScrollIndicator={!imageView}
-        contentContainerStyle={{ flex: imageView ? 1 : 0 }}
+        contentContainerStyle={imageView ? { flex: 1 } : { paddingBottom: insets.bottom + hp(80) }}
         overScrollMode="never">
         {showHeader && (
           <AppHeader
@@ -453,77 +475,38 @@ export const UDADetailsScreen = ({ route, data }) => {
             ) : (
               <>
                 <SizedBox height={hp(15)} />
-                <IssuerVerified
-                  id={twitterVerification?.id}
-                  name={twitterVerification?.name}
-                  username={twitterVerification?.username.replace(/@/g, '')}
-                  assetId={assetId}
-                  schema={RealmSchema.UniqueDigitalAsset}
-                  onVerificationComplete={() => setRefreshToggle(t => !t)}
-                  setIsVerifyingIssuer={setIsVerifyingIssuer}
-                  hasIssuanceTransaction={hasIssuanceTransaction}
-                />
-                <IssuerDomainVerified
-                  domain={
-                    uda?.issuer?.verifiedBy?.find(
-                      v => v.type === IssuerVerificationMethod.DOMAIN,
-                    )?.name
-                  }
-                  verified={domainVerification?.verified}
-                  onPress={() => {
-                    if (domainVerification?.verified) {
-                      openLink(url);
-                    } else {
-                      navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
-                        assetId: assetId,
-                        schema: RealmSchema.UniqueDigitalAsset,
-                        savedDomainName: domainVerification?.name || '',
-                      });
+                <AccordionSection title={'Issuer'} initiallyOpen={true}>
+                  <IssuerVerified
+                    id={twitterVerification?.id}
+                    name={twitterVerification?.name}
+                    username={twitterVerification?.username.replace(/@/g, '')}
+                    assetId={assetId}
+                    schema={RealmSchema.UniqueDigitalAsset}
+                    onVerificationComplete={() => setRefreshToggle(t => !t)}
+                    setIsVerifyingIssuer={setIsVerifyingIssuer}
+                    hasIssuanceTransaction={hasIssuanceTransaction}
+                  />
+                  <IssuerDomainVerified
+                    domain={
+                      uda?.issuer?.verifiedBy?.find(
+                        v => v.type === IssuerVerificationMethod.DOMAIN,
+                      )?.name
                     }
-                  }}
-                  hasIssuanceTransaction={hasIssuanceTransaction}
-                />
-                <Item
-                  title={assets.issuedOn}
-                  value={moment
-                    .unix(uda?.timestamp as number)
-                    .format('DD MMM YY  hh:mm A')}
-                />
-                <Item title={home.udaName} value={uda.name as string} />
-                <Item title={home.assetTicker} value={uda.ticker as string} />
-                <View style={styles.gutter}>
-                  <NewAssetIdContainer assetId={assetId} />
-                </View>
-                <Item
-                  value={home.assetDescription}
-                  title={uda.details.split(DeepLinking.appLinkScheme)[0] || ''}
-                />
-
-                <View style={styles.gutter}>
-                  {uda?.transactions.length > 0 && (
-                    <AssetTransaction
-                      hidePrecision
-                      transaction={uda?.transactions[0]}
-                      coin={uda?.name}
-                      onPress={() => {
-                        navigation.navigate(
-                          NavigationRoutes.COINALLTRANSACTION,
-                          {
-                            assetId: assetId,
-                            transactions: uda?.transactions,
-                            name: uda?.name,
-                            schema: RealmSchema.UniqueDigitalAsset,
-                            hidePrecision: true,
-                          },
-                        );
-                      }}
-                      disabled={uda?.transactions.length === 1}
-                      assetFace={uda?.assetIface}
-                    />
-                  )}
-                </View>
-                {hasIssuanceTransaction && !isCollectionUda && (
-                  <>
+                    verified={domainVerification?.verified}
+                    onPress={() => {
+                      if (domainVerification?.verified) {
+                        openLink(url);
+                      } else {
+                        navigation.navigate(NavigationRoutes.REGISTERDOMAIN, {
+                          assetId: assetId,
+                          schema: RealmSchema.UniqueDigitalAsset,
+                          savedDomainName: domainVerification?.name || '',
+                        });
+                      }
+                    }}
+                    hasIssuanceTransaction={hasIssuanceTransaction}
+                  />
+                  {hasIssuanceTransaction && !isCollectionUda && (
                     <VerifyIssuer
                       assetId={assetId}
                       schema={RealmSchema.UniqueDigitalAsset}
@@ -543,53 +526,95 @@ export const UDADetailsScreen = ({ route, data }) => {
                         }
                       }}
                     />
-                    {!uda?.issuer?.verified && (
-                      <View style={styles.seperatorView} />
-                    )}
-                  </>
-                )}
-                <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
-                  {isAddedInRegistry && (
-                    <SelectOption
-                      title={assets.viewInRegistry}
-                      subTitle={''}
-                      onPress={() =>
-                        navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
-                          url: `${config.REGISTRY_URL}/${assetId}`,
-                          title: 'Registry',
-                        })
-                      }
-                      testID={'view_in_registry'}
-                    />
                   )}
-                  {hasIssuanceTransaction && (
-                    <SelectOption
-                      title={'Show your X post here'}
-                      subTitle={''}
-                      onPress={() =>
-                        navigation.navigate(NavigationRoutes.IMPORTXPOST, {
-                          assetId: assetId,
-                          schema: RealmSchema.UniqueDigitalAsset,
-                          asset: uda,
-                        })
-                      }
-                      testID={'import_x_post'}
-                    />
-                  )}
-                </View>
-                {isAddedInRegistry && <View style={styles.seperatorView} />}
-                {twitterPostVerificationWithLink?.link && (
-                  <View style={styles.wrapper}>
-                    <EmbeddedTweetView
-                      tweetId={twitterPostVerificationWithLink?.link}
-                    />
+                </AccordionSection>
+
+                <AccordionSection title={'Asset Info'}>
+                  <Item
+                    title={assets.issuedOn}
+                    value={moment
+                      .unix(uda?.timestamp as number)
+                      .format('DD MMM YY  hh:mm A')}
+                  />
+                  <Item title={home.udaName} value={uda.name as string} />
+                  <Item title={home.assetTicker} value={uda.ticker as string} />
+                  <View style={styles.gutter}>
+                    <NewAssetIdContainer assetId={assetId} />
                   </View>
+                  <Item
+                    value={home.assetDescription}
+                    title={uda.details.split(DeepLinking.appLinkScheme)[0] || ''}
+                  />
+                </AccordionSection>
+
+                {(isAddedInRegistry || hasIssuanceTransaction || uda?.transactions.length > 0) && (
+                  <AccordionSection title={'Activity & Registry'}>
+                    <View style={styles.gutter}>
+                      {uda?.transactions.length > 0 && (
+                        <AssetTransaction
+                          hidePrecision
+                          transaction={uda?.transactions[0]}
+                          coin={uda?.name}
+                          onPress={() => {
+                            navigation.navigate(
+                              NavigationRoutes.COINALLTRANSACTION,
+                              {
+                                assetId: assetId,
+                                transactions: uda?.transactions,
+                                name: uda?.name,
+                                schema: RealmSchema.UniqueDigitalAsset,
+                                hidePrecision: true,
+                              },
+                            );
+                          }}
+                          disabled={uda?.transactions.length === 1}
+                          assetFace={uda?.assetIface}
+                        />
+                      )}
+                    </View>
+                    <View style={[styles.wrapper, styles.viewRegistryCtaWrapper]}>
+                      {isAddedInRegistry && (
+                        <SelectOption
+                          title={assets.viewInRegistry}
+                          subTitle={''}
+                          onPress={() =>
+                            navigation.navigate(NavigationRoutes.WEBVIEWSCREEN, {
+                              url: `${config.REGISTRY_URL}/${assetId}`,
+                              title: 'Registry',
+                            })
+                          }
+                          testID={'view_in_registry'}
+                        />
+                      )}
+                      {hasIssuanceTransaction && (
+                        <SelectOption
+                          title={'Show your X post here'}
+                          subTitle={''}
+                          onPress={() =>
+                            navigation.navigate(NavigationRoutes.IMPORTXPOST, {
+                              assetId: assetId,
+                              schema: RealmSchema.UniqueDigitalAsset,
+                              asset: uda,
+                            })
+                          }
+                          testID={'import_x_post'}
+                        />
+                      )}
+                    </View>
+                    {twitterPostVerificationWithLink?.link && (
+                      <View style={styles.wrapper}>
+                        <EmbeddedTweetView
+                          tweetId={twitterPostVerificationWithLink?.link}
+                        />
+                      </View>
+                    )}
+                  </AccordionSection>
                 )}
+
                 <HideAssetView
                   title={assets.hideAsset}
                   onPress={() => hideAsset()}
                 />
-                <SizedBox height={screenHeight*0.2}/>
               </>
             )}
           </>
