@@ -76,6 +76,7 @@ import {
 import Fonts from 'src/constants/Fonts';
 import PaymentMethodButton, { PaymentMethodType } from '../send/components/PaymentMethodButton';
 import { saveGasFreeTransaction } from 'src/utils/gasFreeTransactions';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 import { TribeApp } from 'src/models/interfaces/TribeApp';
 
 const gasFreeFeeCalculator = createFeeCalculator();
@@ -436,7 +437,7 @@ const SendAssetScreen = () => {
           setLoading(false);
           setVisible(false);
           setTimeout(() => {
-            Toast(`Gas-free transfer failed: ${error.message}`, true);
+            Toast(getRgbErrorMessage(error, common), true);
           }, 500);
         }
       } else if (paymentMethod === PaymentMethodType.SATS) {
@@ -487,7 +488,7 @@ const SendAssetScreen = () => {
           createUtxos.mutate();
         }, 500);
       } else {
-        Toast(error.message || error.code || `${error}` || 'An unknown error occurred', true);
+        Toast(getRgbErrorMessage(error, common), true);
         setLoading(false);
         setVisible(false);
       }
@@ -1075,7 +1076,7 @@ const SendAssetScreen = () => {
                 setVisible(true);
               } catch (error) {
                 setRequestingQuote(false);
-                Toast(`Failed to get gas-free quote: ${error.message}`, true);
+                Toast(getRgbErrorMessage(error, common), true);
               }
             } else {
               // For regular (SATS) payment, show modal directly

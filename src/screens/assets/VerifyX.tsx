@@ -24,6 +24,7 @@ import { AppContext } from 'src/contexts/AppContext';
 import { saveTwitterHandle } from 'src/utils/socialHandleUtils';
 import TwitterVerificationInfoModal from './components/TwitterVerificationInfoModal';
 import { events, logCustomEvent } from 'src/services/analytics';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 function VerifyX() {
   const navigation = useNavigation();
@@ -123,7 +124,7 @@ function VerifyX() {
       if(error.message.includes('The operation couldn’t be completed')) {
         Toast(`Failed to verify X handle, please try again later.`, true);
       } else {
-        Toast(`${error}`, true);
+        Toast(getRgbErrorMessage(error, common), true);
       }
       console.log(error);
     }

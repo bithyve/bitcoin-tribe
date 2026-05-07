@@ -16,6 +16,7 @@ import { hp } from 'src/constants/responsive';
 import CancelIllustration from 'src/assets/images/cancelIllustration.svg';
 import ResponsePopupContainer from 'src/components/ResponsePopupContainer';
 import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 function TransferDetails({ route, navigation }) {
   const transaction: Transfer = route.params?.transaction;
@@ -24,7 +25,7 @@ function TransferDetails({ route, navigation }) {
   const precision = route.params?.precision;
   const schema = route.params?.schema;
   const { translations } = useContext(LocalizationContext);
-  const { wallet, assets } = translations;
+  const { wallet, assets, common } = translations;
   const [visible, setVisible] = useState(false);
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(() => getStyles(theme), [theme]);
@@ -52,7 +53,7 @@ function TransferDetails({ route, navigation }) {
       }, 600);
     } else if (isError) {
       setVisible(false);
-      Toast(`${error}` || 'An error occurred', true);
+      Toast(getRgbErrorMessage(error, common), true);
       navigation.goBack();
     } else {
       setVisible(false);

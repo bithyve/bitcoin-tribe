@@ -33,6 +33,7 @@ import InProgessPopupContainer from 'src/components/InProgessPopupContainer';
 import { AppTheme } from 'src/theme';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 function ReceiveAssetScreen() {
   const { translations, formatString } = useContext(LocalizationContext);
@@ -122,49 +123,30 @@ function ReceiveAssetScreen() {
 
   useEffect(() => {
     if (error) {
-      const getErrorMessage = err =>
-        err?.message || err?.toString() || 'An unknown error occurred';
-      const errorMessage = getErrorMessage(error);
-      const handleSpecificError = message => {
-        if (message === 'Insufficient sats for RGB') {
-          createUtxos();
-          return true;
-        } else if (error.code === 'AssetNotFound') {
-          setTimeout(() => {
-            mutate({
-              assetId: '',
-              amount: 0,
-              linkedAsset: assetId,
-              linkedAmount: amount,
-              expiry: invoiceExpiry,
-              blinded: invoiceType === InvoiceMode.Blinded,
-            });
-          }, 100);
-          return true;
-        } else {
-          Toast(errorMessage, true);
-          navigation.goBack();
-        }
-        return false;
-      };
-      if (!handleSpecificError(errorMessage)) {
-        Toast(errorMessage, true);
+      const errorMessage = error?.message || error?.toString() || '';
+      if (errorMessage === 'Insufficient sats for RGB') {
+        createUtxos();
+      } else if (error.code === 'AssetNotFound') {
+        setTimeout(() => {
+          mutate({
+            assetId: '',
+            amount: 0,
+            linkedAsset: assetId,
+            linkedAmount: amount,
+            expiry: invoiceExpiry,
+            blinded: invoiceType === InvoiceMode.Blinded,
+          });
+        }, 100);
+      } else {
+        Toast(getRgbErrorMessage(error, common), true);
+        navigation.goBack();
       }
     }
   }, [error]);
 
   useEffect(() => {
     if (generateLNInvoiceMutation.error) {
-      let errorMessage;
-      if (generateLNInvoiceMutation.error instanceof Error) {
-        errorMessage = generateLNInvoiceMutation.error.message;
-      } else if (typeof generateLNInvoiceMutation.error === 'string') {
-        errorMessage = generateLNInvoiceMutation.error;
-      } else {
-        errorMessage = 'An unexpected error occurred. Please try again.';
-      }
-      Toast(`${errorMessage}`, true);
-      // Toast(generateLNInvoiceMutation.error, true);
+      Toast(getRgbErrorMessage(generateLNInvoiceMutation.error, common), true);
     } else if (generateLNInvoiceMutation.data) {
       setLightningInvoice(generateLNInvoiceMutation?.data?.invoice);
     }

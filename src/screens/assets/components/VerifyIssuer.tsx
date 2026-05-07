@@ -36,6 +36,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationRoutes } from 'src/navigation/NavigationRoutes';
 import { ServiceFeeType } from 'src/models/interfaces/Transactions';
 import { events, logCustomEvent } from 'src/services/analytics';
+import { getRgbErrorMessage } from 'src/utils/errorUtils';
 
 const getStyles = (theme: AppTheme, tooltipPos) =>
   StyleSheet.create({
@@ -148,7 +149,7 @@ export const verifyIssuerOnTwitter = async (
       }
     }
   } catch (error) {
-    Toast(`${error}`, true);
+    Toast(getRgbErrorMessage(error, common), true);
     console.log(error);
   }
 };
@@ -173,7 +174,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
   const iconRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const { translations } = useContext(LocalizationContext);
-  const { assets } = translations;
+  const { assets, common } = translations;
   const [isAddedInRegistry, setIsAddedInRegistry] = useState(false);
   const [requesting, setRequesting] = useState(true);
   const [feeDetails, setFeeDetails] = useState(null);
@@ -324,7 +325,7 @@ const VerifyIssuer: React.FC<VerifyIssuerProps> = (
       }
     } catch (error) {
       setDisabledCTA(false);
-      Toast(`${error}`, true);
+      Toast(getRgbErrorMessage(error, common), true);
       console.log(error);
     }
   }, [assetId, schema]);
