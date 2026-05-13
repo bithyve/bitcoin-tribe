@@ -45,8 +45,15 @@ The system MUST allow the user to view and confirm their wallet seed phrase as t
 #### Scenario: Confirming the seed phrase
 - GIVEN the seed phrase screen is displayed
 - WHEN the user chooses to confirm the backup
-- THEN the system MUST mark Step 1 as complete and navigate to the backup history screen
+- THEN the system MUST ask the user to enter one randomly selected mnemonic word from the seed phrase
+- AND only after the entered word is correct, MUST mark Step 1 as complete and navigate to the backup history screen
 - AND a confirmation toast MUST be shown
+
+#### Scenario: Incorrect random mnemonic word
+- GIVEN the random mnemonic confirmation prompt is shown
+- WHEN the user enters an incorrect mnemonic word
+- THEN the system MUST reject confirmation and display an error message
+- AND Step 1 MUST remain incomplete
 
 #### Scenario: Skipping seed phrase confirmation
 - GIVEN the seed phrase screen is displayed
@@ -57,7 +64,7 @@ The system MUST allow the user to view and confirm their wallet seed phrase as t
 ---
 
 ### Requirement: RGB Asset Backup via Relay
-WHEN appType is `ON_CHAIN`, the system MUST allow the user to export an asset backup file and upload it to a relay server as Step 2 of the backup flow.
+WHEN appType is `ON_CHAIN`, the system MUST allow the user to create an encrypted RGB asset backup and MUST automatically upload it to a relay server as Step 2 of the backup flow.
 
 #### Scenario: Performing asset backup when Step 1 is not yet complete
 - GIVEN the user has not completed Step 1
@@ -67,10 +74,10 @@ WHEN appType is `ON_CHAIN`, the system MUST allow the user to export an asset ba
 #### Scenario: Performing a successful asset backup
 - GIVEN Step 1 is complete and the wallet is online
 - WHEN the user selects the asset backup option
-- THEN the system MUST generate a backup file and present the OS share sheet
-- AND upon successful share, the system MUST mark Step 2 as complete
-- AND the backup file MUST also be uploaded to the relay server
-- AND the relay backup timestamp displayed on the backup menu MUST be updated
+- THEN the system MUST generate an encrypted backup payload
+- AND the system MUST automatically upload the encrypted payload to the relay server
+- AND the system MUST mark Step 2 as complete after successful upload
+- AND the system MUST update relay backup metadata in app state, including the latest successful relay backup timestamp
 
 #### Scenario: Asset backup when wallet is not online
 - GIVEN the wallet is in an error or connecting state
@@ -81,33 +88,6 @@ WHEN appType is `ON_CHAIN`, the system MUST allow the user to export an asset ba
 - GIVEN the backup menu is open
 - THEN the system MUST display the date and time of the most recent successful relay backup
 - AND WHEN no relay backup has been performed, the system MUST show "Never"
-
----
-
-### Requirement: Cloud Backup of RGB Assets
-The system MUST allow the user to back up RGB asset data to platform cloud storage and view the history of previous cloud backups.
-
-#### Scenario: Triggering a cloud backup
-- GIVEN the user is on the cloud backup screen
-- WHEN the user initiates a backup
-- THEN the system MUST display an in-progress indicator
-- AND upon success, MUST record the event in cloud backup history and show a success toast
-- AND the cloud storage destination MUST be iCloud on iOS and Google Drive on Android
-
-#### Scenario: Cloud backup failure
-- GIVEN the user initiates a cloud backup
-- WHEN the backup operation fails
-- THEN the system MUST display a failure toast
-
-#### Scenario: Viewing cloud backup history
-- GIVEN one or more cloud backups have been performed
-- WHEN the user opens the cloud backup screen
-- THEN the system MUST display a chronological list of past backup events
-
-#### Scenario: No cloud backup history
-- GIVEN no cloud backup has ever been performed
-- WHEN the user opens the cloud backup screen
-- THEN the system MUST display an empty-state illustration with no history items
 
 ---
 
