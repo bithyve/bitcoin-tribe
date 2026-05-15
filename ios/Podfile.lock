@@ -213,7 +213,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - Orbis1Sdk (0.2.5):
+  - Orbis1Sdk (0.2.6):
     - boost
     - DoubleConversion
     - fast_float
@@ -1986,7 +1986,7 @@ PODS:
   - react-native-app-auth (8.0.1):
     - AppAuth (>= 1.7.6)
     - React-Core
-  - "react-native-bare-kit (0.9.3+68b062)":
+  - "react-native-bare-kit (0.9.3+188bf4)":
     - boost
     - DoubleConversion
     - fast_float
@@ -2141,8 +2141,34 @@ PODS:
     - React-Core
     - React-RCTFabric
     - ReactCommon/turbomodule/core
-  - react-native-netinfo (11.4.1):
+  - react-native-netinfo (11.5.2):
+    - boost
+    - DoubleConversion
+    - fast_float
+    - fmt
+    - glog
+    - hermes-engine
+    - RCT-Folly
+    - RCT-Folly/Fabric
+    - RCTRequired
+    - RCTTypeSafety
     - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - SocketRocket
+    - Yoga
   - react-native-pager-view (6.9.1):
     - boost
     - DoubleConversion
@@ -2177,7 +2203,7 @@ PODS:
     - React-Core
   - react-native-rsa-native (2.0.5):
     - React
-  - react-native-safe-area-context (5.6.2):
+  - react-native-safe-area-context (5.7.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2195,8 +2221,8 @@ PODS:
     - React-graphics
     - React-ImageManager
     - React-jsi
-    - react-native-safe-area-context/common (= 5.6.2)
-    - react-native-safe-area-context/fabric (= 5.6.2)
+    - react-native-safe-area-context/common (= 5.7.0)
+    - react-native-safe-area-context/fabric (= 5.7.0)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-renderercss
@@ -2207,7 +2233,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/common (5.6.2):
+  - react-native-safe-area-context/common (5.7.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2235,7 +2261,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - react-native-safe-area-context/fabric (5.6.2):
+  - react-native-safe-area-context/fabric (5.7.0):
     - boost
     - DoubleConversion
     - fast_float
@@ -2961,7 +2987,7 @@ PODS:
     - FirebaseCoreExtension
     - React-Core
     - RNFBApp
-  - RNGestureHandler (2.29.1):
+  - RNGestureHandler (2.31.2):
     - boost
     - DoubleConversion
     - fast_float
@@ -3106,10 +3132,10 @@ PODS:
     - ReactCommon/turbomodule/core
     - SocketRocket
     - Yoga
-  - RNQrGenerator (1.4.5):
+  - RNQrGenerator (1.4.6):
     - React
     - ZXingObjC
-  - RNReactNativeHapticFeedback (2.3.3):
+  - RNReactNativeHapticFeedback (2.3.4):
     - boost
     - DoubleConversion
     - fast_float
@@ -3892,7 +3918,7 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   NitroMmkv: 320feb7789986e3ba45582d5c630ebcfeca807ae
   NitroModules: 0ecd2bf2d12a6a2958fe10c5200e8e61cbea0fd0
-  Orbis1Sdk: 8207ae7c9a02dc672a5fbc764fe4350d4e8e5e44
+  Orbis1Sdk: 1a78f91fb6630a323d953f391c005a97236db239
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RCT-Folly: 846fda9475e61ec7bcbf8a3fe81edfcaeb090669
   RCTDeprecation: 5eb1d2eeff5fb91151e8a8eef45b6c7658b6c897
@@ -3929,7 +3955,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 94f4264de2cb156960cd82b338a403f4653f2fd9
   React-microtasksnativemodule: 6c4ee39a36958c39c97b074d28f360246a335e84
   react-native-app-auth: 0dd956abd9201fc06f7b4a71f0740836e2532014
-  react-native-bare-kit: 29309be1f32229c8bff3dcdd62779c36ad1dc1e1
+  react-native-bare-kit: 21dd87a3cadb7056241fe2ab6bf9e3b6f911e841
   react-native-biometrics: 43ed5b828646a7862dbc7945556446be00798e7d
   react-native-blur: 6af83e7e3c4c1446a188d9b2c493600fc4beb173
   react-native-config: c9a1b34b1d4edef7bea9fcfdd451bb1134c6a2b1
@@ -3938,12 +3964,12 @@ SPEC CHECKSUMS:
   react-native-image-picker: b16541b587b275e81a12f9b82f215c5e9b0ccbf3
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
   react-native-keep-awake: 129cb4bd75d0f304a479b4c4527d2994fe18e43c
-  react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
+  react-native-netinfo: 57447b5a45c98808f8eae292cf641f3d91d13830
   react-native-pager-view: a0516effb17ca5120ac2113bfd21b91130ad5748
   react-native-randombytes: 4eeddad82d1fd57adda1cd5beffe67d041c9d6de
   react-native-render-html: 5afc4751f1a98621b3009432ef84c47019dcb2bd
   react-native-rsa-native: a7931cdda1f73a8576a46d7f431378c5550f0c38
-  react-native-safe-area-context: c00143b4823773bba23f2f19f85663ae89ceb460
+  react-native-safe-area-context: befb5404eb8a16fdc07fa2bebab3568ecabcbb8a
   react-native-slider: 663776e5683e257de8df8091abc2d93ff6ec67db
   react-native-tcp-socket: 0a0455b843f9dfcad875ea6cfafeb05c0abb0a24
   react-native-view-shot: 6c008e58f4720de58370848201c5d4a082c6d4ca
@@ -3986,12 +4012,12 @@ SPEC CHECKSUMS:
   RNFBAnalytics: bd6cecb65cc11ebdc88734691ab86c14addc0e52
   RNFBApp: fd5bf956d6114cd3172680ab9c2185143faaa385
   RNFBMessaging: 387873ff9c0deb29ec76b1a5c492d06012af58f4
-  RNGestureHandler: 29bbca60c881e5243e219e3fe0016060002ed389
+  RNGestureHandler: 552c97e0bcb541ff91259759ae49420501d9d5e4
   RNImageCropPicker: 5fd4ceaead64d8c53c787e4e559004f97bc76df7
   RNKeychain: a2c134ab796272c3d605e035ab727591000b30f3
   RNLocalize: ed3bbf7e995116ece078e169bda6928dde970cce
-  RNQrGenerator: b467624cdcb0e88108a8b4ca74c94b0978efa265
-  RNReactNativeHapticFeedback: be4f1b4bf0398c30b59b76ed92ecb0a2ff3a69c6
+  RNQrGenerator: af2f0888eb81b8ff99517a3929d6399444dcc56d
+  RNReactNativeHapticFeedback: 43181767a132b77676b6a58b7ed852928e0d4862
   RNReanimated: f39d5f29612cb37617241ea2e91bfecaabe0d1c4
   RNScreens: d821082c6dd1cb397cc0c98b026eeafaa68be479
   RNShare: 87a0674ce05bf224021e992ab5f34fe576b58aee
