@@ -70,6 +70,7 @@ function IssueIfa() {
     useState('');
   const [visibleFailedToCreatePopup, setVisibleFailedToCreatePopup] =
     useState(false);
+    const { mutate: backupMutate } = useMutation(ApiHandler.backup);
 
   const {
     mutate: createUtxos,
@@ -161,6 +162,7 @@ function IssueIfa() {
               askVerify: addToRegistry,
             });
           }
+          backupMutate();
         }, 500);
       } else if (
         response?.error === 'Insufficient sats for RGB' ||

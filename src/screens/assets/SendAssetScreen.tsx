@@ -251,6 +251,7 @@ const SendAssetScreen = () => {
   const [gasFreeQuote, setGasFreeQuote] = useState<FeeQuote | null>(null);
   const [quoteExpiration, setQuoteExpiration] = useState<number | null>(null);
   const [requestingQuote, setRequestingQuote] = useState(false);
+  const { mutate: backupMutate } = useMutation(ApiHandler.backup);
   
   // Check if gas-free feature is available
   const isGasFreeAvailable = useMemo(() => {
@@ -456,6 +457,7 @@ const SendAssetScreen = () => {
       if (response?.txid) {
         setSuccessStatus(true);
         logCustomEvent(events.SEND_ASSET);
+        backupMutate();
       } else if (response?.error === 'Insufficient sats for RGB') {
         setTimeout(() => {
           createUtxos.mutate();
