@@ -4786,7 +4786,7 @@ electron-to-chromium@^1.5.249:
 
 "electrum-client@git+https://github.com/bithyve/rn-electrum-client.git":
   version "2.0.0"
-  resolved "git+ssh://git@github.com/bithyve/rn-electrum-client.git#76c0ea35e1a50c47f3a7f818d529ebd100161496"
+  resolved "git+https://github.com/bithyve/rn-electrum-client.git#76c0ea35e1a50c47f3a7f818d529ebd100161496"
 
 elliptic@^6.5.3, elliptic@^6.5.7, elliptic@^6.6.1:
   version "6.6.1"
