@@ -342,6 +342,21 @@ class RPCManager {
 
 let rpcManager;
 
+function normalizeSeedArg(seedArg) {
+  const raw = typeof seedArg === 'string' ? seedArg.trim() : '';
+
+  if (!raw) {
+    throw new Error('Missing worklet seed argument');
+  }
+
+  const isHex = /^[0-9a-fA-F]+$/.test(raw) && raw.length % 2 === 0;
+  const source = isHex ? Buffer.from(raw, 'hex') : Buffer.from(raw, 'utf8');
+  if(source.byteLength === 32) {
+    return source;
+  }
+  return crypto.hash(source);
+}
+
 // ============================================================================
 // Root Peer Helpers
 // ============================================================================
@@ -537,9 +552,11 @@ async function initializeWorklet() {
     console.log('[Worklet] 🚀 Starting worklet initialization...');
 
     // Get seed and discovery key from React Native (passed as arguments)
-    const seed = Buffer.from(Bare.argv[0], 'hex');
+    const seed = normalizeSeedArg(Bare.argv[0]);
+    console.log('seed', seed.toString('hex'))
     state.discoveryKey = Bare.argv[1];
     console.log('[Worklet] ✅ Seed and discovery key received from React Native');
+    console.log('[Worklet] 🔐 Using normalized seed length:', seed.byteLength);
     console.log('[Worklet] 🔑 Discovery key:', state.discoveryKey);
 
     // Initialize Hyperswarm
@@ -547,7 +564,6 @@ async function initializeWorklet() {
     state.swarm = new Hyperswarm({ seed });
     state.keyPair = state.swarm.keyPair;
 
-    console.log('[Worklet] ✅ Initialized with public key:', state.keyPair.publicKey.toString('hex'));
 
     // Set up RPC communication
     console.log('[Worklet] 🔌 Setting up RPC communication...');
@@ -628,5 +644,7 @@ async function initializeWorklet() {
 // Start the worklet
 initializeWorklet().catch((error) => {
   console.error('[Worklet] Fatal error:', error);
-  process.exit(1);
+
+  // Bare worklet runtime may not expose `process`; rethrow so host can handle failure.
+  throw error;
 });
