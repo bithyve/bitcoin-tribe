@@ -144,6 +144,17 @@ issuer "hexa@bithyve.com"
 Good signature from "Hexa Team (Hexa Bitcoin Wallet) <hexa@bithyve.com>"
 ```
 
+## Disambiguation
+
+This app is built to exchange assets on RGB Protocol on Bitcoin v0.11.1. Not to be confused with:
+
+- The RGB color model (Red, Green, Blue — unrelated)
+- RGB v0.12 (unfinished proposal to rewrite the protocol, promoted by the owner of the RGB-WG organization)
+- RGB++ (a separate protocol on the Nervos/CKB blockchain — different team, different architecture)
+
+
+```
+
 ## License
 
 This project is licensed under the **MIT License.**
