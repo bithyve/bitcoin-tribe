@@ -1,27 +1,21 @@
 import React, { useContext } from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
-import { useTheme } from 'react-native-paper';
 import { hp, windowHeight } from 'src/constants/responsive';
 import AppText from 'src/components/AppText';
 import Fonts from 'src/constants/Fonts';
 import AssetsActive from 'src/assets/images/icon_assets_active.svg';
-import AssetsActiveLight from 'src/assets/images/icon_assets_active_light.svg';
 import AssetsInActive from 'src/assets/images/icon_assets_inactive.svg';
 import AssetsInActiveDark from 'src/assets/images/icon_assets_inactive_dark.svg';
 import CollectiblesActive from 'src/assets/images/icon_collectibles_active.svg';
-import CollectiblesActiveLight from 'src/assets/images/icon_collectibles_active_light.svg';
 import CollectiblesInActive from 'src/assets/images/icon_collectibles_inactive.svg';
 import CollectiblesInActiveLight from 'src/assets/images/icon_collectibles_inactive_light.svg';
 import CommunityActive from 'src/assets/images/icon_community_active.svg';
-import CommunityActiveLight from 'src/assets/images/icon_community_active_light.svg';
 import CommunityInActive from 'src/assets/images/icon_community_inactive.svg';
 import CommunityInActiveLight from 'src/assets/images/icon_community_inactive_light.svg';
 import SettingsActive from 'src/assets/images/icon_settings_active.svg';
-import SettingsActiveLight from 'src/assets/images/icon_settings_active_light.svg';
 import SettingsInActive from 'src/assets/images/icon_setting_inactive.svg';
 import SettingsInActiveLight from 'src/assets/images/icon_setting_inactive_light.svg';
 import { NavigationRoutes } from '../NavigationRoutes';
-import { AppTheme } from 'src/theme';
 import Capitalize from 'src/utils/capitalizeUtils';
 import GradientView from 'src/components/GradientView';
 import { LocalizationContext } from 'src/contexts/LocalizationContext';
@@ -30,9 +24,8 @@ import { Keys } from 'src/storage';
 import AppTouchable from 'src/components/AppTouchable';
 
 const CustomTab = ({ state, descriptors, navigation }) => {
-  const theme: AppTheme = useTheme();
-  const styles = React.useMemo(() => getStyles(theme), [theme]);
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
+  const styles = React.useMemo(() => getStyles(isThemeDark), [isThemeDark]);
   const { translations } = useContext(LocalizationContext);
   const { common } = translations;
 
@@ -40,11 +33,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
     switch (label) {
       case NavigationRoutes.HOMESCREEN:
         return isFocused ? (
-          isThemeDark ? (
-            <AssetsActive />
-          ) : (
-            <AssetsActiveLight />
-          )
+          <AssetsActive />
         ) : (
           isThemeDark ? (
             <AssetsInActiveDark />
@@ -54,11 +43,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         );
       case NavigationRoutes.ASSETS:
         return isFocused ? (
-          isThemeDark ? (
-            <CollectiblesActive />
-          ) : (
-            <CollectiblesActiveLight />
-          )
+          <CollectiblesActive />
         ) : (
           isThemeDark ? (
             <CollectiblesInActive />
@@ -68,11 +53,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         );
       case NavigationRoutes.COMMUNITY:
         return isFocused ? (
-          isThemeDark ? (
-            <CommunityActive />
-          ) : (
-            <CommunityActiveLight />
-          )
+          <CommunityActive />
         ) : (
           isThemeDark ? (
             <CommunityInActive />
@@ -82,11 +63,7 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         );
       case NavigationRoutes.SETTINGS:
         return isFocused ? (
-          isThemeDark ? (
-            <SettingsActive />
-          ) : (
-            <SettingsActiveLight />
-          )
+          <SettingsActive />
         ) : (
           isThemeDark ? (
             <SettingsInActive />
@@ -98,16 +75,16 @@ const CustomTab = ({ state, descriptors, navigation }) => {
         return '';
     }
   };
-  const TabBarTitle = (isFocused, label) => {
+  const TabBarTitle = label => {
     switch (label) {
       case NavigationRoutes.HOMESCREEN:
-        return isFocused ? `${common.home}` : '';
+        return `${common.home}`;
       case NavigationRoutes.ASSETS:
-        return isFocused ? `${common.assets}` : '';
+        return `${common.assets}`;
       case NavigationRoutes.COMMUNITY:
-        return isFocused ? `${common.community}` : '';
+        return `${common.community}`;
       case NavigationRoutes.SETTINGS:
-        return isFocused ? `${common.settings}` : '';
+        return `${common.settings}`;
       default:
         return '';
     }
@@ -115,11 +92,11 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   return (
     <GradientView
       style={styles.tabBar}
-      colors={[
-        theme.colors.cardGradient1,
-        theme.colors.cardGradient2,
-        theme.colors.cardGradient3,
-      ]}>
+      colors={
+        isThemeDark
+          ? ['#121212', '#121212', '#121212']
+          : ['#FFFFFF', '#FFFFFF', '#FFFFFF']
+      }>
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -163,13 +140,15 @@ const CustomTab = ({ state, descriptors, navigation }) => {
               style={[
                 styles.bottomNavigation,
                 {
-                  marginLeft: hp(4),
+                  marginTop: hp(3),
                   color: isFocused
-                    ? theme.colors.primaryCTAText
-                    : theme.colors.disablePrimaryCTAText,
+                    ? '#0166FF'
+                    : isThemeDark
+                    ? '#575757'
+                    : '#667085',
                 },
               ]}>
-              {Capitalize(TabBarTitle(isFocused, label))}
+              {Capitalize(TabBarTitle(label))}
             </AppText>
           </AppTouchable>
         );
@@ -178,44 +157,42 @@ const CustomTab = ({ state, descriptors, navigation }) => {
   );
 };
 
-const getStyles = (theme: AppTheme) =>
+const getStyles = (isThemeDark: boolean) =>
   StyleSheet.create({
     tabBar: {
       flexDirection: 'row',
-      borderRadius: 40,
-      borderColor: theme.colors.borderColor,
+      borderRadius: 28,
+      borderColor: isThemeDark ? '#232323' : '#D0D5DD',
       borderWidth: 1,
       position: 'absolute',
       bottom: windowHeight > 670 ? hp(15) : hp(5),
-      height: hp(68),
-      width: '89%',
+      height: hp(76),
+      width: '90%',
       marginBottom: Platform.OS === 'ios' ? hp(15) : hp(35),
-      marginHorizontal: hp(16),
+      marginHorizontal: hp(14),
       alignSelf: 'center',
-      // marginHorizontal: windowWidth * 0.1,
     },
     activeTab: {
       flex: 1,
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: theme.colors.activeTabColor,
-      borderRadius: 100,
-      margin: 10,
-      paddingHorizontal: hp(12),
-      minWidth: hp(125),
+      backgroundColor: isThemeDark ? '#1E2A42' : '#EAF2FF',
+      borderRadius: 20,
+      margin: 8,
+      minWidth: hp(72),
     },
     inActiveTab: {
       flex: 1,
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       minWidth: hp(50),
     },
     bottomNavigation: {
-      fontSize: 12,
-      fontFamily: Fonts.LufgaSemiBold,
-      lineHeight: 13 * 1.4,
+      fontSize: 10,
+      fontFamily: Fonts.LufgaMedium,
+      lineHeight: 12 * 1.35,
       fontWeight: '500',
     },
   });

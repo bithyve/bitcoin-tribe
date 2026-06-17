@@ -1,5 +1,4 @@
 import {
-  ActivityIndicator,
   Platform,
   StyleSheet,
   View,
@@ -23,7 +22,6 @@ import { hp, windowHeight, windowWidth, wp } from 'src/constants/responsive';
 import { AppTheme } from 'src/theme';
 import { useTheme } from 'react-native-paper';
 import AssetIcon from 'src/components/AssetIcon';
-import TransactionButtons from '../wallet/components/TransactionButtons';
 import { formatLargeNumber } from 'src/utils/numberWithCommas';
 import AppTouchable from 'src/components/AppTouchable';
 import { useNavigation } from '@react-navigation/native';
@@ -51,23 +49,29 @@ import { useSharedValue } from 'react-native-reanimated';
 import Colors from 'src/theme/Colors';
 import { TapGestureHandler } from 'react-native-gesture-handler';
 import { CustomImage } from 'src/components/CustomImage';
+import IconSend from 'src/assets/images/ic_send.svg';
+import IconSendLight from 'src/assets/images/ic_send_light.svg';
+import IconReceive from 'src/assets/images/icon_recieve.svg';
+import IconReceiveLight from 'src/assets/images/icon_recieve_light.svg';
 const CARD_HEIGHT = 245;
 
 const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      marginHorizontal: wp(10),
+      marginHorizontal: wp(16),
       backgroundColor: theme.colors.primaryBackground,
+      paddingBottom: hp(95),
     },
     largeHeaderContainer: {
-      borderColor: isThemeDark ? '#111' : '#fff',
+      borderColor: isThemeDark ? '#232323' : '#E4E7EC',
       borderWidth: 1,
-      borderRadius: hp(20),
-      backgroundColor: isThemeDark ? '#111' : '#fff',
+      borderRadius: hp(24),
+      backgroundColor: isThemeDark ? '#1A1A1A' : '#FFFFFF',
       alignItems: 'center',
       height: CARD_HEIGHT,
       justifyContent: 'space-between',
+      overflow: 'hidden',
     },
     largeHeaderContainer1: {
       borderRadius: hp(20),
@@ -77,51 +81,71 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
     },
     row: {
       flexDirection: 'row',
-      marginBottom: hp(20),
+      alignItems: 'center',
+    },
+    cardRow: {
+      flexDirection: 'row',
+      marginBottom: hp(14),
     },
     list: {
-      height: CARD_HEIGHT,
+      height: CARD_HEIGHT + hp(6),
     },
     coinNameContainer: {
       flex: 1,
       minWidth: 0,
     },
     totalBalance: {
-      marginTop: hp(10),
-      color: theme.colors.headingColor,
-      fontSize: 26,
+      marginTop: hp(6),
+      color: isThemeDark ? '#FFFFFF' : '#101828',
+      fontSize: 50,
+      lineHeight: 52,
+      fontFamily: Fonts.LufgaBold,
     },
     totalBalanceDecimal: {
-      color: theme.colors.headingColor,
-      fontSize: 18,
+      color: isThemeDark ? '#FFFFFF' : '#101828',
+      fontSize: 26,
       alignSelf: 'flex-end',
-      marginBottom: Platform.OS === 'ios' ? hp(3) : hp(3),
+      marginBottom: Platform.OS === 'ios' ? hp(8) : hp(8),
       flexShrink: 1,
+      fontFamily: Fonts.LufgaSemiBold,
     },
     textUnit: {
       fontSize: 16,
-      color: theme.colors.secondaryHeadingColor,
+      color: isThemeDark ? '#787878' : '#667085',
       alignSelf: 'flex-end',
-      marginBottom: hp(2),
-      marginTop: hp(10),
+      marginBottom: hp(10),
+      marginTop: hp(8),
     },
     totalBalanceLabel: {
-      color: theme.colors.secondaryHeadingColor,
-      marginBottom: hp(-10),
+      color: isThemeDark ? '#787878' : '#667085',
+      marginBottom: hp(-2),
+      fontSize: 15,
+      fontFamily: Fonts.LufgaMedium,
+    },
+    totalBalanceLabelMini: {
+      color: '#FFFFFF',
+      fontSize: 18,
+      fontFamily: Fonts.LufgaSemiBold,
+      marginTop: hp(4),
     },
     transactionContainer: {
-      height: windowHeight > 820 ? '55%' : '50%',
+      marginTop: hp(4),
+      height: windowHeight > 820 ? '52%' : '49%',
     },
     transactionContainer1: {
-      marginTop: hp(10),
-      height: windowHeight > 820 ? '54%' : '49%',
+      marginTop: hp(4),
+      height: windowHeight > 820 ? '52%' : '49%',
     },
     balanceContainer: {
       flex: 1,
-      aspectRatio: 1,
-      borderRadius: hp(15),
-      backgroundColor: isThemeDark ? '#111111' : '#E9EEEF',
-      padding: hp(20),
+      borderRadius: hp(18),
+      backgroundColor: isThemeDark ? '#1A1A1A' : '#FFFFFF',
+      borderWidth: 1,
+      borderColor: isThemeDark ? '#232323' : '#E4E7EC',
+      paddingHorizontal: hp(14),
+      paddingVertical: hp(12),
+      minHeight: hp(122),
+      justifyContent: 'space-between',
     },
     imageBackground: {
       width: '100%',
@@ -236,10 +260,70 @@ const getStyles = (theme: AppTheme, isThemeDark: boolean) =>
         'linear-gradient(180deg, rgba(0, 0, 0, 1), rgba(17, 17, 17, 0))',
     },
     coinDataCtr: {
-      padding: hp(20),
-      paddingTop: hp(40),
+      paddingHorizontal: hp(20),
+      paddingTop: hp(24),
+      paddingBottom: hp(16),
       justifyContent: 'space-between',
       flex: 1,
+    },
+    actionRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginTop: hp(4),
+    },
+    actionBtnPrimary: {
+      width: '48.5%',
+      height: hp(44),
+      borderRadius: hp(14),
+      backgroundColor: '#0166FF',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
+    },
+    actionBtnSecondary: {
+      width: '48.5%',
+      height: hp(44),
+      borderRadius: hp(14),
+      backgroundColor: isThemeDark ? '#1E1E1E' : '#F2F4F7',
+      borderColor: isThemeDark ? '#2E2E2E' : '#E4E7EC',
+      borderWidth: 1,
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'row',
+    },
+    actionBtnText: {
+      marginLeft: wp(6),
+      color: isThemeDark ? '#FFFFFF' : '#101828',
+      fontSize: 16,
+      fontFamily: Fonts.LufgaSemiBold,
+    },
+    miniHeaderRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: hp(8),
+    },
+    miniHeaderIconGap: {
+      marginLeft: wp(8),
+    },
+    miniLabelInline: {
+      color: isThemeDark ? '#FFFFFF' : '#101828',
+      fontSize: 16,
+      fontFamily: Fonts.LufgaSemiBold,
+    },
+    miniValue: {
+      color: isThemeDark ? '#FFFFFF' : '#101828',
+      fontSize: 28,
+      lineHeight: 30,
+      fontFamily: Fonts.LufgaBold,
+      marginTop: hp(2),
+      flexShrink: 1,
+    },
+    miniSubValue: {
+      color: '#616161',
+      fontSize: 14,
+      marginTop: hp(4),
+      fontFamily: Fonts.LufgaRegular,
     },
   });
 
@@ -411,6 +495,9 @@ const CoinItem = ({
     collection.filtered(`assetId = $0`, asset.assetId),
   )[0];
   const isCampaignActive = asset?.campaign?.isActive == 'true';
+  const disabled =
+    isWalletOnline === WalletOnlineStatus.Error ||
+    isWalletOnline === WalletOnlineStatus.InProgress;
 
   return (
     <>
@@ -440,45 +527,49 @@ const CoinItem = ({
           <View style={styles.coinDataCtr}>
             <View style={styles.row}>
               <View style={styles.coinNameContainer}>
-                <AppText variant="heading1">{formatTUsdt(asset.name)}</AppText>
                 <AppText style={styles.totalBalanceLabel} variant="body2">
-                  {assets.totalBalance}
+                  {`${formatTUsdt(asset.name)} · ${assets.totalBalance}`}
                 </AppText>
                 <DecimalText
                   value={
                     Number(coin?.balance?.spendable) / 10 ** coin?.precision
                   }
-                  unit={formatTUsdt(asset.ticker)}
                 />
               </View>
               <AssetIcon
                 iconUrl={asset.iconUrl}
                 assetID={asset.assetId}
-                size={80}
+                size={56}
                 verified={asset?.issuer?.verified}
               />
             </View>
 
-            <TransactionButtons
-              onPressSend={() => {
-                navigation.navigate(NavigationRoutes.SCANASSET, {
-                  assetId: asset.assetId,
-                  rgbInvoice: '',
-                });
-              }}
-              onPressReceive={() => {
-                navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
-                  invoiceAssetId: asset.assetId,
-                  chosenAsset: asset,
-                });
-              }}
-              sendCtaWidth={wp(150)}
-              receiveCtaWidth={wp(150)}
-              disabled={
-                isWalletOnline === WalletOnlineStatus.Error ||
-                isWalletOnline === WalletOnlineStatus.InProgress
-              }
-            />
+            <View style={styles.actionRow}>
+              <AppTouchable
+                disabled={disabled}
+                style={styles.actionBtnPrimary}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.SCANASSET, {
+                    assetId: asset.assetId,
+                    rgbInvoice: '',
+                  });
+                }}>
+                {isThemeDark ? <IconSend /> : <IconSendLight />}
+                <AppText style={styles.actionBtnText}>Send</AppText>
+              </AppTouchable>
+              <AppTouchable
+                disabled={disabled}
+                style={styles.actionBtnSecondary}
+                onPress={() => {
+                  navigation.navigate(NavigationRoutes.ENTERINVOICEDETAILS, {
+                    invoiceAssetId: asset.assetId,
+                    chosenAsset: asset,
+                  });
+                }}>
+                {isThemeDark ? <IconReceive /> : <IconReceiveLight />}
+                <AppText style={styles.actionBtnText}>Receive</AppText>
+              </AppTouchable>
+            </View>
           </View>
         </View>
       </TapGestureHandler>
@@ -488,7 +579,6 @@ const CoinItem = ({
 
 const DefaultCoin = ({
   presetAssets,
-  refreshingStatus,
   onRefresh,
 }: {
   presetAssets: Asset[] | null;
@@ -499,13 +589,11 @@ const DefaultCoin = ({
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const styles = getStyles(theme, isThemeDark);
   const navigation = useNavigation();
-  const { translations } = useContext(LocalizationContext);
-  const { assets } = translations;
   const { appType, isWalletOnline } = useContext(AppContext);
   const wallet: Wallet = useWallets({}).wallets[0];
   const app = useQuery<TribeApp>(RealmSchema.TribeApp)[0];
   const rgbWallet = useRgbWallets({}).wallets[0];
-  const { getBalance, getCurrencyIcon } = useBalance();
+  const { getBalance } = useBalance();
   const coins = useQuery<Coin>(RealmSchema.Coin, collection =>
     collection.filtered(`visibility != $0`, AssetVisibility.HIDDEN),
   );
@@ -589,7 +677,7 @@ const DefaultCoin = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <View style={styles.cardRow}>
         <Carousel
           enabled={presetAssets && presetAssets.length > 1}
           ref={carouselRef}
@@ -638,7 +726,7 @@ const DefaultCoin = ({
         </View>
       </View>
 
-      <View style={styles.row}>
+      <View style={styles.cardRow}>
         <AppTouchable
           style={styles.balanceContainer}
           onPress={() => {
@@ -647,12 +735,21 @@ const DefaultCoin = ({
             });
           }}
         >
-          <IconBitcoin />
-          <View style={{ marginVertical: hp(20) }} />
-          <AppText style={styles.totalBalanceLabel} variant="body2">
-            {assets.bitcoinBalance}
+          <View style={styles.miniHeaderRow}>
+            <IconBitcoin />
+            <View style={styles.miniHeaderIconGap}>
+              <AppText style={styles.miniLabelInline} variant="body2">
+                Bitcoin
+              </AppText>
+            </View>
+          </View>
+          <AppText
+            style={styles.miniValue}
+            variant="heading1"
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {getBalance(Number(btcBalance))}
           </AppText>
-          <DecimalText value={Number(btcBalance)} unit={'sats'} />
         </AppTouchable>
         <View style={{ marginHorizontal: wp(7) }} />
 
@@ -662,14 +759,20 @@ const DefaultCoin = ({
             navigation.navigate(NavigationRoutes.ASSETS);
           }}
         >
-          <IconOtherAssets />
-          <View style={{ marginVertical: hp(20) }} />
-
-          <AppText style={styles.totalBalanceLabel} variant="body2">
-            {assets.otherAssets}
-          </AppText>
-          <AppText style={styles.totalBalance} variant="heading1">
-            {totalAssets}
+          <View style={styles.miniHeaderRow}>
+            <IconOtherAssets />
+            <View style={styles.miniHeaderIconGap}>
+              <AppText style={styles.miniLabelInline} variant="body2">
+                Other Assets
+              </AppText>
+            </View>
+          </View>
+          <AppText
+            style={styles.miniValue}
+            variant="heading1"
+            numberOfLines={1}
+            ellipsizeMode="tail">
+            {`${totalAssets} tokens`}
           </AppText>
         </AppTouchable>
       </View>

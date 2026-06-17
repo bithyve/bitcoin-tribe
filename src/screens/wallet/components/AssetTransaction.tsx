@@ -45,8 +45,8 @@ type AssetTransactionProps = {
 };
 function AssetTransaction(props: AssetTransactionProps) {
   const { translations } = useContext(LocalizationContext);
-  const { assets, settings } = translations;
-  const { backColor, disabled, transaction, coin, onPress, assetFace, precision,hidePrecision=false } = props;
+  const { settings } = translations;
+  const { backColor, disabled, transaction, onPress, assetFace, precision,hidePrecision=false } = props;
   const theme: AppTheme = useTheme();
   const styles = React.useMemo(
     () => getStyles(theme, backColor, assetFace),
@@ -259,11 +259,11 @@ const getStyles = (theme: AppTheme, backColor, assetFace) =>
       marginTop: hp(2),
     },
     amountTextReceive: {
-      color: theme.colors.headingColor,
+      color: '#01FFE3',
       marginTop: hp(2),
     },
     amountSend: {
-      color: theme.colors.headingColor,
+      color: '#FF423E',
       marginTop: hp(2),
     },
   });
