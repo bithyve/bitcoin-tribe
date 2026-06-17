@@ -33,6 +33,7 @@ export enum Keys {
   IS_APP_IMAGE_BACKUP_ERROR = 'IS_APP_IMAGE_BACKUP_ERROR',
   IS_TOPIC_SUBSCRIBED = 'IS_TOPIC_SUBSCRIBED',
   GAS_FREE_TRANSACTIONS = 'GAS_FREE_TRANSACTIONS',
+  BACKGROUND_TIMESTAMP = 'BACKGROUND_TIMESTAMP',
 }
 
 export class Storage {
@@ -74,6 +75,14 @@ export class Storage {
     }
 
     return undefined;
+  };
+
+  static delete = (key: Keys): void => {
+    if (!this.isInitialized()) {
+      console.warn('Storage is not initialized');
+      return;
+    }
+    MMKVStorage.delete(key);
   };
 
   static clear = (): void => {

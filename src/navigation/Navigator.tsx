@@ -1,5 +1,9 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { AppState, AppStateStatus } from 'react-native';
+import {
+  NavigationContainer,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Splash from 'src/screens/splash/Splash';
 import WalletSetupOption from 'src/screens/onBoarding/WalletSetupOption';
@@ -62,8 +66,8 @@ import ViewLogs from 'src/screens/settings/ViewLogs';
 import OnchainLearnMore from 'src/screens/onBoarding/OnchainLearnMore';
 import LNLearnMore from 'src/screens/onBoarding/LNLearnMore';
 import SupportLearnMore from 'src/screens/onBoarding/SupportLearnMore';
-import { Keys } from 'src/storage';
-import { useMMKVBoolean } from 'react-native-mmkv';
+import { Keys, Storage } from 'src/storage';
+import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import { useTheme } from 'react-native-paper';
 import { AppTheme } from 'src/theme';
 import IssueCollectible from 'src/screens/collectiblesCoins/IssueCollectible';
@@ -98,6 +102,13 @@ import { CollectionUdaSwiper } from 'src/screens/assets/CollectionUdaSwiper';
 import { BannerMarquee } from 'src/components/BannerMarquee';
 import IFADetails from 'src/screens/assets/IFADetails';
 import IfaMetaData from 'src/screens/assets/IfaMetaDataScreen';
+import { AppContext } from 'src/contexts/AppContext';
+import {
+  isSessionExpired,
+  shouldEnforceSessionLock,
+} from 'src/utils/sessionUtils';
+
+const navigationRef = createNavigationContainerRef<AppStackParams>();
 
 function LoginStack() {
   const Stack = createNativeStackNavigator<AppStackParams>();
@@ -420,9 +431,51 @@ function Navigator() {
   const Stack = createNativeStackNavigator<AppStackParams>();
   const [isThemeDark] = useMMKVBoolean(Keys.THEME_MODE);
   const theme: AppTheme = useTheme();
+  const [pinMethod] = useMMKVString(Keys.PIN_METHOD);
+  const { setKey } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    const handleAppStateChange = (nextAppState: AppStateStatus) => {
+      if (nextAppState === 'background' || nextAppState === 'inactive') {
+        if (shouldEnforceSessionLock(pinMethod)) {
+          Storage.set(Keys.BACKGROUND_TIMESTAMP, Date.now());
+        }
+      } else if (nextAppState === 'active') {
+        const backgroundTs = Storage.get(Keys.BACKGROUND_TIMESTAMP);
+        if (backgroundTs !== undefined && shouldEnforceSessionLock(pinMethod)) {
+          if (isSessionExpired(backgroundTs as number)) {
+            setKey(null);
+            if (navigationRef.isReady()) {
+              navigationRef.reset({
+                index: 0,
+                routes: [
+                  {
+                    name: NavigationRoutes.LOGINSTACK,
+                    state: {
+                      routes: [{ name: NavigationRoutes.LOGIN }],
+                    },
+                  },
+                ],
+              });
+            }
+          }
+        }
+        Storage.delete(Keys.BACKGROUND_TIMESTAMP);
+      }
+    };
+
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange,
+    );
+    return () => {
+      subscription.remove();
+    };
+  }, [pinMethod, setKey]);
 
   return (
     <NavigationContainer
+      ref={navigationRef}
       linking={{
         prefixes: ['tribe://'],
         config: {
