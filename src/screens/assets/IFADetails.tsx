@@ -12,6 +12,7 @@ import { useMMKVBoolean, useMMKVString } from 'react-native-mmkv';
 import {
   InflatableFungibleAsset,
   IssuerVerificationMethod,
+  Transfer,
   WalletOnlineStatus,
 } from 'src/models/interfaces/RGBWallet';
 import { RealmSchema } from 'src/storage/enum';
@@ -195,16 +196,17 @@ const CoinDetailsScreen = () => {
   );
 
   const transactionsData = useMemo(() => {
-    appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
-      ? Object.values({
-          ...filteredPayments,
-          ...coin?.transactions,
-        }).sort((a, b) => {
-          const dateA = new Date(a.createdAt).getTime() || 0;
-          const dateB = new Date(b.createdAt).getTime() || 0;
-            return dateA - dateB;
-          })
-        : coin?.transactions.slice(-4);
+    if (appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN) {
+      return Object.values({
+        ...filteredPayments,
+        ...coin?.transactions,
+      }).sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime() || 0;
+        const dateB = new Date(b.createdAt).getTime() || 0;
+        return dateB - dateA;
+      });
+    }
+    return (coin?.transactions || []) as Transfer[];
   }, [filteredPayments, coin?.transactions]);
 
   const rawHtml = isThemeDark
@@ -343,6 +345,7 @@ const CoinDetailsScreen = () => {
         </GradientBorderAnimated>
       )}
       <TransactionsList
+        limitToVisibleRows
         style={
           appType === AppType.NODE_CONNECT || appType === AppType.SUPPORTED_RLN
             ? styles.transactionContainer1
