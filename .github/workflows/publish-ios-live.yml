@@ -5,9 +5,27 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      keeper_action:
+        description: Keeper2.5.17 action; off preserves the existing Tribe release job
+        type: choice
+        options: ['off', 'inspect', 'prepare', 'submit']
+        default: 'off'
+        required: false
+      keeper_upload_receipt_json:
+        description: Sanitized exact successful local altool upload receipt; required for prepare/submit
+        type: string
+        default: ""
+        required: false
+      keeper_prepared_receipt_json:
+        description: Matching sanitized prepared-version receipt from prepare; required for submit
+        type: string
+        default: ""
+        required: false
 
 jobs:
   ios-prod:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.keeper_action == '' || inputs.keeper_action == 'off' }}
     runs-on: macos-latest
     permissions:
       contents: read
@@ -161,3 +179,50 @@ jobs:
         run: |
             rm -f ios/fastlane/AuthKey.p8
             rm -f .env
+
+
+  keeper-review:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/release/keeper-2.5.17-review-ci' && contains(fromJSON('["inspect","prepare","submit"]'), inputs.keeper_action) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    concurrency:
+      group: keeper-1545535925-2.5.17-review
+      cancel-in-progress: false
+    steps:
+      - name: Checkout approved isolated CI branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          sparse-checkout: |
+            .github/scripts
+          sparse-checkout-cone-mode: false
+      - name: Setup Ruby for the existing Fastlane API client
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3.0'
+      - name: Install pinned existing Fastlane API client
+        run: gem install fastlane --version 2.225.0 --no-document --quiet
+      - name: Run guarded Keeper review action
+        env:
+          FASTLANE_DISABLE_COLORS: '1'
+          FASTLANE_SKIP_UPDATE_CHECK: '1'
+          FASTLANE_OPT_OUT_USAGE: '1'
+          KEEPER_ACTION: ${{ inputs.keeper_action }}
+          KEEPER_UPLOAD_RECEIPT_JSON: ${{ inputs.keeper_upload_receipt_json }}
+          KEEPER_PREPARED_RECEIPT_JSON: ${{ inputs.keeper_prepared_receipt_json }}
+          KEEPER_RECEIPTS_DIR: ${{ runner.temp }}/keeper-release-receipts
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          FASTLANE_APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.FASTLANE_APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+        run: ruby .github/scripts/keeper-review-2.5.17.rb "$KEEPER_ACTION"
+      - name: Preserve sanitized Apple history and action receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keeper-2.5.17-${{ inputs.keeper_action }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/keeper-release-receipts/*.json
+          if-no-files-found: ignore
+          retention-days: 7
