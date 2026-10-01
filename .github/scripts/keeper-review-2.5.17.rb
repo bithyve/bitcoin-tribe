@@ -46,8 +46,8 @@ module KeeperAPIRelease
     Digest::SHA256.file(path).hexdigest
   end
   def self.version_parts(value)
-    guard(value.to_s.match?(/\A\d+\.\d+\.\d+\z/), 'UNKNOWN_MARKETING_VERSION')
-    value.split('.').map(&:to_i)
+    guard(value.to_s.match?(/\A\d+(?:\.\d+){0,2}\z/), "UNKNOWN_MARKETING_VERSION_#{value.inspect}")
+    parts = value.split('.').map(&:to_i); parts.fill(0, parts.length...3)
   end
   # No IPA or private application source is copied to this job.
   # The operator supplies the sanitized receipt from the exact successful local upload.
