@@ -179,8 +179,14 @@ module KeeperAPIRelease
     review_hash = review && Digest::SHA256.hexdigest(JSON.generate(review_fields.to_h { |field| [field, review.public_send(field)] }))
     {copyright: version.copyright, locales: locales, review_details_sha256: review_hash}
   end
+  def self.phased_release(version)
+    version.fetch_app_store_version_phased_release
+  rescue RuntimeError => error
+    raise unless error.message == 'No data'
+    nil
+  end
   def self.policy(version)
-    phase = version.fetch_app_store_version_phased_release
+    phase = phased_release(version)
     {release_type: version.release_type, earliest_release_date: version.earliest_release_date, phased_release_enabled: !phase.nil?}
   end
   def self.digest(value)
@@ -268,7 +274,7 @@ module KeeperAPIRelease
           @target = @app.get_edit_app_store_version(platform: 'IOS')
           guard(@target && @target.version_string == VERSION, 'CREATED_VERSION_NOT_FOUND')
           @target = @target.update(attributes: {releaseType: initial_policy[:release_type]})
-          if initial_policy[:phased_release_enabled] && !@target.fetch_app_store_version_phased_release
+          if initial_policy[:phased_release_enabled] && !phased_release(@target)
             @target.create_app_store_version_phased_release(attributes: {phasedReleaseState: 'INACTIVE'})
           end
         end
