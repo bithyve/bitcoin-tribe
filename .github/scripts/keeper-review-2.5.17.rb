@@ -171,7 +171,7 @@ module KeeperAPIRelease
     locales = version.get_app_store_version_localizations.sort_by(&:locale).map do |loc|
       text = %w[description keywords marketing_url promotional_text support_url].to_h { |field| [field, loc.public_send(field)] }
       screens = loc.get_app_screenshot_sets.map { |set| [set.screenshot_display_type, (set.app_screenshots || []).map { |s| [s.file_name, s.file_size, s.source_file_checksum] }] }.sort_by(&:first)
-      previews = loc.get_app_preview_sets.map { |set| [set.preview_type, (set.app_previews || []).map { |s| [s.file_name, s.file_size, s.source_file_checksum, s.preview_frame_time_code] }] }.sort_by(&:first)
+      previews = Spaceship::ConnectAPI::AppPreviewSet.all(filter: {'appStoreVersionLocalization' => loc.id}, includes: 'appPreviews').map { |set| [set.preview_type, (set.app_previews || []).map { |s| [s.file_name, s.file_size, s.source_file_checksum, s.preview_frame_time_code] }] }.sort_by(&:first)
       {locale: loc.locale, metadata: text, screenshots: screens, previews: previews}
     end
     review = version.fetch_app_store_review_detail
