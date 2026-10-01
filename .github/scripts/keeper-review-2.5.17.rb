@@ -339,7 +339,7 @@ if $PROGRAM_NAME == __FILE__
     warn JSON.generate(status: 'GUARD_STOPPED', reason: e.message, apple_submission_not_claimed: true)
     exit 1
   rescue Exception => e
-    warn JSON.generate(status: 'STOPPED_CHECK_SANITIZED_RECEIPTS', error_class: e.class.name, apple_submission_not_claimed: true)
+    warn JSON.generate(status: 'STOPPED_CHECK_SANITIZED_RECEIPTS', error_class: e.class.name, locations: e.backtrace_locations.first(8).map { |loc| "#{File.basename(loc.path)}:#{loc.lineno}:#{loc.label}" }, apple_submission_not_claimed: true)
     exit 1
   end
 end
